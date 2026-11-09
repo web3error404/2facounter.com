@@ -7,7 +7,7 @@
    cached page keeps generating codes with zero connectivity.
    ──────────────────────────────────────────────────────────── */
 
-const VERSION = '2fal-v1';
+const VERSION = '2fac-v1';
 const PAGE_CACHE = `${VERSION}-pages`;
 const ASSET_CACHE = `${VERSION}-assets`;
 
