@@ -1,7 +1,7 @@
 // Real-browser smoke test for http://localhost:4322/ (2facounter.com)
 import { chromium } from 'playwright';
 
-const BASE = 'http://localhost:4321/';
+const BASE = 'http://localhost:4322/';
 const KEY1 = 'JBSWY3DPEHPK3PXPJBSW'; // valid base32, >16 chars
 const KEY2 = 'GAXG243EMR2XQZUBIKTY';
 
