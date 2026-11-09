@@ -4,7 +4,7 @@ import sharp from 'sharp';
 import { readFileSync, writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 
-const src = resolve(process.argv[2] ?? 'C:/Users/web3e/Downloads/a_clean_high_resolution_flat_vector_cartoon_style.png');
+const src = resolve(process.argv[2] ?? 'tools/logo-source.png');
 const out = 'public';
 
 const png = (size, path, extra = {}) =>
