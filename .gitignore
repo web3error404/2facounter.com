@@ -25,3 +25,6 @@ pnpm-debug.log*
 
 # local QA screenshots
 snapshots/
+
+# agent workspace (skills, scratch scripts, scan output)
+.agents/
