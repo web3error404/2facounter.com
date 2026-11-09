@@ -39,7 +39,9 @@
   --color-ink: #2a1f1a; /* kiwi-dark — text, borders, shadows */
   --color-ink-deep: #2a1f1a;
   --color-body: #2a1f1a;
-  --color-muted: #888888;
+  /* Darkened from #888888 (3.0:1 on cream, failing WCAG AA) — now ≈5.1:1 on
+     cream / ≈6.0:1 on white; same warm-gray family as muted-soft and ink */
+  --color-muted: #6d6152;
   /* Darkened from #a3937f (≈2.5:1 on cream) — now ≈4.1:1 on cream /
      ≈4.9:1 on white so the secret-key placeholder and de-emphasized
      hints stay readable while remaining clearly secondary to ink */

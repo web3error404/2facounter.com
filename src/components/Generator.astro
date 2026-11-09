@@ -90,7 +90,7 @@ const t = generatorStringsFor(locale || urlLocale || 'en');
              its own icon (camera / upload) and label; the ink divider welds
              them into a single button group. Left half opens the camera
              scanner, right half opens the image picker. -->
-        <input type="file" id="file-qr-input" accept="image/*" class="sr-only" />
+        <input type="file" id="file-qr-input" accept="image/*" class="sr-only" aria-label={t.titleUpload} />
 
         <div
           class="btn-split w-full min-[560px]:w-auto min-[560px]:flex-[1.25]"
