@@ -1,0 +1,232 @@
+---
+import Layout from '../layouts/Layout.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+
+const title = 'Authenticator App for PC — 2FA Codes on Any Desktop (Free)';
+const description =
+  'Google Authenticator and Microsoft Authenticator live on your phone, not your PC. Three honest ways to get 2FA codes on a desktop — including a free browser-based authenticator that works on Windows, macOS and Linux.';
+
+const faqs = [
+  {
+    q: 'Can I install Google Authenticator on Windows or a Mac?',
+    a: 'No — Google has never shipped Google Authenticator for Windows, macOS, or desktop Linux. There is no official installer, and the well-known "PC versions" online are third-party clones or Android emulators wrapping the phone app, not Google products. Any desktop method therefore involves either a different tool (a browser-based TOTP generator, or your password manager\'s built-in TOTP) or an emulator running the phone app.',
+  },
+  {
+    q: 'Is Microsoft Authenticator available for PC?',
+    a: 'Not for Windows, as of November 2026. Microsoft Authenticator ships on iOS and Android; on desktop the company expects codes only when signing into Microsoft accounts through Windows Hello or a browser prompt. For standard TOTP codes from a service like AWS IAM, GitHub, or Coinbase — tokens not tied to a Microsoft account — you need a separate authenticator, which is where a browser generator fits.',
+  },
+  {
+    q: 'Is a browser-based 2FA generator safe to use on my PC?',
+    a: 'It computes the same RFC 6238 HMAC-SHA-1 codes a phone app would — the math is identical, and it runs locally: this site receives no keys, no codes, no telemetry. The real safety factors are the same as with any authenticator: keep the Base32 secret in an encrypted password-manager vault rather than a text file, and only paste it into a site you know and trust. Verify the URL before pasting — a secret pasted into a lookalike site is compromised no matter which tool generated code.',
+  },
+  {
+    q: 'Is using 2FA on a company or work computer a good idea?',
+    a: 'The browser generator is actually one of the better fits: nothing to install, no admin rights required, no data leaves the machine. The caveat is not technical — it is policy. On some managed endpoints the employer can image or inspect the device, which undermines any secret stored in browser storage. If your account matters (personal Gmail, Coinbase, GitHub), generating codes at work is fine; but keep the master secret in your own vault, so the job never holds your factor.',
+  },
+  {
+    q: 'Does the browser generator work offline like a phone app?',
+    a: 'Yes. Once installed as a PWA (Add to Home Screen / Install), pages are cached locally and codes are computed entirely offline from your device clock plus the secret — no network, no account session, no reachable server at all. Codes are right as long as your computer clock is accurate; standard phone apps have exactly the same clock dependency.',
+  },
+  {
+    q: 'What about Android emulators like BlueStacks to run Google Authenticator on PC?',
+    a: 'It technically works, and it is the route many articles recommend. We recommend against it on principle: you are running a security chain inside a heavyweight, third-party emulator with broad permissions, an unknown update cadence, and its own network stack. If the emulator or its adware-adjacent bundling history ever concerns you, your secrets sit inside it. A browser generator gives you the same desktop outcome with none of that surface.',
+  },
+];
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: 'Authenticator App for PC — 2FA Codes on Any Desktop (Free)',
+    description,
+    url: 'https://2facounter.com/authenticator-for-pc/',
+    datePublished: '2026-11-10',
+    dateModified: '2026-11-10',
+    author: { '@type': 'Organization', name: '2FA COUNTER', url: 'https://2facounter.com' },
+    publisher: {
+      '@type': 'Organization',
+      name: '2FA COUNTER',
+      url: 'https://2facounter.com',
+      logo: { '@type': 'ImageObject', url: 'https://2facounter.com/apple-touch-icon.png' },
+    },
+    mainEntityOfPage: { '@type': 'WebPage', '@id': 'https://2facounter.com/authenticator-for-pc/' },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map(({ q, a }) => ({
+      '@type': 'Question',
+      name: q,
+      acceptedAnswer: { '@type': 'Answer', text: a },
+    })),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: '2FA COUNTER', item: 'https://2facounter.com/' },
+      { '@type': 'ListItem', position: 2, name: 'Authenticator for PC', item: 'https://2facounter.com/authenticator-for-pc/' },
+    ],
+  },
+];
+---
+
+<Layout title={title} description={description} path="/authenticator-for-pc/" jsonLd={jsonLd}>
+  <SiteHeader />
+  <main id="main">
+    <article class="mx-auto max-w-[820px] px-4 py-16 sm:px-6 lg:py-24">
+      <p class="section-label">Learn</p>
+      <h1 class="mt-3 font-display text-4xl tracking-normal text-ink sm:text-5xl">
+        Your authenticator app, on the PC: 2FA codes without reaching for the phone
+      </h1>
+      <p class="mt-5 max-w-2xl text-lg font-medium text-ink">
+        Google Authenticator and Microsoft Authenticator have never shipped for Windows, macOS, or
+        desktop Linux — so the honest answer to "authenticator app for PC" is a different tool, not a
+        workaround. Here are the three real ways to get codes on a desktop, compared fairly.
+      </p>
+
+      <nav aria-label="On this page" class="mt-10 rounded-xl border-2 border-ink bg-cream p-6" style="box-shadow: var(--shadow-card)">
+        <p class="font-mono text-[13px] font-bold tracking-wide text-ink uppercase">On this page</p>
+        <ul class="mt-3 space-y-2 text-sm font-medium text-ink">
+          <li><a class="link" href="#quick-answer">The 60-second answer</a></li>
+          <li><a class="link" href="#why">Why your authenticator is trapped on the phone</a></li>
+          <li><a class="link" href="#options">Three ways to get codes on a PC</a></li>
+          <li><a class="link" href="#how">How the browser generator works on a desktop</a></li>
+          <li><a class="link" href="#setup">Set it up in three steps</a></li>
+          <li><a class="link" href="#phone-still">Where a phone app still earns its place</a></li>
+          <li><a class="link" href="#faq">FAQ</a></li>
+        </ul>
+      </nav>
+
+      <div class="rich-text mt-12">
+        <h2 id="quick-answer">The 60-second answer</h2>
+        <p>
+          <strong>There is no official Google Authenticator or Microsoft Authenticator for PC.</strong>
+          Both are phone apps, and emulation is the only way to run them on a desktop. The practical
+          alternatives are a <strong>browser-based TOTP generator</strong> — this site does it with
+          zero installs, zero accounts, and codes that never leave your machine — or the
+          <strong>TOTP built into your password manager</strong>. Both compute the identical
+          RFC 6238 codes every service already accepts.
+        </p>
+
+        <h2 id="why">Why your authenticator is trapped on the phone</h2>
+        <p>
+          The phone app pattern dates to 2010, when the first authenticators coincided with the
+          smartphone boom. The industry never fully revisited the assumption: a <em>phone is the
+          second factor</em>. But for most daily work the phone is not where sign-ins happen —
+          it is a second monitor and a sister device sitting face-down on the desk. Every
+          app-based sign-in at work then costs the same tax: pick it up, unlock it, find
+          the app, transcribe six digits before the timer flips.
+        </p>
+        <p>
+          That pattern also concentrates two real risks: the <strong>device is a single point of
+          failure</strong> (a dead battery on a travel day locks you out of every account behind
+          the app), and phone-centric identity creates attack surface (see how SIM-swap attackers
+          defeated SMS 2FA via <a href="/sim-swap-attacks/">carrier-side number theft</a> — the fix
+          in both cases is reducing how much your factor depends on one phone).
+        </p>
+
+        <h2 id="options">Three ways to get codes on a PC, honestly compared</h2>
+        <ul>
+          <li>
+            <strong>1. A browser-based TOTP generator (easiest, zero installs)</strong> — This is
+            our site, and the trade is simple: open a browser tab, paste the Base32 secret from
+            your password manager, and the live code appears. Nothing is installed, no admin
+            rights are needed, nothing is transmitted — the computation happens in your browser's
+            Web Crypto. It works identically on Windows, macOS, Linux, ChromeOS, a borrowed
+            laptop, a library computer you would never install an app on. And with
+            <a href="/how-to-get-2fa-code/">setup saved in the vault</a>, it doubles as a recovery
+            path if the phone dies.
+          </li>
+          <li>
+            <strong>2. Your password manager's built-in TOTP (most integrated)</strong> —
+            1Password, Bitwarden, Proton Pass, and KeePassXC can store a secret and fill a rotating
+            code next to the username. The upside: the secret lives with the password it guards. The
+            honest costs: feature tiers matter (Bitwarden's TOTP is a paid tier), secrets remain
+            inside one vendor's vault, and asking the vault to both store and apply the second
+            factor means one tool now controls both factors — that is a deliberate trade of
+            convenience for independence, not a free upgrade.
+          </li>
+          <li>
+            <strong>3. An Android emulator running the phone app (possible, not recommended)</strong> —
+            Emulators like BlueStacks can technically run Google Authenticator on Windows. Our
+            position: skip it. You are putting real 2FA secrets inside a heavyweight third-party
+            emulator with broad system permissions, a murky update mechanism, and — for the free
+            tier — an ad-serving business model. The failure mode is not that it stops working;
+            it is that your secrets live in an environment with a far wider set of side
+            channels than a browser tab that receives nothing and sends nothing.
+          </li>
+        </ul>
+
+        <h2 id="how">How the browser generator works on a desktop</h2>
+        <p>
+          A TOTP code is a time-based HMAC-SHA-1 code computed from two things a PC already has:
+          the secret and the clock. There is no proprietary magic in a phone app — a browser can
+          run the exact same algorithm through
+          <a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Crypto_API">the Web Crypto API</a>.
+          Our implementation:
+        </p>
+        <ul>
+          <li><strong>Zero-knowledge by architecture:</strong> keys are pasted in, computed locally, and cached in your browser's local storage — no server, no sync, no account (our <a href="/privacy/">privacy policy</a> is short for a reason).</li>
+          <li><strong>Keyboard-native multi-account:</strong> the Recent-keys list switches accounts with one click instead of scrolling a token list made for one thumb.</li>
+          <li><strong>Offline via PWA:</strong> once installed, page assets and the generator logic are cached — sign-ins work with the network entirely off.</li>
+          <li><strong>No future deprecation:</strong> there is no vendor cliff here — no client that can be sunset the way desktop Authy was retired in 2024; the site either keeps running or it is one static page you could host yourself.</li>
+        </ul>
+
+        <h2 id="setup">Set it up in three steps</h2>
+        <ol class="list-decimal">
+          <li>Enroll 2FA on the service as usual — when the QR code appears, choose the "can't scan?" or "enter manually" option to reveal the setup key.</li>
+          <li>Store that Base32 secret in your password manager's notes for that service (<a href="/how-to-get-2fa-code/">full step-by-step here</a>). That vault copy is your master, working even if this browser window is gone.</li>
+          <li>Paste the same secret into <a href="/#generator">the generator on our homepage</a>, confirm the live code verifies on the service, and — for everyday use — install the page as a PWA so it behaves like a desktop app.</li>
+        </ol>
+        <p>
+          One habit covers the whole portfolio: the vault is the source of truth for secrets, and
+          the generator is where they compute. Switch browsers, switch machines, lose the phone
+          itself — the factor survives all three, because the secret is yours, not the app's.
+        </p>
+
+        <h2 id="phone-still">Where a phone app still earns its place</h2>
+        <p>
+          We are not going to pretend the browser makes the phone obsolete: push approvals
+          (Microsoft Entra, some banks) only work from a phone-enrolled app; scanning a brand-new
+          QR code is a camera task; and for account recovery flows, a phone that never leaves your
+          pocket is a sound anchor. The strongest setup uses both honestly —
+          <strong>secrets in a vault, codes computed wherever you are working</strong>, and the
+          phone as a backup device, not the single keeper of your identity. If you are migrating
+          from a specific app, start with the app-by-app
+          <a href="/totp-vs-google-authenticator/">Google Authenticator comparison</a> or the
+          <a href="/totp-vs-authy/">Authy comparison</a>.
+        </p>
+      </div>
+
+      <h2 id="faq" class="mt-16 font-display text-[28px] leading-[1.2] tracking-normal text-ink">FAQ</h2>
+      <div class="mt-6 divide-y-2 divide-dashed divide-hairline-strong">
+        {
+          faqs.map(({ q, a }) => (
+            <details class="group px-1 py-1">
+              <summary class="flex cursor-pointer list-none items-center justify-between gap-4 py-4 text-left font-bold text-ink select-none marker:hidden">
+                {q}
+                <svg class="h-4 w-4 shrink-0 text-ink transition-transform group-open:rotate-45" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"></path>
+                </svg>
+              </summary>
+              <p class="pb-5 text-sm font-medium text-ink">{a}</p>
+            </details>
+          ))
+        }
+      </div>
+
+      <div class="cta-banner on-dark mt-12">
+        <h2 class="font-display text-2xl tracking-normal text-primary">Try it — no install at all</h2>
+        <p class="mt-2 max-w-2xl font-medium text-cream/80">
+          Paste a secret into the browser generator, get a live code in seconds, right on your
+          desktop. No account, no phone, nothing sent anywhere — the whole computation happens on
+          your machine.
+        </p>
+        <a href="/#generator" class="btn-primary mt-5">Open the generator</a>
+      </div>
+    </article>
+  </main>
+  <SiteFooter />
+</Layout>
