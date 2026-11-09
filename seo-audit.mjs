@@ -5,7 +5,7 @@ import { join } from 'node:path';
 
 const pages = [];
 (function walk(dir, prefix = '') {
-  for (const e of readdirSync(dir, { withErrorTypes: false, withFileTypes: true })) {
+  for (const e of readdirSync(dir, { withFileTypes: true })) {
     const p = join(dir, e.name);
     if (e.isDirectory()) walk(p, prefix + '/' + e.name);
     else if (e.name === 'index.html') pages.push({ path: prefix + '/', file: p });
@@ -49,6 +49,8 @@ for (const { path, file } of pages) {
   if (!desc) { console.log(`✗ ${label}: no meta description`); problems++; }
   else if (desc.length > 165) console.log(`⚠ ${label}: description ${desc.length} chars (may truncate)`);
   else if (desc.length < 50) console.log(`⚠ ${label}: description only ${desc.length} chars (thin)`);
+  else if (desc.endsWith('…') || desc.endsWith('...'))
+    console.log(`⚠ ${label}: description ends mid-sentence with an ellipsis — looks broken, finish the sentence`);
 
   // 3. og + twitter essentials
   for (const need of ['og:title', 'og:description', 'og:image', 'og:url']) {

@@ -58,7 +58,11 @@ const ogLocale: Record<string, string> = {
   ja: 'ja_JP',
   fr: 'fr_FR',
   de: 'de_DE',
-  pt: 'pt_PT',
+  /* The pt pages are written in Brazilian Portuguese (você, câmera, tela,
+     arquivo — verified across the homepage, generator strings and articles),
+     so og:locale must be pt_BR; hreflang stays the generic "pt", which is
+     the correct target for a single Portuguese version. */
+  pt: 'pt_BR',
   ko: 'ko_KR',
   it: 'it_IT',
   hi: 'hi_IN',

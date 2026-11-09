@@ -37,3 +37,22 @@ Keys are cached only in the device's local storage; there are no servers.
 | `npm run preview`   | Preview the production build locally      |
 | `npm run typecheck` | TypeScript check (`tsc --noEmit`)         |
 | `npm run test:e2e`  | Run the Playwright smoke tests (dev server must be running) |
+
+## Search engine verification (post-deploy)
+
+1. Copy `.env.example` → `.env`, paste your `PUBLIC_GSC_TOKEN` and
+   `PUBLIC_BING_TOKEN`, rebuild. The verification metas render only when
+   non-empty (see the commented block in `src/layouts/Layout.astro`).
+2. In Google Search Console: Sitemaps → submit
+   `https://2facounter.com/sitemap-index.xml` (Bing takes the same URL).
+
+## AdSense launch runbook
+
+The site currently ships **no ad code** — `public/ads.txt` is a
+comment-only placeholder, and the privacy policy states there are no ads.
+When ad code is added, the in-source checklist in
+`src/pages/privacy.astro` (search "ADSENSE LAUNCH CHECKLIST") lists every
+statement that must be updated the same day, plus the EU/EEA/UK consent
+management (CMP) requirement. Filling `public/ads.txt` with the real
+AdSense publisher ID (`google.com, pub-XXXXXXXXXXXXXXXX, DIRECT, f08c47fec0942fa0`)
+is required once the account is active — never publish an invented ID.

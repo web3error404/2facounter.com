@@ -67,7 +67,7 @@ const faq = [
   },
   {
     q: 'Where are my keys stored?',
-    a: 'Only in your own browser. Your last key plus a short “Saved keys” list (up to 8) are kept in this device’s local storage so the generator survives a refresh and you can switch keys in one click — never on our servers, because there aren’t any. The keys are stored as plain text, so anyone who can open this browser profile can read them — treat the profile like a password-manager vault. “Clear all” above the list — which asks you to confirm — clearing the field, or wiping your browser data removes them for good; keep the original secret in your password manager as the master copy.',
+    a: 'Only in your own browser. Your last key plus a short “Saved keys” list (up to 8) are kept in this device’s local storage so the generator survives a refresh and you can switch keys in one click — never on our servers, because there aren’t any. The keys are stored as plain text, so anyone who can open this browser profile can read them — treat the profile like a password-manager vault. The “Clear all” button above the list (it asks you to confirm), clearing the input field, or wiping your browser data removes them for good; keep the original secret in your password manager as the master copy.',
   },
   {
     q: 'Does it work with HOTP, 8-digit codes, or SHA-256 services?',
@@ -108,7 +108,7 @@ const jsonLd = [
     '@context': 'https://schema.org',
     '@type': 'WebApplication',
     name: '2FA COUNTER',
-    alternateName: ['2FA COUNTER', '2facounter', '2FA Online Authenticator', '2FA Auth Tool'],
+    alternateName: '2FA Online Authenticator',
     url: 'https://2facounter.com/',
     description,
     applicationCategory: 'SecurityApplication',

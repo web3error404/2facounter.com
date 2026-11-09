@@ -57,7 +57,7 @@ components:
 
 2FA COUNTER is presented through the visual metaphor of a neighborhood deli. Every page surface is a physical artifact: the generator is a cream order pad, the token chamber is a nutrition-facts-style white panel, countdown timers are tilted blue date stamps, and guide lists read as menu boards with prices. Thick dark borders, hard offset shadows, and dashed perforation lines reinforce the handmade, slightly retro deli aesthetic.
 
-The visual identity centers on four materials: a vibrant **kiwi-orange** canvas (#E87A35) that dominates the page, **kiwi-green** (#6CA632) reserved for primary actions, warm **cream** (#F4EBE1) for paper surfaces, and dark cocoa **ink** (#2A1F1A) for text, borders, and shadows. Typography pairs the geometric grotesque **Rubik** — headings, nav and buttons heavy (700–900), body medium (500) — while **JetBrains Mono** handles technical labels and metadata, and **Rubik Black** sets numerals (prices, stats, digits) with typewriter precision. All fonts are bundled locally at build time via Fontsource — the site makes zero third-party requests.
+The visual identity centers on four materials: a vibrant **kiwi-orange** canvas (#E87A35) that dominates the page, **kiwi-green** (#6CA632) reserved for primary actions, warm **cream** (#F4EBE1) for paper surfaces, and dark cocoa **ink** (#2A1F1A) for text, borders, and shadows. Typography pairs the rounded geometric **Fredoka** — headings, nav and buttons (400–700) — while **Inter** carries body copy and sets numerals (prices, stats) at 900, **JetBrains Mono** handles technical labels and metadata, and **Titan One** renders the brand wordmark. All fonts are bundled locally at build time via Fontsource — the site makes zero third-party requests.
 
 ## Colors
 
@@ -100,11 +100,11 @@ The visual identity centers on four materials: a vibrant **kiwi-orange** canvas 
 
 ## Components
 
-- **Generator (order pad):** cream 4px-border card, 6px offset shadow; left = key input, right = white token panel with segmented progress, mono digits, green copy CTA, dashed privacy note, recent-keys list.
+- **Generator (order pad):** dark cocoa two-panel shell, 4px ink border, 6px offset shadow; left = cream key input ("paper slip"), right = token chamber with segmented progress, mono digits, green copy CTA, dashed privacy note, recent-keys list.
 - **Nav pills:** rounded-full, 2px ink border, active = green fill; cream sticky bar with 3px ink base border.
 - **Tickets (steps):** rectangular cream cards, perforated dashed top edge, red Inter-black step numbers.
 - **Menu board (guides index):** cream board with a dark header bar; line items with Inter-black "price" (duration) right-aligned, dashed separators.
-- **CTA banner:** ink panel, 4px border, green Rubik 800 heading, cream body copy.
+- **CTA banner:** ink panel, 4px border, green Fredoka 700 heading, cream body copy.
 - **Nutrition panels:** pure white, 2px ink border, sharp 2px corners — the only place white is used.
 
 ## Accessibility
