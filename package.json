@@ -11,7 +11,9 @@
     "preview": "astro preview",
     "typecheck": "tsc --noEmit",
     "test:e2e": "node e2e-smoke.mjs",
-    "deploy": "astro build && wrangler deploy",
+    "test:camera": "node camera-race.mjs",
+    "test": "node e2e-smoke.mjs && node camera-race.mjs",
+    "deploy": "node deploy.mjs",
     "astro": "astro"
   },
   "dependencies": {
