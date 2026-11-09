@@ -22,6 +22,8 @@ Keys are cached only in the device's local storage; there are no servers.
 │   ├── pages/           # index, about, contact, privacy, guides/*, preview
 │   ├── scripts/         # generator.ts — client-side TOTP/HOTP engine
 │   └── styles/          # global.css — Tailwind theme + component primitives
+├── tools/               # asset pipelines (favicons, OG card rendering)
+├── scripts/             # build helpers (build-favicons.mjs)
 ├── DESIGN.md            # design system spec (deli/identity theme)
 └── e2e-smoke.mjs        # Playwright smoke test suite
 ```
