@@ -1,0 +1,50 @@
+---
+import Layout from '../layouts/Layout.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+
+const title = 'Page not found — 2FA COUNTER';
+const description =
+  'The page you were looking for doesn’t exist on 2facounter.com. Head back to the homepage to generate live TOTP codes, or browse our step-by-step 2FA guides.';
+---
+
+<Layout title={title} description={description} path="/404/" noindex>
+  <SiteHeader />
+  <main id="main">
+    <div class="mx-auto max-w-[720px] px-4 py-20 sm:px-6 lg:py-24">
+      <p class="section-label">Error 404</p>
+      <h1 class="mt-3 font-display text-4xl tracking-normal text-ink">
+        This page slipped off the ticket roll
+      </h1>
+
+      <div
+        class="mt-12 rounded-xl border-2 border-ink bg-cream p-6 text-center sm:p-10"
+        style="box-shadow: var(--shadow-card)"
+      >
+        <!-- Oversized code stamp, tilted like a date stamp -->
+        <p
+          class="font-brand text-7xl leading-none tracking-normal text-accent-red sm:text-8xl"
+          style="text-shadow: 3px 3px 0 rgb(42 31 26 / 0.15)"
+          aria-hidden="true"
+        >
+          404
+        </p>
+        <p class="mt-5 text-sm font-medium text-ink sm:text-base">
+          The address you typed doesn’t exist here — maybe it was moved, mistyped, or never
+          existed at all. Nothing to worry about: no keys, no accounts, nothing lost.
+        </p>
+
+        <div class="mt-8 flex flex-wrap items-center justify-center gap-4">
+          <a href="/" class="btn-primary">Back to the homepage</a>
+          <a href="/guides/" class="btn-secondary">Browse 2FA guides</a>
+        </div>
+        <p class="mt-6 text-sm font-medium text-muted">
+          Looking for the generator?{" "}
+          <a href="/#generator" class="link">Open a live TOTP code</a> — it works entirely in your
+          browser, from any page.
+        </p>
+      </div>
+    </div>
+  </main>
+  <SiteFooter />
+</Layout>

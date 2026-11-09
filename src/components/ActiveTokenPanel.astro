@@ -1,0 +1,206 @@
+---
+/**
+ * Standalone recreation of the "Timer" panel.
+ * Reference canvas: exactly 600 × 350, overflow hidden.
+ *
+ * Responsive strategy: every length is authored in design units
+ * (`--u`, 1 unit = 1px at the 600px design width). On narrow
+ * viewports `--u` shrinks proportionally (100vw / 640), so the
+ * layout scales down as one unit — no stretching, no rearranging.
+ */
+const SEGMENTS = Array.from({ length: 30 }, (_, i) =>
+  i < 3
+    ? 'seg seg-red' // bright red — seconds remaining
+    : i === 3
+      ? 'seg seg-red-2'
+      : i === 4
+        ? 'seg seg-red-3'
+        : 'seg'
+);
+const PLACEHOLDERS = Array.from({ length: 6 });
+---
+
+<div class="token-panel" role="status" aria-label="Timer panel">
+  <!-- ── Header: title + countdown badge ─────────────────────── -->
+  <header class="tp-head">
+    <span class="tp-title">
+      <svg class="tp-zap" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"></polygon>
+      </svg>
+      Timer
+    </span>
+    <span class="tp-badge">
+      <span class="tp-badge-dot" aria-hidden="true"></span>
+      <span class="tp-badge-text">4 s</span>
+    </span>
+  </header>
+
+  <!-- ── Segmented buffer progress bar ───────────────────────── -->
+  <div class="tp-bar" aria-hidden="true">
+    {SEGMENTS.map((cls) => <span class={cls}></span>)}
+  </div>
+
+  <!-- ── Telemetry row ───────────────────────────────────────── -->
+  <div class="tp-telemetry">
+    <span class="tp-tele tp-tele-ok">SYNC_OK</span>
+  </div>
+
+  <!-- ── OTP display chamber with placeholder slabs ──────────── -->
+  <div class="tp-chamber">
+    <div class="tp-digits">
+      {PLACEHOLDERS.map(() => <span class="tp-slab"></span>)}
+    </div>
+  </div>
+</div>
+
+<style>
+  .token-panel {
+    /* 1 unit = 1px at the 600px reference width; scales fluidly on small screens */
+    --u: min(1px, 100vw / 640);
+
+    box-sizing: border-box;
+    width: calc(var(--u) * 600);
+    height: calc(var(--u) * 350);
+    overflow: hidden;
+
+    display: flex;
+    flex-direction: column;
+
+    padding: calc(var(--u) * 24) calc(var(--u) * 48) calc(var(--u) * 12);
+    background: #f4ebe1; /* kiwi-cream — butcher paper */
+    color: #2a1f1a; /* kiwi-dark */
+    text-transform: uppercase;
+    border: calc(var(--u) * 3) solid #2a1f1a;
+    border-radius: calc(var(--u) * 12);
+    box-shadow: calc(var(--u) * 6) calc(var(--u) * 6) 0 0 rgb(0 0 0 / 0.2);
+  }
+
+  /* ── Header ── */
+  .tp-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: calc(var(--u) * 24);
+    flex: none;
+  }
+
+  .tp-title {
+    display: inline-flex;
+    align-items: center;
+    gap: calc(var(--u) * 10);
+    font-family: var(--font-mono);
+    font-size: calc(var(--u) * 13);
+    font-weight: 600;
+    letter-spacing: calc(var(--u) * 2.6);
+    color: #d32f2f; /* accent-red — the ticket-number stamp */
+  }
+
+  .tp-zap {
+    width: calc(var(--u) * 16);
+    height: calc(var(--u) * 16);
+    color: #2a1f1a; /* kiwi-dark */
+    flex: none;
+  }
+
+  .tp-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: calc(var(--u) * 6);
+    height: calc(var(--u) * 26);
+    padding: 0 calc(var(--u) * 10);
+    border: calc(var(--u) * 2) solid #1e3a8a; /* accent-blue postal stamp */
+    border-radius: 0;
+    background: #ffffff;
+  }
+
+  .tp-badge-dot {
+    width: calc(var(--u) * 8);
+    height: calc(var(--u) * 8);
+    border-radius: 50%;
+    background: var(--color-danger, #d32f2f);
+    flex: none;
+  }
+
+  .tp-badge-text {
+    font-family: var(--font-mono);
+    font-size: calc(var(--u) * 12);
+    font-weight: 700;
+    letter-spacing: calc(var(--u) * 0.5);
+    color: #1e3a8a; /* accent-blue */
+    line-height: 1;
+  }
+
+  /* ── Segmented bar ── */
+  .tp-bar {
+    display: flex;
+    align-items: stretch;
+    gap: calc(var(--u) * 2);
+    height: calc(var(--u) * 30);
+    margin-top: calc(var(--u) * 26);
+    flex: none;
+  }
+
+  .seg {
+    flex: 1 1 0;
+    min-width: 0;
+    border-radius: 0;
+    background: #dcd3c8; /* kiwi-warm-gray — unlit segments */
+  }
+
+  .seg-red {
+    background: #6ca632; /* kiwi-green — lit seconds */
+  }
+
+  /* Fading tail of the lit run */
+  .seg-red-2 {
+    background: #6ca632;
+    opacity: 0.72;
+  }
+
+  .seg-red-3 {
+    background: #6ca632;
+    opacity: 0.48;
+  }
+
+  /* ── Telemetry ── */
+  .tp-telemetry {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    margin-top: calc(var(--u) * 10);
+    flex: none;
+  }
+
+  .tp-tele-ok {
+    color: #6ca632; /* kiwi-green */
+    font-weight: 700;
+    justify-self: center;
+  }
+
+  /* ── OTP chamber ── */
+  .tp-chamber {
+    flex: 1;
+    margin-top: calc(var(--u) * 32);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0;
+    border: calc(var(--u) * 2) solid #2a1f1a;
+    background: #f4ebe1; /* kiwi-cream — butcher paper */
+  }
+
+  .tp-digits {
+    display: flex;
+    align-items: center;
+    gap: calc(var(--u) * 18);
+  }
+
+  .tp-slab {
+    width: calc(var(--u) * 28);
+    height: calc(var(--u) * 16);
+    border-radius: 0;
+    background: #dcd3c8; /* kiwi-warm-gray */
+  }
+
+</style>

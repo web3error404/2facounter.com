@@ -1,0 +1,189 @@
+---
+import ShieldLogo from './ShieldLogo.astro';
+
+const year = new Date().getFullYear();
+
+const defaultColumns = [
+  {
+    title: 'Product',
+    links: [
+      { href: '/#generator', label: 'Live generator' },
+      { href: '/how-to-get-2fa-code/', label: 'Get a 2FA code' },
+      { href: '/what-is-2fa/', label: 'What is 2FA?' },
+      { href: '/#features', label: 'Features' },
+      { href: '/#compatibility', label: 'Compatibility' },
+    ],
+  },
+  {
+    title: 'Learn',
+    links: [
+      { href: '/totp-vs-passkeys/', label: 'TOTP vs passkeys' },
+      { href: '/sim-swap-attacks/', label: 'SIM-swap attacks' },
+      { href: '/authenticator-cloud-sync/', label: 'App cloud sync, compared' },
+    ],
+  },
+  {
+    title: 'Guides',
+    links: [
+      { href: '/guides/', label: 'All guides' },
+      { href: '/guides/google/', label: 'Google 2FA' },
+      { href: '/guides/microsoft/', label: 'Microsoft 2FA' },
+      { href: '/guides/discord/', label: 'Discord 2FA' },
+      { href: '/guides/github/', label: 'GitHub 2FA' },
+      { href: '/guides/steam/', label: 'Steam 2FA' },
+      { href: '/guides/binance/', label: 'Binance 2FA' },
+    ],
+  },
+  {
+    title: 'Company',
+    links: [
+      { href: '/about/', label: 'About' },
+      { href: '/methodology/', label: 'Editorial methodology' },
+      { href: '/contact/', label: 'Contact' },
+    ],
+  },
+  {
+    title: 'Legal',
+    links: [
+      { href: '/privacy/', label: 'Privacy policy' },
+      { href: '/terms/', label: 'Terms of service' },
+      { href: '/disclaimer/', label: 'Disclaimer' },
+      { href: '/contact/', label: 'Report a security issue' },
+    ],
+  },
+];
+
+const defaultLanguages = [
+  { href: '/', label: 'English' },
+  { href: '/vi/', label: 'Tiếng Việt' },
+  { href: '/zh-cn/', label: '简体中文' },
+  { href: '/zh-tw/', label: '繁體中文' },
+  { href: '/es/', label: 'Español' },
+  { href: '/ja/', label: '日本語' },
+  { href: '/fr/', label: 'Français' },
+  { href: '/de/', label: 'Deutsch' },
+  { href: '/pt/', label: 'Português' },
+  { href: '/ko/', label: '한국어' },
+  { href: '/it/', label: 'Italiano' },
+];
+
+interface Props {
+  /** Nav columns — override with translated labels on localized pages */
+  columns?: Array<{ title: string; links: Array<{ href: string; label: string }> }>;
+  /** One-line description under the wordmark */
+  tagline?: string;
+  /** Title of the language-switcher column */
+  languagesTitle?: string;
+  /** Language links (default: all homepage language variants) */
+  languages?: Array<{ href: string; label: string }>;
+}
+
+const {
+  columns = defaultColumns,
+  tagline = 'A zero-knowledge 2FA authenticator that runs entirely in your browser at 2facounter.com. No accounts, no servers, no phone required.',
+  languagesTitle = 'Language',
+  languages = defaultLanguages,
+} = Astro.props;
+
+// hreflang value matching each language-switcher URL (self-linking alternates)
+const hreflangOf = (href: string) => {
+  const dir = href.replace(/\//g, '');
+  if (!dir) return 'en';
+  const map: Record<string, string> = {
+    en: 'en',
+    vi: 'vi',
+    'zh-cn': 'zh-Hans',
+    'zh-tw': 'zh-Hant',
+    es: 'es',
+    ja: 'ja',
+    fr: 'fr',
+    de: 'de',
+    pt: 'pt',
+    ko: 'ko',
+    it: 'it',
+  };
+  return map[dir.toLowerCase()] ?? dir;
+};
+---
+
+<footer class="on-dark bg-ink text-cream">
+  <div class="mx-auto max-w-[1200px] px-4 py-16 sm:px-6 xl:px-0">
+    <div class="flex flex-col justify-between gap-12 lg:flex-row">
+      <div class="max-w-sm">
+        <a href="/" class="flex items-center gap-2.5">
+          <ShieldLogo class="h-9 w-9 shrink-0" />
+          <span translate="no" class="font-brand text-lg leading-none tracking-normal text-cream text-shadow-[2px_2px_0_0_rgb(0_0_0/0.4)]">2FA COUNTER</span>
+        </a>
+        <p class="mt-4 font-mono text-[13px] leading-relaxed text-cream/75">
+          {tagline}
+        </p>
+        <!-- Decorative barcode — the deli receipt mark -->
+        <div
+          class="mt-6 flex h-10 w-fit items-stretch gap-[2px] opacity-80"
+          aria-hidden="true"
+        >
+          {[3, 1, 2, 1, 1, 3, 1, 2, 2, 1, 3, 1, 1, 2, 1, 3, 2, 1, 1, 3, 1, 1, 2, 1].map(
+            (w, i) => (
+              <span
+                class="bg-cream"
+                style={`width:${w}px;${i % 3 === 0 ? 'height:100%;' : 'height:80%;align-self:end;'}`}
+              ></span>
+            ),
+          )}
+        </div>
+      </div>
+
+      <nav class="grid grid-cols-2 gap-8 sm:grid-cols-4 lg:min-w-0 lg:flex-1 lg:grid-cols-5" aria-label="Footer">
+        {
+          columns.map((col) => (
+            <div>
+              <h2 class="font-mono text-[13px] font-bold tracking-wide text-cream uppercase">
+                {col.title}
+              </h2>
+              <ul class="mt-4 space-y-2">
+                {col.links.map(({ href, label }) => (
+                  <li>
+                    <a
+                      href={href}
+                      class="-mx-2 -my-1 inline-block rounded-sm px-2 py-3 text-sm text-cream/75 hover:text-primary hover:underline hover:decoration-2 hover:underline-offset-2"
+                    >
+                      {label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))
+        }
+        <div>
+          <h2 class="font-mono text-[13px] font-bold tracking-wide text-cream uppercase">
+            {languagesTitle}
+          </h2>
+          <ul class="mt-4 space-y-2">
+            {languages.map(({ href, label }) => (
+              <li>
+                <a
+                  hreflang={hreflangOf(href)}
+                  href={href}
+                  class="-mx-2 -my-1 inline-block rounded-sm px-2 py-3 text-sm text-cream/75 hover:text-primary hover:underline hover:decoration-2 hover:underline-offset-2"
+                >
+                  {label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </nav>
+    </div>
+
+    <div
+      class="mt-12 flex flex-col justify-between gap-4 border-t-2 border-dashed border-cream/25 pt-8 font-mono text-[13px] text-cream/65 md:flex-row md:items-center"
+    >
+      <p>© {year} 2FA COUNTER · 2facounter.com</p>
+      <p>
+        Not affiliated with any of the services mentioned. 2FA is a security auxiliary — always
+        keep your recovery codes offline.
+      </p>
+    </div>
+  </div>
+</footer>

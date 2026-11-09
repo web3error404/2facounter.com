@@ -1,0 +1,30 @@
+---
+import '@fontsource-variable/fredoka';
+import '@fontsource-variable/inter';
+import '@fontsource/titan-one';
+import '@fontsource-variable/jetbrains-mono';
+import '../styles/global.css';
+import ActiveTokenPanel from '../components/ActiveTokenPanel.astro';
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Timer — 600×350 preview</title>
+  </head>
+  <body class="preview-page">
+    <ActiveTokenPanel />
+  </body>
+</html>
+
+<style is:global>
+  body.preview-page {
+    min-height: 100svh;
+    display: grid;
+    place-items: center;
+    background: #e87a35; /* kiwi-orange canvas — matches the site background */
+  }
+</style>

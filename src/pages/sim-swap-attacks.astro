@@ -1,0 +1,264 @@
+---
+import Layout from '../layouts/Layout.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+
+const title = 'SIM-Swap Attacks: How Thieves Hijack Your Phone Number (and Defeat SMS 2FA) — 2FA COUNTER';
+const description =
+  'How SIM-swap attacks work: the takeover playbook, why SMS 2FA dies with your number, carrier safeguards that help, and the authenticator-based setup that removes the phone number from the loop entirely.';
+
+const faqs = [
+  {
+    q: 'Can a SIM swap happen without the attacker contacting my carrier?',
+    a: 'Yes. The classic route is social engineering or bribery against the carrier (or a dealer acting in their name), but there are quieter paths too: eSIM portal abuse, weak port-out procedures, government/VoIP number-migration windows, insiders, and old-style SIM cloning on weak legacy-key network setups. None of these require you to receive anything on your phone — which is why you can be a perfectly careful user and still be hit.',
+  },
+  {
+    q: 'Is eSIM safer than a physical SIM?',
+    a: 'Marginally. A digital SIM is harder to pull out of a shop in twenty minutes, but the attack that matters isn’t your own SIM being cloned in their hands — it’s the carrier quietly pointing your number at a different SIM. eSIM re-provisioning is still a carrier-side process, usually still triggered by a support request; treat “go eSIM” as a speed bump, not a site defense.',
+  },
+  {
+    q: 'What should I do the moment a SIM swap happens?',
+    a: 'Move fast, in this order: 1) Call your carrier (from another line or their web portal) and demand an emergency lock/freeze on the account — tell them the number was ported fraudulently; 2) change the password on your email first, then banks/exchanges, and sign every other session out; 3) switch every account you can from SMS 2FA to an authenticator app; 4) report to local fraud authorities (in the US, the FTC and FBI’s IC3); 5) ask carriers to re-provision your number back to a new secure SIM with port protection on.',
+  },
+  {
+    q: 'Which accounts matter most to protect from a SIM swap?',
+    a: 'Your email above everything — whoever controls the inbox can trigger the "forgot password" reset chain on every account behind it. Then exchanges and banking platforms, which use SMS as a withdrawal confirmation, then social media accounts whose reach (less often their money) is the target.',
+  },
+  {
+    q: 'Does setting a SIM PIN help?',
+    a: 'Almost not at all, and it’s worth knowing why: a SIM PIN only stops someone from using your physical SIM card in another phone. It does nothing to stop the carrier from activating your number on a different SIM — which is the actual SIM-swap mechanism. The carrier-side port-out PIN or lock services are the useful control.',
+  },
+];
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: 'SIM-Swap Attacks: How Thieves Hijack Your Phone Number (and Defeat SMS 2FA)',
+    description,
+    url: 'https://2facounter.com/sim-swap-attacks/',
+    datePublished: '2026-11-09',
+    dateModified: '2026-11-09',
+    author: { '@type': 'Organization', name: '2FA COUNTER', url: 'https://2facounter.com' },
+    publisher: {
+      '@type': 'Organization',
+      name: '2FA COUNTER',
+      url: 'https://2facounter.com',
+      logo: { '@type': 'ImageObject', url: 'https://2facounter.com/favicon-96x96.png' },
+    },
+    mainEntityOfPage: { '@type': 'WebPage', '@id': 'https://2facounter.com/sim-swap-attacks/' },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map(({ q, a }) => ({
+      '@type': 'Question',
+      name: q,
+      acceptedAnswer: { '@type': 'Answer', text: a },
+    })),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: '2FA COUNTER', item: 'https://2facounter.com/' },
+      { '@type': 'ListItem', position: 2, name: 'SIM-swap attacks', item: 'https://2facounter.com/sim-swap-attacks/' },
+    ],
+  },
+];
+---
+
+<Layout title={title} description={description} path="/sim-swap-attacks/" jsonLd={jsonLd}>
+  <SiteHeader />
+  <main id="main">
+    <article class="mx-auto max-w-[820px] px-4 py-16 sm:px-6 lg:py-24">
+      <p class="section-label">Learn</p>
+      <h1 class="mt-3 font-display text-4xl tracking-normal text-ink sm:text-5xl">
+        SIM-swap attacks: why your phone number is a bad security anchor
+      </h1>
+      <p class="mt-5 max-w-2xl text-lg font-medium text-ink">
+        SMS 2FA rests on an assumption nobody should trust with money: that the phone number next
+        to “SMS code sent to…” is still yours. Here’s how the attack actually runs, what your
+        carrier can and can’t do about it, and how an authenticator app removes the number from
+        the loop.
+      </p>
+
+      <nav aria-label="On this page" class="mt-10 rounded-xl border-2 border-ink bg-cream p-6" style="box-shadow: var(--shadow-card)">
+        <p class="font-mono text-[13px] font-bold tracking-wide text-ink uppercase">On this page</p>
+        <ul class="mt-3 space-y-2 text-sm font-medium text-ink">
+          <li><a class="link" href="#what">What a SIM swap actually is</a></li>
+          <li><a class="link" href="#playbook">The attack playbook, step by step</a></li>
+          <li><a class="link" href="#sms">Why SMS 2FA dies with your number</a></li>
+          <li><a class="link" href="#carrier">What carriers can genuinely do</a></li>
+          <li><a class="link" href="#defense">The defense that removes the number</a></li>
+          <li><a class="link" href="#if-hit">If it already happened</a></li>
+          <li><a class="link" href="#faq">FAQ</a></li>
+        </ul>
+      </nav>
+
+      <div class="rich-text mt-12">
+        <h2 id="what">What a SIM swap actually is</h2>
+        <p>
+          A SIM swap is when someone convinces — or pays — your mobile carrier to activate your
+          phone number on a SIM card in their hands. Nothing on your device needs to fail for
+          this to work: it’s an identity <em>assertion</em> made to your carrier by a stranger.
+          From that moment, calls and texts meant for you (every SMS 2FA code included) arrive
+          on the attacker’s hardware. You usually notice as a "No Service" banner, or not at all.
+        </p>
+        <p>
+          Public cases have taken down crypto fortunes, X co-founder Jack Dorsey in 2019, and
+          thousands of ordinary customers when dealer-agent insider rings were prosecuted.
+          Insurance-sounding “protections” change: the one constant is that the control sits on
+          the carrier side with strangers, not with you.
+        </p>
+
+        <h2 id="playbook">The attack playbook, step by step</h2>
+        <ol>
+          <li>
+            <strong>Recon.</strong> The attacker collects on you: leaked breach databases, social
+            media, and — crucially — the last digits of your phone number and answers to your
+            carrier’s security questions, which come mostly from public records and past data
+            breaches, not from mind-reading.
+          </li>
+          <li>
+            <strong>Port request.</strong> One of three routes: a call to the carrier’s
+            (sometimes outsourced, sometimes bribed) support desk; a retail dealer activation;
+            or an online eSIM portal abuse. Weak carriers need almost nothing; strong ones need
+            only the failures of their weakest agent.
+          </li>
+          <li>
+            <strong>Interception.</strong> Password resets start flying — email first, exchange
+            accounts next, then the SMS codes for each land on the attacker’s SIM.
+          </li>
+          <li>
+            <strong>Harvest.</strong> Sessions get taken, tokens issued, seed backups saved.
+            High-value targets get a "maintenance window" of hours before they even see the
+            network banner.
+          </li>
+          <li>
+            <strong>Fast exit.</strong> The number is ported on again once the drain is done;
+            meanwhile you see nothing on your phone but a dead connection.
+          </li>
+        </ol>
+
+        <h2 id="sms">Why SMS 2FA dies with your number</h2>
+        <p>
+          SMS was never designed as an authentication channel. Two-failure modes matter:
+        </p>
+        <ul>
+          <li>
+            <strong>The code travels, the factor doesn’t.</strong> With TOTP,{" "}
+            <a href="/what-is-2fa/">the secret lives on your device</a> and nothing is
+            transmitted — an attacker needs your device <em>and</em> your password. With SMS,
+            the secret (your subscriber identity, roughly your number) is held by a third
+            party and the code gets <em>delivered</em> over a network an attacker can quietly
+            re-point. The proof factor can be redirected without you.
+          </li>
+          <li>
+            <strong>One blast radius.</strong> Whoever controls your number receives every SMS
+            code on every account whose 2FA rests on it. There’s no per-app isolation, no
+            offline mode, and no rotation you control.
+          </li>
+        </ul>
+        <p>
+          That is why NIST’s US federal guidance has explicitly{" "}
+          <em>deprecated SMS and phone-bound out-of-band factors</em> — long before this article.
+          The exchanges that push hard for "authenticator app" over SMS aren’t being difficult;
+          they’re shipping the fix.
+        </p>
+
+        <h2 id="carrier">What carriers can genuinely do</h2>
+        <p>
+          Carrier-side measures cut your exposure a worthwhile amount, though none of them turn
+          your number into a cryptographic factor:
+        </p>
+        <ul>
+          <li>
+            <strong>Port-out PIN / number lock.</strong> Every major US carrier now offers some
+            form: an extra PIN, a freeze on porting, in-app identity gates. Set the one your
+            carrier offers today.
+          </li>
+          <li>
+            <strong>Demand the PIN be used in-store too</strong> — dealer activations frequently
+            bypassed phone-based checks in the cases that made headlines.
+          </li>
+          <li>
+            <strong>Watch your SMS/email for carrier messages</strong> about number changes;
+            treat a surprise as a fire alarm, not spam.
+          </li>
+        </ul>
+
+        <h2 id="defense">The defense that removes the number</h2>
+        <p>
+          The structural fix is to stop routing security proofs through the phone network.
+          Replace SMS with a TOTP authenticator wherever the service allows it: the code is
+          computed locally from your own secret, expires in 30 seconds, and no phone number
+          participates at all. Hardware keys and passkeys go further and bind the proof to the
+          real domain — our{" "}
+          <a href="/totp-vs-passkeys/">TOTP-vs-passkeys article</a> maps out who should choose
+          which. And if part of your thinking here is "but my authenticator backup lives in some
+          app's cloud", read {" "}
+          <a href="/authenticator-cloud-sync/">what app cloud-sync actually means for your keys</a>.
+        </p>
+        <p>
+          Where SMS cannot be disabled — banking apps that insist, service email-confirmation
+          loops — at least subscribe to the carrier hardening above, and shrink what an SMS
+          compromise can touch: use unique email addresses per high-value account, keep backing
+          passwords fresh, and whitelist withdrawal addresses on exchanges so a stolen session
+          can’t invent a destination.
+        </p>
+
+        <h2 id="if-hit">If it already happened</h2>
+        <ol>
+          <li>
+            <strong>Freeze the number.</strong> Call the carrier from another phone or use their
+            portal; demand an emergency block, then a fresh SIM with port protection. Get a
+            support ticket number before you hang up.
+          </li>
+          <li>
+            <strong>Secure email first.</strong> Change its password, sign out all sessions,
+            then re-secure the forgot-password chains rooted in it.
+          </li>
+          <li>
+            <strong>Tiered re-securing.</strong> Exchanges and banks: revoke sessions, cancel
+            standing orders, freeze withdrawals if the platform offers it. Then social accounts
+            and connected apps (check OAuth grants — attacker sessions can hide behind them.)
+          </li>
+          <li>
+            <strong>Report it.</strong> Fraud reports (FTC/IC3 in the US; your national
+            equivalent elsewhere) create the paper trail carriers and courts sometimes need to
+            unwind the damage, and the exchange’s fraud desk may be able to flag and claw back
+            outgoing transfers caught in time.
+          </li>
+        </ol>
+      </div>
+
+      <h2 id="faq" class="mt-16 font-display text-[28px] leading-[1.2] tracking-normal text-ink">FAQ</h2>
+      <div class="mt-6 divide-y-2 divide-dashed divide-hairline-strong">
+        {
+          faqs.map(({ q, a }) => (
+            <details class="group px-1 py-1">
+              <summary class="flex cursor-pointer list-none items-center justify-between gap-4 py-4 text-left font-bold text-ink select-none marker:hidden">
+                {q}
+                <svg class="h-4 w-4 shrink-0 text-ink transition-transform group-open:rotate-45" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"></path>
+                </svg>
+              </summary>
+              <p class="pb-5 text-sm font-medium text-ink">{a}</p>
+            </details>
+          ))
+        }
+      </div>
+
+      <div class="cta-banner on-dark mt-12">
+        <h2 class="font-display text-2xl tracking-normal text-primary">Cut the number out of the loop</h2>
+        <p class="mt-2 max-w-2xl font-medium text-cream/80">
+          On any service willing to accept an authenticator app, do it today: paste your setup
+          key into the generator and carry codes that no SIM could ever intercept.
+        </p>
+        <a href="/#generator" class="btn-primary mt-5">Open the generator</a>
+      </div>
+    </article>
+  </main>
+  <SiteFooter />
+</Layout>

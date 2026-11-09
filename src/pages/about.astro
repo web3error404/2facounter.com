@@ -1,0 +1,86 @@
+---
+import Layout from '../layouts/Layout.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+
+const title = 'About 2FA COUNTER — Free Browser-Based 2FA Authenticator Tool';
+const description =
+  'Why 2FA COUNTER exists: a phone-free, zero-knowledge 2FA authenticator that runs entirely in your browser. No accounts, no servers, no tracking — just live TOTP codes.';
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'AboutPage',
+    name: title,
+    description,
+    url: 'https://2facounter.com/about/',
+    breadcrumb: {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: '2FA COUNTER', item: 'https://2facounter.com/' },
+        { '@type': 'ListItem', position: 2, name: 'About', item: 'https://2facounter.com/about/' },
+      ],
+    },
+  },
+];
+---
+
+<Layout title={title} description={description} path="/about/" jsonLd={jsonLd}>
+  <SiteHeader />
+  <main id="main">
+    <div class="mx-auto max-w-[720px] px-4 py-20 sm:px-6 lg:py-24">
+      <p class="section-label">Company</p>
+      <h1 class="mt-3 font-display text-4xl tracking-normal text-ink">About</h1>
+
+      <div class="rich-text mt-12 rounded-xl border-2 border-ink bg-cream p-6 sm:p-10" style="box-shadow: var(--shadow-card)">
+        <h2>Why this exists</h2>
+        <p>
+          Two-factor authentication is the single best upgrade you can make to account security.
+          But most people meet it inside a phone app — and phones get lost, sold, dunked in
+          water, and drained to 1% at exactly the wrong moment. Losing the only device that
+          carries your authenticator is one of the fastest ways to lock yourself out of your own
+          account.
+        </p>
+        <p>
+          <strong>2FA COUNTER</strong> (2facounter.com) is the fix: the exact RFC 6238 TOTP
+          algorithms your phone app runs, implemented in JavaScript, running on whatever device
+          you actually have in front of you. Paste a setup key once, get live codes for as long
+          as you need them.
+        </p>
+
+        <h2>Zero-knowledge, not zero-responsibility</h2>
+        <p>
+          Because every calculation happens in your browser with the Web Crypto API, there is no
+          server-side database of keys — nothing that could be sold, subpoenaed, or breached. The
+          trade-off is real responsibility on your side: back up your secrets in an encrypted
+          password manager <strong>before</strong> anything else, and <strong>always keep the service’s one-time
+          recovery codes offline</strong>. This tool is a convenience and an emergency access
+          route — the recovery codes are the airbag.
+        </p>
+
+        <h2>Principles</h2>
+        <ul>
+          <li><strong>No accounts, ever.</strong> A login form on a security tool is an attack surface, not a feature.</li>
+          <li><strong>No telemetry.</strong> We don’t want to know how many keys you have — that’s the point.</li>
+          <li><strong>Verifiability.</strong> The network tab is your receipt: keys never cross the wire.</li>
+          <li><strong>Works offline.</strong> Installed as a PWA, it never needs us again after the first visit.</li>
+        </ul>
+
+        <h2>How we write and review guides</h2>
+        <p>
+          Our step-by-step guides are fact-checked against each service's own documentation, and
+          every guide carries a visible review date. Corrections are welcome —{" "}
+          <a href="mailto:guides@2facounter.com">guides@2facounter.com</a>. See the full{" "}
+          <a href="/methodology/">editorial &amp; fact-checking methodology</a>.
+        </p>
+
+        <h2>Contact</h2>
+        <p>
+          Questions, bug reports, or a service where your TOTP parameters don’t match? Use the{" "}
+          <a href="/contact/">contact page</a>.
+        </p>
+      </div>
+    </div>
+  </main>
+  <SiteFooter />
+</Layout>

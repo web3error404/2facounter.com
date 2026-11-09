@@ -1,0 +1,234 @@
+---
+import Layout from '../layouts/Layout.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+
+const title = 'Authenticator Cloud Sync, Compared: Google, Microsoft, Authy — 2FA COUNTER';
+const description =
+  'What "cloud backup" in Google Authenticator, Microsoft Authenticator and Authy actually means for your 2FA secrets: where copies live, who can reach them, and which setup keeps keys truly under your control.';
+
+const faqs = [
+  {
+    q: 'Is Google Authenticator’s backup end-to-end encrypted?',
+    a: 'No — and Google says so plainly in its own documentation. Cloud backup in Authenticator has historically been encrypted in transit and at rest on Google’s servers without being end-to-end encrypted, meaning that protecting that copy is Google’s job, while the copy of your Google account itself (its own 2FA and any attacker who breaches it) carries the blast. Treat the cloud copy as a convenience tier, not a right you can rotate.',
+  },
+  {
+    q: 'Is it safe to use an app with cloud sync at all?',
+    a: 'It’s a trade-off, not a trap. Cloud sync hugely reduces the most common 2FA catastrophe — losing the only device — and for most people most of the time, it beats having no 2FA because the phone drowned in a lake. The honest move is matching the security tier to the account tier: cloud-synced apps everywhere it’s convenient, but keep the secrets of your highest-value accounts in your own encrypted vault, where cloud sync means your password manager’s E2E design rather than an app vendor’s.',
+  },
+  {
+    q: 'Can I move keys out of one authenticator app into another?',
+    a: 'Almost always, yes. Re-enroll per service: open each account’s 2FA settings, remove the old authenticator method, and add a new one — services issue a fresh setup key in the flow. You don’t need the old secret to migrate; you need live access to each account, which is exactly why you should do migrations calmly, with recovery codes saved, rather than mid-emergency.',
+  },
+  {
+    q: 'What’s the most private way to run TOTP codes today?',
+    a: 'Keep the secret (the Base32 key) in an encrypted password-manager vault and generate codes live in a browser — a local tool like this site does it with zero network. Your "sync" then becomes the password manager’s own end-to-end design, the secrets are yours to export in plain text, and nothing app-specific can silently upload them somewhere you haven’t thought through.',
+  },
+];
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: 'Authenticator Cloud Sync, Compared: Google, Microsoft, Authy',
+    description,
+    url: 'https://2facounter.com/authenticator-cloud-sync/',
+    datePublished: '2026-11-09',
+    dateModified: '2026-11-09',
+    author: { '@type': 'Organization', name: '2FA COUNTER', url: 'https://2facounter.com' },
+    publisher: {
+      '@type': 'Organization',
+      name: '2FA COUNTER',
+      url: 'https://2facounter.com',
+      logo: { '@type': 'ImageObject', url: 'https://2facounter.com/favicon-96x96.png' },
+    },
+    mainEntityOfPage: { '@type': 'WebPage', '@id': 'https://2facounter.com/authenticator-cloud-sync/' },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map(({ q, a }) => ({
+      '@type': 'Question',
+      name: q,
+      acceptedAnswer: { '@type': 'Answer', text: a },
+    })),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: '2FA COUNTER', item: 'https://2facounter.com/' },
+      { '@type': 'ListItem', position: 2, name: 'Authenticator cloud sync', item: 'https://2facounter.com/authenticator-cloud-sync/' },
+    ],
+  },
+];
+---
+
+<Layout title={title} description={description} path="/authenticator-cloud-sync/" jsonLd={jsonLd}>
+  <SiteHeader />
+  <main id="main">
+    <article class="mx-auto max-w-[820px] px-4 py-16 sm:px-6 lg:py-24">
+      <p class="section-label">Learn</p>
+      <h1 class="mt-3 font-display text-4xl tracking-normal text-ink sm:text-5xl">
+        What app “cloud sync” really does to your 2FA secrets
+      </h1>
+      <p class="mt-5 max-w-2xl text-lg font-medium text-ink">
+        Google Authenticator, Microsoft Authenticator and Authy all advertise easier lives —
+        but “your codes everywhere” means copies of your secrets live somewhere. Here’s where,
+        for each of them, and how to set up the same convenience without the unknown.
+      </p>
+
+      <nav aria-label="On this page" class="mt-10 rounded-xl border-2 border-ink bg-cream p-6" style="box-shadow: var(--shadow-card)">
+        <p class="font-mono text-[13px] font-bold tracking-wide text-ink uppercase">On this page</p>
+        <ul class="mt-3 space-y-2 text-sm font-medium text-ink">
+          <li><a class="link" href="#tradeoff">The sync trade-off, stated plainly</a></li>
+          <li><a class="link" href="#google">Google Authenticator</a></li>
+          <li><a class="link" href="#microsoft">Microsoft Authenticator</a></li>
+          <li><a class="link" href="#authy">Authy</a></li>
+          <li><a class="link" href="#choosing">How to choose — threat model first</a></li>
+          <li><a class="link" href="#local-first">The local-first alternative</a></li>
+          <li><a class="link" href="#faq">FAQ</a></li>
+        </ul>
+      </nav>
+
+      <div class="rich-text mt-12">
+        <h2 id="tradeoff">The sync trade-off, stated plainly</h2>
+        <p>
+          A TOTP secret is just a small string (our{" "}
+          <a href="/what-is-2fa/">guide to the math</a> shows what it encodes). Any app that
+          displays codes must hold that string — the interesting question is where, and who else
+          can get it:
+        </p>
+        <ul>
+          <li>
+            <strong>Offline app, no backup</strong> (classic Google Authenticator): a copy on one
+            phone and a copy on each enrolled service’s servers. Lose the phone, lose the
+            convenience of codes — the service-side copy is what forces recovery-at-a-distance.
+          </li>
+          <li>
+            <strong>Vendor cloud sync</strong> (Authy, modern Google/Microsoft apps): an
+            encrypted-at-rest copy sits in the vendor’s cloud, bound to an account the vendor
+            controls. You gain instant multi-device recovery; you accept that the vendor’s
+            account security (and their breach history) now applies to all your secrets at once.
+          </li>
+          <li>
+            <strong>Password-manager vault + live generation</strong>: secrets ride the vault’s
+            end-to-end encryption; an authenticator surface anywhere can mint codes offline.
+            Strongest ownership story — with the fixed cost that “I lost the vault I control”
+            is exactly as bad as designed, which is why vault recovery discipline matters.
+          </li>
+        </ul>
+        <p>
+          None of these are wrong. They solve different failure modes — be honest about which
+          failure would hurt you most.
+        </p>
+
+        <h2 id="google">Google Authenticator</h2>
+        <p>
+          Google’s classic was proudly offline. In 2023 it gained optional cloud backup: enable
+          it, and your secrets upload to your Google account, so sign-ins produce codes on any
+          signed-in device. Google’s documentation has described the transfer as encrypted in
+          transit and at rest but <em>not end-to-end encrypted</em> — in practical terms, a
+          compromise of your Google account can expose the backup, and Google itself sits on
+          that trust chain. If you use it: guard your Google account hard (passkey first — see{" "}
+          <a href="/totp-vs-passkeys/">TOTP vs passkeys</a>), check the “Export accounts” /
+          export-QR path that exists on-device, and treat backup-on as a deliberate choice per
+          account value.
+        </p>
+
+        <h2 id="microsoft">Microsoft Authenticator</h2>
+        <p>
+          Microsoft Authenticator’s story is cloud-forward from the start: personal-account
+          backups go into your Microsoft account (tied to its own 2FA, with the app re-import
+          gates by recovery code), and Microsoft also pushes the app as a sign-in factor with
+          number-matching push approvals. That per-approval model is genuinely good against
+          blind phishing, but the backup copies of your TOTP secrets ride on the Microsoft
+          account; the same theme as Google, with Microsoft in the trust chain.
+        </p>
+
+        <h2 id="authy">Authy</h2>
+        <p>
+          Authy popularized multi-device TOTP: encrypted-at-rest backups in Twilio’s cloud,
+          device-pairing approvals, and (historically) a desktop app. Two events shaped the
+          current picture and are worth knowing when you rely on it: in mid-2024, Twilio reported
+          that an unsecured endpoint let attackers identify certain Authy users’ phone numbers
+          (they used it for SIM-swap targeting; Authy’s own end-to-end design means secrets
+          weren’t extracted), and the same summer Twilio ended support for the desktop apps,
+          making it phone-first today. As of our last review, Authy remains encrypted-backup
+          cloud-first — convenient, with the same “trust the vendor’s account security” shape as
+          above.
+        </p>
+
+        <h2 id="choosing">How to choose — threat model first</h2>
+        <p>
+          Rank the failures you actually fear:
+        </p>
+        <ul>
+          <li>
+            <strong>“I lose the phone and can’t log in for a week.”</strong> Cloud sync wins;
+            any of the big three will have you back in minutes. Use it widely.
+          </li>
+          <li>
+            <strong>“Someone monetizes my email + every synced copy at once.”</strong> Vendor
+            cloud is the weakest point in this sentence. For exchange, banking, primary email
+            and work accounts, prefer secrets living only in an end-to-end-encrypted vault —
+            yours.
+          </li>
+          <li>
+            <strong>“A vendor quietly changes behavior (drops a platform, gets breached).”</strong>
+            Any vendor-bound setup can. The antidote is the same: keep the Base32 secrets
+            portable, so you re-point generation to the next tool in minutes — app, browser, or{" "}
+            <a href="/#generator">this site’s offline generator</a>.
+          </li>
+        </ul>
+        <p>
+          A practical split: cloud-synced app for everyday social and shopping accounts;
+          vault-held secrets for the accounts that hurt when lost; recovery codes for
+          everything, saved the same day. And remember that sync-in-anything still leaves one
+          hard rule: when you enroll a new key, the{" "}
+          <a href="/#generator">generator at the top of our homepage</a> will confirm the mechanism
+          the same way any app would — the codes must match at sign-in time, wherever you keep
+          the secret.
+        </p>
+
+        <h2 id="local-first">The local-first alternative</h2>
+        <p>
+          If “no vendor in my secrets path” sounds like the boring end-state you want: keep a
+          Base32 secret in your encrypted password-manager vault per service, and produce codes
+          on demand in a browser that computes them locally (Web Crypto, no network — page
+          works even disconnected). That is exactly how 2facounter.com works, and why the
+          privacy policy can truthfully say nothing is uploaded. The trade-offs are spelled out
+          in the home FAQ: browser profile storage is a convenience cache (treat the profile
+          like a vault), and the master copy is whatever you keep in the password manager.
+        </p>
+      </div>
+
+      <h2 id="faq" class="mt-16 font-display text-[28px] leading-[1.2] tracking-normal text-ink">FAQ</h2>
+      <div class="mt-6 divide-y-2 divide-dashed divide-hairline-strong">
+        {
+          faqs.map(({ q, a }) => (
+            <details class="group px-1 py-1">
+              <summary class="flex cursor-pointer list-none items-center justify-between gap-4 py-4 text-left font-bold text-ink select-none marker:hidden">
+                {q}
+                <svg class="h-4 w-4 shrink-0 text-ink transition-transform group-open:rotate-45" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"></path>
+                </svg>
+              </summary>
+              <p class="pb-5 text-sm font-medium text-ink">{a}</p>
+            </details>
+          ))
+        }
+      </div>
+
+      <div class="cta-banner on-dark mt-12">
+        <h2 class="font-display text-2xl tracking-normal text-primary">Secrets you can actually audit</h2>
+        <p class="mt-2 max-w-2xl font-medium text-cream/80">
+          No vendor account, no silent upload, no export lock-in. Paste a Base32 key and the
+          generator computes live codes locally — the page even works offline.
+        </p>
+        <a href="/#generator" class="btn-primary mt-5">Open the generator</a>
+      </div>
+    </article>
+  </main>
+  <SiteFooter />
+</Layout>

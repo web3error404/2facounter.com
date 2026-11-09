@@ -1,0 +1,29 @@
+---
+// Reusable brand logo tile — matches the favicon (favicon.svg) design.
+// Orange rounded tile + ink border, dark Lucide shield with green kiwi seed dot.
+interface Props {
+  /** Extra classes to apply to the svg element */
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+---
+
+<svg class={className} width="36" height="36" viewBox="0 0 512 512" fill="none" aria-hidden="true">
+  <!-- Tile: kiwi-orange canvas, border follows the surrounding text color (ink in header, cream in footer) -->
+  <rect
+    x="14"
+    y="14"
+    width="484"
+    height="484"
+    rx="106"
+    fill="#e87a35"
+    stroke="currentColor"
+    stroke-width="28"></rect>
+  <g transform="translate(56.8 46) scale(16.6)">
+    <path
+      fill="#2a1f1a"
+      d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path>
+    <circle cx="12" cy="11.6" r="1.75" fill="#6ca632"></circle>
+  </g>
+</svg>

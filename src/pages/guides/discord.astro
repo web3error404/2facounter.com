@@ -1,0 +1,67 @@
+---
+import GuideLayout from '../../components/GuideLayout.astro';
+
+const title = 'How to Set Up 2FA on Discord (Without the Phone App)';
+
+const description =
+  'Add two-factor authentication to Discord using just your browser. Find your Discord 2FA secret key or QR code and generate valid 6-digit codes at 2facounter.com — no phone required.';
+
+---
+
+<GuideLayout
+  serviceName="Discord"
+  title={title}
+  description={description}
+  path="/guides/discord/"
+  dateModified="2026-11-07"
+  lastReviewed="2026-11-07"
+  intro="Discord throws you out if you lose both your phone and its authenticator. This browser-only route generates your Discord 6-digit codes on any device you’re actually logged in on — and 2FA is mandatory if you run a server or want moderation copy to stick."
+  minutes={4}
+  params={['6 digits', '30s period', 'SHA-1']}
+  ctaTitle="A Discord key is a permission key, not just a login key"
+  ctaBody="On Discord, 2FA also gates server moderation — bans, deletes, and bot setup checks it. If you run any community, losing your second-factor keys is losing the server itself. Recovery codes first, Base32 key second, both encrypted."
+  steps={[
+    {
+      title: 'Open Discord settings',
+      body: 'Desktop or web: gear icon next to your username → “My Account”. On the account card, click “Enable Two-Factor Auth”.',
+    },
+    {
+      title: 'Verify your password',
+      body: 'Discord asks for your current account password. Enter it and continue — you’ll land on the “Add an authenticator app” step.',
+    },
+    {
+      title: 'Get the secret key instead of using your phone',
+      body: 'The screen shows a QR code by default. Click the text link below it — “can’t scan? enter the key manually” — and you’ll see a Base32 key like abc123XYZ….',
+    },
+    {
+      title: 'Paste it into 2FA COUNTER',
+      body: 'Copy that key, paste it into the generator, and name the account “Discord”. Or scan the QR: screenshot it, then paste the screenshot anywhere on the generator page with Ctrl+V.',
+    },
+    {
+      title: 'Copy the live code back into Discord',
+      body: 'A fresh 6-digit code appears in the yellow ring. Click “Copy code” and type/paste it into Discord’s confirm dialog. Discord then shows SMS-backup options — enable them if you want a fallback.',
+    },
+    {
+      title: 'Save your recovery codes first',
+      body: 'Discord displays a one-time set of recovery codes. Download them and store them in an encrypted password manager. If you keep the Base32 secret there too, 2facounter.com can rebuild your codes anywhere, offline.',
+    },
+  ]}
+  faqs={[
+    {
+      q: 'Discord says my 2FA code is wrong.',
+      a: 'That’s clock drift, nine times out of ten. Check that your device clock auto-syncs with an internet time server (Windows: Settings → Time & language → “Sync now”; macOS: System Settings → Date & time), then try again — the generator computes against the time your device reports.',
+    },
+    {
+      q: 'Does 2FA change anything about running a server?',
+      a: 'Yes. Server owners can enable "2FA requirement for moderation actions", which then demands that anyone performing bans or deletions has 2FA enabled on their account — and your own enrollment from this guide satisfies that. It is also required to configure many moderation bots.',
+    },
+    {
+      q: 'Can I still use Discord without a phone number this way?',
+      a: 'Yes — enabling 2FA is about the authenticator, not the phone number. If you don’t want SMS as a backup, skip it; it’s optional on Discord.',
+    },
+    {
+      q: 'I lost the phone my Discord authenticator was on. Can I still log in?',
+      a: 'Use a recovery code if you saved them. Otherwise browser 2FA codes can’t help retroactively — that’s why saving recovery codes before you need them is step six.',
+    },
+  ]}
+/>

@@ -1,0 +1,75 @@
+---
+import Layout from '../layouts/Layout.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+
+const title = 'Disclaimer — 2FA COUNTER';
+const description =
+  'Important disclaimers about 2FA COUNTER: what this tool should and should not be used for, and how to stay safe with your 2FA keys.';
+---
+
+<Layout title={title} description={description} path="/disclaimer/">
+  <SiteHeader />
+  <main id="main">
+    <div class="mx-auto max-w-[720px] px-4 py-20 sm:px-6 lg:py-24">
+      <p class="section-label">Legal</p>
+      <h1 class="mt-3 font-display text-4xl tracking-normal text-ink">Disclaimer</h1>
+      <p class="mt-4 font-mono text-label font-bold text-ink">Effective · November 8, 2026</p>
+
+      <div class="rich-text mt-12 rounded-xl border-2 border-ink bg-cream p-6 sm:p-10" style="box-shadow: var(--shadow-card)">
+        <blockquote>
+          The short version: this tool is an auxiliary, not a vault. How you handle your secret
+          keys is the single most important security decision here — and it’s yours.
+        </blockquote>
+
+        <h2>Secret-key handling is your responsibility</h2>
+        <p>
+          A TOTP secret is the master key to your account: whoever has it can generate valid
+          codes. Entering a seed phrase in any webpage entails a small risk, which is why this
+          site is designed to be auditable — everything happens locally, you can disconnect from
+          the internet after loading the page, and the
+          <a href="/privacy/">privacy policy</a> documents every request the browser makes.
+          Nevertheless, you choose where and how to paste your keys, and you remain responsible
+          for keeping the original secret safe (an encrypted password-manager vault is the
+          recommended master copy).
+        </p>
+
+        <h2>2FA does not replace recovery codes</h2>
+        <p>
+          Never rely on a single authenticator — this one, a phone app, or otherwise — as your
+          only route into an account. When a service shows you backup/recovery codes, save them
+          offline before enabling two-factor authentication. If you lose access to this tool,
+          another device, and your secret key at the same time, the recovery codes are the only
+          thing that can save you.
+        </p>
+
+        <h2>Not affiliated with third-party services</h2>
+        <p>
+          This site and its guides are independently produced and are
+          <strong>not affiliated with, endorsed by, or sponsored by</strong> Discord, GitHub,
+          Steam, Binance, Google, Microsoft, or any other service mentioned. Guides describe
+          publicly documented flows and may become outdated when those services change their
+          interfaces — always defer to the official documentation of the service you are
+          configuring.
+        </p>
+
+        <h2>No security guarantee</h2>
+        <p>
+          While the generator implements the RFC 6238 standard exactly, we cannot guarantee that
+          any autonomous third party will accept every code, support every parameter
+          combination, or that this site will be available at the moment you need it. Code
+          validation issues are almost always clock drift — verify your device time first.
+        </p>
+
+        <h2>Educational information only</h2>
+        <p>
+          Explanations of two-factor authentication, TOTP, and related standards on this site
+          are provided for information only and do not constitute professional security advice
+          for your specific circumstances. Consult the security documentation of the services
+          you use for guidance tailored to them.
+        </p>
+      </div>
+    </div>
+  </main>
+  <SiteFooter />
+</Layout>

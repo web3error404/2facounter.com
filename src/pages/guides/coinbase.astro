@@ -1,0 +1,63 @@
+---
+import GuideLayout from '../../components/GuideLayout.astro';
+
+const title = 'How to Set Up 2FA on Coinbase (TOTP Authenticator)';
+
+const description =
+  'Secure your Coinbase account with two-factor authentication codes you generate in the browser. Get the TOTP setup key from Coinbase security settings and generate live codes at 2facounter.com.';
+
+---
+
+<GuideLayout
+  serviceName="Coinbase"
+  title={title}
+  description={description}
+  path="/guides/coinbase/"
+  dateModified="2026-11-07"
+  lastReviewed="2026-11-07"
+  intro="Coinbase protects an exchange balance, so 2FA here is the difference between an inconvenience and a headline. The platform supports standard TOTP with any authenticator — including a purely browser-based one — and pairs it with a few crypto-specific extra gates worth setting up the same day."
+  minutes={3}
+  params={['6 digits', '30s period', 'SHA-1']}
+  ctaTitle="On Coinbase, safeguarding the secret is safeguarding the funds"
+  ctaBody="SMS 2FA on a crypto account is a standing SIM-swap invitation — the app-based enrollment above is the fast fix. The Base32 key and the withdrawal-whitelist screenshot belong in your encrypted vault the moment the dialog closes."
+  steps={[
+    {
+      title: 'Open Coinbase security settings',
+      body: 'Sign in at coinbase.com → click your profile avatar (top-right) → Settings → “Security” tab.',
+    },
+    {
+      title: 'Add an authenticator method',
+      body: 'Under “Two-factor authentication” (or “2FA method”), choose “Authenticator app” rather than SMS. Coinbase verifies you’re the account holder with a password step first.',
+    },
+    {
+      title: 'Extract the setup key',
+      body: 'Coinbase shows a QR code with a “use secret key” / “enter code manually” option. The revealed Base32 string is what every authenticator app would scan — paste it into 2facounter.com.',
+    },
+    {
+      title: 'Generate and confirm',
+      body: 'Copy the live 6-digit code and enter it in Coinbase’s verification field. Coinbase marks the TOTP method as active and shows it alongside any passkeys or hardware keys you keep.',
+    },
+    {
+      title: 'Pull the key into your vault',
+      body: 'Crypto accounts are high-value targets: store the Base32 secret in an encrypted password manager immediately, and double-check the withdrawal-address whitelist that Coinbase offers so a stolen session alone can’t redirect funds.',
+    },
+  ]}
+  faqs={[
+    {
+      q: 'Coinbase Authenticator app vs. SMS — which should I pick?',
+      a: 'Always the authenticator app. SMS 2FA on a crypto exchange is a SIM-swap attack waiting to happen: an attacker porting your number receives every code. TOTP tokens never transit a phone network.',
+    },
+    {
+      q: 'I removed or replaced my 2FA — why can’t I send crypto out?',
+      a: 'Coinbase may hold outbound sends for a short security window after authentication changes. The pause gives the real owner time to undo an attacker’s edits — so when you eventually rotate this key, expect a temporary send hold rather than a fresh compromise.',
+    },
+    {
+      q: 'Does this replace the Coinbase mobile app’s prompts?',
+      a: 'It replaces code *generation*, not the policy. Coinbase may still send push notifications about sign-ins from new devices and ask to confirm unusual activity regardless of the second factor you use.',
+    },
+    {
+      q: 'I lost my Coinbase TOTP key — how do I get back in?',
+      a: 'Without the secret you’ll need Coinbase’s identity-verification recovery path, which can take days. Now you see the point of step 5: the Base32 key in an encrypted vault *is* your backup, and it can re-mint codes anywhere, forever.',
+    },
+  ]}
+/>

@@ -1,0 +1,106 @@
+---
+/* SEO.astro — the single reusable <head> component.
+   Every page renders its search/social head through this component from
+   src/layouts/Layout.astro, so metadata, canonicals, alternates, and
+   structured data are declared in one place. It renders search/social
+   tags only: favicons, the web manifest, theme color, and font preloads
+   stay in Layout.astro's own <head> since they are site chrome, not SEO. */
+
+interface Props {
+  title: string;
+  description: string;
+  /** Site-absolute path starting with "/" for canonical + og:url */
+  canonicalPath: string;
+  /** Social-share image path relative to the site root (defaults to /og.png) */
+  ogImage?: string;
+  /** BCP 47 language of the page; also emits a self-referencing hreflang */
+  lang?: string;
+  /** hreflang alternates for translated versions of this page */
+  alternates?: Array<{ hreflang: string; href: string }>;
+  /** Force the page out of the index (dev-only / scratch pages) */
+  noindex?: boolean;
+  /** Additional JSON-LD objects to inject */
+  jsonLd?: object[];
+  /** Article published date (ISO 8601) for news/article pages */
+  datePublished?: string;
+  /** Article modified date (ISO 8601) for news/article pages */
+  dateModified?: string;
+}
+
+const {
+  title,
+  description,
+  canonicalPath,
+  ogImage = '/og.png',
+  lang = 'en',
+  alternates = [],
+  noindex = false,
+  jsonLd = [],
+  datePublished,
+  dateModified,
+} = Astro.props;
+
+// Base URL from the configured `site` (hardcoded fallback keeps the
+// canonical stable even if someone builds without astro.config.mjs).
+const site = Astro.site?.origin ?? 'https://2facounter.com';
+// Self-referencing canonical: home ("/") stays bare, like the current URLs.
+const canonical = `${site}${canonicalPath === '/' ? '' : canonicalPath}`;
+
+// Map BCP 47 to the hyphenated locale format og:locale expects.
+const ogLocale: Record<string, string> = {
+  en: 'en_US',
+  vi: 'vi_VN',
+  'zh-cn': 'zh_CN',
+  'zh-hans': 'zh_CN',
+  'zh-tw': 'zh_TW',
+  'zh-hant': 'zh_TW',
+  es: 'es_ES',
+  ja: 'ja_JP',
+  fr: 'fr_FR',
+  de: 'de_DE',
+  pt: 'pt_PT',
+  ko: 'ko_KR',
+  it: 'it_IT',
+};
+const locale = ogLocale[lang.toLowerCase()] ?? 'en_US';
+
+// hreflang must include a self-referencing entry for every page in the
+// set — add it automatically unless the caller already listed this page.
+const selfLang = lang.toLowerCase();
+const allAlternates = alternates.some((a) => a.hreflang.toLowerCase() === selfLang)
+  ? alternates
+  : [{ hreflang: lang, href: canonical }, ...alternates];
+---
+
+<title>{title}</title>
+<meta name="description" content={description} />
+<meta name="author" content="2FA COUNTER" />
+<meta name="robots" content={noindex ? 'noindex, nofollow' : 'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1'} />
+{noindex && <meta name="googlebot" content="noindex, nofollow" />}
+
+<link rel="canonical" href={canonical} />
+{allAlternates.map((a) => <link rel="alternate" hreflang={a.hreflang} href={a.href} />)}
+
+<!-- Open Graph -->
+<meta property="og:type" content="website" />
+<meta property="og:locale" content={locale} />
+<meta property="og:site_name" content="2FA COUNTER" />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonical} />
+<meta property="og:image" content={`${site}${ogImage}`} />
+<meta property="og:image:type" content="image/png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content="2FA COUNTER — the 2FA authenticator that runs in your browser" />
+{datePublished && <meta property="article:published_time" content={datePublished} />}
+{dateModified && <meta property="article:modified_time" content={dateModified} />}
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={`${site}${ogImage}`} />
+<meta name="twitter:image:alt" content="2FA COUNTER — the 2FA authenticator that runs in your browser" />
+
+{jsonLd.map((graph) => <script type="application/ld+json" set:html={JSON.stringify(graph)} />)}

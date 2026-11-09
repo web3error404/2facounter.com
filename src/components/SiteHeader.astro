@@ -1,0 +1,122 @@
+---
+import ShieldLogo from './ShieldLogo.astro';
+
+const defaultLinks = [
+  { href: '/#how-it-works', label: 'How it works' },
+  { href: '/#features', label: 'Features' },
+  { href: '/#faq', label: 'FAQ' },
+  { href: '/guides/', label: 'Guides' },
+  { href: '/privacy/', label: 'Privacy' },
+];
+
+interface Props {
+  /** Nav links — override with translated labels on localized pages */
+  links?: Array<{ href: string; label: string }>;
+  /** Label of the primary call-to-action button */
+  cta?: string;
+}
+
+const { links = defaultLinks, cta = 'Generate a code' } = Astro.props;
+---
+
+<!-- Deli nav-bar: orange band matching the canvas, 3px ink base border, segmented nav pills -->
+<header class="sticky top-0 z-40 border-b-3 border-ink bg-canvas">
+  <nav
+    class="mx-auto flex h-16 max-w-[1200px] items-center justify-between gap-4 px-4 sm:px-6 xl:px-0"
+    aria-label="Main"
+  >
+    <a href="/" class="flex items-center gap-2.5" aria-label="2FA COUNTER — home">
+      <ShieldLogo class="h-9 w-9 shrink-0" />
+      <span
+        translate="no"
+        class="font-brand text-lg leading-none tracking-normal text-ink text-shadow-[2px_2px_0_0_rgb(244_235_225/0.65)]"
+      >
+        2FA COUNTER
+      </span>
+    </a>
+
+    <div class="hidden items-center gap-1.5 lg:flex">
+      {
+        links.map(({ href, label }) => (
+          <a
+            href={href}
+            class="rounded-full border-2 border-transparent px-3 py-1.5 text-sm font-semibold text-ink hover:border-ink hover:bg-surface"
+          >
+            {label}
+          </a>
+        ))
+      }
+      <a href="/#generator" class="btn-primary ml-2">{cta}</a>
+    </div>
+
+    <button
+      id="menu-toggle"
+      class="btn-icon h-11 w-11 lg:hidden"
+      aria-expanded="false"
+      aria-controls="mobile-menu"
+      aria-label="Open menu"
+    >
+      <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+      </svg>
+    </button>
+  </nav>
+
+  <div id="mobile-menu" class="hidden border-t-2 border-dashed border-ink/40 bg-canvas px-4 py-3 lg:hidden">
+    <div class="flex flex-col gap-1">
+      {
+        links.map(({ href, label }) => (
+          <a href={href} class="rounded-full px-3 py-3 text-sm font-semibold text-ink hover:bg-canvas-soft">
+            {label}
+          </a>
+        ))
+      }
+      <a href="/#generator" class="btn-primary mt-2">{cta}</a>
+    </div>
+  </div>
+</header>
+
+<script>
+  const toggle = document.getElementById('menu-toggle');
+  const menu = document.getElementById('mobile-menu');
+
+  function menuIsOpen(): boolean {
+    return toggle?.getAttribute('aria-expanded') === 'true';
+  }
+
+  function closeMenu(): void {
+    menu?.classList.add('hidden');
+    menu?.classList.remove('block');
+    toggle?.setAttribute('aria-expanded', 'false');
+    toggle?.setAttribute('aria-label', 'Open menu');
+  }
+
+  toggle?.addEventListener('click', () => {
+    const expanded = menuIsOpen();
+    toggle.setAttribute('aria-expanded', String(!expanded));
+    toggle.setAttribute('aria-label', expanded ? 'Open menu' : 'Close menu');
+    menu?.classList.toggle('hidden', expanded);
+    menu?.classList.toggle('block', !expanded);
+  });
+
+  // Route every link click through the same close path
+  menu?.querySelectorAll('a').forEach((a) =>
+    a.addEventListener('click', closeMenu),
+  );
+
+  // Escape closes the menu and returns focus to the toggle
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && menuIsOpen()) {
+      closeMenu();
+      toggle?.focus();
+    }
+  });
+
+  // A click anywhere outside the bar + menu closes it
+  document.addEventListener('click', (e) => {
+    if (!menuIsOpen()) return;
+    if (e.target instanceof Node && !menu?.contains(e.target) && !toggle?.contains(e.target)) {
+      closeMenu();
+    }
+  });
+</script>

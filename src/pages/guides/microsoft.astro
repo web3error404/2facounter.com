@@ -1,0 +1,61 @@
+---
+import GuideLayout from '../../components/GuideLayout.astro';
+
+const title = 'How to Set Up 2FA on Microsoft (TOTP, No Phone App)';
+const description =
+  'Enable two-factor authentication on your Microsoft account with any standard authenticator. Get the TOTP secret key from Microsoft security settings and generate codes at 2facounter.com.';
+---
+
+<GuideLayout
+  serviceName="Microsoft"
+  title={title}
+  description={description}
+  path="/guides/microsoft/"
+  dateModified="2026-11-07"
+  lastReviewed="2026-11-07"
+  intro="Microsoft account security (Outlook, Windows, Xbox, Office) pushes hard toward its own Authenticator and passkeys — but a standard TOTP setup key is always available if you know where to look. Here's the path."
+  minutes={5}
+  params={['6 digits', '30s period', 'SHA-1']}
+  ctaTitle="Your Microsoft account opens Windows itself"
+  ctaBody="Because a Microsoft account can unlock an entire PC — and every confidential thing in OneDrive — treat its Base32 key as tier-one material: encrypted vault the same day you enroll, and print the one-time code list Microsoft offers alongside it."
+  steps={[
+    {
+      title: 'Open Microsoft account security',
+      body: 'Sign in at account.microsoft.com and open Security → “Manage how I sign in” (or Advanced security options). Personal accounts land in your profile; work accounts use the same TOTP standard through Entra ID security info.',
+    },
+    {
+      title: 'Decline the Authenticator-app download',
+      body: 'Microsoft offers its mobile Authenticator first. When asked “which way do you want to verify?”, continue with “Use an app” / “I don’t have the app” — the wizard then shows the classic QR-code setup screen for any authenticator app.',
+    },
+    {
+      title: 'Reveal the secret key',
+      body: 'On the QR screen choose “Can’t scan the image?” (or “enter code manually”). A Base32 setup key appears — letters A–Z and digits 2–7, no spaces.',
+    },
+    {
+      title: 'Paste the key into the generator',
+      body: 'Paste it into 2facounter.com and the live 6-digit code appears immediately. Prefer your camera? Screenshot the QR and press Ctrl+V on the page instead — nothing is uploaded to anyone.',
+    },
+    {
+      title: 'Confirm the code',
+      body: 'Copy the token and enter it in Microsoft’s confirmation field. Once accepted, the app entry appears in your sign-in methods list alongside your password and any passkeys you keep.',
+    },
+    {
+      title: 'Archive key and recovery info',
+      body: 'Save the Base32 key in your encrypted password manager as master copy, verify a fallback email/phone exists in your profile, and note the “check your authenticator every 90 days” prompt Microsoft sometimes shows for hybrid accounts.',
+    },
+  ]}
+  faqs={[
+    {
+      q: 'Is Microsoft Authenticator required for Microsoft 2FA?',
+      a: 'No. Microsoft’s Authenticator app is the default suggestion, but personal accounts support standard RFC 6238 TOTP — the same algorithm every authenticator uses. Choosing “use an app” without native app support delivers a setup key that works everywhere.',
+    },
+    {
+      q: 'My work/school Microsoft 365 account has no authenticator option — why?',
+      a: 'Entra ID (Azure AD) administrators can restrict which sign-in methods are allowed. If “authenticator app” is greyed out, your organization has limited methods to passkeys or its mobile app. Contact your IT admin — this site cannot bypass the policy, and shouldn’t.',
+    },
+    {
+      q: 'Does 2FA get demanded for Xbox or Outlook too?',
+      a: 'Yes — they all sit behind the same Microsoft account, so a single enrollment covers Xbox sign-ins, Outlook.com mail, OneDrive, and Microsoft Store purchases. Some flows (new devices, region changes) will demand the code even from already-trusted apps, so the generator being a bookmark away matters.',
+    },
+  ]}
+/>

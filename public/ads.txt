@@ -1,0 +1,14 @@
+# ads.txt — authorized digital sellers (IAB standard, required by the
+# "Authorized inventory" Google Publisher Policy once AdSense is live).
+#
+# HOW TO FILL IN: in your AdSense account (Settings → Account → Your AdSense
+# publisher ID, format pub-1234567890123456), add a line below exactly like:
+#
+#    google.com, pub-XXXXXXXXXXXXXXXX, DIRECT, f08c47fec0942fa0
+#
+# WHY IT MATTERS: without a valid ads.txt entry Google treats ad inventory on
+# this domain as unauthorized and may stop serving on it entirely.
+#
+# IMPORTANT: publish the real pub- ID only — an invented or wrong ID is an
+# inaccurate file under Google's "Dishonest declarations" policy and can also
+# block ad serving. Until the account is approved this file stays comment-only.

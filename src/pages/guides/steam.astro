@@ -1,0 +1,77 @@
+---
+import GuideLayout from '../../components/GuideLayout.astro';
+
+const title = 'How to Set Up 2FA on Steam (Steam Guard Alternative) ';
+const description =
+  'Add two-factor authentication to Steam in your browser. Generate the 5-character Steam TOTP codes from your secret key at 2facounter.com — no mobile app needed.';
+---
+
+<GuideLayout
+  serviceName="Steam"
+  title={title}
+  description={description}
+  path="/guides/steam/"
+  dateModified="2026-11-09"
+  intro="Steam Guard is the honest exception: Steam login codes use Valve’s own 5-character TOTP variant that no standards-based generator — including this one — reproduces. Here is what actually works for Steam and what does not, so you don’t rely on a backup that silently fails."
+  minutes={5}
+  params={['5-char code', '30s period', 'Valve variant']}
+  ctaTitle="For Steam, the honest answer is the official app"
+  ctaBody="No standards-based tool — including this one — can produce genuine Steam Guard codes, and nothing on this page should pretend it can. Enroll Steam Guard once, keep your session clean, and save your recovery details with your Steam password in an encrypted vault."
+  deepDive={{
+    heading: "How Steam Guard differs from standard TOTP — the honest details",
+    blocks: [
+      {
+        title: 'A different encoding on top of the same math',
+        body: 'Steam login codes are 5 characters (letters A–Z plus digits 2–9) instead of 6 digits, because Valve runs its own alphabet and character mapping over the RFC 6238 HMAC output. A standards-based generator literally cannot produce that string — which is exactly why this guide points you at Steam Guard itself instead of pretending a pasted secret will yield valid login codes. Beware of any tool that claims otherwise; it isn’t telling the truth.',
+      },
+      {
+        title: 'The 15-day cooldown on fresh enrollments',
+        body: 'Newly added Steam Guard locks the market and trading for 15 days. Enroll well before you plan to trade, not an hour before a sale is due. Trade and market confirmations are also their own flow inside the official app — a separate channel from login codes that no third-party tool can stand in for.',
+      },
+      {
+        title: 'The QR scam every trader eventually meets',
+        body: 'The classic hijack: a “buyer” messages you a QR code and asks you to scan it to “verify”, “confirm a trade”, or “check an offer”. It’s actually the Steam login QR for your own account — scanning it signs the scammer in. The rule is simple: only scan setup QR codes from the Steam client you opened yourself. A genuine enrollment never arrives by chat, email, or inside a trade window.',
+      },
+    ],
+  }}
+  steps={[
+    {
+      title: 'Open Steam account settings',
+      body: 'In the Steam client (desktop), go to “Account” → “Account security”, then click “Manage Steam Guard”.',
+    },
+    {
+      title: 'Enroll the official Steam Guard app',
+      body: 'Steam login codes come from Valve’s TOTP variant (5 characters, its own alphabet on top of RFC 6238) — the official Steam mobile app is the only tool that produces them. Enroll the app there once; it also handles trade and market confirmations, which no third-party tool can.',
+    },
+    {
+      title: 'Know where a standard generator does help',
+      body: 'Web tools like 2facounter.com implement the standard RFC 6238 alphabet (6/7/8-digit codes). You can keep your passwords safe, compute standard-TOTP codes in a browser, or verify what a Base32 secret produces — but the codes are not valid Steam login codes.',
+    },
+    {
+      title: 'Keep trade/market protections in mind',
+      body: 'Newly added Steam Guard has a 15-day market/trading cooldown. Plan around it: enroll, wait the cooldown out, then use the app freely.',
+    },
+    {
+      title: 'Write the recovery details down',
+      body: 'Store Steam’s recovery details with your Steam password in an encrypted vault so a lost phone can be re-enrolled without guessing.',
+    },
+    {
+      title: 'Bottom line for Steam',
+      body: 'For Steam logins and trade confirmations, use Steam Guard itself. Everything this site generates is standards-based TOTP — exactly the wrong alphabet for Valve’s variant, and we won’t pretend otherwise.',
+    },
+  ]}
+  faqs={[
+    {
+      q: 'Is this the same as the official Steam Mobile Authenticator?',
+      a: 'No — and for Steam, the official app is not optional. Valve’s login TOTP is a 5-character variant plus its own trade-confirmation flow; only the Steam Guard app does both. A standards-based generator cannot stand in for it.',
+    },
+    {
+      q: 'Why are Steam codes 5 characters instead of 6 digits?',
+      a: 'Steam runs its own alphabet (A–Z + 2–9) on top of TOTP. This generator implements the standard RFC 6238 alphabet, so its output will not match Steam’s login strings — and no tool that claims otherwise is telling the truth. Use the Steam Guard app for logins.',
+    },
+    {
+      q: 'I shouldn’t ever use a QR code someone sent me in chat, right?',
+      a: 'Right — never trust a QR code someone sends you, or a “log in to trade” link. Only enroll 2FA from Steam itself, on the settings screen you opened yourself.',
+    },
+  ]}
+/>

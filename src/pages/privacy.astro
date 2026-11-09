@@ -1,0 +1,145 @@
+---
+import Layout from '../layouts/Layout.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+
+const title = 'Privacy Policy — 2FA COUNTER';
+const description =
+  '2FA COUNTER (2facounter.com) privacy policy: no accounts, no tracking, no telemetry. Your 2FA secret keys are processed exclusively in your browser.';
+---
+
+<Layout title={title} description={description} path="/privacy/">
+  <SiteHeader />
+  <main id="main">
+    <div class="mx-auto max-w-[720px] px-4 py-20 sm:px-6 lg:py-24">
+      <p class="section-label">Legal</p>
+      <h1 class="mt-3 font-display text-4xl tracking-normal text-ink">Privacy policy</h1>
+      <p class="mt-4 font-mono text-label font-bold text-ink">Effective · November 7, 2026</p>
+
+      <div class="rich-text mt-12 rounded-xl border-2 border-ink bg-cream p-6 sm:p-10" style="box-shadow: var(--shadow-card)">
+        <blockquote>
+          The short version: we cannot see your keys, we cannot lose them, and there is nothing
+          about you to protect — because we never receive it.
+        </blockquote>
+
+        <h2>What this site collects</h2>
+        <p>
+          <strong>Nothing.</strong> There are no accounts, no tracking cookies, no analytics, no
+          form submissions, and no third-party tracking pixels. The site is statically generated
+          HTML plus JavaScript that runs locally in your browser. The one thing this site stores
+          on your device — the last key you used, in your browser’s local storage — is described
+          below under <a href="#local-storage">Local storage</a>, and cookies are covered under{" "}
+          <a href="#cookies">Cookies</a>.
+        </p>
+
+        <h2 id="cookies">Cookies</h2>
+        <p>
+          2facounter.com does not set any cookies of its own, and nothing about your visit is
+          profiled or recorded by this site. The tool’s “remember my last key” behavior uses your
+          browser’s <code>localStorage</code> — a storage area that never leaves your device and
+          is not sent to us — rather than cookies. More on storage in the Local storage section
+          below.
+        </p>
+
+        <h2 id="ads">Google advertising</h2>
+        <!-- ── ADSENSE LAUNCH CHECKLIST (update this page the day ad code ships) ──
+             1. Ads set cookies and make third-party requests; the statements in
+                "What this site collects", "Cookies", and "Third-party requests"
+                ("collects NOTHING", "zero third-party requests") become false
+                and would violate Google's Privacy disclosures / Dishonest
+                declarations policies if left untouched.
+             2. Replacements required:
+                • Body lead:            Nothing from this site itself. Google’s
+                                        ad partners, however, may use cookies…
+                • Cookies section:      add “Advertising cookies (Google
+                                        AdSense)…” paragraph
+                • Third-party requests: add “Ads served through Google may load
+                                        scripts from Google’s serving domains…”
+                • Keep current DoubleClick + adsettings/aboutads opt-out text
+                  (already here — that matches Google’s required disclosure).
+             3. EU/EEA/UK traffic: enable a Google-certified CMP (AdSense
+                “Privacy & messaging”) or serve non-personalized ads before
+                turning on personalized ads — required by the EU user consent
+                policy.
+             4. Matching site change: public/ads.txt holds the pub- ID
+                (comment-only placeholder exists today). -->
+        <p>
+          There are no ads on the site today, and the tool works without any. This policy
+          discloses in advance how advertising would work if it is ever introduced (for example,
+          via Google AdSense): third-party vendors, including Google, use cookies to serve ads
+          based on your prior visits to this and other websites; Google’s use of advertising
+          cookies (such as the DoubleClick cookie) enables it and its partners to serve ads to
+          you based on your visits to this site and/or other sites on the internet; and you may
+          opt out of personalized advertising at any time by visiting{" "}
+          <a rel="noopener noreferrer nofollow" href="https://adssettings.google.com">Google Ads Settings</a>{" "}
+          or{" "}
+          <a rel="noopener noreferrer nofollow" href="https://www.aboutads.info">www.aboutads.info</a>. For
+          Google’s own account of how it uses data when you use our partners’ sites, see{" "}
+          <a rel="noopener noreferrer nofollow" href="https://www.google.com/policies/privacy/partners/">How
+          Google uses data when you use our partners’ sites or apps</a>.
+          Advertising cookies would never be used to read, receive, or transmit your 2FA secret
+          keys — those are handled exclusively in the tool described above and are simply not in
+          scope for anything beyond your own browser.
+        </p>
+
+        <h2>What never leaves your device</h2>
+        <ul>
+          <li>Your Base32 / <code>otpauth://</code> secret keys.</li>
+          <li>Screenshots and images you drop in or paste for QR scanning.</li>
+          <li>Your saved key (the last one you entered, stored only in your browser’s local storage).</li>
+          <li>Generated TOTP codes and their timers.</li>
+        </ul>
+        <p>
+          You can verify all of this yourself: open your browser’s DevTools, watch the Network
+          tab, and paste a key. <strong>Zero requests carry your data.</strong> Once the page is
+          loaded you can disconnect from the internet entirely — decoding QR images, generating
+          codes, and copying them all keep working offline.
+        </p>
+
+        <h2 id="local-storage">Local storage</h2>
+        <p>
+          The most recent key you enter is kept in your browser’s <code>localStorage</code> under
+          the key <code>2fal.key.v2</code> so the generator restores it on a page refresh. That
+          data never leaves your device. Clearing the input field, clearing site data in your
+          browser, or using the generator in a private window means nothing is stored at all.
+        </p>
+        <p>
+          There is no cloud sync and no export file: the tool intentionally has nothing to
+          back up. Keep the original secret in an encrypted, password-manager vault — that is
+          your master copy, and it contains your raw secrets.
+        </p>
+
+        <h2>Third-party requests</h2>
+        <p>
+          <strong>There are none.</strong> Fonts (display, text, and mono) and the
+          QR-decoding library are all bundled at build time and served from this domain itself —
+          loading 2facounter.com makes zero requests to any third-party CDN, analytics provider,
+          or ad network. Your browser talks only to this site, and never sends any of your data.
+          Once the page is loaded (or the app is installed), everything keeps working with the
+          internet disconnected entirely.
+        </p>
+
+        <h2>Standard logs</h2>
+        <p>
+          Like every website on the internet, our hosting provider (or CDN) may process standard
+          connection metadata such as request IP addresses and user agents for security and abuse
+          prevention. This is outside its control and retained for hours. No 2FA data is ever
+          included, because no 2FA data is ever transmitted.
+        </p>
+
+        <h2>Children</h2>
+        <p>
+          The tool is a general-purpose utility and does not target children under 13, and it can
+          never collect information from them.
+        </p>
+
+        <h2>Changes</h2>
+        <p>
+          If this policy changes meaningfully, including the domain, the change will be noted
+          above. Public issue? Write to <a href="/contact/">the contact page</a>.
+        </p>
+      </div>
+    </div>
+  </main>
+  <SiteFooter />
+</Layout>

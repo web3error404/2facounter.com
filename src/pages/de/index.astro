@@ -1,0 +1,558 @@
+---
+/* Deutsch — übersetzte Startseite (hreflang: de). Struktur parallel zu
+   index.astro; SEO-optimierte Übersetzung. */
+import Layout from '../../layouts/Layout.astro';
+import SiteHeader from '../../components/SiteHeader.astro';
+import SiteFooter from '../../components/SiteFooter.astro';
+import Generator from '../../components/Generator.astro';
+
+const title = '2FA-Code-Generator online — kostenloser 2FA-Authenticator (TOTP)';
+const description =
+  '2FA-Code online erzeugen: kostenloser browserbasierter 2FA-Code-Generator und TOTP-Authenticator. Geheimen Schlüssel einfügen und ein 6-stelliges Einmalpasswort berechnen lassen, das sich alle 30 Sekunden aktualisiert — eine private Google-Authenticator-Alternative ohne Anmeldung, ohne Handy.';
+
+const faq = [
+  {
+    q: 'Wie erhalte ich 2FA?',
+    a: 'Sie erhalten 2FA über das Konto, das Sie schützen möchten: Öffnen Sie dessen Einstellungen, suchen Sie „Sicherheit“ oder „Login & Sicherheit“ und dort „Zwei-Faktor-Authentifizierung“ oder „Zwei-Schritt-Verifizierung“. Wählen Sie die Option „Authenticator-App“, scannen Sie den QR-Code — oder klicken Sie auf „Scannt nicht? Schlüssel anzeigen“, um den Einrichtungsschlüssel zu sehen (eine Base32-Zeichenkette oder eine otpauth://-URI) — und fügen Sie ihn oben auf dieser Seite in den Generator ein. Bestätigen Sie die Einrichtung mit dem Live-Code und speichern Sie dann die Wiederherstellungscodes, die der Dienst Ihnen anzeigt.',
+  },
+  {
+    q: 'Wie aktiviere ich die Zwei-Faktor-Authentifizierung?',
+    a: 'Vier Schritte, ungefähr zwei Minuten: 1) Öffnen Sie die Konto- oder Sicherheitseinstellungen und wählen Sie „Zwei-Faktor-Authentifizierung“. 2) Wählen Sie „Authenticator-App verwenden“ (meiden Sie SMS, wenn es eine bessere Option gibt). 3) Scannen Sie den QR-Code mit Ihrem Authenticator — oder lassen Sie sich den Einrichtungsschlüssel anzeigen und speichern Sie ihn. 4) Bestätigen Sie mit dem Live-Code und laden Sie die Backup-Codes herunter oder drucken Sie sie aus. Für Google, GitHub, Discord, Binance und weitere Dienste veröffentlichen wir eigene Einrichtungsanleitungen.',
+  },
+  {
+    q: 'Wie funktioniert 2FA?',
+    a: 'Nach dem Passwort verlangt der Dienst einen zweiten Identitätsnachweis. Beim Standardverfahren TOTP (RFC 6238) berechnet Ihr Authenticator aus einem gemeinsam geheimen Schlüssel plus der aktuellen Zeit einen 6-stelligen Einmalpasswort-Code, und der Server führt exakt dieselbe Berechnung aus und vergleicht beide Werte. Der Code wird alle 30 Sekunden neu abgeleitet und ist nach seinem Ablauf wertlos — ein geleaktes Passwort allein reicht damit nicht mehr aus, Ihr Konto zu öffnen.',
+  },
+  {
+    q: 'Wofür brauchen wir 2FA?',
+    a: 'Sie schützt jede Anmeldung, auf die ein anderer scharf ist: E-Mail- und Cloud-Suiten (Google, Microsoft, Apple), Bank- und Brokerkonten, Krypto-Börsen (Binance, Coinbase, Kraken), Entwicklerplattformen (GitHub, AWS), Gaming (Steam, Discord, Twitch) und Soziale Netze (X, Instagram). Unternehmen nutzen sie auch für VPNs, E-Mail und Admin-Konsolen. Überall dort, wo eine Website die Option „Authenticator-App“ anbietet, führt der Weg über 2FA.',
+  },
+  {
+    q: 'Ist 2FA 100 % sicher?',
+    a: 'Nein — keine Sicherheitskontrolle ist das, und ehrliche Anleitungen sagen das offen. Zwei-Faktor-Authentifizierung vernichtet Angriffe über gestohlene Passwörter, aber ein frischer Code, den Sie innerhalb seiner 30 Sekunden auf einer gefälschten Website eingeben, lässt sich weiterhin phishen; Schadsoftware, die bereits auf Ihrem Gerät ist, kann die Sitzung selbst übernehmen; und SMS-Codes fallen SIM-Swap-Angriffen zum Opfer. Trotz aller Einschränkungen gilt: Ein Konto mit 2FA ist weit schwerer zu knacken als eines ohne.',
+  },
+  {
+    q: 'Ist 2FA verpflichtend?',
+    a: 'Kein Staat macht sie zur Pflicht, aber immer mehr Plattformen tun es: GitHub verlangt sie seit 2023 von Code-Beitragenden, Banken und Krypto-Börsen erzwingen sie, und Arbeitgeber schreiben sie für Arbeitszugänge routinemäßig vor. Überall sonst ist sie optional, aber dringend empfohlen. Behandeln Sie sie trotzdem als Pflicht für Ihr wertvollstes Konto — Ihre E-Mail — denn wer Ihr Postfach kontrolliert, kann alles andere zurücksetzen.',
+  },
+  {
+    q: 'Warum ist 2FA so wichtig?',
+    a: 'Weil Passwörter immer auf dieselbe Art scheitern. Milliarden echter Passwörter sind durch Datenlecks bereits öffentlich, und Angreifer probieren sie rund um die Uhr auf jeder anderen Website aus (Credential Stuffing). Microsoft berichtet, dass 2FA über 99,9 % automatisierter Kontoübernahme-Angriffe blockiert — es ist das günstigste Upgrade, das Ihre E-Mail-, Bank-, Gaming- und Krypto-Konten vor den Bedrohungen schützt, die tatsächlich passieren.',
+  },
+  {
+    q: 'Wie stark ist 2FA?',
+    a: 'Das hängt allein vom zweiten Faktor ab. SMS-Codes sind die schwächste Variante, denn ein SIM-Swap lässt einen Angreifer Ihre Rufnummer übernehmen und die Codes mitlesen. TOTP-Authenticator-Codes — die 30-Sekunden-Variante — sind kryptografisch stark: nichts wird übertragen, ein Offline-Angreifer kann sie nicht ableiten, und jeder Code läuft nach Sekunden aus. Hardware-Sicherheitsschlüssel und Passkeys sind am stärksten, weil sie phishing-resistent und kryptografisch an die echte Domain gebunden sind.',
+  },
+  {
+    q: 'Warum setzt heute alles auf 2FA?',
+    a: 'Weil die Ära des reinen Passworts zusammengebrochen ist. Industrielle Datenlecks legten Milliarden Zugangsdaten offen, automatisiertes Credential Stuffing machte Kontohijacking nahezu kostenlos, und die Plattformen waren es leid, für die Folgen zu bezahlen. Die Regulierung zog nach: NIST stufte SMS-Authentifizierung in US-Standards ab, und die EU-Richtlinie PSD2 verlangt starke Kundenauthentifizierung. Nachdem wenige Giganten 2FA normalisiert haben, zog jeder weitere Dienst nach.',
+  },
+  {
+    q: 'Brauche ich ein Handy für diesen 2FA-Authenticator?',
+    a: 'Nein. Das ist ein browserbasierter 2FA-Code-Generator: Er läuft auf jedem Laptop, Tablet oder Desktop mit einem modernen Browser, online oder komplett offline als installierte App. Er ersetzt die Handy-App, wenn das Handy verloren, verkauft, kaputt oder leer ist — oder wo ein Handy schlicht nicht erlaubt ist.',
+  },
+  {
+    q: 'Ist 2FA COUNTER sicher zu benutzen?',
+    a: 'Ja. Jede Berechnung läuft lokal in Ihrem Browser mit der Web Crypto API. Ihre geheimen Schlüssel werden niemals an einen Server gesendet — oder von einem gesehen. Sie können die Seite laden, das Internet trennen, und der Generator arbeitet weiter.',
+  },
+  {
+    q: 'Funktioniert das auch offline?',
+    a: 'Absolut. Installieren Sie 2FA COUNTER als App („Zum Startbildschirm hinzufügen“ / „Installieren“), und es läuft vollständig offline wie ein nativer Authenticator. Die Codes werden aus Ihrem Geheimnis plus der Uhr Ihres Geräts abgeleitet — es wird kein Netzwerk benötigt.',
+  },
+  {
+    q: 'Warum wird mein 2FA-Code abgelehnt?',
+    a: 'Fast immer wegen einer Uhrabweichung. TOTP-Codes basieren auf der Zeit; wenn die Uhr Ihres Geräts auch nur um eine halbe Minute daneben liegt, ist der Code ungültig. Stellen Sie sicher, dass die Systemzeit automatisch synchronisiert wird (z. B. bei Windows „Jetzt synchronisieren“ in den Einstellungen für Datum und Uhrzeit, bei macOS „Uhrzeit automatisch festlegen“) und versuchen Sie es erneut. Der Generator rechnet mit der Zeit, die Ihr Gerät meldet — eine eigene Uhr, die er korrigieren könnte, hat er nicht.',
+  },
+  {
+    q: 'Wie unterscheidet sich das von Google Authenticator oder Authy?',
+    a: 'Das sind Handy-Apps; dies ist ein Authenticator im Browser. Er nutzt exakt denselben RFC-6238-TOTP-Algorithmus und funktioniert mit jedem Dienst, der eine Standard-Authenticator-App akzeptiert — aber Sie verlieren den Zugang nie wieder, nur weil ein Handy kaputt, verkauft oder leer ist. Eine praktische Google-Authenticator-Alternative, wenn kein Handy in Reichweite ist.',
+  },
+  {
+    q: 'Wo werden meine Schlüssel gespeichert?',
+    a: 'Nur in Ihrem eigenen Browser. Ihr letzter Schlüssel plus eine kurze „Recent keys“-Liste (bis zu 8) liegen im lokalen Speicher dieses Geräts, damit der Generator einen Reload überlebt und Sie mit einem Klick zwischen Ihren Schlüsseln wechseln können — nie auf unseren Servern, weil es keine gibt. Die Schlüssel liegen als Klartext vor; wer dieses Browserprofil öffnen kann, kann sie also lesen — behandeln Sie das Profil wie einen Passwort-Manager-Tresor. „Clear all“ über der Liste (fragt nach Bestätigung), das Leeren des Feldes oder das Zurücksetzen Ihrer Browserdaten entfernt sie endgültig; bewahren Sie das Original in Ihrem Passwort-Manager als Hauptkopie auf.',
+  },
+  {
+    q: 'Funktioniert es mit HOTP, 8-stelligen Codes oder SHA-256-Diensten?',
+    a: 'Ja. Fügen Sie die vollständige otpauth://-URI ein, die Ihr Dienst bereitstellt, und jeder übergebene Parameter wird automatisch berücksichtigt — 6, 7 oder 8 Ziffern, 15/30/60 s Periode, SHA-1/SHA-256/SHA-512-Hashing und zählerbasiertes HOTP. Ein nackter Base32-Schlüssel nutzt die Standardwerte (6 Ziffern, 30 s, SHA-1) — das verwenden fast alle Dienste.',
+  },
+  {
+    q: 'Ist es wirklich kostenlos?',
+    a: 'Ja — keine Konten, keine Premium-Stufen, kein Login. Es ist ein Werkzeug, kein Dienst.',
+  },
+];
+
+// hreflang cluster for the translated homepages (+ x-default → English)
+const homeAlternates = [
+  { hreflang: 'en', href: 'https://2facounter.com/' },
+  { hreflang: 'vi', href: 'https://2facounter.com/vi/' },
+  { hreflang: 'zh-Hans', href: 'https://2facounter.com/zh-cn/' },
+  { hreflang: 'zh-Hant', href: 'https://2facounter.com/zh-tw/' },
+  { hreflang: 'es', href: 'https://2facounter.com/es/' },
+  { hreflang: 'ja', href: 'https://2facounter.com/ja/' },
+  { hreflang: 'fr', href: 'https://2facounter.com/fr/' },
+  { hreflang: 'de', href: 'https://2facounter.com/de/' },
+  { hreflang: 'pt', href: 'https://2facounter.com/pt/' },
+  { hreflang: 'ko', href: 'https://2facounter.com/ko/' },
+  { hreflang: 'it', href: 'https://2facounter.com/it/' },
+  { hreflang: 'x-default', href: 'https://2facounter.com/' },
+];
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebApplication',
+    name: '2FA COUNTER',
+    alternateName: ['2FA Live Code', '2facounter', '2FA Online Authenticator', '2FA Auth Tool'],
+    url: 'https://2facounter.com/de/',
+    description,
+    applicationCategory: 'SecurityApplication',
+    applicationSubCategory: 'Two-Factor Authentication',
+    operatingSystem: 'Beliebig (browserbasiert)',
+    browserRequirements: 'Benötigt einen modernen Browser mit Web-Crypto-API-Unterstützung',
+    softwareVersion: '2.0',
+    featureList: [
+      'TOTP 2FA-Code-Erzeugung (RFC 6238)',
+      'HOTP-Code-Erzeugung (RFC 4226)',
+      'QR-Codes scannen per Kamera oder Screenshot',
+      'Offline-/PWA-Unterstützung',
+      'SHA-1-, SHA-256- und SHA-512-Hashing',
+      'Unterstützung für 6-, 7- und 8-stellige Codes',
+      'Liste der letzten Schlüssel',
+      'Zero-Knowledge — kein Server, keine Konten',
+    ],
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+    isAccessibleForFree: true,
+    inLanguage: ['en', 'vi', 'zh-CN', 'zh-TW', 'es', 'ja', 'fr', 'de', 'pt', 'ko', 'it'],
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faq.map(({ q, a }) => ({
+      '@type': 'Question',
+      name: q,
+      acceptedAnswer: { '@type': 'Answer', text: a },
+    })),
+  },
+];
+
+const steps = [
+  { n: '01', title: 'Geheimen Schlüssel besorgen', body: 'Wenn ein Dienst „Zwei-Faktor-Authentifizierung → Authenticator-App“ anbietet, wählen Sie „Scannt nicht? Einrichtungsschlüssel anzeigen“. Sie erhalten eine Base32-Zeichenkette wie JBSWY3DPEHPK3PXP — oder einen kompletten otpauth://-Link. Beides funktioniert hier.' },
+  { n: '02', title: 'Einfügen, ablegen oder scannen', body: 'Fügen Sie den Schlüssel oder die URI in den Generator ein, ziehen Sie einen Screenshot des QR-Codes auf die Seite oder scannen Sie ihn mit der Kamera. Alles wird auf Ihrem Gerät dekodiert — nichts wird hochgeladen.' },
+  { n: '03', title: 'Live-Code kopieren', body: 'Ein frischer Token erscheint nach wenigen Sekunden, synchron mit der Uhr Ihres Geräts. Klicken Sie auf Kopieren und schließen Sie Ihre Anmeldung ab. Er aktualisiert sich automatisch alle 30 Sekunden.' },
+];
+
+const features = [
+  { title: 'Ein Feld, ein Live-Token', body: 'Geheimschlüssel oder den ganzen otpauth://-Link einfügen, und der passende Code beginnt sofort herunterzuzählen — keine Einrichtung, keine Formulare, keine „Konto hinzufügen“-Zeremonie.', v: 'cream' },
+  { title: 'Screenshot einfügen, Schlüssel erhalten', body: 'QR-Code-Bild mit Strg+V einfügen, eine Bilddatei hineinziehen oder mit der Webcam scannen. Drei Wege zum Importieren, kein Weg, über den Ihr Schlüssel entweichen kann.', v: 'cream' },
+  { title: 'Vollständige Parameterunterstützung, automatisch erkannt', body: 'Ein nackter Schlüssel nutzt die Standardwerte; eine vollständige otpauth://-URI berücksichtigt jeden übergebenen Parameter — 6/7/8 Ziffern, 15/30/60 s Periode, SHA-1/256/512, sogar zählerbasiertes HOTP.', v: 'cream' },
+  { title: 'Überlebt einen Reload — und wechselt mit', body: 'Seite neu geöffnet, und Ihr letzter Schlüssel ist schon da. Über die Liste „Recent keys“ springen Sie mit einem Klick zwischen Ihren Schlüsseln — nur aus dem lokalen Speicher dieses Geräts wiederhergestellt, nie von einem Server.', v: 'cream' },
+  { title: 'Nichts zu installieren, nichts zu registrieren', body: 'Keine Handy-App, kein Konto, keine Sync-Gebühren, kein Tracking. Wer einen Browser öffnen kann, kann einen Code erzeugen.', v: 'cream' },
+  { title: 'Offline & installierbar', body: 'Funktioniert, wenn die Verbindung zur Außenwelt getrennt ist — wortwörtlich. Und als PWA installiert es sich in Ihr Dock oder auf Ihren Startbildschirm wie eine native App.', v: 'dark' },
+];
+
+const services = [
+  'Discord', 'GitHub', 'Steam', 'Binance', 'Google', 'X / Twitter',
+  'AWS', 'Coinbase', 'Kraken', 'Twitch', 'Microsoft', 'Proton Mail',
+];
+---
+
+<Layout title={title} description={description} path="/de/" lang="de" jsonLd={jsonLd} alternates={homeAlternates}>
+  <SiteHeader
+    links={[
+      { href: '/de/#how-it-works', label: 'So funktioniert es' },
+      { href: '/de/#features', label: 'Funktionen' },
+      { href: '/de/#faq', label: 'FAQ' },
+      { href: '/guides/', label: 'Anleitungen' },
+      { href: '/privacy/', label: 'Datenschutz' },
+    ]}
+    cta="Code generieren"
+  />
+
+  <main id="main">
+    <section aria-label="Live-2FA-Code-Generator — Startbereich">
+      <div class="mx-auto max-w-[1200px] px-4 pt-10 pb-4 sm:px-6 sm:pt-16 xl:px-0">
+        <Generator />
+      </div>
+
+      <div class="mx-auto grid max-w-[1200px] items-center gap-12 px-4 pt-14 pb-12 sm:px-6 sm:pt-20 lg:grid-cols-[7fr_5fr] lg:pt-24 xl:px-0">
+        <div>
+          <span class="badge-eyebrow -rotate-1">100 % clientseitig · Zero-Knowledge</span>
+          <h1 class="mt-6 max-w-[11em] font-display text-display-xl tracking-normal text-ink lg:text-display-xxl">
+            Live 2FA-Code-Generator
+          </h1>
+          <p class="mt-6 max-w-xl text-lg leading-[1.5] font-medium text-ink lg:text-xl">
+            Geheimen Schlüssel einfügen und ein 6-stelliges Einmalpasswort live erzeugen. Ein schneller,
+            kostenloser, privater 2FA-Authenticator und Google-Authenticator-Alternative — für die Momente,
+            in denen Ihr Handy weg, kaputt oder schlicht nicht zur Hand ist.
+          </p>
+          <div class="mt-8 flex flex-wrap gap-4">
+            <a href="#generator" class="btn-primary">
+              Ersten Code generieren
+              <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14m0 0-6-6m6 6-6 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            </a>
+            <a href="#how-it-works" class="btn-secondary">So funktioniert es</a>
+          </div>
+          <p class="mt-5 font-mono text-label text-ink">Keine App. Kein Konto. Kein Schlüssel berührt je einen Server.</p>
+        </div>
+        <!-- Codefenster-Artefakt: Cream-Ticket mit dunkler Kopfzeile (auf Mobil unter dem Hero-Text) -->
+        <div class="min-w-0 overflow-hidden rounded-xl border-4 border-ink bg-cream" style="box-shadow: var(--shadow-card)">
+          <div class="flex items-center gap-2 border-b-2 border-dashed border-hairline-strong bg-ink px-4 py-2.5">
+            <span class="h-2.5 w-2.5 rounded-full bg-accent-red"></span>
+            <span class="h-2.5 w-2.5 rounded-full bg-canvas"></span>
+            <span class="h-2.5 w-2.5 rounded-full bg-primary"></span>
+            <span class="ml-2 font-mono text-xs text-cream">otp.rfc-6238.js</span>
+          </div>
+          <pre class="overflow-x-auto p-5 font-mono text-[13px] leading-relaxed"><code>
+<span class="text-muted">// The whole tool. No servers involved.</span>
+<span class="font-bold text-accent-blue">const</span> <span class="text-ink">step</span> = Math.<span class="text-ink">floor</span>(Date.<span class="text-ink">now</span>() / 1000 / 30);
+
+<span class="font-bold text-accent-blue">const</span> <span class="text-ink">key</span> = <span class="font-bold text-accent-blue">await</span> crypto.subtle.<span class="text-ink">importKey</span>(
+  'raw', <span class="text-ink">base32</span>(secret), &#123; name: 'HMAC', hash: 'SHA-1' &#125;);
+
+<span class="font-bold text-accent-blue">const</span> <span class="text-ink">mac</span> = <span class="font-bold text-accent-blue">new</span> <span class="text-ink">Uint8Array</span>(
+  <span class="font-bold text-accent-blue">await</span> crypto.subtle.<span class="text-ink">sign</span>('HMAC', key, <span class="text-ink">u64</span>(step)));
+
+<span class="font-bold text-accent-blue">const</span> <span class="text-ink">o</span> = mac[19] &amp; 15;
+<span class="font-bold text-accent-blue">const</span> <span class="text-ink">code</span> = ((mac[o] &amp; 0x7f) << 24 | mac[o+1] << 16
+  | mac[o+2] << 8 | mac[o+3]) % <span class="text-ink">1e6</span>;
+<span class="text-ink">code</span>.<span class="text-ink">toString</span>().<span class="text-ink">padStart</span>(6, '0'); <span class="text-muted">// ← your 2FA code</span>
+</code></pre>
+        </div>
+      </div>
+
+    </section>
+
+    <div class="mx-auto max-w-[1200px] px-4 sm:px-6 xl:px-0" aria-hidden="true">
+      <hr class="border-t-2 border-dashed border-ink/40" />
+    </div>
+
+    <section aria-label="Zero-Knowledge in Zahlen">
+      <div class="mx-auto grid max-w-[1200px] grid-cols-1 gap-10 px-4 py-16 text-center sm:grid-cols-3 sm:px-6 lg:py-20 xl:px-0">
+        <div>
+          <p class="font-numeric text-5xl font-black tracking-[-0.03125em] text-ink lg:text-[56px]">0</p>
+          <p class="mt-2 text-sm font-medium text-ink">Schlüssel auf unserer Seite gespeichert — es gibt keine Server, die sie speichern könnten</p>
+        </div>
+        <div>
+          <p class="font-numeric text-5xl font-black tracking-[-0.03125em] text-ink lg:text-[56px]">100%</p>
+          <p class="mt-2 text-sm font-medium text-ink">der Berechnungen passieren auf Ihrem Gerät, via Web Crypto</p>
+        </div>
+        <div>
+          <p class="font-numeric text-5xl font-black tracking-[-0.03125em] text-ink lg:text-[56px]">6238</p>
+          <p class="mt-2 text-sm font-medium text-ink">der implementierte RFC-Standard — kompatibel mit jeder Authenticator-App</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="how-it-works" class="scroll-mt-20" aria-labelledby="how-title">
+      <div class="mx-auto max-w-[1200px] px-4 py-20 sm:px-6 lg:py-24 xl:px-0">
+        <div class="grid items-start gap-12 lg:grid-cols-[5fr_7fr]">
+          <div>
+            <p class="section-label">So funktioniert es</p>
+            <h2 id="how-title" class="mt-3 font-display text-3xl tracking-normal text-ink sm:text-4xl lg:text-section-display">
+              Drei Schritte zum Live-2FA-Code — ohne Handy.
+            </h2>
+            <p class="mt-5 text-lg font-medium text-ink">
+              Die Zwei-Faktor-Authentifizierung setzt ein zweites Schloss vor Ihre Konten: einen Code, der sich
+              alle 30 Sekunden ändert und aus einem gemeinsam geheimen Schlüssel plus der aktuellen Zeit
+              abgeleitet wird (TOTP — RFC 6238). Diese Seite ist das zweite Schloss. Ihr Browser führt dieselbe
+              Berechnung aus wie die Website, bei der Sie sich gerade anmelden.
+            </p>
+            <p class="mt-4 font-medium text-ink">
+              Weil das Geheimnis das Einzige ist, das zählt, können Sie es in einem verschlüsselten
+              Passwort-Manager aufbewahren und Codes überall neu erzeugen — auf einem Laptop, in einem zweiten
+              Browserprofil, am Rechner unterwegs, offline.
+            </p>
+            <p class="mt-4 text-sm font-medium text-ink">
+              Neu im Thema? Lesen Sie den verständlichen Erklärartikel:{" "}
+              <a href="/what-is-2fa/" class="link">Was ist 2FA? Wie TOTP funktioniert</a>
+            </p>
+            <a href="#generator" class="btn-primary mt-8">Jetzt ausprobieren</a>
+          </div>
+          <ol class="grid gap-6 sm:grid-cols-3">
+            {steps.map((s) => (
+              <li class="relative flex flex-col rounded-xs border-2 border-ink bg-cream p-6 pt-7" style="box-shadow: var(--shadow-ticket)">
+                <span class="absolute inset-x-3 top-1.5 border-t-2 border-dashed border-hairline-strong" aria-hidden="true"></span>
+                <span class="font-numeric text-3xl font-black tracking-[-0.03125em] text-accent-red">{s.n}</span>
+                <h3 class="mt-3 text-lg font-bold text-ink">{s.title}</h3>
+                <p class="mt-2 text-sm font-medium text-ink">{s.body}</p>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <section id="features" class="scroll-mt-20" aria-labelledby="features-title">
+      <div class="mx-auto max-w-[1200px] px-4 py-20 sm:px-6 lg:py-24 xl:px-0">
+        <div class="mb-12 max-w-2xl">
+          <p class="section-label">Funktionen</p>
+          <h2 id="features-title" class="mt-3 font-display text-3xl tracking-normal text-ink sm:text-4xl lg:text-section-display">
+            Alles, was eine 2FA-App kann — vieles davon besser
+          </h2>
+        </div>
+        <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {features.map((f) => (
+            <article
+              class:list={[
+                'p-6 sm:p-8',
+                f.v === 'dark'
+                  ? 'on-dark rounded-xl border-4 border-ink bg-ink text-cream'
+                  : 'rounded-xl border-2 border-ink bg-cream',
+              ]}
+              style={f.v === 'dark' ? 'box-shadow: var(--shadow-card)' : undefined}
+            >
+              <h3 class:list={['text-lg font-bold', f.v === 'dark' ? 'text-primary' : 'text-ink']}>{f.title}</h3>
+              <p class:list={['mt-2.5 text-sm font-medium', f.v === 'dark' ? 'text-cream/80' : 'text-ink']}>{f.body}</p>
+            </article>
+          ))}
+        </div>
+        <div class="cta-banner on-dark mt-6">
+          <div class="flex flex-col items-start justify-between gap-6 lg:flex-row lg:items-center">
+            <div>
+              <h3 class="font-display text-2xl tracking-normal text-primary lg:text-[28px]">
+                Ihre Schlüssel sind kein Geschäftsmodell
+              </h3>
+              <p class="mt-2 max-w-2xl font-medium text-cream/80">
+                Keine Konten. Keine Logins. Kein „Schicken Sie uns Diagnosedaten“. Das Werkzeug berechnet Codes
+                lokal für Sie und würde identisch funktionieren, wenn diese Domain von einem USB-Stick ausgeliefert
+                würde.
+              </p>
+            </div>
+            <a href="#generator" class="btn-primary shrink-0">
+              Generator öffnen
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="mx-auto max-w-[1200px] px-4 sm:px-6 xl:px-0" aria-hidden="true">
+      <hr class="border-t-2 border-dashed border-ink/40" />
+    </div>
+
+    <section id="compatibility" class="scroll-mt-20" aria-labelledby="compat-title">
+      <div class="mx-auto max-w-[1200px] px-4 py-20 sm:px-6 lg:py-24 xl:px-0">
+        <div class="mb-10 max-w-2xl">
+          <p class="section-label">Kompatibilität</p>
+          <h2 id="compat-title" class="mt-3 font-display text-3xl tracking-normal text-ink sm:text-4xl lg:text-section-display">
+            Funktioniert überall dort, wo eine Authenticator-App funktioniert
+          </h2>
+          <p class="mt-4 font-medium text-ink">
+            Jeder Dienst mit der Option „Authenticator-App verwenden“ erzeugt denselben standardisierten
+            TOTP-Code — auch die folgenden:
+          </p>
+        </div>
+        <ul class="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+          {services.map((s) => (
+            <li class="flex items-center justify-center rounded-full border-2 border-ink bg-surface px-3 py-3 text-sm font-semibold text-ink">{s}</li>
+          ))}
+        </ul>
+        <p class="mt-6 text-sm font-medium text-ink">
+          Gerade einen dieser Dienste einrichten? Lesen Sie die Schritt-für-Schritt-Anleitung:{" "}
+          {[
+            ['Google', 'google'],
+            ['Microsoft', 'microsoft'],
+            ['Discord', 'discord'],
+            ['GitHub', 'github'],
+            ['X', 'x'],
+            ['AWS', 'aws'],
+            ['Coinbase', 'coinbase'],
+            ['Kraken', 'kraken'],
+            ['Steam', 'steam'],
+            ['Binance', 'binance'],
+          ].map(([name, slug], i) => (
+            <>
+              {i > 0 && <span aria-hidden="true"> · </span>}
+              <a href={`/guides/${slug}/`} class="link">{name}</a>
+            </>
+          ))}
+        </p>
+      </div>
+    </section>
+
+    <section id="about" class="scroll-mt-20" aria-labelledby="about-title">
+      <article class="mx-auto max-w-[820px] px-4 py-20 sm:px-6 lg:py-24 xl:px-0">
+        <p class="section-label">Über diesen 2FA-Generator</p>
+        <h2 id="about-title" class="mt-3 font-display text-3xl tracking-normal text-ink sm:text-4xl lg:text-section-display">
+          2FA COUNTER — der 2FA-Authenticator, der in Ihrem Browser lebt
+        </h2>
+        <div class="rich-text mt-8">
+          <p>
+            Die Menschen kommen mit demselben Wunsch hierher: ein funktionierender Einmalpasswort-Code, sofort,
+            ohne etwas zu installieren. Genau das ist 2FA COUNTER: ein kostenloser, browserbasierter
+            2FA-Authenticator und 2FA-Code-Generator. Fügen Sie Ihren geheimen Schlüssel ein, ziehen Sie einen
+            Screenshot des QR-Codes auf die Seite oder scannen Sie ihn mit der Kamera — der passende Live-Code
+            erscheint in Sekunden und aktualisiert sich alle 30 Sekunden, genau wie die App auf Ihrem Handy; nur
+            eben, ohne dass etwas installiert werden muss.
+          </p>
+
+          <h3>Was ist 2FA? Die Antwort in 60 Sekunden</h3>
+          <p>
+            2FA — Zwei-Faktor-Authentifizierung — ist das zweite Schloss Ihres Kontos: etwas, das Sie
+            <em>besitzen</em>, zusätzlich zu etwas, das Sie <em>wissen</em>. Beim Einschalten übergibt Ihnen der
+            Dienst ein geheimen Schlüssel für die einmalige Nutzung. Ihr Authenticator leitet daraus plus der
+            aktuellen Zeit einen frischen 6-stelligen Code ab — der TOTP-Standard, RFC 6238 —, während die Website,
+            bei der Sie sich anmelden, dieselbe Berechnung ausführt und die Ergebnisse vergleicht. Weil der Code
+            alle 30 Sekunden rotiert, öffnet ein gestohlenes Passwort allein nichts mehr. Wenn Sie die komplette
+            Kryptografie erklärt bekommen möchten, lesen Sie den verständlichen Erklärartikel{" "}
+            <a href="/what-is-2fa/">Was ist 2FA? Wie Zwei-Faktor-Authentifizierung &amp; TOTP funktionieren</a>,
+            und erzeugen Sie danach Ihren ersten Code.
+          </p>
+
+          <h3>In drei Schritten zum Code</h3>
+          <p>
+            Wann immer Sie zu einer Anmeldung einen Code brauchen, genügen drei Eingaben. Erstens: Aktivieren Sie
+            die Zwei-Faktor-Authentifizierung auf der Website und wählen Sie „Authenticator-App“; wenn sich der
+            QR-Code nicht scannen lässt, blenden Sie den Einrichtungsschlüssel ein — eine Base32-Zeichenkette oder
+            den vollständigen otpauth://-Link. Zweitens: Fügen Sie diesen Schlüssel oder diese URI in den Generator
+            am Anfang dieser Seite ein, ziehen Sie einen QR-Screenshot hinein oder nutzen Sie die Kamera. Drittens:
+            Kopieren Sie den frischen Code und schließen Sie Ihre Anmeldung ab. Der Generator berücksichtigt jeden
+            übergebenen otpauth-Parameter: 6-, 7- oder 8-stellige Codes, 15/30/60-Sekunden-Perioden, SHA-1-,
+            SHA-256- oder SHA-512-Hashing und zählerbasierte HOTP-Codes. Nichts wird hochgeladen, nichts
+            protokolliert — der Code entsteht auf Ihrem Gerät, und Sie können es selbst im Netzwerk-Tab Ihres
+            Browsers nachprüfen.
+          </p>
+
+          <h3>Ein 2FA-Authenticator, der Ihr Handy nie braucht</h3>
+          <p>
+            Die meisten kommen hierher, weil ihr Handy verschwunden ist — verkauft, kaputt, ertrunken,
+            zurückgesetzt oder am Reisetag mit leerer Batterie — und Google Authenticator, Authy und Microsoft
+            Authenticator nur auf diesem einen Gerät leben. Ein 2FA-Werkzeug im Browser beseitigt diesen einzelnen
+            Ausfallpunkt: Das Geheimnis liegt im Tresor Ihres Passwort-Managers, und den Code erzeugen Sie auf
+            jedem Computer neu, dem Sie vertrauen. Es passt auch zu Desktop-Workflows — bei GitHub oder einer
+            AWS-Konsole am Zweitmonitor anmelden, mehrere Konten über die Liste „Recent keys“ verwalten, an einer
+            Maschine arbeiten, auf der Handys nicht erlaubt sind. Installieren Sie es als App, und der Generator
+            bleibt auch bei komplett getrennter Netzwerkverbindung einsatzfähig. Es ist dieselbe RFC-6238-Mathematik,
+            die jeder Dienst ohnehin akzeptiert — nur eben nicht an Ihre Hosentasche gebunden.
+          </p>
+
+          <h3>Ein Werkzeug für Krypto, Cloud, Gaming und Soziale Netze</h3>
+          <p>
+            Was auch immer Sie schützen, der Standard-TOTP ist die gemeinsame Sprache. Beim Handel auf Binance,
+            Coinbase oder Kraken, beim Absichern von AWS-, Microsoft- oder Google-Konten, beim Schutz von Steam,
+            Discord, X oder Ihres Postfachs — jeder Dienst, der „Authenticator-App verwenden“ anbietet, spricht
+            dasselbe Protokoll, also deckt ein Werkzeug sie alle ab. Lehnt eine Website Ihren Code ab, liegt es
+            fast immer an der Geräteuhr, nicht am Werkzeug: Stellen Sie die Systemzeit auf automatische
+            Synchronisierung, und die Codes stimmen wieder. Für die populären Dienste veröffentlichen wir{" "}
+            <a href="/guides/">Schritt-für-Schritt-Einrichtungsanleitungen</a>, die zu diesem Generator passen —
+            vom Aktivieren der Funktion bis zum Einfügen des letzten Codes.
+          </p>
+
+          <h3>Nichts gesendet, nichts gespeichert, nichts zu zahlen</h3>
+          <p>
+            Dies ist eines der ganz wenigen 2FA-Werkzeuge ohne Versteck, weil es nichts gibt, das sich verstecken
+            ließe. Es gibt keine Server, an die Schlüssel gesendet werden könnten, keine zu erstellenden Konten,
+            keine Premium-Stufen, keine Telemetrie. Jeder Code wird lokal mit der Web Crypto API berechnet; Ihr
+            letzter Schlüssel und eine kurze „Recent keys“-Liste liegen nur im Speicher Ihres eigenen Browsers und
+            lassen sich mit einem Klick auf „Clear all“ entfernen. Bewahren Sie die Hauptkopie jedes Geheimnisses
+            in einem verschlüsselten Passwort-Manager auf, sichern Sie zusätzlich die Wiederherstellungscodes jedes
+            Dienstes — und werten Sie jede drängende Aufforderung zu einem frischen Code als das Warnsignal, das
+            sie ist.
+          </p>
+
+          <p>
+            Es ist bereit, wenn Sie sind: Der Generator ist am Anfang der Seite. Fügen Sie einen Schlüssel ein und
+            beobachten Sie den Live-Code beim Herunterzählen — kostenlos, privat, offlinefähig, für immer.
+          </p>
+        </div>
+      </article>
+    </section>
+
+    <section id="faq" class="scroll-mt-20" aria-labelledby="faq-title">
+      <div class="mx-auto max-w-[1200px] px-4 py-20 sm:px-6 lg:py-24 xl:px-0">
+        <div class="grid gap-12 lg:grid-cols-[4fr_8fr]">
+          <div>
+            <p class="section-label">FAQ</p>
+            <h2 id="faq-title" class="mt-3 font-display text-3xl tracking-normal text-ink sm:text-4xl lg:text-section-display">
+              Fragen, klar beantwortet
+            </h2>
+            <p class="mt-4 font-medium text-ink">
+              Noch unsicher? Alles, was dieses Werkzeug tut, ist im Netzwerk-Tab der DevTools Ihres Browsers
+              sichtbar: <span class="font-bold text-ink">keine einzige Anfrage</span> enthält Ihren Schlüssel.
+            </p>
+          </div>
+          <div class="divide-y-2 divide-dashed divide-hairline-strong">
+            {faq.map(({ q, a }) => (
+              <details class="group px-1 py-1">
+                <summary class="flex cursor-pointer list-none items-center justify-between gap-4 py-4 text-left text-lg font-bold text-ink select-none marker:hidden">
+                  {q}
+                  <svg class="h-4 w-4 shrink-0 text-ink transition-transform group-open:rotate-45" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"></path></svg>
+                </summary>
+                <p class="pb-5 text-sm font-medium text-ink">{a}</p>
+              </details>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section aria-label="Loslegen">
+      <div class="on-dark bg-ink px-4 py-20 text-center sm:px-6 lg:py-24">
+        <h2 class="mx-auto max-w-[11em] font-display text-display-xl tracking-normal text-primary lg:text-display-xxl">
+          Nie wieder zum Handy greifen
+        </h2>
+        <p class="mx-auto mt-5 max-w-2xl text-lg font-medium text-cream/80">
+          Bewahren Sie Ihre Geheimnisse im Passwort-Manager auf, erzeugen Sie Codes direkt hier und bleiben Sie
+          auf jedem Gerät angemeldet — sogar ganz ohne Internet.
+        </p>
+        <a href="#generator" class="btn-primary mt-10 inline-flex">
+          Jetzt 2FA-Code generieren
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <SiteFooter
+    columns={[
+      {
+        title: 'Produkt',
+        links: [
+          { href: '/#generator', label: 'Live-Generator' },
+          { href: '/how-to-get-2fa-code/', label: '2FA-Code abrufen' },
+          { href: '/what-is-2fa/', label: 'Was ist 2FA?' },
+          { href: '/#features', label: 'Funktionen' },
+          { href: '/#compatibility', label: 'Kompatibilität' },
+        ],
+      },
+      {
+        title: 'Wissen',
+        links: [
+          { href: '/totp-vs-passkeys/', label: 'TOTP gegen Passkeys' },
+          { href: '/sim-swap-attacks/', label: 'SIM-Swap-Angriffe' },
+          { href: '/authenticator-cloud-sync/', label: 'App-Cloud-Sync im Vergleich' },
+        ],
+      },
+      {
+        title: 'Anleitungen',
+        links: [
+          { href: '/guides/', label: 'Alle Anleitungen' },
+          { href: '/guides/google/', label: 'Google 2FA' },
+          { href: '/guides/microsoft/', label: 'Microsoft 2FA' },
+          { href: '/guides/discord/', label: 'Discord 2FA' },
+          { href: '/guides/github/', label: 'GitHub 2FA' },
+          { href: '/guides/steam/', label: 'Steam 2FA' },
+          { href: '/guides/binance/', label: 'Binance 2FA' },
+        ],
+      },
+      {
+        title: 'Über uns',
+        links: [
+          { href: '/about/', label: 'Über uns' },
+          { href: '/methodology/', label: 'Redaktionelle Methodik' },
+          { href: '/contact/', label: 'Kontakt' },
+        ],
+      },
+      {
+        title: 'Rechtliches',
+        links: [
+          { href: '/privacy/', label: 'Datenschutzerklärung' },
+          { href: '/terms/', label: 'Nutzungsbedingungen' },
+          { href: '/disclaimer/', label: 'Haftungsausschluss' },
+          { href: '/contact/', label: 'Sicherheitsproblem melden' },
+        ],
+      },
+    ]}
+    tagline="Ein Zero-Knowledge-2FA-Authenticator, der vollständig in Ihrem Browser läuft, auf 2facounter.com. Keine Konten, keine Server, kein Handy nötig."
+    languagesTitle="Sprachen"
+  />
+</Layout>

@@ -1,0 +1,235 @@
+---
+import Layout from '../layouts/Layout.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+
+const title = 'TOTP Codes vs Passkeys: Which 2FA Should You Choose? — 2FA COUNTER';
+const description =
+  'TOTP, passkeys, and SMS compared honestly: phishing resistance, device lock-in, recovery, and offline use. Which 2FA factor belongs on which account — and when TOTP portable codes still win.';
+
+const faqs = [
+  {
+    q: 'Are passkeys a replacement for 2FA?',
+    a: 'They can be. A synced passkey replaces both factors in one step: unlocking your device (something you have/are) plus the origin-bound key (something only that account on that platform holds). That is why vendors describe passkeys as "a single step that is two-factor". The caveat: it hinges on the unlock — a 6-digit PIN on a shared machine is a weaker gate than a hardware key’s touch confirmation.',
+  },
+  {
+    q: 'Can I use TOTP and a passkey on the same account?',
+    a: 'Usually yes. Most services let you register a passkey, keep an authenticator-app method, and hold backup codes all at once. Enrolling two different factor types is actually the recommended final state: passkeys or hardware keys for day-to-day sign-ins, TOTP for environments passkeys don’t reach, recovery codes for the day nothing else works.',
+  },
+  {
+    q: 'Do passkeys work offline?',
+    a: 'Platform passkeys work offline for sign-ins to websites only in limited cases: mobile OS passkeys are available without a network, but password-manager-backed passkeys may need a sync round-trip. Hardware keys need nothing from the network, ever. A TOTP generator like ours also produces codes fully offline — it’s one of TOTP’s underrated strengths.',
+  },
+  {
+    q: 'What happens if I lose the device my passkey lives on?',
+    a: 'If your passkeys sync through Apple, Google or a password manager, they’re waiting on your other devices and in the cloud of that ecosystem — recover by unlocking that account. If it was a single hardware key, use the second key you (hopefully) registered, or fall back to the recovery codes you saved. Businesses run the same play: a spare key in a drawer is a 5-minute outage, not an account loss.',
+  },
+  {
+    q: 'Is the TOTP secret stored on a server somewhere?',
+    a: 'Yes — every TOTP enrollment means the service holds a copy of your shared secret, because both sides must compute the same codes. That is intrinsic to TOTP and fine in practice (services already know your password too). A passkey flips this: the server holds only a public key, and your private half never leaves your device or trusted cloud. With a local-first TOTP setup, the strongest you can do is supply the secret yourself from a vault — then the authenticator doesn’t matter, only your vault does.',
+  },
+];
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: 'TOTP vs Passkeys: Which 2FA Should You Choose?',
+    description,
+    url: 'https://2facounter.com/totp-vs-passkeys/',
+    datePublished: '2026-11-09',
+    dateModified: '2026-11-09',
+    author: { '@type': 'Organization', name: '2FA COUNTER', url: 'https://2facounter.com' },
+    publisher: {
+      '@type': 'Organization',
+      name: '2FA COUNTER',
+      url: 'https://2facounter.com',
+      logo: { '@type': 'ImageObject', url: 'https://2facounter.com/favicon-96x96.png' },
+    },
+    mainEntityOfPage: { '@type': 'WebPage', '@id': 'https://2facounter.com/totp-vs-passkeys/' },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map(({ q, a }) => ({
+      '@type': 'Question',
+      name: q,
+      acceptedAnswer: { '@type': 'Answer', text: a },
+    })),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: '2FA COUNTER', item: 'https://2facounter.com/' },
+      { '@type': 'ListItem', position: 2, name: 'TOTP vs passkeys', item: 'https://2facounter.com/totp-vs-passkeys/' },
+    ],
+  },
+];
+---
+
+<Layout title={title} description={description} path="/totp-vs-passkeys/" jsonLd={jsonLd}>
+  <SiteHeader />
+  <main id="main">
+    <article class="mx-auto max-w-[820px] px-4 py-16 sm:px-6 lg:py-24">
+      <p class="section-label">Learn</p>
+      <h1 class="mt-3 font-display text-4xl tracking-normal text-ink sm:text-5xl">
+        TOTP vs passkeys: which second factor actually belongs on your accounts?
+      </h1>
+      <p class="mt-5 max-w-2xl text-lg font-medium text-ink">
+        An honest comparison across the criteria that matter — phishing resistance, portability,
+        recovery, offline use, and who holds a copy of your credentials — and a rule of thumb for
+        which to enable where.
+      </p>
+
+      <nav aria-label="On this page" class="mt-10 rounded-xl border-2 border-ink bg-cream p-6" style="box-shadow: var(--shadow-card)">
+        <p class="font-mono text-[13px] font-bold tracking-wide text-ink uppercase">On this page</p>
+        <ul class="mt-3 space-y-2 text-sm font-medium text-ink">
+          <li><a class="link" href="#quick-answer">The 60-second answer</a></li>
+          <li><a class="link" href="#how">How each factor works</a></li>
+          <li><a class="link" href="#compare">What each buys you — and costs you</a></li>
+          <li><a class="link" href="#when-totp">When TOTP still wins</a></li>
+          <li><a class="link" href="#when-passkeys">When passkeys (or hardware keys) win</a></li>
+          <li><a class="link" href="#both">The setup that beats choosing</a></li>
+          <li><a class="link" href="#faq">FAQ</a></li>
+        </ul>
+      </nav>
+
+      <div class="rich-text mt-12">
+        <h2 id="quick-answer">The 60-second answer</h2>
+        <p>
+          <strong>Passkeys (or hardware security keys) are the stronger factor</strong> — they are
+          cryptographically bound to the real website, so a fake lookalike page simply can’t
+          collect them, and no shared secret sits on the service’s servers. <strong>TOTP is the
+          most portable factor</strong> — one Base32 secret generates correct codes in any
+          authenticator app, any browser, any device, offline, on shared machines, on hardware
+          your passkeys will never reach. SMS is neither — see our{" "}
+          <a href="/sim-swap-attacks/">SIM-swap article</a> for why it belongs last.
+        </p>
+        <p>
+          The honest ranking for <em>security</em> is: hardware key ≥ passkey &gt; TOTP ≫ SMS.
+          The honest ranking for <em>portability</em> inverts it: TOTP &gt; synced passkeys &gt;
+          hardware keys ≫ SMS. Most people need both halves, which is why the right long-term
+          answer is mixing, not replacing (see <a href="#both">the setup that beats choosing</a>).
+        </p>
+
+        <h2 id="how">How each factor works</h2>
+        <p>
+          <strong>TOTP</strong> (RFC 6238) is a shared-secret design. At enrollment the service
+          gives you a random secret once; every 30 seconds both sides independently compute the
+          HMAC of the current time-step under that secret and compare results. No network
+          traffic, no device pairing — just a secret and a clock. The full walkthrough is in our{" "}
+          <a href="/what-is-2fa/">What is 2FA guide</a>.
+        </p>
+        <p>
+          <strong>Passkeys</strong> (WebAuthn/FIDO2) are asymmetric. At registration the service
+          receives only your <em>public</em> key; the private half stays on your device (or in
+          your platform’s end-to-end-encrypted passkey sync). At sign-in the site sends a
+          challenge that only the private key can answer — and the browser refuses to release a
+          signature unless the domain matches the one the key was created for. That origin
+          binding is what makes them phishing-resistant by construction.
+        </p>
+        <p>
+          <strong>Hardware keys</strong> are passkeys in a physical body (FIDO2 over USB/NFC),
+          with the private key held in a secure element and gate-kept by a physical touch. A
+          synced passkey inherits almost all of the same math; a hardware key adds device
+          independence — it works on borrowed machines where none of your platform accounts are
+          signed in.
+        </p>
+
+        <h2 id="compare">What each buys you — and costs you</h2>
+        <ul>
+          <li>
+            <strong>Phishing resistance.</strong> Passkeys and hardware keys win outright: a
+            phishing domain gets no key, ever. TOTP can be phished — a live code typed into a
+            fake page inside its 30-second window is still one working login. SMS loses hardest:
+            codes are collected wholesale by whatever network path the attacker impersonates.
+          </li>
+          <li>
+            <strong>Portability.</strong> TOTP wins: one Base32 string reproduces identical
+            codes in a phone app, a browser tab, a shared support machine, or an offline laptop.
+            A passkey is deliberately pinned to its platform; a hardware key pins to your pocket.
+          </li>
+          <li>
+            <strong>Server-side copy.</strong> TOTP enrollment leaves a copy of the secret on the
+            service’s servers. Passkeys don’t — the server keeps only a public key. For threat
+            models that include a future breach of the service itself, that asymmetry matters.
+          </li>
+          <li>
+            <strong>Recovery & lock-in.</strong> TOTP’s secret is yours to back up as text — in
+            a password-manager vault — so the factor survives any single device dying. Passkey
+            recovery runs through your platform account (Apple/Google/password-manager) or a
+            backup hardware key; lose both ends of a non-synced setup and the enrollment is
+            gone with it.
+          </li>
+          <li>
+            <strong>Shared/CI machines.</strong> Passkeys on a shared workstation tie sign-ins
+            to that machine’s profile. A TOTP slot in a browser private window comes and goes
+            cleanly — close it, nothing lingers.
+          </li>
+        </ul>
+
+        <h2 id="when-totp">When TOTP still wins</h2>
+        <ul>
+          <li>Your phone died, broke, or was sold — you need codes on whatever you have.</li>
+          <li>You sign in on consoles, VMs, jump boxes, or CI boxes where passkeys can’t live.</li>
+          <li>You browse across multiple machines without a shared platform account.</li>
+          <li>You want one factor you can audit end-to-end: the math is public, the secret is a
+            string you can hold in an encrypted vault, and the network traffic is zero.</li>
+          <li>A service simply doesn’t support passkeys yet — which is still most of the web’s long tail.</li>
+        </ul>
+
+        <h2 id="when-passkeys">When passkeys (or hardware keys) win</h2>
+        <ul>
+          <li>High-value consumer accounts where phishing modules target users — primary email, banking, crypto, Apple/Google accounts.</li>
+          <li>You want a defense that works while asleep and anxious: telling fake sites apart is not your problem anymore.</li>
+          <li>Your organization enforces phishing-resistant flows (AWS, GitHub and Google all push this way) — comply where policy asks.</li>
+          <li>You carry one hardware key (plus a backup) and want the strongest no-phone-signals factor in the game.</li>
+        </ul>
+
+        <h2 id="both">The setup that beats choosing</h2>
+        <p>
+          On the accounts you can, enroll in this order: <strong>passkey or hardware key first</strong> (the
+          phishing-resistant daily driver), <strong>then TOTP</strong> as your universal fallback on the
+          services that allow it, <strong>then recovery codes printed to your vault</strong>. That stack gives
+          you: day-to-day phishing immunity, a portable factor for odd machines and app-less days, and a
+          paper trail of last resort. The Base32 secret from the TOTP enrolment belongs in the same vault —
+          with <a href="/#generator">a local generator like this site</a> it becomes codes on demand anywhere,
+          no app install required.
+        </p>
+        <p>
+          And keep the SMS line off wherever the service permits a stronger substitute. Where it
+          cannot be avoided entirely, at least know the attack that hits it:{" "}
+          <a href="/sim-swap-attacks/">SIM swaps, explained plainly</a>.
+        </p>
+      </div>
+
+      <h2 id="faq" class="mt-16 font-display text-[28px] leading-[1.2] tracking-normal text-ink">FAQ</h2>
+      <div class="mt-6 divide-y-2 divide-dashed divide-hairline-strong">
+        {
+          faqs.map(({ q, a }) => (
+            <details class="group px-1 py-1">
+              <summary class="flex cursor-pointer list-none items-center justify-between gap-4 py-4 text-left font-bold text-ink select-none marker:hidden">
+                {q}
+                <svg class="h-4 w-4 shrink-0 text-ink transition-transform group-open:rotate-45" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"></path>
+                </svg>
+              </summary>
+              <p class="pb-5 text-sm font-medium text-ink">{a}</p>
+            </details>
+          ))
+        }
+      </div>
+
+      <div class="cta-banner on-dark mt-12">
+        <h2 class="font-display text-2xl tracking-normal text-primary">Keep the portable half alive</h2>
+        <p class="mt-2 max-w-2xl font-medium text-cream/80">
+          Passkeys don't follow you into a VM, a borrowed laptop, or an offline day. The Base32
+          secret does. Paste it into the generator and keep TOTP codes flowing anywhere.
+        </p>
+        <a href="/#generator" class="btn-primary mt-5">Open the generator</a>
+      </div>
+    </article>
+  </main>
+  <SiteFooter />
+</Layout>

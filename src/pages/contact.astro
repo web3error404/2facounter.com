@@ -1,0 +1,68 @@
+---
+import Layout from '../layouts/Layout.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+
+const title = 'Contact — 2FA COUNTER';
+const description =
+  'Contact the 2FA COUNTER team: bug reports, unsupported services, security disclosures, and feedback for 2facounter.com.';
+---
+
+<Layout title={title} description={description} path="/contact/">
+  <SiteHeader />
+  <main id="main">
+    <div class="mx-auto max-w-[880px] px-4 py-20 sm:px-6 lg:py-24">
+      <p class="section-label">Get in touch</p>
+      <h1 class="mt-3 max-w-2xl font-display text-4xl tracking-normal text-ink">
+        Contact — report a bug, request a guide, or disclose a security issue
+      </h1>
+
+      <div class="mt-12 grid gap-6 sm:grid-cols-2">
+        <div class="rounded-xl border-2 border-ink bg-cream p-7" style="box-shadow: var(--shadow-btn)">
+          <h2 class="font-display text-lg tracking-normal text-ink">Support &amp; bugs</h2>
+          <p class="mt-2 text-sm font-medium text-ink">
+            Something not working — a code rejected, a QR that won’t scan, a service with unusual
+            TOTP parameters? Email{" "}
+            <a class="link" href="mailto:support@2facounter.com">support@2facounter.com</a>
+          </p>
+        </div>
+        <div class="rounded-xl border-2 border-ink bg-cream p-7" style="box-shadow: var(--shadow-btn)">
+          <h2 class="font-display text-lg tracking-normal text-ink">Guide requests</h2>
+          <p class="mt-2 text-sm font-medium text-ink">
+            Want a step-by-step 2FA guide for a service we don’t cover yet?{" "}
+            <a class="link" href="mailto:guides@2facounter.com">guides@2facounter.com</a>
+          </p>
+        </div>
+        <div class="rounded-xl border-2 border-ink bg-cream p-7" style="box-shadow: var(--shadow-btn)">
+          <h2 class="font-display text-lg tracking-normal text-ink">Security disclosure</h2>
+          <p class="mt-2 text-sm font-medium text-ink">
+            Found something that would send a key anywhere it shouldn’t go? We want to hear it
+            first. Email{" "}
+            <a class="link" href="mailto:security@2facounter.com">security@2facounter.com</a>{" "}
+            and include repro steps and a DevTools screenshot.
+          </p>
+        </div>
+        <div class="rounded-xl border-2 border-ink bg-cream p-7" style="box-shadow: var(--shadow-btn)">
+          <h2 class="font-display text-lg tracking-normal text-ink">Everything else</h2>
+          <p class="mt-2 text-sm font-medium text-ink">
+            Feedback, comparison questions, other domains,{" "}
+            <a class="link" href="mailto:hello@2facounter.com">hello@2facounter.com</a>{" "}
+            reaches a human.
+          </p>
+        </div>
+      </div>
+
+      <!-- Security stamp callout: cream paper slip with a red dashed border -->
+      <div class="mt-8 rounded-xs border-2 border-dashed border-accent-red bg-surface p-7" style="box-shadow: var(--shadow-btn)">
+        <h2 class="font-display text-lg tracking-normal text-accent-red">Important security note</h2>
+        <p class="mt-2 text-sm font-medium text-ink">
+          <strong class="text-accent-red">Never</strong> email us or anyone else your secret keys,
+          screenshots containing QR codes from setup dialogs, or recovery codes. We don’t need
+          them to help with any issue — they can never be un-leaked, no matter who you send them
+          to.
+        </p>
+      </div>
+    </div>
+  </main>
+  <SiteFooter />
+</Layout>

@@ -1,0 +1,250 @@
+<!doctype html>
+<!-- 2FA COUNTER — Open Graph share card (1200×630), rendered to public/og.png by render.mjs -->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      @font-face {
+        font-family: 'Fredoka';
+        src: url('../../node_modules/@fontsource-variable/fredoka/files/fredoka-latin-wght-normal.woff2') format('woff2-variations');
+        font-weight: 300 700;
+      }
+      @font-face {
+        font-family: 'Inter';
+        src: url('../../node_modules/@fontsource-variable/inter/files/inter-latin-opsz-normal.woff2') format('woff2-variations');
+        font-weight: 100 900;
+      }
+      @font-face {
+        font-family: 'JetBrains Mono';
+        src: url('../../node_modules/@fontsource-variable/jetbrains-mono/files/jetbrains-mono-latin-wght-normal.woff2') format('woff2-variations');
+        font-weight: 100 800;
+      }
+      @font-face {
+        font-family: 'Titan One';
+        src: url('../../node_modules/@fontsource/titan-one/files/titan-one-latin-400-normal.woff2') format('woff2');
+      }
+
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1200px; height: 630px; overflow: hidden; }
+
+      body {
+        position: relative;
+        background: #e87a35;
+        color: #2a1f1a;
+        font-family: 'Inter', system-ui, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      canvas { position: absolute; inset: 0; opacity: 0.07; }
+
+      .frame {
+        position: relative;
+        z-index: 1;
+        display: grid;
+        grid-template-columns: 640px 1fr;
+        gap: 48px;
+        padding: 52px 56px 92px;
+        height: 100%;
+      }
+
+      /* ── left column ── */
+      .brand-row { display: flex; align-items: center; gap: 18px; }
+      .brand-row svg.shield { width: 64px; height: 64px; }
+      .wordmark {
+        font-family: 'Titan One', 'Fredoka', sans-serif;
+        font-size: 40px; letter-spacing: 0.01em; line-height: 1;
+      }
+      h1 {
+        margin-top: 30px;
+        font-family: 'Fredoka', sans-serif;
+        font-weight: 600;
+        font-size: 58px;
+        line-height: 1.08;
+        letter-spacing: -0.02em;
+        max-width: 560px;
+      }
+      h1 .accent { color: #ffffff; }
+      .tagline {
+        margin-top: 20px;
+        font-size: 21px; font-weight: 500; line-height: 1.4;
+        max-width: 520px;
+      }
+      .stamps { margin-top: 28px; display: flex; flex-wrap: wrap; gap: 12px; }
+      .stamp {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 15px; font-weight: 700; letter-spacing: 0.04em;
+        padding: 9px 14px;
+        border: 3px solid #2a1f1a;
+        border-radius: 8px;
+        background: transparent;
+      }
+      .stamp.filled { background: #f4ebe1; box-shadow: 4px 4px 0 #2a1f1a; }
+      .stamp.rot-1 { transform: rotate(-2deg); }
+      .stamp.rot-2 { transform: rotate(1.5deg); }
+
+      /* ── right column: the deli ticket ── */
+      .ticket-wrap { display: flex; align-items: center; justify-content: center; }
+      .ticket {
+        width: 100%;
+        background: #f4ebe1;
+        border: 4px solid #2a1f1a;
+        border-radius: 14px;
+        box-shadow: 10px 10px 0 #2a1f1a;
+        transform: rotate(2.2deg);
+        overflow: hidden;
+      }
+      .ticket-head {
+        display: flex; align-items: center; gap: 10px;
+        background: #2a1f1a; padding: 14px 22px;
+      }
+      .dot { width: 12px; height: 12px; border-radius: 50%; }
+      .ticket-head span.pathbar {
+        margin-left: 8px;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 15px; color: #f4ebe1;
+      }
+      .ticket-body { padding: 26px 26px 20px; position: relative; }
+      .ticket-body::before {
+        content: '';
+        position: absolute; top: 6px; left: 12px; right: 12px;
+        border-top: 2px dashed #b9ab98;
+      }
+      .label {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 15px; font-weight: 700; letter-spacing: 0.08em;
+        color: #888888;
+      }
+      .secret {
+        margin-top: 6px;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 22px; font-weight: 600; letter-spacing: 0.02em;
+      }
+      .code-row {
+        margin-top: 18px;
+        display: flex; align-items: center; gap: 20px;
+        white-space: nowrap;
+      }
+      .code {
+        font-family: 'Inter', sans-serif;
+        font-size: 64px; font-weight: 900; letter-spacing: 0.015em;
+        font-variant-numeric: tabular-nums;
+        line-height: 1;
+      }
+      .ring {
+        position: relative; width: 74px; height: 74px; flex-shrink: 0;
+      }
+      .ring svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+      .ring .t {
+        position: absolute; inset: 0;
+        display: flex; align-items: center; justify-content: center;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 20px; font-weight: 700;
+      }
+      .ticket-foot {
+        display: flex; align-items: center; justify-content: space-between;
+        gap: 16px;
+        padding: 0 26px 20px;
+      }
+      .foot-stamp {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 13px; font-weight: 700; letter-spacing: 0.05em;
+        color: #d32f2f;
+        white-space: nowrap;
+      }
+      .foot-url {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 13px; font-weight: 600; color: #888888;
+        white-space: nowrap;
+      }
+
+      .footer-slug {
+        position: absolute; z-index: 1;
+        left: 56px; bottom: 34px;
+        display: flex; align-items: center; gap: 12px;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 17px; font-weight: 600;
+      }
+      .footer-slug .url { color: #2a1f1a; }
+      .footer-slug .dot-sep { width: 8px; height: 8px; border-radius: 50%; background: #2a1f1a; }
+      .footer-slug .note { letter-spacing: 0.03em; }
+    </style>
+  </head>
+  <body>
+    <!-- faint barcode texture across the canvas -->
+    <canvas id="dots"></canvas>
+
+    <div class="frame">
+      <div>
+        <div class="brand-row">
+          <svg class="shield" viewBox="0 0 64 64" aria-hidden="true">
+            <path d="M32 3 56 11v20c0 15-10 24-24 30C18 55 8 46 8 31V11L32 3Z" fill="#f4ebe1" stroke="#2a1f1a" stroke-width="4" stroke-linejoin="round"/>
+            <path d="M22 32l7 8 14-16" fill="none" stroke="#6ca632" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span class="wordmark">2FA COUNTER</span>
+        </div>
+
+        <h1>The 2FA authenticator that runs <span class="accent">in your browser</span></h1>
+
+        <p class="tagline">
+          Paste a secret key, get a live 6-digit code — a free, private alternative to
+          Google Authenticator with no app and no account.
+        </p>
+
+        <div class="stamps">
+          <span class="stamp filled rot-1">100% CLIENT-SIDE</span>
+          <span class="stamp rot-2">ZERO SERVERS</span>
+          <span class="stamp rot-1">RFC 6238 TOTP</span>
+        </div>
+      </div>
+
+      <div class="ticket-wrap">
+        <div class="ticket">
+          <div class="ticket-head">
+            <span class="dot" style="background:#d32f2f"></span>
+            <span class="dot" style="background:#f4ebe1"></span>
+            <span class="dot" style="background:#6ca632"></span>
+            <span class="pathbar">otp.rfc-6238.js</span>
+          </div>
+          <div class="ticket-body">
+            <p class="label">SECRET KEY (LOCAL ONLY)</p>
+            <p class="secret">JBSWY3DP·EHPK3PXP</p>
+            <div class="code-row">
+              <span class="code">419 302</span>
+              <span class="ring">
+                <svg viewBox="0 0 74 74">
+                  <circle cx="37" cy="37" r="31" fill="none" stroke="#2a1f1a" stroke-width="5" opacity="0.15"/>
+                  <circle cx="37" cy="37" r="31" fill="none" stroke="#6ca632" stroke-width="5" stroke-linecap="round" stroke-dasharray="195" stroke-dashoffset="52"/>
+                </svg>
+                <span class="t">30s</span>
+              </span>
+            </div>
+          </div>
+          <div class="ticket-foot">
+            <span class="foot-stamp">GENUINE — 30-SECOND WINDOW</span>
+            <span class="foot-url">WORKS OFFLINE</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-slug">
+      <span class="url">2facounter.com</span>
+      <span class="dot-sep"></span>
+      <span class="note">No app · no account · keys never leave your device</span>
+    </div>
+
+    <script>
+      // deterministic barcode speckle — no randomness, same image every render
+      const cv = document.getElementById('dots');
+      const ctx = cv.getContext('2d');
+      cv.width = 1200; cv.height = 630;
+      ctx.fillStyle = '#2a1f1a';
+      let seed = 42;
+      const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+      for (let i = 0; i < 220; i++) {
+        const x = rnd() * 1200 | 0, y = rnd() * 630 | 0;
+        ctx.fillRect(x, y, 2 + (rnd() * 3 | 0), 14 + (rnd() * 26 | 0));
+      }
+    </script>
+  </body>
+</html>

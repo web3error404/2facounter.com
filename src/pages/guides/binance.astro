@@ -1,0 +1,71 @@
+---
+import GuideLayout from '../../components/GuideLayout.astro';
+
+const title = 'How to Set Up 2FA on Binance (TOTP Without an App)';
+
+const description =
+  'Enable two-factor authentication on Binance from your browser. Use Binance’s TOTP secret or QR to generate 6-digit codes at 2facounter.com — a backup when Google Authenticator isn’t reachable.';
+
+---
+
+<GuideLayout
+  serviceName="Binance"
+  title={title}
+  description={description}
+  path="/guides/binance/"
+  dateModified="2026-11-07"
+  lastReviewed="2026-11-07"
+  intro="Binance rewards strong 2FA with higher withdrawal limits and lower trading fees. Their TOTP setup is standard — you can run it on your browser keys, in an encrypted password manager, or on an offline machine. Two Binance-specific extras, the anti-phishing code and the withdrawal whitelist, are worth the extra two minutes."
+  minutes={5}
+  params={['6 digits', '30s period', 'SHA-1']}
+  ctaTitle="Trading fees and limits are the small reward; keeping the robots out is the real one"
+  ctaBody="Binance accounts sit in the highest-value attack category on the web right now. Finishing the anti-phishing code and withdrawal whitelist — not just the TOTP toggle — is what actually closes the door; screenshots of both belong in your encrypted vault."
+  steps={[
+    {
+      title: 'Sign in and open Security',
+      body: 'At binance.com, click your profile icon → “Account” → “Security”. Find “Authenticator App” and click “Enable”.',
+    },
+    {
+      title: 'Choose software (TOTP) over SMS',
+      body: 'Binance presents options. Prefer the authenticator app — SMS codes are interceptable and can fail when you travel.',
+    },
+    {
+      title: 'Get the key text, not only the QR',
+      body: 'The dialog shows a QR code. Below it, click “view the key string” (or similar wording) and Binance reveals a Base32 secret like 26-char …you want that.',
+    },
+    {
+      title: 'Paste it into the generator',
+      body: 'Paste the key into the generator at 2facounter.com and a live code appears immediately. Airplane-mode first if you like: the page works fully offline.',
+    },
+    {
+      title: 'Confirm on Binance',
+      body: 'Copy the 6-digit code and submit it. Binance then asks for a password/verification — finish that, and withdrawals are now protected.',
+    },
+    {
+      title: 'Turn on the anti-phishing code and withdrawal whitelist',
+      body: 'Back in Security → “Anti Phishing Code”: Binance then stamps every real email with a code of your choosing, so fake “account alert” mail becomes instantly recognizable. In the same settings, add the withdrawal addresses you actually use — whitelisted addresses pause newly added ones rather than letting a thief redirect.',
+    },
+    {
+      title: 'Save Binance’s recovery key offline',
+      body: 'However Binance’s flow surfaces recovery material to you, write it down — it’s your path back if every device with the secret dies.',
+    },
+  ]}
+  faqs={[
+    {
+      q: 'Do I have to scan the QR with a webcam?',
+      a: 'No — three none-camera routes: paste the Base32 key text, upload a screenshot of the QR, or just paste the screenshot with Ctrl+V anywhere on the generator page.',
+    },
+    {
+      q: 'Is it safe to use exchange 2FA in a browser?',
+      a: 'It’s as safe as the browser. Use a fresh private window on a trusted computer, check the URL (2facounter.com) character-for-character, and clear the key field and site data afterward. Never enter your Binance password on any other page.',
+    },
+    {
+      q: 'Binance shows “Google Authenticator” only — will the browser codes work?',
+      a: 'Yes. Binance’s authenticator flow is standard RFC-6238 TOTP at 6 digits / 30 seconds, exactly what the generator implements.',
+    },
+    {
+      q: 'What if my clock is a bit off?',
+      a: 'Exchanges are stricter on drift than social networks. If codes keep failing, make sure your device clock syncs automatically with an internet time server (Windows/macOS both have a “sync now” toggle) before blaming anything else.',
+    },
+  ]}
+/>

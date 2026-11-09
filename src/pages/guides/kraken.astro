@@ -1,0 +1,63 @@
+---
+import GuideLayout from '../../components/GuideLayout.astro';
+
+const title = 'How to Set Up 2FA on Kraken (TOTP Authenticator)';
+
+const description =
+  'Enable TOTP two-factor authentication on Kraken without a mobile app. Get the setup key from Kraken security settings and generate live, browser-based codes at 2facounter.com.';
+
+---
+
+<GuideLayout
+  serviceName="Kraken"
+  title={title}
+  description={description}
+  path="/guides/kraken/"
+  dateModified="2026-11-07"
+  lastReviewed="2026-11-07"
+  intro="Kraken has supported standard TOTP for years — it's actually the *recommended* factor for trading accounts. What makes Kraken worth its own guide: the factor is scoped per “facet” (sign-in, trading, funding), so one enrollment is only the start."
+  minutes={3}
+  params={['6 digits', '30s period', 'SHA-1']}
+  ctaTitle="Kraken's strength is the second secret you haven't enrolled yet"
+  ctaBody="Sign-in 2FA protects the door; the Master key protects the vault — withdrawals, exports, and API permissions run on their own secret in Kraken. Finish both enrollments and keep them as two independent recent-key slots here."
+  steps={[
+    {
+      title: 'Open Kraken security settings',
+      body: 'Sign in at kraken.com → click your profile icon → “Security” → “Two-factor authentication”. Kraken lists separate facets like Sign-in, Trading, Master key.',
+    },
+    {
+      title: 'Add the password/TOTP factor',
+      body: 'Pick the “Set up TOTP” (password/authenticator-app) option for sign-in first — that’s the facet that stops account takeovers on the login page itself.',
+    },
+    {
+      title: 'Reveal the secret',
+      body: 'Kraken shows the QR plus a Base32 “secret key” line for manual entry. Copy the key (or screenshot the QR and paste it into the page — the parser reads it locally).',
+    },
+    {
+      title: 'Generate, verify, activate',
+      body: 'Paste into 2facounter.com, copy the live code, and paste it back into Kraken’s confirmation field. The facet flips to “Active” and codes are now required per that facet.',
+    },
+    {
+      title: 'Harden the rest',
+      body: 'Add Kraken’s Master Key, enable withdrawal address whitelisting, and keep the separate secrets for sign-in and Master key in your password manager. Kraken also offers a support phrase for identity verification when contacting support.',
+    },
+  ]}
+  faqs={[
+    {
+      q: 'Do I need the Kraken mobile app for 2FA?',
+      a: 'No. Kraken’s TOTP factor is standard RFC 6238 — any authenticator works, including a purely browser-based one. The mobile app is one carrier, not a requirement.',
+    },
+    {
+      q: 'What are Kraken’s “facets” for 2FA?',
+      a: 'Kraken lets you require separate factors for logging in, for trading, and for account-level changes (Master key). Stronger setups have sign-in on TOTP and the Master key on a *different* secret — you can maintain both recent-key slots in this generator.',
+    },
+    {
+      q: 'What is the Global Settings Lock?',
+      a: 'Kraken’s GSL (Global Settings Lock) freezes security-critical settings — 2FA changes, password resets, withdrawal addresses — until you explicitly unlock it. Set it up after today’s enrollment: even someone with your password and phone can’t then quietly rewire the account.',
+    },
+    {
+      q: 'Codes rejected right after setup — what broke?',
+      a: 'Clock drift almost always. Kraken validates codes within a window: if your system clock is even ~30 s off, every guess fails. Set your OS to sync time automatically, wait for the next step, and try once more.',
+    },
+  ]}
+/>

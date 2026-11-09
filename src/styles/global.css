@@ -1,0 +1,516 @@
+@import "tailwindcss";
+
+/* Tailwind v4 scans every file in the project for class names. The
+   .agents/ tooling directory holds skill documentation with example
+   class names (bg-[url('/what_a_rush.png')] & co.) that must never
+   leak into this site's CSS — exclude it from source detection. */
+@source not "../../.agents";
+
+/*
+ * ── DESIGN.md / deli alignment ─────────────────────────────────
+ * The site is styled as a neighborhood deli counter: a vibrant
+ * kiwi-orange canvas, cream butcher-paper surfaces, thick dark
+ * borders (2–4px) and hard offset shadows cast down-right — every
+ * element reads as a physical object resting on the counter.
+ * Fredoka signs headlines, nav and buttons (weights 400–700),
+ * Inter carries body copy and sets numerals (prices, stats) at 900
+ * — matching kiwi fonts — JetBrains Mono stamps labels and metadata,
+ * and Titan One renders the brand wordmark.
+ * Dashed rules mimic tear-off perforations; solid hairlines survive
+ * only inside the nutrition-style tables.
+ */
+@theme {
+  /* ── Brand (DESIGN.md / deli alignment) ───────────────────── */
+  --color-primary: #6ca632; /* kiwi-green — the only action color */
+  --color-primary-active: #7cb53e;
+  --color-primary-neutral: #5d9229;
+  --color-primary-pale: #e4efd4;
+  --color-on-primary: #2a1f1a; /* kiwi-dark text on green: 5.4:1 (white fails at 2.9:1) */
+
+  /* ── Surfaces (orange canvas → cream paper → white panels) ── */
+  --color-canvas: #e87a35; /* kiwi-orange — the dominant field */
+  --color-canvas-soft: #dcd3c8; /* kiwi-warm-gray — inactive fills */
+  --color-cream: #f4ebe1; /* butcher paper */
+  --color-surface: #ffffff; /* nutrition-facts panels only */
+  --color-surface-card: var(--color-cream);
+  --color-surface-elevated: #dcd3c8;
+
+  /* ── Text (dark cocoa ink on every light surface) ─────────── */
+  --color-ink: #2a1f1a; /* kiwi-dark — text, borders, shadows */
+  --color-ink-deep: #2a1f1a;
+  --color-body: #2a1f1a;
+  --color-muted: #888888;
+  /* Darkened from #a3937f (≈2.5:1 on cream) — now ≈4.1:1 on cream /
+     ≈4.9:1 on white so the secret-key placeholder and de-emphasized
+     hints stay readable while remaining clearly secondary to ink */
+  --color-muted-soft: #7d6f5c;
+
+  /* ── Dividers (dashed perforations; solid rules inside tables) ── */
+  --color-hairline: #dcd3c8; /* kiwi-warm-gray */
+  --color-hairline-strong: #b9ab98;
+
+  /* ── Stamped accents (never reused as action colors) ──────── */
+  --color-accent-red: #d32f2f; /* ticket numbers, emphasis stamps */
+  --color-accent-blue: #1e3a8a; /* date stamps, postal marks */
+
+  /* ── Semantic states (runtime JS toggles these names) ─────── */
+  --color-positive: #6ca632;
+  --color-positive-deep: #43691d;
+  --color-warning: #ffd11a;
+  --color-warning-deep: #b86700;
+  --color-warning-content: #4a3b1c;
+  --color-negative: #d32f2f;
+  --color-negative-deep: #a72027;
+  --color-negative-darkest: #8f181b;
+  --color-negative-bg: #5c1512;
+  --color-accent-orange: #e87a35;
+  --color-accent-cyan: #1e3a8a;
+
+  /* ── Compatibility aliases (used by runtime JS toggles) ───── */
+  --color-ok: var(--color-positive);
+  --color-danger: var(--color-negative);
+  --color-info: var(--color-accent-blue);
+
+  /* ── Type ─────────────────────────────────────────────────── */
+  --font-display: "Fredoka Variable", "Fredoka", system-ui, sans-serif;
+  --font-sans: "Inter Variable", "Inter", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono Variable", "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --font-numeric: "Inter Variable", "Inter", system-ui, sans-serif;
+  --font-brand: "Titan One", "Fredoka Variable", system-ui, sans-serif;
+
+  /* ── Deli type scale ──────────────────────────────────────── */
+  --text-hero-display: 3.25rem; /* profile name, major headlines */
+  --text-hero-display--line-height: 1.1;
+  --text-hero-display--font-weight: 700;
+  --text-section-display: 2.375rem; /* section headers */
+  --text-section-display--line-height: 1.2;
+  --text-section-display--font-weight: 700;
+  --text-display-xl: 2.25rem; /* page h1 on smaller breakpoints */
+  --text-display-xl--line-height: 1.2;
+  --text-display-xl--font-weight: 700;
+  --text-display-xxl: 3rem; /* hero + closing CTA at ≥lg */
+  --text-display-xxl--line-height: 1.15;
+  --text-display-xxl--font-weight: 700;
+  --text-label: 0.85rem; /* metadata, tags, captions */
+  --text-label--line-height: 1.4;
+  --text-price: 2rem; /* menu prices, big numerals */
+  --text-price--line-height: 1;
+  --text-price--letter-spacing: -0.03125em;
+  --text-caption: 0.6875rem; /* fine print */
+  --text-caption--line-height: 1.6;
+
+  /* ── Radius scale (12px buttons · 20px cards · 999px pills) ── */
+  --radius-xs: 2px; /* tickets, nutrition panels — paper edges */
+  --radius-sm: 8px;
+  --radius-md: 12px; /* buttons */
+  --radius-lg: 16px;
+  --radius-xl: 20px; /* hero/menu cards */
+
+  /* ── Offset shadows: cast down-right only, never diffuse ──── */
+  --shadow-btn: 4px 4px 0 0 rgb(42 31 26 / 0.2);
+  --shadow-card: 6px 6px 0 0 rgb(0 0 0 / 0.2);
+  --shadow-ticket:
+    0 10px 12px rgb(42 31 26 / 0.15), inset 0 2px 0 0 rgb(255 255 255 / 0.65);
+}
+
+/* ── Base ────────────────────────────────────────────────────── */
+
+html {
+  scroll-behavior: smooth;
+  color-scheme: light;
+}
+
+body {
+  background-color: var(--color-canvas);
+  color: var(--color-body);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background-color: var(--color-ink);
+  color: var(--color-cream);
+}
+
+a,
+button,
+[role='button'] {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  text-wrap: balance;
+}
+
+/* Display voice: heavy Rubik headings, slightly lighter card titles */
+h1,
+h2 {
+  font-weight: 800;
+}
+h3,
+h4 {
+  font-weight: 700;
+}
+
+/* Focus ring: 3px dark — high contrast on orange, cream, and white.
+   On dark surfaces the ring flips to cream. */
+:focus-visible {
+  outline: 3px solid var(--color-ink);
+  outline-offset: 2px;
+}
+.on-dark :focus-visible,
+.on-dark:focus-visible {
+  outline-color: var(--color-cream);
+}
+
+/* Light scrollbars */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-hairline-strong) transparent;
+}
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+*::-webkit-scrollbar-thumb {
+  background: var(--color-hairline-strong);
+  border-radius: 9999px;
+}
+
+/* ── Component primitives ────────────────────────────────────── */
+
+@layer components {
+  /* Deli CTA: green stamp with heavy Rubik, 4px border, 4px offset shadow.
+     Press = the stamp sinks into the paper. */
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-md border-4 border-ink bg-primary px-5 py-3 font-display text-lg font-bold text-on-primary select-none;
+    box-shadow: var(--shadow-btn);
+    transition: box-shadow 100ms ease, translate 100ms ease, background-color 100ms ease;
+  }
+  /* Hover lift is gated to devices that actually hover — on touch a
+     sticky :hover would leave the stamped button mid-press after a tap.
+     Touch feedback comes from :active (press = stamp sinks). */
+  @media (hover: hover) {
+    .btn-primary:hover {
+      @apply bg-primary-active;
+      translate: -1px -1px;
+      box-shadow: 5px 5px 0 0 rgb(42 31 26 / 0.2);
+    }
+  }
+  .btn-primary:active {
+    @apply bg-primary-neutral;
+    translate: 4px 4px;
+    box-shadow: 0 0 0 0 rgb(42 31 26 / 0.2);
+  }
+  .btn-primary:disabled {
+    @apply cursor-not-allowed border-hairline-strong bg-canvas-soft text-muted;
+    box-shadow: none;
+    translate: 0 0;
+  }
+
+  /* Split button: two actions (Scan QR / Upload) combined into ONE stamp.
+     The group carries the border + hard shadow; the halves share the same
+     fill, and an ink divider line welds them together so the pair reads
+     as a single connected control. */
+  .btn-split {
+    @apply inline-flex overflow-hidden rounded-md border-4 border-ink font-display font-bold select-none;
+    box-shadow: var(--shadow-btn);
+    transition: box-shadow 100ms ease, translate 100ms ease;
+  }
+  @media (hover: hover) {
+    .btn-split:hover {
+      translate: -1px -1px;
+      box-shadow: 5px 5px 0 0 rgb(42 31 26 / 0.2);
+    }
+  }
+  .btn-split:has(button:active) {
+    translate: 0 0;
+    box-shadow: 0 0 0 0 rgb(42 31 26 / 0.2);
+  }
+  .btn-split > button {
+    @apply inline-flex h-full min-w-0 items-center justify-center gap-2 bg-primary px-3 text-on-primary transition-colors duration-100;
+  }
+  .btn-split > button:hover {
+    @apply bg-primary-active;
+  }
+  .btn-split > button:active {
+    @apply bg-primary-neutral;
+  }
+  .btn-split > button + button {
+    @apply border-l-4 border-ink;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .btn-split,
+    .btn-split:hover {
+      translate: none;
+    }
+  }
+
+  /* Secondary: cream paper button, 3px border, same offset language */
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 rounded-md border-3 border-ink bg-cream px-5 py-3 font-display text-lg font-bold text-ink select-none;
+    box-shadow: var(--shadow-btn);
+    transition: box-shadow 100ms ease, translate 100ms ease, background-color 100ms ease;
+  }
+  @media (hover: hover) {
+    .btn-secondary:hover {
+      @apply bg-surface;
+      translate: -1px -1px;
+      box-shadow: 5px 5px 0 0 rgb(42 31 26 / 0.2);
+    }
+  }
+  .btn-secondary:active {
+    translate: 4px 4px;
+    box-shadow: 0 0 0 0 rgb(42 31 26 / 0.2);
+  }
+
+  .btn-ghost {
+    @apply inline-flex h-9 items-center justify-center gap-2 rounded-full px-3 text-sm font-semibold text-muted select-none;
+  }
+  .btn-ghost:hover {
+    @apply bg-canvas-soft text-ink;
+  }
+
+  .btn-icon {
+    @apply inline-flex h-9 w-9 items-center justify-center rounded-full text-muted;
+  }
+  .btn-icon:hover {
+    @apply bg-canvas-soft text-ink;
+  }
+
+  /* Date stamp: tilted blue-bordered postal mark (rotate it with an
+     inline -rotate-2 / -rotate-3 where it hangs on tickets) */
+  .badge-stamp {
+    @apply inline-flex items-center gap-1.5 rounded-xs border-2 border-accent-blue bg-surface px-2.5 py-1 font-mono text-label font-bold text-accent-blue;
+  }
+
+  .badge-eyebrow {
+    @apply inline-flex items-center gap-1.5 rounded-xs border-2 border-ink bg-surface px-3 py-1 font-mono text-label font-bold tracking-wide text-ink uppercase;
+  }
+
+  .link {
+    @apply font-semibold text-ink underline decoration-2 underline-offset-2;
+  }
+  .link:hover {
+    @apply decoration-accent-red text-accent-red;
+  }
+
+  .section-label {
+    @apply font-mono text-label font-bold tracking-wide text-ink uppercase;
+  }
+
+  /* Dark CTA band: ink panel, cream copy, green display text */
+  .cta-banner {
+    @apply rounded-xl border-4 border-ink bg-ink p-8 text-cream lg:p-12;
+    box-shadow: var(--shadow-card);
+  }
+  .on-dark {
+    color-scheme: dark;
+  }
+}
+
+/* ── Rich text (guides / privacy / about content) ────────────── */
+
+.rich-text h2 {
+  @apply mt-16 font-display text-[28px] leading-[1.2] tracking-normal text-ink first:mt-0;
+}
+.rich-text h3 {
+  @apply mt-8 font-display text-lg tracking-normal text-ink;
+}
+.rich-text p {
+  @apply mt-4 text-body;
+}
+.rich-text ul {
+  @apply mt-4 list-disc space-y-2 pl-6;
+}
+.rich-text ol {
+  @apply mt-4 list-decimal space-y-2 pl-6;
+}
+.rich-text li {
+  @apply text-body marker:text-accent-red;
+}
+.rich-text a {
+  @apply font-semibold text-ink underline decoration-2 underline-offset-2;
+}
+.rich-text a:hover {
+  @apply text-accent-red decoration-accent-red;
+}
+.rich-text code {
+  @apply rounded-xs border border-hairline bg-canvas-soft px-1.5 py-0.5 font-mono text-[13px] text-ink;
+}
+.rich-text pre {
+  @apply mt-6 overflow-x-auto rounded-xs border-2 border-ink bg-surface p-6;
+  box-shadow: var(--shadow-btn);
+}
+.rich-text pre code {
+  @apply border-transparent bg-transparent p-0 text-ink;
+}
+.rich-text blockquote {
+  @apply mt-6 border-2 border-dashed border-accent-red bg-surface px-4 py-3 font-semibold text-ink;
+  border-radius: 0;
+}
+.rich-text strong {
+  @apply font-bold text-ink;
+}
+.rich-text hr {
+  @apply mt-12 border-t-2 border-dashed border-hairline-strong;
+}
+
+/* ── Generator-specific ──────────────────────────────────────── */
+
+.code-digits {
+  font-variant-numeric: tabular-nums;
+  transition:
+    transform 120ms ease,
+    color 120ms ease;
+}
+/* Visual gap between the two 3-digit groups (e.g. "111 111") */
+.digit-group-space {
+  width: 0.55em;
+  flex: none;
+}
+.code-tick {
+  animation: code-pop 300ms ease;
+}
+@keyframes code-pop {
+  0% {
+    transform: scale(0.96);
+    opacity: 0.4;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Recent-keys rows: soft slide-in with a small stagger */
+.recent-row {
+  animation: recent-in 180ms ease both;
+}
+@keyframes recent-in {
+  from {
+    opacity: 0;
+    transform: translateY(-3px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.recent-row:nth-child(2) { animation-delay: 25ms; }
+.recent-row:nth-child(3) { animation-delay: 50ms; }
+.recent-row:nth-child(4) { animation-delay: 75ms; }
+.recent-row:nth-child(5) { animation-delay: 100ms; }
+.recent-row:nth-child(6) { animation-delay: 125ms; }
+.recent-row:nth-child(7) { animation-delay: 150ms; }
+.recent-row:nth-child(8) { animation-delay: 175ms; }
+
+.scan-line {
+  animation: scan-sweep 2.4s ease-in-out infinite;
+}
+@keyframes scan-sweep {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(74cqh);
+  }
+}
+
+/* Decorative backdrop motion — transform-only, reduced-motion honored.
+   Whole-column drift + per-shape bob (transform-box: fill-box so SVG
+   groups rotate around their own centers). */
+.drift-slow {
+  animation: drift 7s ease-in-out infinite alternate;
+}
+.drift-slower {
+  animation: drift 9s ease-in-out infinite alternate-reverse;
+}
+@keyframes drift {
+  from {
+    transform: translateY(10px) rotate(-2deg);
+  }
+  to {
+    transform: translateY(-20px) rotate(3deg);
+  }
+}
+.drift-item {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: bob 2.5s ease-in-out infinite alternate;
+}
+.drift-item-slow {
+  animation-duration: 3.5s;
+}
+@keyframes bob {
+  from {
+    transform: translateY(9px) rotate(-6deg);
+  }
+  to {
+    transform: translateY(-22px) rotate(7deg);
+  }
+}
+
+@keyframes toast-in {
+  from {
+    transform: translateY(12px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+.toast-in {
+  animation: toast-in 250ms ease;
+}
+
+/* Timer badge dot: soft pulse while the countdown runs, quickening in
+   the final ≤5 s alongside the red swap. Never dips below 0.45 opacity —
+   a full on/off flicker is a photosensitivity hazard; a shallow pulse
+   reads as "alive" without strobing. */
+.dot-blink {
+  animation: dot-blink 1.2s ease-in-out infinite;
+}
+.dot-blink-fast {
+  animation-duration: 500ms;
+}
+@keyframes dot-blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.55;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .code-tick,
+  .scan-line,
+  .toast-in,
+  .recent-row,
+  .drift-slow,
+  .drift-slower,
+  .drift-item,
+  .drift-item-slow,
+  .dot-blink {
+    animation: none;
+  }
+  .btn-primary,
+  .btn-secondary {
+    transition: none;
+    translate: 0 0;
+  }
+}

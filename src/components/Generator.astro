@@ -1,0 +1,260 @@
+---
+/**
+ * Live, zero-knowledge TOTP/HOTP generator — deli redesign.
+ * The tool is presented as a deli order pad on a dark chalkboard:
+ * a dark cocoa two-panel card (≈60% key input / ≈40% live token)
+ * with a 4px ink border and a hard 6px down-right shadow. Buttons,
+ * the textarea and the token chamber stay light "paper slips" so
+ * they pop against the dark shell; the countdown is a tilted blue
+ * date stamp.
+ * All cryptography runs in the browser via Web Crypto — no key ever leaves the tab.
+ */
+---
+
+<section id="generator" class="scroll-mt-20" aria-label="Live 2FA code generator">
+  <!-- Centered order-pad shell: fills the site's 1200px content grid -->
+  <div class="generator-shell mx-auto w-full max-w-[1200px]">
+  <!-- Main Generator Container: 60 / 40 two-column dashboard grid -->
+  <div
+    class="on-dark grid grid-cols-1 overflow-hidden rounded-xl border-4 border-ink bg-ink text-cream md:min-h-[735px] md:grid-cols-[3fr_2fr] lg:min-h-[800px]"
+    style="box-shadow: var(--shadow-card)"
+  >
+    <!-- ================= LEFT PANEL: INPUT SECTION (~60%) ================= -->
+    <section
+      class="left-panel min-w-0 flex flex-col gap-4 p-5 sm:gap-5 sm:p-6 md:border-r-2 md:border-dashed md:border-cream/40 lg:gap-6 lg:p-9"
+      aria-label="Secret key input"
+    >
+      <!-- Title / Label -->
+      <div class="label-wrapper">
+        <label
+          for="secret-key-input"
+          class="section-label font-mono text-sm tracking-[0.4px] text-cream md:text-base"
+        >
+          Authentication secret key
+        </label>
+      </div>
+
+      <!-- Secret Key Enter Box -->
+      <div class="input-wrapper">
+        <textarea
+          id="secret-key-input"
+          name="secret-key"
+          rows="4"
+          spellcheck="false"
+          autocomplete="off"
+          autocorrect="off"
+          autocapitalize="characters"
+          enterkeyhint="done"
+          class="w-full resize-none rounded-sm border-2 border-ink bg-cream px-4 py-3 font-mono text-base text-ink placeholder-muted-soft focus:outline-none focus:shadow-[0_0_0_3px_#43691d] sm:text-lg md:py-4"
+          placeholder="e.g. GAXG 243E MR2X QZ…"
+        ></textarea>
+      </div>
+
+      <!-- Action Buttons Row (side-by-side from 560px up; full-width taps on smaller phones) -->
+      <div class="actions-row flex flex-col gap-3 min-[560px]:flex-row min-[560px]:items-center">
+        <!-- Paste Key Button -->
+        <button type="button" id="btn-paste" class="btn-primary flex-1 h-16 w-full text-xl lg:h-[70px] lg:text-2xl">
+          <svg class="h-5 w-5 lg:h-6 lg:w-6" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2" stroke="currentColor" stroke-width="1.8"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path>
+          </svg>
+          <span>Paste Key</span>
+        </button>
+
+        <!-- Scan QR + Upload: one connected split "stamp". Each half shows
+             its own icon (camera / upload) and label; the ink divider welds
+             them into a single button group. Left half opens the camera
+             scanner, right half opens the image picker. -->
+        <input type="file" id="file-qr-input" accept="image/*" class="sr-only" />
+
+        <div
+          class="btn-split w-full min-[560px]:w-auto min-[560px]:flex-[1.25]"
+          role="group"
+          aria-label="Import a key by scanning or uploading a QR code"
+        >
+          <button
+            type="button"
+            id="btn-qr-camera"
+            title="Scan a QR code with the camera"
+            class="h-16 min-w-0 flex-[1.05] gap-1.5 px-2 text-lg md:text-xl lg:h-[70px] lg:px-3 lg:text-2xl"
+          >
+            <svg class="h-5 w-5 shrink-0 lg:h-6 lg:w-6" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"></path>
+              <circle cx="12" cy="13" r="4" stroke="currentColor" stroke-width="1.8"></circle>
+            </svg>
+            <span class="truncate">Scan QR</span>
+          </button>
+          <button
+            type="button"
+            id="btn-qr-upload"
+            title="Upload a QR screenshot"
+            class="h-16 min-w-0 flex-1 gap-1.5 px-2 text-lg md:text-xl lg:h-[70px] lg:px-3 lg:text-2xl"
+          >
+            <svg class="h-5 w-5 shrink-0 lg:h-6 lg:w-6" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path>
+              <polyline points="17 8 12 3 7 8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></polyline>
+              <line x1="12" y1="3" x2="12" y2="15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></line>
+            </svg>
+            <span class="truncate">Upload</span>
+          </button>
+        </div>
+      </div>
+      <!-- Large empty space beneath the action buttons (reference layout) -->
+      <div class="hidden md:block md:flex-1" aria-hidden="true"></div>
+    </section>
+
+    <!-- ================= RIGHT PANEL: TOKEN SECTION (~40%) ================= -->
+    <section
+      class="right-panel min-w-0 flex flex-col gap-6 border-t-2 border-dashed border-cream/40 p-5 sm:p-6 md:border-t-0 lg:gap-7 lg:p-9"
+      aria-label="Timer"
+    >
+      <!-- Top Header: Title & Expiration Badge -->
+      <div class="flex items-center justify-between gap-3">
+        <p class="inline-flex items-center gap-2.5 font-mono text-base font-bold tracking-wider text-cream uppercase md:text-lg">
+          <svg class="h-5 w-5 shrink-0 text-accent-red md:h-6 md:w-6" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"></polygon>
+          </svg>
+          Timer
+        </p>
+
+        <!-- Countdown Badge: tilted blue date stamp -->
+        <div
+          id="countdown-badge"
+          class="badge-stamp -rotate-2 items-center gap-2 px-3.5 py-1.5 text-base hidden md:text-lg lg:px-4 lg:py-2"
+        >
+          <span id="badge-dot" class="dot-blink h-2.5 w-2.5 rounded-full bg-ok md:h-3 md:w-3" aria-hidden="true"></span>
+          <span id="timer-seconds">26 s</span>
+        </div>
+      </div>
+
+      <!-- Segmented Buffer Progress Bar -->
+      <div class="progress-section">
+        <div
+          id="segmented-bar"
+          class="flex h-5 w-full items-stretch gap-[2px] md:h-6"
+          aria-hidden="true"
+        ></div>
+      </div>
+
+      <!-- 6-Digit OTP Token Display Chamber (fluid width, scales with the panel) -->
+      <div
+        id="token-box"
+        class="token-display-chamber @container mx-auto flex h-24 w-full max-w-[440px] items-center justify-center overflow-hidden rounded-xs border-2 border-ink bg-cream px-4 md:h-28 lg:h-32"
+      >
+        <span
+          id="token-value"
+          class="code-digits flex items-center gap-2 font-mono font-bold tracking-widest text-accent-red md:gap-3 text-[min(68px,max(28px,calc((100cqw-96px)*0.222)))]"
+        ></span>
+      </div>
+      <!-- Single live region for the whole panel: announces only when the code
+           actually rotates (once per period). The digit chamber itself is NOT
+           a live region — per-digit skeleton "—" slashes and second-by-second
+           badge updates would otherwise be announced as noise. Screen readers
+           can still reach the chamber by navigation to read the current code. -->
+      <p id="token-announce" class="sr-only" role="status" aria-live="polite"></p>
+
+      <!-- Primary Action: Copy Code Button -->
+      <div class="copy-action-wrapper">
+        <button type="button" id="btn-copy-code" class="btn-primary h-16 w-full text-xl lg:h-[70px] lg:text-2xl">
+          <svg class="h-5 w-5 lg:h-6 lg:w-6" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2" stroke="currentColor" stroke-width="1.8"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path>
+          </svg>
+          <span id="copy-btn-text">Copy Code</span>
+        </button>
+      </div>
+
+      <!-- Recent keys — cached locally, private to this browser -->
+      <!-- Sits directly beneath the Copy button, above the privacy note -->
+      <div id="recent-keys-wrap" class="hidden">
+        <div class="flex items-center justify-between">
+          <span class="section-label font-mono text-base text-cream">
+            Recent keys
+          </span>
+          <!-- Two-step confirm: first click arms ("Really clear?"), a second
+               click within 3 s executes — a single accidental tap can't wipe
+               the last key and the recent list. Logic in generator.ts. -->
+          <button
+            type="button"
+            id="btn-recent-clear"
+            class="btn-ghost h-8 px-2 text-sm text-cream/70"
+            title="Remove all cached keys — click again to confirm"
+          >
+            <span id="btn-recent-clear-label">Clear all</span>
+          </button>
+        </div>
+        <ul id="recent-keys" class="mt-2 flex max-h-52 flex-col gap-1.5 overflow-y-auto pr-1"></ul>
+      </div>
+
+      <!-- ── Privacy information: dashed perforation note ── -->
+      <!-- mt-auto anchors this footer group to the card bottom so the -->
+      <!-- sections above keep a tight rhythm instead of spreading apart -->
+      <div class="privacy-note mt-auto rounded-xs border-2 border-dashed border-cream/40 px-4 py-3.5">
+        <!-- Single-line markup: Astro would strip the newline and lose the space after the bold lead -->
+        <p class="font-mono text-[13px] leading-relaxed text-cream/80 md:text-sm"><span class="font-bold text-cream">Private by design.</span> Codes are generated in your browser with Web Crypto. Keys are cached unencrypted in this device’s local storage — they never leave it (there are no servers), but anyone who can open this browser profile can read them.</p>
+      </div>
+    </section>
+  </div>
+  </div>
+
+  <!-- Camera modal -->
+  <div
+    id="cam-modal"
+    class="fixed inset-0 z-50 hidden items-center justify-center bg-ink/80 overscroll-contain p-4"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Camera QR scanner"
+  >
+    <div class="max-h-full w-full max-w-md">
+      <!-- Flex column + max-h so the card never overflows short/rotated screens:
+           the header and caption stay visible and the preview shrinks instead. -->
+      <div class="relative flex max-h-full flex-col overflow-hidden rounded-xl border-4 border-ink bg-cream" style="box-shadow: var(--shadow-card)">
+        <div class="flex shrink-0 items-center justify-between border-b-2 border-dashed border-hairline-strong px-4 py-2.5">
+          <p class="text-sm font-semibold text-ink">Position the 2FA QR code in frame</p>
+          <button id="cam-close" class="btn-icon" aria-label="Close camera">
+            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+            </svg>
+          </button>
+        </div>
+        <!-- Explicit clamp height: a grow-only flex box collapses to 0 here
+             (absolutely-positioned children contribute no intrinsic size),
+             which swallowed the video preview entirely. clamp() keeps the
+             viewport sane on short screens/landscape and svh keeps it still
+             under mobile URL-bar show/hide. -->
+        <div class="relative h-[clamp(220px,62svh,560px)] w-full shrink bg-surface">
+          <video id="cam-video" class="absolute inset-0 h-full w-full object-cover" playsinline muted></video>
+          <div class="pointer-events-none absolute inset-0 flex items-center justify-center">
+            <!-- Square viewfinder sized by height so it stays a perfect square
+                 even when the preview area gets squashed in landscape -->
+            <div class="relative aspect-square h-[72%] max-w-[85%]" style="container-type: size">
+              <!-- Corner brackets only — the scanner look people know -->
+              <span class="absolute left-0 top-0 h-6 w-6 rounded-tl-[4px] border-l-[3px] border-t-[3px] border-accent-blue" aria-hidden="true"></span>
+              <span class="absolute right-0 top-0 h-6 w-6 rounded-tr-[4px] border-r-[3px] border-t-[3px] border-accent-blue" aria-hidden="true"></span>
+              <span class="absolute bottom-0 left-0 h-6 w-6 rounded-bl-[4px] border-b-[3px] border-l-[3px] border-accent-blue" aria-hidden="true"></span>
+              <span class="absolute bottom-0 right-0 h-6 w-6 rounded-br-[4px] border-b-[3px] border-r-[3px] border-accent-blue" aria-hidden="true"></span>
+              <!-- transform-only sweep (cqh = % of this box height) — reduced-motion honored in global.css -->
+              <div class="scan-line absolute top-[12%] inset-x-2 h-0.5 rounded bg-accent-red"></div>
+            </div>
+          </div>
+        </div>
+        <p class="px-4 py-2.5 font-mono text-xs text-body">
+          Decoding happens on your device. The camera stream never touches any server.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast: cream paper slip with an ink border and hard shadow -->
+  <div
+    id="toast"
+    class="toast-in fixed bottom-6 left-1/2 z-50 hidden -translate-x-1/2 items-center gap-2 rounded-md border-2 border-ink bg-cream px-4 py-2.5 text-sm font-semibold text-ink"
+    style="box-shadow: var(--shadow-btn)"
+    role="status"
+    aria-live="polite"
+  >
+    <span id="toast-text"></span>
+  </div>
+</section>
+
+<script src="../scripts/generator.ts"></script>

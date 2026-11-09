@@ -1,0 +1,592 @@
+---
+/* 한국어 — 번역 홈페이지 (hreflang: ko). index.astro와 병렬 구조, 한국어 SEO에 맞춘 번역. */
+import Layout from '../../layouts/Layout.astro';
+import SiteHeader from '../../components/SiteHeader.astro';
+import SiteFooter from '../../components/SiteFooter.astro';
+import Generator from '../../components/Generator.astro';
+
+const title = '2FA 코드 생성기 온라인 — 무료 2FA 인증기 (TOTP)';
+const description =
+  '브라우저에서 바로 2FA 코드를 만드는 무료 2FA 인증기. 비밀 키를 붙여넣으면 TOTP 코드가 30초마다 자동으로 갱신됩니다. 회원가입도, 휴대폰도 필요 없습니다.';
+
+// hreflang cluster for the translated homepages (+ x-default → English)
+const homeAlternates = [
+  { hreflang: 'en', href: 'https://2facounter.com/' },
+  { hreflang: 'vi', href: 'https://2facounter.com/vi/' },
+  { hreflang: 'zh-Hans', href: 'https://2facounter.com/zh-cn/' },
+  { hreflang: 'zh-Hant', href: 'https://2facounter.com/zh-tw/' },
+  { hreflang: 'es', href: 'https://2facounter.com/es/' },
+  { hreflang: 'ja', href: 'https://2facounter.com/ja/' },
+  { hreflang: 'fr', href: 'https://2facounter.com/fr/' },
+  { hreflang: 'de', href: 'https://2facounter.com/de/' },
+  { hreflang: 'pt', href: 'https://2facounter.com/pt/' },
+  { hreflang: 'ko', href: 'https://2facounter.com/ko/' },
+  { hreflang: 'it', href: 'https://2facounter.com/it/' },
+  { hreflang: 'x-default', href: 'https://2facounter.com/' },
+];
+
+const faq = [
+  {
+    q: '2FA는 어떻게 받나요?',
+    a: '2FA는 보호하려는 계정에서 얻습니다. 해당 서비스의 설정을 열어 “보안” 또는 “로그인 및 보안” 메뉴에서 “2단계 인증” 항목을 찾으세요. 인증 앱 옵션을 고른 뒤 QR 코드를 스캔하고, 스캔이 안 되면 “스캔할 수 없나요?”를 눌러 설정 키(Base32 문자열 또는 otpauth:// URI)를 꺼내 이 페이지 상단의 2FA 코드 생성기에 붙여넣으세요. 표시되는 실시간 코드를 입력해 설정을 마치고, 서비스가 보여 주는 복구 코드를 반드시 보관해 두세요.',
+  },
+  {
+    q: '2단계 인증은 어떻게 활성화하나요?',
+    a: '네 단계, 2분이면 충분합니다. 1) 계정 또는 보안 설정에서 “2단계 인증”을 선택합니다. 2) “인증 앱 사용”을 고릅니다(더 좋은 방식이 있다면 SMS는 피하세요). 3) 인증 앱으로 QR 코드를 스캔하거나, 대신 설정 키를 꺼내 저장합니다. 4) 실시간 코드를 입력해 마친 뒤 백업 코드를 내려받거나 인쇄해 둡니다. Google, GitHub, Discord, Binance 등 서비스별 설정 가이드도 제공합니다.',
+  },
+  {
+    q: '2FA는 어떻게 작동하나요?',
+    a: '비밀번호 다음에 서비스는 두 번째 확인을 요구합니다. 표준 방식인 TOTP(RFC 6238)에서는 인증기가 공유 비밀 키와 현재 시각으로 6자리 OTP 인증번호를 계산하고, 서버도 완전히 같은 계산을 해 두 결과를 비교합니다. 코드는 30초마다 새로 만들어지고 만료되면 아무 가치가 없어지므로, 유출된 비밀번호만으로는 더 이상 계정을 열 수 없습니다.',
+  },
+  {
+    q: '2FA는 어디에 쓰이나요?',
+    a: '누군가 탐내 만 한 모든 로그인을 지킵니다. 이메일과 클라우드(Google, Microsoft, Apple), 은행·증권 계좌, 암호화폐 거래소(Binance, Coinbase, Kraken), 개발자 플랫폼(GitHub, AWS), 게임(Steam, Discord, Twitch), 소셜 계정(X, Instagram)에까지 쓰입니다. 회사에서는 VPN, 사내 메일, 관리자 콘솔에도 씁니다. 사이트에 “인증 앱” 옵션이 보인다면 그것이 바로 2FA입니다.',
+  },
+  {
+    q: '2FA가 100% 안전한가요?',
+    a: '아니요. 어떤 보안 장치도 100%는 아니며, 솔직한 안내문은 이를 분명히 말합니다. 2FA는 유출된 비밀번호를 노리는 공격은 차단하지만, 30초의 유효기간 안에 가짜 사이트에 코드를 입력하면 그대로 낚이고, 기기에 이미 깔린 악성코드는 세션 자체를 가로챌 수 있으며, SMS 코드는 SIM 스와핑 공격에 뚫릴 수 있습니다. 그래도 이런 위험을 모두 감수하더라도 2FA가 있는 계정이 없는 계정보다 훨씬 뚫기 어렵습니다.',
+  },
+  {
+    q: '2FA는 필수인가요?',
+    a: '정부가 의무화하는 곳은 없지만, 서비스들은 하나둘 의무로 바꾸고 있습니다. GitHub는 2023년부터 코드 기여자에게 필수로 요구하고, 은행과 암호화폐 거래소는 강제 활성화하며, 직장 로그인에도 의무 적용하는 곳이 흔합니다. 그 외에는 선택 사항이긴 하나 강력히 권장됩니다. 가장 소중한 계정인 이메일에는 어차피 필수로 취급하세요. 누구든 받은 편지함을 지배하는 순간 나머지 모든 계정을 초기화할 수 있습니다.',
+  },
+  {
+    q: '2FA는 왜 이렇게 중요한가요?',
+    a: '비밀번호가 똑같은 방식으로 계속 무너지기 때문입니다. 수십억 개의 실제 비밀번호가 이미 유출돼 공개돼 있고, 공격자들은 낮밤 없이 다른 사이트에 그것들을 재사용합니다(크리덴셜 스터핑). Microsoft에 따르면 2FA는 자동화된 계정 탈취 공격의 99.9% 이상을 막아 줍니다. 이메일, 은행, 게임, 암호화폐를 실제로 일어나는 위협에서 지키는 가장 싼 보험입니다.',
+  },
+  {
+    q: '2FA는 얼마나 강력한가요?',
+    a: '전적으로 두 번째 요소에 달려 있습니다. SMS는 가장 약합니다. SIM 스와핑으로 번호를 빼앗기면 코드도 함께 넘어갑니다. TOTP 인증기의 30초짜리 코드는 계산적으로 매우 강력합니다. 아무것도 전송되지 않고, 오프라인의 공격자가 유도할 수 없고, 몇 초면 만료됩니다. 하드웨어 보안 키와 패스키가 그다음입니다. 피싱에 저항하고 진짜 도메인에 암호학적으로 묶이기 때문입니다.',
+  },
+  {
+    q: '요즘은 모든 서비스가 2FA를 쓰나요?',
+    a: '비밀번호만으로 하던 시대가 무너졌기 때문입니다. 대규모 유출로 수십억 개의 인증 정보가 드러났고, 자동화된 크리덴셜 스터핑이 계정 탈취를 거의 공짜로 만들었으며, 플랫폼들은 그 후속 비용을 감당하기 싫어졌습니다. 규제도 겹쳤습니다. 미국 표준에서 NIST가 SMS 인증을 사실상 폐기했고, EU의 PSD2는 강력한 고객 인증을 요구합니다. 몇 개 거인이 2FA를 일반화하자 다른 서비스들도 뒤따랐습니다.',
+  },
+  {
+    q: '이 2FA 인증기를 쓰려면 휴대폰이 필요한가요?',
+    a: '아니요. 브라우저 기반 2FA 도구입니다. 요즘 브라우저만 있으면 노트북, 태블릿, 데스크톱 어디서든 돌아가고, 앱으로 설치하면 완전한 오프라인에서도 작동합니다. 휴대폰이 분실·판매·고장·방전됐거나, 일하는 곳에서 애초에 휴대폰이 허용되지 않을 때 휴대폰 앱을 대체해 줍니다.',
+  },
+  {
+    q: '2FA COUNTER는 사용해도 안전한가요?',
+    a: '네. 모든 계산은 Web Crypto API로 여러분의 브라우저 안에서 일어납니다. 비밀 키가 서버로 전송되는 일도, 어떤 서버가 키를 보는 일도 없습니다. 페이지를 불러 온 뒤 인터넷을 끊어도 생성기는 그대로 작동합니다.',
+  },
+  {
+    q: '오프라인에서도 쓸 수 있나요?',
+    a: '그렇습니다. 2FA COUNTER를 앱으로 설치하면(홈 화면에 추가/설치) 네이티브 인증기처럼 완전 오프라인에서 실행됩니다. 코드는 여러분의 비밀 키와 기기 시계만으로 만들어지므로 네트워크가 전혀 필요 없습니다.',
+  },
+  {
+    q: '2FA 코드가 계속 거부되는 이유는요?',
+    a: '거의 항상 시계 오차 탓입니다. TOTP 코드는 시간 기반이라 기기 시계가 겨우 반 분만 어긋나도 코드가 무효가 됩니다. 기기 시간을 자동 동기화로 설정(Windows는 날짜·시간 설정의 “지금 동기화”, macOS는 “날짜 및 시간 자동으로 설정”)한 뒤 다시 시도하세요. 이 생성기는 기기가 보고하는 시각만 참고하며 자체 시계가 없으니, 도구 쪽에서 고쳐 줄 것이 없습니다.',
+  },
+  {
+    q: '구글 인증기나 Authy와는 뭐가 다른가요?',
+    a: '둘은 휴대폰 앱이고, 이건 브라우저 인증기입니다. 똑같은 RFC 6238 TOTP 알고리즘을 쓰며 표준 인증 앱을 받아들이는 서비스라면 어디서든 작동합니다. 대신 휴대폰이 고장나거나 팔리거나 배터리가 다 되어도 접근 권한을 잃지 않습니다 — 구글 인증기 대체 용도로 딱입니다.',
+  },
+  {
+    q: '내 키는 어디에 저장되나요?',
+    a: '여러분의 브라우저에만 저장됩니다. 마지막 키와 “최근 키” 목록(최대 8개)은 이 기기의 로컬 스토리지에 유지되어 새로고침을 견디고 클릭 한 번으로 키를 넘나들 수 있게 해 주며, 우리 서버에는 절대 저장되지 않습니다. 사실 서버 자체가 없습니다. 키는 평문으로 저장되므로 이 브라우저 프로필을 열 수 있는 사람은 누구든 읽을 수 있고, 프로필을 비밀번호 관리자 금고처럼 다루세요. 목록 위의 “Clear all” 버튼(확인을 요구합니다), 입력창을 비우는 것, 또는 브라우저 데이터 삭제 중 하나면 완전히 사라집니다. 원본 시크릿은 비밀번호 관리자에 마스터 사본으로 보관하세요.',
+  },
+  {
+    q: 'HOTP, 8자리 코드, SHA-256 서비스에서도 동작하나요?',
+    a: '네. 서비스가 제공하는 otpauth:// URI 전체를 붙여넣으면 담고 있는 모든 매개변수가 자동으로 적용됩니다. 6·7·8자리 코드, 15/30/60초 주기, SHA-1/SHA-256/SHA-512 해싱, 카운터 기반 HOTP까지 모두 그렇습니다. 문자열만 담긴 Base32 키는 표준 기본값(6자리, 30초, SHA-1)을 씁니다. 대부분의 서비스가 바로 이 기본값을 씁니다.',
+  },
+  {
+    q: '정말 무료인가요?',
+    a: '네. 계정도, 프리미엄 요금제도, 로그인도 없습니다. 서비스가 아니라 도구입니다.',
+  },
+];
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebApplication',
+    name: '2FA COUNTER',
+    alternateName: ['2FA Live Code', '2facounter', '2FA Online Authenticator', '2FA Auth Tool'],
+    url: 'https://2facounter.com/ko/',
+    description,
+    applicationCategory: 'SecurityApplication',
+    applicationSubCategory: 'Two-Factor Authentication',
+    operatingSystem: '모든 환경 (브라우저 기반)',
+    browserRequirements: 'Web Crypto API를 지원하는 최신 브라우저 필요',
+    softwareVersion: '2.0',
+    featureList: [
+      'RFC 6238 기반 TOTP 2FA 코드 생성',
+      'RFC 4226 기반 HOTP 코드 생성',
+      '카메라 또는 스크린샷으로 QR 코드 스캔',
+      '오프라인 / PWA 지원',
+      'SHA-1, SHA-256, SHA-512 해싱',
+      '6, 7, 8자리 코드 지원',
+      '최근 키 목록',
+      '제로 지식 — 서버도 계정도 없음',
+    ],
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+    isAccessibleForFree: true,
+    inLanguage: ['en', 'vi', 'zh-CN', 'zh-TW', 'es', 'ja', 'fr', 'de', 'pt', 'ko', 'it'],
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faq.map(({ q, a }) => ({
+      '@type': 'Question',
+      name: q,
+      acceptedAnswer: { '@type': 'Answer', text: a },
+    })),
+  },
+];
+
+const steps = [
+  {
+    n: '01',
+    title: '비밀 키 확보',
+    body: '서비스에서 “2단계 인증 → 인증 앱” 메뉴가 나오면 “스캔할 수 없나요? 설정 키 표시”를 고르세요. JBSWY3DPEHPK3PXP 같은 Base32 문자열, 혹은 otpauth:// 링크 전체를 받게 됩니다. 둘 다 여기서 그대로 쓸 수 있습니다.',
+  },
+  {
+    n: '02',
+    title: '붙여넣고, 놓거나, 스캔하세요',
+    body: '키나 URI를 생성기에 붙여넣고, QR 코드 스크린샷을 페이지 위로 드래그 앤 드롭하거나, 카메라로 스캔하세요. 모든 해석은 여러분의 기기에서 이뤄집니다. 아무것도 업로드되지 않습니다.',
+  },
+  {
+    n: '03',
+    title: '실시간 코드 복사',
+    body: '몇 초 안에 새 코드가 나타나며 여러분 기기의 시계와 동기화됩니다. 복사를 눌러 로그인을 마치세요. 코드는 30초마다 자동으로 갱신됩니다.',
+  },
+];
+
+const features = [
+  {
+    title: '한 칸, 하나의 실시간 코드',
+    body: '비밀 키 또는 otpauth:// 링크 전체를 붙여넣으면 대응하는 코드가 곧바로 카운트다운을 시작합니다. 설정도, 양식도, “계정 추가” 절차도 없습니다.',
+  },
+  {
+    title: '스크린샷을 붙여넣으면 키가 된다',
+    body: 'QR 코드 이미지를 Ctrl+V로 붙여넣거나, 이미지 파일을 드래그 앤 드롭하거나, 웹캠으로 스캔하세요. 가져오는 길은 세 가지, 키가 새는 길은 하나도 없습니다.',
+  },
+  {
+    title: '모든 매개변수 지원, 자동 인식',
+    body: '문자열만 담긴 키는 표준 기본값을 따르고, otpauth:// URI 전체를 주면 담긴 매개변수를 모두 존중합니다. 6/7/8자리, 15/30/60초 주기, SHA-1/256/512, 카운터 기반 HOTP까지.',
+  },
+  {
+    title: '새로고침에도 살아남고, 키 전환도 쉽게',
+    body: '페이지를 다시 열면 마지막 키가 이미 있습니다. 최근 키 목록으로 클릭 한 번에 키를 넘나들 수 있으며, 이 목록은 이 기기의 로컬 스토리지에서만 복원됩니다. 서버는 절대 아닙니다.',
+  },
+  {
+    title: '설치도 가입도 필요 없음',
+    body: '폰 앱 없이, 계정 없이, 동기화 요금 없이, 추적 없이. 브라우저만 열 수 있으면 코드를 만들 수 있습니다.',
+  },
+  {
+    title: '오프라인 작동, 앱 설치 가능',
+    body: '탭 인터넷 연결을 완전히 끊고도 작동합니다. 문자 그대로요. 그리고 PWA로서 독이나 홈 화면에 네이티브 앱처럼 설치됩니다.',
+  },
+];
+
+const services = [
+  'Discord', 'GitHub', 'Steam', 'Binance', 'Google', 'X / Twitter',
+  'AWS', 'Coinbase', 'Kraken', 'Twitch', 'Microsoft', 'Proton Mail',
+];
+---
+
+<Layout title={title} description={description} path="/ko/" lang="ko" jsonLd={jsonLd} alternates={homeAlternates}>
+  <SiteHeader
+    links={[
+      { href: '/ko/#how-it-works', label: '작동 방식' },
+      { href: '/ko/#features', label: '기능' },
+      { href: '/ko/#faq', label: '자주 묻는 질문' },
+      { href: '/guides/', label: '설정 가이드' },
+      { href: '/privacy/', label: '개인정보 보호' },
+    ]}
+    cta="코드 생성하기"
+  />
+
+  <main id="main">
+    <!-- ── 주황색 캔버스: 실시간 생성기가 먼저, 히어로 콘텐츠가 바로 아래 ── -->
+    <section aria-label="실시간 2FA 코드 생성기 — 히어로">
+      <!-- SECTION 1: the 2FA Generator interface sits at the very top -->
+      <div class="mx-auto max-w-[1200px] px-4 pt-10 pb-4 sm:px-6 sm:pt-16 xl:px-0">
+        <Generator />
+      </div>
+
+      <!-- SECTION 2: hero content directly under the generator -->
+      <div class="mx-auto grid max-w-[1200px] items-center gap-12 px-4 pt-14 pb-12 sm:px-6 sm:pt-20 lg:grid-cols-[7fr_5fr] lg:pt-24 xl:px-0">
+        <div>
+          <span class="badge-eyebrow -rotate-1">100% 클라이언트 사이드 · 제로 지식</span>
+          <h1 class="mt-6 max-w-[11em] font-display text-display-xl tracking-normal text-ink lg:text-display-xxl">
+            실시간 2FA 코드 생성기
+          </h1>
+          <p class="mt-6 max-w-xl text-lg leading-[1.5] font-medium text-ink lg:text-xl">
+            비밀 키를 붙여넣으면 6자리 OTP 인증번호를 바로 받습니다. 휴대폰이 없거나, 고장 났거나,
+            손이 닿지 않을 때를 위한 빠르고 무료하고 개인정보를 지키는 도구 — 구글 인증기,
+            Authy, Microsoft Authenticator를 대신합니다.
+          </p>
+          <div class="mt-8 flex flex-wrap gap-4">
+            <a href="#generator" class="btn-primary">
+              첫 코드 만들기
+              <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14m0 0-6-6m6 6-6 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            </a>
+            <a href="#how-it-works" class="btn-secondary">작동 방식</a>
+          </div>
+          <p class="mt-5 font-mono text-label text-ink">앱도, 계정도 없습니다. 키는 단 한 번도 서버에 닿지 않습니다.</p>
+        </div>
+        <!-- Code-window artifact: code stays English byte-for-byte -->
+        <div class="min-w-0 overflow-hidden rounded-xl border-4 border-ink bg-cream" style="box-shadow: var(--shadow-card)">
+          <div class="flex items-center gap-2 border-b-2 border-dashed border-hairline-strong bg-ink px-4 py-2.5">
+            <span class="h-2.5 w-2.5 rounded-full bg-accent-red"></span>
+            <span class="h-2.5 w-2.5 rounded-full bg-canvas"></span>
+            <span class="h-2.5 w-2.5 rounded-full bg-primary"></span>
+            <span class="ml-2 font-mono text-xs text-cream">otp.rfc-6238.js</span>
+          </div>
+          <pre class="overflow-x-auto p-5 font-mono text-[13px] leading-relaxed"><code>
+<span class="text-muted">// The whole tool. No servers involved.</span>
+<span class="font-bold text-accent-blue">const</span> <span class="text-ink">step</span> = Math.<span class="text-ink">floor</span>(Date.<span class="text-ink">now</span>() / 1000 / 30);
+
+<span class="font-bold text-accent-blue">const</span> <span class="text-ink">key</span> = <span class="font-bold text-accent-blue">await</span> crypto.subtle.<span class="text-ink">importKey</span>(
+  'raw', <span class="text-ink">base32</span>(secret), &#123; name: 'HMAC', hash: 'SHA-1' &#125;);
+
+<span class="font-bold text-accent-blue">const</span> <span class="text-ink">mac</span> = <span class="font-bold text-accent-blue">new</span> <span class="text-ink">Uint8Array</span>(
+  <span class="font-bold text-accent-blue">await</span> crypto.subtle.<span class="text-ink">sign</span>('HMAC', key, <span class="text-ink">u64</span>(step)));
+
+<span class="font-bold text-accent-blue">const</span> <span class="text-ink">o</span> = mac[19] &amp; 15;
+<span class="font-bold text-accent-blue">const</span> <span class="text-ink">code</span> = ((mac[o] &amp; 0x7f) << 24 | mac[o+1] << 16
+  | mac[o+2] << 8 | mac[o+3]) % <span class="text-ink">1e6</span>;
+<span class="text-ink">code</span>.<span class="text-ink">toString</span>().<span class="text-ink">padStart</span>(6, '0'); <span class="text-muted">// ← your 2FA code</span>
+</code></pre>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ── 절선(투켓) 구분선 ─────────────────────────── -->
+    <div class="mx-auto max-w-[1200px] px-4 sm:px-6 xl:px-0" aria-hidden="true">
+      <hr class="border-t-2 border-dashed border-ink/40" />
+    </div>
+
+    <!-- ── 숫자로 보는 통계 ── -->
+    <section aria-label="숫자로 보는 제로 지식">
+      <div class="mx-auto grid max-w-[1200px] grid-cols-1 gap-10 px-4 py-16 text-center sm:grid-cols-3 sm:px-6 lg:py-20 xl:px-0">
+        <div>
+          <p class="font-numeric text-5xl font-black tracking-[-0.03125em] text-ink lg:text-[56px]">0</p>
+          <p class="mt-2 text-sm font-medium text-ink">우리 쪽에 저장되는 키 — 저장해 둘 서버 자체가 없습니다</p>
+        </div>
+        <div>
+          <p class="font-numeric text-5xl font-black tracking-[-0.03125em] text-ink lg:text-[56px]">100%</p>
+          <p class="mt-2 text-sm font-medium text-ink">계산은 Web Crypto를 통해 여러분의 기기에서 일어납니다</p>
+        </div>
+        <div>
+          <p class="font-numeric text-5xl font-black tracking-[-0.03125em] text-ink lg:text-[56px]">6238</p>
+          <p class="mt-2 text-sm font-medium text-ink">구현한 RFC 표준 — 모든 인증 앱과 호환됩니다</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── 작동 방식: 카운터 위에 놓인 번호표 ──────────── -->
+    <section id="how-it-works" class="scroll-mt-20" aria-labelledby="how-title">
+      <div class="mx-auto max-w-[1200px] px-4 py-20 sm:px-6 lg:py-24 xl:px-0">
+        <div class="grid items-start gap-12 lg:grid-cols-[5fr_7fr]">
+          <div>
+            <p class="section-label">작동 방식</p>
+            <h2 id="how-title" class="mt-3 font-display text-3xl tracking-normal text-ink sm:text-4xl lg:text-section-display">
+              휴대폰 없이, 세 단계로 실시간 2FA 코드를 받는 방법.
+            </h2>
+            <p class="mt-5 text-lg font-medium text-ink">
+              2단계 인증은 계정에 두 번째 잠금 장치를 더합니다. 30초마다 바뀌는 코드인데, 이는 공유
+              비밀 키와 현재 시각으로 만들어집니다(TOTP — RFC 6238). 이 페이지가 바로 그 두 번째
+              자물쇠입니다. 여러분의 브라우저는 로그인 중인 웹사이트와 정확히 같은 계산을 돌립니다.
+            </p>
+            <p class="mt-4 font-medium text-ink">
+              정말 중요한 것은 비밀 키 하나뿐이므로, 키를 암호화된 비밀번호 관리자에 보관하고
+              어디서든 코드를 다시 만들 수 있습니다. 노트북, 두 번째 브라우저 프로필, 출장용
+              노트북, 오프라인에서도요.
+            </p>
+            <p class="mt-4 text-sm font-medium text-ink">
+              처음이신가요? 쉽게 쓴 설명서를 읽어 보세요:{" "}
+              <a href="/what-is-2fa/" class="link">2FA란 무엇인가? TOTP는 어떻게 작동하나</a>
+            </p>
+            <a href="#generator" class="btn-primary mt-8">지금 써 보기</a>
+          </div>
+          <ol class="grid gap-6 sm:grid-cols-3">
+            {steps.map((s) => (
+              <li class="relative flex flex-col rounded-xs border-2 border-ink bg-cream p-6 pt-7" style="box-shadow: var(--shadow-ticket)">
+                <!-- 표 최상단의 절선 -->
+                <span class="absolute inset-x-3 top-1.5 border-t-2 border-dashed border-hairline-strong" aria-hidden="true"></span>
+                <span class="font-numeric text-3xl font-black tracking-[-0.03125em] text-accent-red">{s.n}</span>
+                <h3 class="mt-3 text-lg font-bold text-ink">{s.title}</h3>
+                <p class="mt-2 text-sm font-medium text-ink">{s.body}</p>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── 기능: 크림색 메뉴 카드 + 하나의 다크 스페셜 ──────── -->
+    <section id="features" class="scroll-mt-20" aria-labelledby="features-title">
+      <div class="mx-auto max-w-[1200px] px-4 py-20 sm:px-6 lg:py-24 xl:px-0">
+        <div class="mb-12 max-w-2xl">
+          <p class="section-label">기능</p>
+          <h2 id="features-title" class="mt-3 font-display text-3xl tracking-normal text-ink sm:text-4xl lg:text-section-display">
+            2FA 앱이 하는 일은 전부 — 그리고 여러 면에서 더 잘
+          </h2>
+        </div>
+        <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {features.map((f) => (
+            <article
+              class:list={[
+                'p-6 sm:p-8',
+                f.v === 'dark'
+                  ? 'on-dark rounded-xl border-4 border-ink bg-ink text-cream'
+                  : 'rounded-xl border-2 border-ink bg-cream',
+              ]}
+              style={f.v === 'dark' ? 'box-shadow: var(--shadow-card)' : undefined}
+            >
+              <h3 class:list={['text-lg font-bold', f.v === 'dark' ? 'text-primary' : 'text-ink']}>{f.title}</h3>
+              <p class:list={['mt-2.5 text-sm font-medium', f.v === 'dark' ? 'text-cream/80' : 'text-ink']}>{f.body}</p>
+            </article>
+          ))}
+        </div>
+        <div class="cta-banner on-dark mt-6">
+          <div class="flex flex-col items-start justify-between gap-6 lg:flex-row lg:items-center">
+            <div>
+              <h3 class="font-display text-2xl tracking-normal text-primary lg:text-[28px]">
+                당신의 키는 우리 수익 모델이 아닙니다
+              </h3>
+              <p class="mt-2 max-w-2xl font-medium text-cream/80">
+                계정도 없습니다. 로그인도 없습니다. “진단 정보를 보내 주세요”도 없습니다. 도구는
+                코드를 여러분 기기 안에서 그대로 계산하며, 이 도메인을 USB 메모리에서 서빙해도
+                동일하게 작동할 것입니다.
+              </p>
+            </div>
+            <a href="#generator" class="btn-primary shrink-0">
+              생성기 열기
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── 절선(투켓) 구분선 ─────────────────────────── -->
+    <div class="mx-auto max-w-[1200px] px-4 sm:px-6 xl:px-0" aria-hidden="true">
+      <hr class="border-t-2 border-dashed border-ink/40" />
+    </div>
+
+    <!-- ── 호환성 ─────────────────────────────────────── -->
+    <section id="compatibility" class="scroll-mt-20" aria-labelledby="compat-title">
+      <div class="mx-auto max-w-[1200px] px-4 py-20 sm:px-6 lg:py-24 xl:px-0">
+        <div class="mb-10 max-w-2xl">
+          <p class="section-label">호환성</p>
+          <h2 id="compat-title" class="mt-3 font-display text-3xl tracking-normal text-ink sm:text-4xl lg:text-section-display">
+            인증 앱이 되는 곳이라면 어디서든 작동합니다
+          </h2>
+          <p class="mt-4 font-medium text-ink">
+            “인증 앱 사용” 옵션을 제공하는 모든 서비스는 같은 표준 TOTP 코드를 만듭니다. 아래
+            서비스들도 포함하여:
+          </p>
+        </div>
+        <ul class="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+          {services.map((s) => (
+            <li class="flex items-center justify-center rounded-full border-2 border-ink bg-surface px-3 py-3 text-sm font-semibold text-ink">{s}</li>
+          ))}
+        </ul>
+        <p class="mt-6 text-sm font-medium text-ink">
+          이 중 하나를 설정 중이신가요? 단계별 가이드를 참고하세요:{" "}
+          {[
+            ['Google', 'google'],
+            ['Microsoft', 'microsoft'],
+            ['Discord', 'discord'],
+            ['GitHub', 'github'],
+            ['X', 'x'],
+            ['AWS', 'aws'],
+            ['Coinbase', 'coinbase'],
+            ['Kraken', 'kraken'],
+            ['Steam', 'steam'],
+            ['Binance', 'binance'],
+          ].map(([name, slug], i) => (
+            <>
+              {i > 0 && <span aria-hidden="true"> · </span>}
+              <a href={`/guides/${slug}/`} class="link">{name}</a>
+            </>
+          ))}
+        </p>
+      </div>
+    </section>
+
+    <!-- ── 도구 소개: 긴 형식의 글 ─────────────────────── -->
+    <section id="about" class="scroll-mt-20" aria-labelledby="about-title">
+      <article class="mx-auto max-w-[820px] px-4 py-20 sm:px-6 lg:py-24 xl:px-0">
+        <p class="section-label">이 2FA 도구에 대하여</p>
+        <h2 id="about-title" class="mt-3 font-display text-3xl tracking-normal text-ink sm:text-4xl lg:text-section-display">
+          2FA COUNTER — 브라우저 안에 사는 2FA 인증기
+        </h2>
+        <div class="rich-text mt-8">
+          <p>
+            사람들은 모두 똑같은 바람을 안고 찾아옵니다. 설치 대신, 지금 당장, 돌아가는 인증 코드
+            하나. 그것이 바로 2FA COUNTER입니다. 무료로 브라우저에서 돌아가는 2FA 인증기이자
+            코드 생성기로, 비밀 키를 붙여넣거나 QR 코드 스크린샷을 올리거나 카메라로 스캔하면
+            대응하는 실시간 코드가 몇 초 안에 나타나 30초마다 자동으로 갱신됩니다. 휴대폰 앱과
+            똑같이요. 다른 점은 아무것도 설치할 필요가 없다는 것뿐입니다.
+          </p>
+
+          <h3>2FA란? 60초 요약</h3>
+          <p>
+            2FA, 즉 2단계 인증은 계정의 두 번째 잠금 장치입니다. 기본적으로 “아는 것”,
+            즉 비밀번호에 더해 “가진 것”을 요구합니다. 2FA를 켜면 서비스가 일회용 공유 비밀
+            키를 내줍니다. 인증기는 그 키와 현재 시각에서 새 6자리 OTP 인증번호를 만들어 냅니다 —
+            TOTP 표준, RFC 6238이죠. 동시에 로그인 중인 사이트도 같은 계산을 해 결과를
+            비교합니다. 코드는 30초마다 바뀌므로, 유출된 비밀번호 하나로는 이제 아무것도 열 수
+            없습니다. 암호학적 원리를 끝까지 들여다보고 싶다면 쉽게 쓴 설명서를 읽어 보세요{" "}
+            <a href="/what-is-2fa/">2FA란 무엇인가? 2단계 인증과 TOTP의 작동 원리</a> — 그리고
+            돌아와서 첫 코드를 만들어 보세요.
+          </p>
+
+          <h3>세 단계로 코드 받기</h3>
+          <p>
+            로그인할 때마다 코드가 필요하다면 세 가지 입력이면 충분합니다. 먼저 웹사이트에서 2단계
+            인증을 켜고 “인증 앱”을 선택하세요. QR 코드를 스캔할 수 없으면 설정 키 — Base32
+            문자열이나 otpauth:// 링크 전체 — 를 꺼냅니다. 둘째, 그 키나 URI를 이 페이지 상단의
+            생성기에 붙여넣거나 QR 스크린샷을 올리거나 카메라로 스캔합니다. 셋째, 새로 만들어진
+            코드를 복사해 로그인을 마칩니다. 생성기는 otpauth의 모든 매개변수를 존중합니다. 6, 7,
+            8자리 코드, 15/30/60초 주기, SHA-1, SHA-256, SHA-512 해싱, 카운터 기반 HOTP까지요.
+            아무것도 업로드되지 않고 기록도 남지 않습니다. 코드는 여러분의 기기에서 계산되며,
+            브라우저의 네트워크 탭으로 직접 확인하실 수 있습니다.
+          </p>
+
+          <h3>휴대폰이 필요 없는 2FA 인증기</h3>
+          <p>
+            대부분의 방문자는 휴대폰이 떠나버린 뒤에 찾아옵니다. 팔고, 깨고, 빠져 죽고, 초기화되고,
+            출장 날 방전되고 — 그런데 Google Authenticator, Authy, Microsoft Authenticator는 오직
+            그 기기에만 살아 있습니다. 브라우저 2FA 도구는 단일 실패 지점을 없앱니다. 비밀은
+            비밀번호 관리자 금고에 그대로 있고, 코드는 신뢰하는 어떤 컴퓨터에서든 다시 만들 수
+            있으며, 데스크톱 환경에도 잘 맞습니다. 두 번째 모니터에서 GitHub나 AWS 콘솔에
+            로그인하는 것, 최근 키 목록으로 여러 계정을 관리하는 것, 휴대폰이 허용되지 않는 기기에서
+            일하는 것이요. 앱으로 설치하면 네트워크를 완전히 꺼도 생성기는 계속 작동합니다. 어느
+            서비스든 이미 받아 들이는 바로 그 RFC 6238 수학입니다. 주머니에서 풀려난 것뿐입니다.
+          </p>
+
+          <h3>암호화폐, 클라우드, 게임, 소셜을 하나의 도구로</h3>
+          <p>
+            지키는 대상이 무엇이든 표준 TOTP가 공통 언어입니다. Binance, Coinbase, Kraken에서
+            매매하고, AWS, Microsoft, Google 계정을 잠그고, Steam, Discord, X 또는 받은 편지함을
+            지키는 일 — “인증 앱 사용”을 제공하는 어떤 서비스든 같은 프로토콜을 말하므로 도구
+            하나로 전부 커버됩니다. 사이트가 코드를 거부할 때는 거의 항상 기기 시계가 문제지 도구가
+            아닙니다. 시스템 시간을 자동 동기화로 바꾸면 코드가 다시 맞아 떨어집니다. 인기
+            서비스에는 이 생성기와 짝을 이루는 <a href="/guides/">단계별 설정 가이드</a>를
+            제공합니다. 기능 켜기부터 마지막 코드 붙여넣기까지.
+          </p>
+
+          <h3>보내는 것 없이, 저장하는 것 없이, 내는 돈 없이</h3>
+          <p>
+            숨길 것이 아예 없기 때문에, 이는 숨길 것이 하나도 없는 몇 안 되는 2FA 도구 중
+            하나입니다. 키를 보낼 서버도 없고, 만들 계정도 없고, 프리미엄 요금제도, 텔레메트리도
+            없습니다. 모든 코드는 Web Crypto API로 로컬에서 계산되고, 마지막 키와 짧은 최근 키
+            목록은 여러분 브라우저의 스토리지에만 살다가 “Clear all” 클릭 한 번으로 지워집니다.
+            모든 시크릿의 원본은 암호화된 비밀번호 관리자에 보관하고, 각 서비스의 복구 코드도 함께
+            저장하며, 급하다는 듯 새 코드를 요구하는 요청은 본색 그대로 위험 신호로 다루세요.
+          </p>
+
+          <p>
+            준비되면 시작하세요. 생성기는 페이지 상단에 있습니다. 키를 붙여넣고 실시간 코드가
+            카운트다운하는 것을 지켜보세요 — 무료로, 비공개로, 오프라인에서, 영원히.
+          </p>
+        </div>
+      </article>
+    </section>
+
+    <!-- ── FAQ: 절선 찢기 목록 ─────────────────────────── -->
+    <section id="faq" class="scroll-mt-20" aria-labelledby="faq-title">
+      <div class="mx-auto max-w-[1200px] px-4 py-20 sm:px-6 lg:py-24 xl:px-0">
+        <div class="grid gap-12 lg:grid-cols-[4fr_8fr]">
+          <div>
+            <p class="section-label">FAQ</p>
+            <h2 id="faq-title" class="mt-3 font-display text-3xl tracking-normal text-ink sm:text-4xl lg:text-section-display">
+              질문, 담백하게 답했습니다
+            </h2>
+            <p class="mt-4 font-medium text-ink">
+              아직 확신이 안 드시나요? 이 도구가 하는 모든 일은 브라우저 개발자 도구의 네트워크
+              탭에서 확인할 수 있습니다. 당신의 키를 담은 요청은{" "}
+              <span class="font-bold text-ink">단 한 건도 없습니다</span>.
+            </p>
+          </div>
+          <div class="divide-y-2 divide-dashed divide-hairline-strong">
+            {faq.map(({ q, a }) => (
+              <details class="group px-1 py-1">
+                <summary class="flex cursor-pointer list-none items-center justify-between gap-4 py-4 text-left text-lg font-bold text-ink select-none marker:hidden">
+                  {q}
+                  <svg class="h-4 w-4 shrink-0 text-ink transition-transform group-open:rotate-45" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"></path></svg>
+                </summary>
+                <p class="pb-5 text-sm font-medium text-ink">{a}</p>
+              </details>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── 최종 CTA: 다크 스페셜 게시판 ─────────────────── -->
+    <section aria-label="시작하기">
+      <div class="on-dark bg-ink px-4 py-20 text-center sm:px-6 lg:py-24">
+        <h2 class="mx-auto max-w-[11em] font-display text-display-xl tracking-normal text-primary lg:text-display-xxl">
+          이제 휴대폰을 꺼낼 필요가 없습니다
+        </h2>
+        <p class="mx-auto mt-5 max-w-2xl text-lg font-medium text-cream/80">
+          비밀은 비밀번호 관리자에 두고, 코드는 여기서 만들고, 어떤 기기에서도 로그인 상태를
+          유지하세요 — 인터넷이 전혀 없을 때에도요.
+        </p>
+        <a href="#generator" class="btn-primary mt-10 inline-flex">
+          지금 2FA 코드 생성하기
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <SiteFooter
+    columns={[
+      {
+        title: '제품',
+        links: [
+          { href: '/ko/#generator', label: '실시간 코드 생성기' },
+          { href: '/how-to-get-2fa-code/', label: '2FA 코드 받는 법' },
+          { href: '/what-is-2fa/', label: '2FA란 무엇인가?' },
+          { href: '/ko/#features', label: '기능' },
+          { href: '/ko/#compatibility', label: '호환성' },
+        ],
+      },
+      {
+        title: '배움터',
+        links: [
+          { href: '/totp-vs-passkeys/', label: 'TOTP와 패스키 비교' },
+          { href: '/sim-swap-attacks/', label: 'SIM 스와핑 공격' },
+          { href: '/authenticator-cloud-sync/', label: '인증 앱 클라우드 동기화 비교' },
+        ],
+      },
+      {
+        title: '가이드',
+        links: [
+          { href: '/guides/', label: '모든 가이드' },
+          { href: '/guides/google/', label: 'Google 2FA' },
+          { href: '/guides/microsoft/', label: 'Microsoft 2FA' },
+          { href: '/guides/discord/', label: 'Discord 2FA' },
+          { href: '/guides/github/', label: 'GitHub 2FA' },
+          { href: '/guides/steam/', label: 'Steam 2FA' },
+          { href: '/guides/binance/', label: 'Binance 2FA' },
+        ],
+      },
+      {
+        title: '소개',
+        links: [
+          { href: '/about/', label: '회사 소개' },
+          { href: '/methodology/', label: '편집 기준' },
+          { href: '/contact/', label: '문의하기' },
+        ],
+      },
+      {
+        title: '법적 고지',
+        links: [
+          { href: '/privacy/', label: '개인정보 처리방침' },
+          { href: '/terms/', label: '서비스 이용약관' },
+          { href: '/disclaimer/', label: '면책 조항' },
+          { href: '/contact/', label: '보안 문제 신고' },
+        ],
+      },
+    ]}
+    tagline="2facounter.com은 브라우저 안에서 전부 처리되는 제로 지식 2FA 인증기입니다. 계정도, 서버도, 휴대폰도 필요 없습니다."
+    languagesTitle="언어"
+  />
+</Layout>

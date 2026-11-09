@@ -1,0 +1,82 @@
+---
+import GuideLayout from '../../components/GuideLayout.astro';
+
+const title = 'How to Set Up 2FA on GitHub (TOTP, No Phone App)';
+const description =
+  'Enable two-factor authentication on GitHub using your browser. Find GitHub’s TOTP secret key or QR code, and generate codes at 2facounter.com — perfect for shared CI machines and lost phones.';
+---
+
+<GuideLayout
+  serviceName="GitHub"
+  title={title}
+  description={description}
+  path="/guides/github/"
+  dateModified="2026-11-09"
+  lastReviewed="2026-11-09"
+  intro="GitHub has required 2FA since 2023 and also supports WebAuthn/passkeys everywhere — but many devs still want a portable TOTP option for CI machines, VMs, and terminals. Here you go."
+  minutes={6}
+  params={['6 digits', '30s period', 'SHA-1']}
+  ctaTitle="A lost GitHub key is a lost codebase"
+  ctaBody="Recovering a GitHub account without working 2FA access — and without the recovery codes — runs through GitHub support, identity proofs, and waiting. Push the Base32 key and the recovery-code bundle into your vault while you still have them."
+  deepDive={{
+    heading: "GitHub specifics: what 2FA does and doesn’t touch",
+    blocks: [
+      {
+        title: 'Pushes, CLI, and PATs are unaffected — by design',
+        body: 'Git over HTTPS authenticates with Personal Access Tokens and credential helpers, and SSH keys are entirely independent — neither pauses for a TOTP code. What 2FA changes is your web sign-in and password re-confirmation steps (revoking tokens, approving OAuth apps). If a clone or CI job fails after enabling 2FA, the fix is a fresh PAT or SSH key, not the second factor itself.',
+      },
+      {
+        title: 'Shared machines: paste once, leave nothing behind',
+        body: 'On CI terminals and borrowed laptops, work in a private window: paste the key, read the code, close the window. Nothing lands in localStorage or browsing history. On your own machine the recent-keys list is a convenience — on anything shared, it’s leakage. Your vaulted Base32 key plus recovery codes is the plan that lives on your own hardware, not the shared one.',
+      },
+      {
+        title: 'Passkeys vs. TOTP: choose per device',
+        body: 'GitHub leads with passkeys, and on a personal machine that’s the right default — passkeys are phishing-resistant and cryptographically bound to the real domain. But a passkey lives in that device’s secure hardware and can’t be re-derived from a string. TOTP is the opposite trade: weaker against phishing, but portable to any browser that has your key. A strong setup uses both — passkey on daily devices, TOTP as the independent second basket, recovery codes as the third.',
+      },
+    ],
+  }}
+  steps={[
+    {
+      title: 'Open GitHub’s settings',
+      body: 'Sign in at github.com, click your avatar → “Settings” → “Password and authentication” → “Enable two-factor authentication”.',
+    },
+    {
+      title: 'Skip the passkey prompt if you want TOTP',
+      body: 'GitHub offers passkeys first — great on personal machines. If your device is shared or headed-for-destruction (CI boxes, borrowed laptops), continue with “TOTP app” instead.',
+    },
+    {
+      title: 'View the secret key, not just the QR',
+      body: 'GitHub shows a QR code. Below it, click “Write down the setup key instead” and a Base32 string (letters A–Z, digits 2–7) appears.',
+    },
+    {
+      title: 'Paste the key into the generator',
+      body: 'Paste the key into 2facounter.com and a live code appears within seconds — the page works fully offline too. Or screenshot the QR and press Ctrl+V on the page — the scanner reads it right off the clipboard.',
+    },
+    {
+      title: 'Verify in GitHub',
+      body: 'Copy the live 6-digit code from the generator and enter it in GitHub’s confirm step. GitHub goes further: it now shows your security log with this change noted.',
+    },
+    {
+      title: 'Download recovery codes — twice over',
+      body: 'GitHub gives a one-time bundle of recovery codes. Download and store them encrypted. Put the Base32 key in your password manager too so the generator can resurrect access on any machine you trust.',
+    },
+  ]}
+  faqs={[
+    {
+      q: 'Do I need a browser extension to generate GitHub 2FA codes?',
+      a: 'No. Everything is a normal screen in front of you. Extensions that see all page content are a bigger risk than a standalone site.',
+    },
+    {
+      q: 'Can I use the same GitHub key on my phone and the browser?',
+      a: 'Yes — TOTP is deterministic: the same secret produces the same codes everywhere. Enroll both if you like, or generate a QR from this site to drop it into any phone app later.',
+    },
+    {
+      q: 'Works for GitHub’s 2FA on shared/company machines?',
+      a: 'Yes, but treat shared machines as untrusted. Clear the key field and your browser’s site data after use, or better: use a private window — paste the key just once, copy your codes, then close it and nothing is left behind.',
+    },
+    {
+      q: 'Does 2FA affect pushes or API tokens?',
+      a: 'Not for one thing — Git-over-HTTPS and the REST/GraphQL API authenticate with PATs and Git credentials, not TOTP codes, so pushes don’t pause for a code. What 2FA does touch: web sign-ins, and the password you want when revoking tokens or approving OAuth apps now comes with the code step too.',
+    },
+  ]}
+/>

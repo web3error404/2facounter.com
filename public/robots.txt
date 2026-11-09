@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+# Dev-only preview page (also noindexed)
+Disallow: /preview/
+
+Sitemap: https://2facounter.com/sitemap-index.xml

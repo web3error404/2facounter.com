@@ -1,0 +1,78 @@
+---
+import GuideLayout from '../../components/GuideLayout.astro';
+
+const title = 'How to Set Up 2FA on Google (TOTP, No Phone App)';
+const description =
+  'Enable 2-Step Verification on your Google account with a browser-based authenticator. Find the TOTP setup key Google hides behind the QR code and generate codes at 2facounter.com.';
+---
+
+<GuideLayout
+  serviceName="Google"
+  title={title}
+  description={description}
+  path="/guides/google/"
+  dateModified="2026-11-09"
+  lastReviewed="2026-11-09"
+  intro="Google’s 2-Step Verification supports standard TOTP for everyone — but the setup key is hidden behind the QR code and Google nudges you toward its cloud-synced app. This guide gets you the plain Base32 key in under five minutes."
+  minutes={6}
+  params={['6 digits', '30s period', 'SHA-1']}
+  ctaTitle="A Google key is worth guarding like a master key"
+  ctaBody="Whatever resets your Google account can reset everything behind it — banking, GitHub, Steam, work email. Store the Base32 key in an encrypted password manager now, while the setup dialog is still open, not “later”."
+  deepDive={{
+    heading: "Google nuances worth knowing before you enroll",
+    blocks: [
+      {
+        title: 'Personal vs. Workspace accounts',
+        body: 'Everything in this guide is written for a personal Google account, where you control every second-step setting yourself. On a Google Workspace account, your admin can enforce security keys, hide the authenticator-app option, or block TOTP outright — if “Authenticator app” never appears in the second-step list, that’s a policy, not a bug. Ask your IT admin which methods are allowed before burning time in the settings.',
+      },
+      {
+        title: 'The identical key, minus the cloud upload',
+        body: 'The Base32 secret Google reveals is the same secret the Google Authenticator app would store. The only difference is what happens next: the app uploads secrets to Google’s servers so they survive a lost phone, while a plain TOTP key stays wherever you put it. If you’d rather accept the “I own my backups” responsibility — a key in your password manager, this site on any machine — the upload is exactly the thing you’re trading away.',
+      },
+      {
+        title: 'Leave Google Prompt enabled as a fallback',
+        body: 'Prompt (tap “Yes” on your phone) is Google’s fastest second step, but it dies when the phone does — battery, network, or loss. A TOTP code computed from a key you hold keeps working on any device. Enabling both costs nothing: keep Prompt for convenience, keep the browser generator as the phone-independent lane, and print backup codes for when even the browser is gone.',
+      },
+    ],
+  }}
+  steps={[
+    {
+      title: 'Open 2-Step Verification',
+      body: 'Sign in at myaccount.google.com → Security → “2-Step Verification”. Confirm your password to proceed. If 2SV isn’t enabled yet, start it here.',
+    },
+    {
+      title: 'Choose “Authenticator app”',
+      body: 'Scroll to the available second-step options and add “Authenticator app”. Google shows a QR code — hold the page and the key below it.',
+    },
+    {
+      title: 'Reveal the setup key',
+      body: 'Click “Can’t scan it?” — a 32-character Base32 secret (e.g. JBSWY3DPEHPK3PXP) replaces the QR. Copy it. This is the same secret the Google Authenticator app would store, minus the cloud-sync upload.',
+    },
+    {
+      title: 'Generate codes locally',
+      body: 'Paste the key into 2facounter.com. The live 6-digit code appears instantly and refreshes every 30 seconds. Your key never reaches our (nonexistent) servers.',
+    },
+    {
+      title: 'Verify',
+      body: 'Click Next in Google’s dialog, enter the current code, and confirm. Google adds “Authenticator” to your list of active second steps.',
+    },
+    {
+      title: 'Save backups where they belong',
+      body: 'Store the Base32 key in your encrypted password-manager vault and print Google’s backup codes once (Security → 2-Step Verification → Backup codes). Recovery codes, not the app, are your airbag.',
+    },
+  ]}
+  faqs={[
+    {
+      q: 'Does this mean I avoid Google Authenticator’s cloud sync?',
+      a: 'Exactly. Google switched its app to upload secrets to Google’s servers for “convenience”. With 2facounter.com, the secret stays on your machine only — no account, no backup you didn’t explicitly make, no cloud at any point.',
+    },
+    {
+      q: 'Can my Google Workspace admin force a different method?',
+      a: 'Yes — Workspace admins can enforce security keys or platform passkeys. That policy is intact regardless of authenticator; TOTP here only replaces which device computes the code.',
+    },
+    {
+      q: 'Should I keep Google Prompt enabled too?',
+      a: 'You can. Multiple second steps coexist: a phone prompt, TOTP codes, and backup codes are independent baskets. Prompt is convenient at your desk, but TOTP is the one that keeps working when the phone is dead — which is why a browser authenticator plus backup codes is the setup this site exists for.',
+    },
+  ]}
+/>

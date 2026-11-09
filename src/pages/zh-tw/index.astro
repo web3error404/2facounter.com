@@ -1,0 +1,509 @@
+---
+/* 繁體中文（台灣用語）— 首頁翻譯（hreflang: zh-Hant）。結構與 index.astro
+   並行；全部 17 條常見問題均已成對應英文版翻譯完成，含兩輪人工校對與潤飾（2026-11-09）。 */
+import Layout from '../../layouts/Layout.astro';
+import SiteHeader from '../../components/SiteHeader.astro';
+import SiteFooter from '../../components/SiteFooter.astro';
+import Generator from '../../components/Generator.astro';
+
+const title = '2FA 線上驗證碼 — 免費 TOTP 兩步驟驗證產生器';
+const description =
+  '免費線上產生 2FA 驗證碼：輸入密鑰，立即取得每 30 秒自動重新整理的 TOTP 驗證碼。無需註冊，無需安裝。';
+
+const homeAlternates = [
+  { hreflang: 'en', href: 'https://2facounter.com/' },
+  { hreflang: 'vi', href: 'https://2facounter.com/vi/' },
+  { hreflang: 'zh-Hans', href: 'https://2facounter.com/zh-cn/' },
+  { hreflang: 'zh-Hant', href: 'https://2facounter.com/zh-tw/' },
+  { hreflang: 'es', href: 'https://2facounter.com/es/' },
+  { hreflang: 'ja', href: 'https://2facounter.com/ja/' },
+  { hreflang: 'fr', href: 'https://2facounter.com/fr/' },
+  { hreflang: 'de', href: 'https://2facounter.com/de/' },
+  { hreflang: 'pt', href: 'https://2facounter.com/pt/' },
+  { hreflang: 'ko', href: 'https://2facounter.com/ko/' },
+  { hreflang: 'it', href: 'https://2facounter.com/it/' },
+  { hreflang: 'x-default', href: 'https://2facounter.com/' },
+];
+
+const faq = [
+  {
+    q: '如何取得帳戶的 2FA 驗證碼？',
+    a: '在要保護的服務中開啟兩步驟驗證，並選擇「驗證器應用程式」選項。如果顯示 QR 碼，請尋找「無法掃描？」連結以顯示設定密鑰（Base32 字串或 otpauth:// 連結）。把密鑰貼到上方產生器，2FA 驗證碼立即出現，並每 30 秒自動重新整理。',
+  },
+  {
+    q: '如何開啟兩步驟驗證（2FA）？',
+    a: '四個步驟，約兩分鐘：1) 開啟帳戶或安全性設定，選擇「兩步驟驗證」。2) 選擇「使用驗證器應用程式」（若另有更好的選項，就別用簡訊）。3) 用驗證器掃描 QR 碼——或者改為顯示並保存設定密鑰。4) 輸入目前的驗證碼完成設定，然後下載或列印備用代碼。我們也提供 Google、GitHub、Discord、Binance 等服務的逐步指南。',
+  },
+  {
+    q: '2FA 是如何運作的？',
+    a: '在密碼之後，服務會要求第二重身分證明。採用標準 TOTP 方法（RFC 6238）時，你的驗證器以「共享密鑰＋當前時間」算出 6 位驗證碼，登入伺服器獨立完成同樣的計算並比對結果。驗證碼每 30 秒重新產生，逾期即作廢——就算密碼外洩，別人也無法憑它進入你的帳戶。',
+  },
+  {
+    q: '2FA 用在哪些場合？',
+    a: '它保護任何別人想登進去的東西：電子郵件與雲端服務（Google、Microsoft、Apple）、銀行與證券帳戶、加密貨幣交易所（Binance、Coinbase、Kraken）、開發者平台（GitHub、AWS）、遊戲（Steam、Discord、Twitch）、社群媒體（X、Instagram）。企業也用它保護 VPN、郵件和管理後台。只要網站提供「驗證器應用程式」選項，那就是 2FA 的通道。',
+  },
+  {
+    q: '2FA 是 100% 安全的嗎？',
+    a: '不是——沒有任何安全措施能到 100%，誠實的指南都會這麼說。2FA 能擋住「密碼已被盜」的攻擊，但在 30 秒效期內把新驗證碼輸進假網站，照樣會被釣魚；已經潛伏在你裝置上的惡意軟體也能挾持登入工作階段；簡訊驗證碼還可能遭遇 SIM 卡劫持。即便如此，開啟 2FA 的帳戶仍比沒開啟的難以攻破得多。',
+  },
+  {
+    q: '2FA 是強制的嗎？',
+    a: '沒有法律強制所有人使用，但平台陸續強制：GitHub 自 2023 年起要求程式碼貢獻者開啟 2FA，銀行和交易所大多預設開啟，雇主也常要求工作帳戶開啟。其餘情況它是可選項，卻強烈建議使用。無論如何，請把你最重要的帳號——電子郵件——當作「必須開啟 2FA」來對待：能控制你信箱的人，就能重設其他一切。',
+  },
+  {
+    q: '為什麼 2FA 這麼重要？',
+    a: '因為密碼總以同樣的方式失守。數十億組真實密碼已隨資料外洩流出，攻擊者日夜不停拿它們去試其他網站（撞庫攻擊）。微軟的數據顯示，2FA 能擋下超過 99.9% 的自動化帳戶接管攻擊——它是成本最低、卻能在真實威脅發生時保護你的信箱、銀行、遊戲和加密資產的升級。',
+  },
+  {
+    q: '2FA 的安全強度有多高？',
+    a: '完全取決於第二重要素是什麼。簡訊驗證碼最弱——SIM 卡劫持能讓攻擊者收到你的驗證碼。TOTP 驗證碼（那種 30 秒一換的）在運算上很穩固：不傳送任何資料、離線攻擊者無法推導、幾秒內即逾期。硬體安全金鑰和通行金鑰（passkey）最強——它們能防釣魚，並與真實網域綁定。',
+  },
+  {
+    q: '為什麼現在到處都在用 2FA？',
+    a: '因為「只用密碼」的時代崩塌了。大規模資料外洩暴露了數十億組憑證，自動化的撞庫攻擊讓盜號幾乎零成本，平台也厭倦了收拾善後。監管隨之加碼——美國標準中 NIST 已淘汰簡訊認證，歐盟的 PSD2 要求強客戶認證。幾個巨頭立下規矩之後，其他服務紛紛跟進。',
+  },
+  {
+    q: '使用這個工具需要手機嗎？',
+    a: '不需要。這是基於瀏覽器的 2FA 工具：在任何裝有現代瀏覽器的電腦、筆電或平板上都能執行，安裝後即使沒有網路也能用。手機遺失、賣掉、損壞或沒電時，它可以取代手機上的應用程式。',
+  },
+  {
+    q: '這個驗證器安全嗎？',
+    a: '安全。所有運算都透過 Web Crypto API 在你的瀏覽器裡完成。你的密鑰不會傳送到任何伺服器，任何伺服器也看不到它。頁面載入後即使完全離線，產生器依然照常運作。',
+  },
+  {
+    q: '離線時能用嗎？',
+    a: '完全可以。把 2FA COUNTER 安裝成應用程式（「加入主畫面／安裝」），它就能像原生驗證器一樣全程離線運作。驗證碼由「密鑰＋裝置時鐘」算出——完全不需要網路。',
+  },
+  {
+    q: '為什麼我的 2FA 驗證碼被拒絕？',
+    a: '幾乎都是時鐘偏差。TOTP 驗證碼基於時間，裝置時鐘即使偏差半分鐘，驗證碼就會失效。請將系統時間設定為自動同步（如 Windows「立即同步」、macOS「自動設定日期與時間」）後再試一次。產生器依裝置回報的時間計算，無法替你修正時鐘。',
+  },
+  {
+    q: '它和 Google Authenticator 或 Authy 有什麼區別？',
+    a: '它們是手機應用程式；這是瀏覽器驗證器。它採用完全相同的 RFC 6238 TOTP 演算法，相容於所有接受標準驗證器應用程式的服務——但你永遠不會因為手機摔了、賣掉或沒電而失去產生驗證碼的管道。',
+  },
+  {
+    q: '我的密鑰保存在哪裡？',
+    a: '只保存在你自己的瀏覽器裡。最近一次輸入的密鑰和「最近使用的密鑰」清單（最多 8 筆）儲存在本裝置的 localStorage，重新整理頁面後仍在，也絕不會上傳到伺服器。密鑰以純文字保存：任何人只要能開啟這個瀏覽器設定檔就能讀取，請像對待密碼管理員保管庫一樣對待它。一鍵「Clear all」即可全部清除；原始密鑰請保存在密碼管理員中。',
+  },
+  {
+    q: '它支援 HOTP、8 位驗證碼或 SHA-256 嗎？',
+    a: '支援。貼上服務提供的完整 otpauth:// 連結，它攜帶的每個參數都會被自動遵守：6、7 或 8 位數字，15/30/60 秒週期，SHA-1/SHA-256/SHA-512 雜湊，甚至基於計數器的 HOTP。單獨的 Base32 密鑰則採用標準預設值（6 位、30 秒、SHA-1）——這正是絕大多數服務使用的設定。',
+  },
+  {
+    q: '這個工具真的免費嗎？',
+    a: '免費——沒有帳戶，沒有付費版，無需登入。它是一個工具，不是一項服務。',
+  },
+];
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebApplication',
+    name: '2FA COUNTER',
+    url: 'https://2facounter.com/zh-tw/',
+    description,
+    applicationCategory: 'SecurityApplication',
+    operatingSystem: 'Any (browser-based)',
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faq.map(({ q, a }) => ({
+      '@type': 'Question',
+      name: q,
+      acceptedAnswer: { '@type': 'Answer', text: a },
+    })),
+  },
+];
+
+const steps = [
+  {
+    n: '01',
+    title: '取得你的密鑰',
+    body: '當服務顯示「兩步驟驗證 → 驗證器應用程式」時，選擇「無法掃描？顯示設定密鑰」。你會得到類似 JBSWY3DPEHPK3PXP 的 Base32 字串，或完整的 otpauth:// 連結——兩者都可以使用。',
+  },
+  {
+    n: '02',
+    title: '貼上、拖放或掃描',
+    body: '把密鑰或連結貼到產生器，拖入 QR 碼截圖，或用相機掃描。一切都在你的裝置上解碼——沒有任何東西被上傳。',
+  },
+  {
+    n: '03',
+    title: '複製即時驗證碼',
+    body: '幾秒鐘內就會出現新的驗證碼，與裝置時鐘同步。點擊複製並完成登入。驗證碼每 30 秒自動重新整理。',
+  },
+];
+
+const features = [
+  {
+    title: '一個輸入框，一組即時驗證碼',
+    body: '貼上密鑰或整串 otpauth:// 連結，對應的驗證碼立即開始倒數——無需設定，無需表單。',
+  },
+  {
+    title: '貼上截圖，取得密鑰',
+    body: 'Ctrl+V 貼入 QR 碼截圖、拖入圖片檔，或用網路攝影機掃描。三種匯入方式，密鑰沒有任何洩漏途徑。',
+  },
+  {
+    title: '參數全支援，自動辨識',
+    body: '單獨密鑰使用標準預設值；完整 otpauth:// 連結會遵循其所有參數：6/7/8 位數字、15/30/60 秒週期、SHA-1/256/512，甚至支援以計數器為基礎的 HOTP。',
+  },
+  {
+    title: '重新整理不遺失，切換一鍵完成',
+    body: '重新開啟頁面，上次的密鑰已經就位。最近密鑰清單讓你一鍵切換——僅從本裝置的 localStorage 還原。',
+  },
+  {
+    title: '無需安裝，無需註冊',
+    body: '不用手機應用程式，不用帳戶，不收費。能開啟瀏覽器，就能產生驗證碼。',
+  },
+  {
+    title: '離線可用，可安裝',
+    body: '完全斷網也能執行。以 PWA 形式安裝後，它能像原生應用程式一樣裝進程式塢或主畫面。',
+  },
+];
+
+const services = [
+  'Discord', 'GitHub', 'Steam', 'Binance', 'Google', 'X / Twitter',
+  'AWS', 'Coinbase', 'Kraken', 'Twitch', 'Microsoft', 'Proton Mail',
+];
+---
+
+<Layout title={title} description={description} path="/zh-tw/" lang="zh-Hant" jsonLd={jsonLd} alternates={homeAlternates}>
+  <SiteHeader
+    links={[
+      { href: '/zh-tw/#how-it-works', label: '運作方式' },
+      { href: '/zh-tw/#features', label: '功能' },
+      { href: '/zh-tw/#faq', label: '常見問題' },
+      { href: '/guides/', label: '使用指南' },
+      { href: '/privacy/', label: '隱私政策' },
+    ]}
+    cta="立即產生"
+  />
+
+  <main id="main">
+    <section aria-label="即時 2FA 驗證碼產生器">
+      <div class="mx-auto max-w-[1200px] px-4 pt-10 pb-4 sm:px-6 sm:pt-16 xl:px-0">
+        <Generator />
+      </div>
+
+      <div class="mx-auto grid max-w-[1200px] items-center gap-12 px-4 pt-14 pb-12 sm:px-6 sm:pt-20 lg:grid-cols-[7fr_5fr] lg:pt-24 xl:px-0">
+        <div>
+          <span class="badge-eyebrow -rotate-1">100% 本機執行 · 零知識設計</span>
+          <h1 class="mt-6 max-w-[11em] font-display text-display-xl tracking-normal text-ink lg:text-display-xxl">
+            2FA 驗證碼線上產生
+          </h1>
+          <p class="mt-6 max-w-xl text-lg leading-[1.5] font-medium text-ink lg:text-xl">
+            貼上密鑰，立即取得 6 位即時驗證碼。快速、免費、注重隱私，可取代 Google
+            Authenticator 與 Microsoft Authenticator——專治手機遺失、損壞或沒電的時刻。
+          </p>
+          <div class="mt-8 flex flex-wrap gap-4">
+            <a href="#generator" class="btn-primary">
+              產生你的第一組驗證碼
+              <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14m0 0-6-6m6 6-6 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            </a>
+            <a href="#how-it-works" class="btn-secondary">運作方式</a>
+          </div>
+          <p class="mt-5 font-mono text-label text-ink">無需應用程式。無需帳戶。密鑰絕不離開你的裝置。</p>
+        </div>
+        <!-- 程式碼視窗裝飾：保持程式碼原樣（程式碼本身是英文） -->
+        <div class="min-w-0 overflow-hidden rounded-xl border-4 border-ink bg-cream" style="box-shadow: var(--shadow-card)">
+          <div class="flex items-center gap-2 border-b-2 border-dashed border-hairline-strong bg-ink px-4 py-2.5">
+            <span class="h-2.5 w-2.5 rounded-full bg-accent-red"></span>
+            <span class="h-2.5 w-2.5 rounded-full bg-canvas"></span>
+            <span class="h-2.5 w-2.5 rounded-full bg-primary"></span>
+            <span class="ml-2 font-mono text-xs text-cream">otp.rfc-6238.js</span>
+          </div>
+          <pre class="overflow-x-auto p-5 font-mono text-[13px] leading-relaxed"><code>
+<span class="text-muted">// The whole tool. No servers involved.</span>
+<span class="font-bold text-accent-blue">const</span> <span class="text-ink">step</span> = Math.<span class="text-ink">floor</span>(Date.<span class="text-ink">now</span>() / 1000 / 30);
+
+<span class="font-bold text-accent-blue">const</span> <span class="text-ink">key</span> = <span class="font-bold text-accent-blue">await</span> crypto.subtle.<span class="text-ink">importKey</span>(
+  'raw', <span class="text-ink">base32</span>(secret), &#123; name: 'HMAC', hash: 'SHA-1' &#125;);
+
+<span class="font-bold text-accent-blue">const</span> <span class="text-ink">mac</span> = <span class="font-bold text-accent-blue">new</span> <span class="text-ink">Uint8Array</span>(
+  <span class="font-bold text-accent-blue">await</span> crypto.subtle.<span class="text-ink">sign</span>('HMAC', key, <span class="text-ink">u64</span>(step)));
+
+<span class="font-bold text-accent-blue">const</span> <span class="text-ink">o</span> = mac[19] &amp; 15;
+<span class="font-bold text-accent-blue">const</span> <span class="text-ink">code</span> = ((mac[o] &amp; 0x7f) << 24 | mac[o+1] << 16
+  | mac[o+2] << 8 | mac[o+3]) % <span class="text-ink">1e6</span>;
+<span class="text-ink">code</span>.<span class="text-ink">toString</span>().<span class="text-ink">padStart</span>(6, '0'); <span class="text-muted">// ← your 2FA code</span>
+</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <div class="mx-auto max-w-[1200px] px-4 sm:px-6 xl:px-0" aria-hidden="true">
+      <hr class="border-t-2 border-dashed border-ink/40" />
+    </div>
+
+    <section aria-label="零知識的資料重點">
+      <div class="mx-auto grid max-w-[1200px] grid-cols-1 gap-10 px-4 py-16 text-center sm:grid-cols-3 sm:px-6 lg:py-20 xl:px-0">
+        <div>
+          <p class="font-numeric text-5xl font-black tracking-[-0.03125em] text-ink lg:text-[56px]">0</p>
+          <p class="mt-2 text-sm font-medium text-ink">個密鑰存放在我們這邊——根本沒有可以存放的伺服器</p>
+        </div>
+        <div>
+          <p class="font-numeric text-5xl font-black tracking-[-0.03125em] text-ink lg:text-[56px]">100%</p>
+          <p class="mt-2 text-sm font-medium text-ink">的運算透過 Web Crypto 在你的裝置上完成</p>
+        </div>
+        <div>
+          <p class="font-numeric text-5xl font-black tracking-[-0.03125em] text-ink lg:text-[56px]">6238</p>
+          <p class="mt-2 text-sm font-medium text-ink">號 RFC 標準——與所有驗證器應用程式相容</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="how-it-works" class="scroll-mt-20" aria-labelledby="how-title">
+      <div class="mx-auto max-w-[1200px] px-4 py-20 sm:px-6 lg:py-24 xl:px-0">
+        <div class="grid items-start gap-12 lg:grid-cols-[5fr_7fr]">
+          <div>
+            <p class="section-label">運作方式</p>
+            <h2 id="how-title" class="mt-3 font-display text-3xl tracking-normal text-ink sm:text-4xl lg:text-section-display">
+              三步驟取得即時 2FA 驗證碼——不需要手機。
+            </h2>
+            <p class="mt-5 text-lg font-medium text-ink">
+              兩步驟驗證為帳戶加上第二道鎖：一組每 30 秒更換一次、由共享密鑰與當前時間共同產生的驗證碼
+              （即 TOTP 標準，RFC 6238）。本頁就是那第二道鎖。你的瀏覽器執行的，正是登入網站所執行的同一道算式。
+            </p>
+            <p class="mt-4 font-medium text-ink">
+              因為真正重要的只有那把密鑰，你完全可以把它放進加密的密碼管理員，在任何地方重新產生驗證碼——
+              筆電、第二個瀏覽器設定檔、外出用的電腦，離線也行。
+            </p>
+            <p class="mt-4 text-sm font-medium text-ink">
+              想了解原理？閱讀淺顯解說：{" "}
+              <a href="/what-is-2fa/" class="link">What is 2FA? How TOTP works</a>
+            </p>
+            <a href="#generator" class="btn-primary mt-8">立即試用</a>
+          </div>
+          <ol class="grid gap-6 sm:grid-cols-3">
+            {steps.map((s) => (
+              <li class="relative flex flex-col rounded-xs border-2 border-ink bg-cream p-6 pt-7" style="box-shadow: var(--shadow-ticket)">
+                <span class="absolute inset-x-3 top-1.5 border-t-2 border-dashed border-hairline-strong" aria-hidden="true"></span>
+                <span class="font-numeric text-3xl font-black tracking-[-0.03125em] text-accent-red">{s.n}</span>
+                <h3 class="mt-3 text-lg font-bold text-ink">{s.title}</h3>
+                <p class="mt-2 text-sm font-medium text-ink">{s.body}</p>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <section id="features" class="scroll-mt-20" aria-labelledby="features-title">
+      <div class="mx-auto max-w-[1200px] px-4 py-20 sm:px-6 lg:py-24 xl:px-0">
+        <div class="mb-12 max-w-2xl">
+          <p class="section-label">功能</p>
+          <h2 id="features-title" class="mt-3 font-display text-3xl tracking-normal text-ink sm:text-4xl lg:text-section-display">
+            一個 2FA 應用程式該有的它都有——而且不少地方做得更好
+          </h2>
+        </div>
+        <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {features.map((f) => (
+            <article class="rounded-xl border-2 border-ink bg-cream p-6 sm:p-8">
+              <h3 class="text-lg font-bold text-ink">{f.title}</h3>
+              <p class="mt-2.5 text-sm font-medium text-ink">{f.body}</p>
+            </article>
+          ))}
+        </div>
+        <div class="cta-banner on-dark mt-6">
+          <div class="flex flex-col items-start justify-between gap-6 lg:flex-row lg:items-center">
+            <div>
+              <h3 class="font-display text-2xl tracking-normal text-primary lg:text-[28px]">
+                你的密鑰不是我們的生意
+              </h3>
+              <p class="mt-2 max-w-2xl font-medium text-cream/80">
+                沒有帳戶，沒有登入，沒有「把診斷資訊傳給我們」。工具在你的裝置上為你計算驗證碼——
+                就算這個網域改從隨身碟提供服務，它的行為也一模一樣。
+              </p>
+            </div>
+            <a href="#generator" class="btn-primary shrink-0">
+              開啟產生器
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="mx-auto max-w-[1200px] px-4 sm:px-6 xl:px-0" aria-hidden="true">
+      <hr class="border-t-2 border-dashed border-ink/40" />
+    </div>
+
+    <section id="compatibility" class="scroll-mt-20" aria-labelledby="compat-title">
+      <div class="mx-auto max-w-[1200px] px-4 py-20 sm:px-6 lg:py-24 xl:px-0">
+        <div class="mb-10 max-w-2xl">
+          <p class="section-label">相容性</p>
+          <h2 id="compat-title" class="mt-3 font-display text-3xl tracking-normal text-ink sm:text-4xl lg:text-section-display">
+            驗證器應用程式能用的地方，它都能用
+          </h2>
+          <p class="mt-4 font-medium text-ink">
+            任何提供「使用驗證器應用程式」選項的服務，產生的都是同一種標準 TOTP
+            驗證碼——包括以下這些：
+          </p>
+        </div>
+        <ul class="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+          {services.map((s) => (
+            <li class="flex items-center justify-center rounded-full border-2 border-ink bg-surface px-3 py-3 text-sm font-semibold text-ink">{s}</li>
+          ))}
+        </ul>
+        <p class="mt-6 text-sm font-medium text-ink">
+          正要為某個服務開啟 2FA？查看逐步指南：{" "}
+          {[
+            ['Google', 'google'],
+            ['Microsoft', 'microsoft'],
+            ['Discord', 'discord'],
+            ['GitHub', 'github'],
+            ['AWS', 'aws'],
+            ['Coinbase', 'coinbase'],
+            ['Steam', 'steam'],
+            ['Binance', 'binance'],
+          ].map(([name, slug], i) => (
+            <>
+              {i > 0 && <span aria-hidden="true"> · </span>}
+              <a href={`/guides/${slug}/`} class="link">{name}</a>
+            </>
+          ))}
+        </p>
+      </div>
+    </section>
+
+    <section id="about" class="scroll-mt-20" aria-labelledby="about-title">
+      <article class="mx-auto max-w-[820px] px-4 py-20 sm:px-6 lg:py-24 xl:px-0">
+        <p class="section-label">關於這個工具</p>
+        <h2 id="about-title" class="mt-3 font-display text-3xl tracking-normal text-ink sm:text-4xl lg:text-section-display">
+          安家在你瀏覽器裡的 2FA 驗證器
+        </h2>
+        <div class="rich-text mt-8">
+          <p>
+            大家來到這裡都是為了同一件事：立刻拿到一組能用的登入驗證碼，什麼也不必安裝。這正是
+            2FA COUNTER——一個免費、基於瀏覽器的 2FA
+            驗證器與驗證碼產生器：貼上密鑰、拖入 QR 碼截圖或用相機掃描，對應的即時驗證碼幾秒內出現，每
+            30 秒自動重新整理，和手機上的應用程式完全一樣——只是什麼都不用裝。
+          </p>
+
+          <h3>什麼是 2FA？60 秒讀懂</h3>
+          <p>
+            2FA——兩步驟驗證——是帳戶上的第二道鎖：在「你知道的」之外，再加上「你擁有的」。開啟
+            2FA 後，服務會給你一組一次性共享密鑰。驗證器用這個密鑰加上當前時間算出 6 位驗證碼——
+            TOTP 標準，RFC 6238——而登入網站執行完全相同的算式並比對結果。因為驗證碼每 30 秒輪替，
+            單獨外洩的密碼再也無法開啟任何東西。想看完整的密碼學解說？閱讀文章{" "}
+            <a href="/what-is-2fa/">What is 2FA?</a>，然後回來產生你的第一組驗證碼。
+          </p>
+
+          <h3>從不需要你手機的驗證器</h3>
+          <p>
+            大多數人來到這裡，是因為手機離開了他們——賣了、摔了、進水了、被清除了，或者出門那天剛好沒電——
+            而 Google Authenticator、Authy 和 Microsoft Authenticator 只裝在那支手機上。瀏覽器版的
+            2FA 工具消除了這個唯一的單點故障：密鑰放在密碼管理員的保管庫，驗證碼可以在任何你信任的電腦上重新產生。
+            它還能以 PWA 形式安裝，網路完全中斷時產生器照樣執行。
+          </p>
+
+          <h3>一個工具，涵蓋各種服務</h3>
+          <p>
+            標準的 TOTP 是共通語言。在 Binance、Coinbase 或 Kraken 交易、保護 AWS、Microsoft 或
+            Google 帳戶、守住 Steam、Discord、X 或信箱——只要服務提供「使用驗證器應用程式」選項，
+            講的都是同一種協定，一個工具全部涵蓋。驗證碼被拒絕時，原因幾乎總是裝置時鐘而不是工具。
+            我們也準備了{" "}
+            <a href="/how-to-get-2fa-code/">逐步取得 2FA 驗證碼的指南</a>，以及按服務分類的{" "}
+            <a href="/guides/">開啟 2FA 指南</a>。
+          </p>
+
+          <h3>不上傳、不儲存、不收費</h3>
+          <p>
+            沒有可以接收密鑰的伺服器，沒有帳戶，沒有付費版，沒有遙測。每組驗證碼都用 Web Crypto API
+            在本機計算；上次的密鑰與最近密鑰清單只保存在你自己的瀏覽器儲存空間，點一下「Clear all」即可徹底清除。
+            每把密鑰的原始副本請始終保留在加密的密碼管理員裡；對任何催促你提供新驗證碼的要求保持警覺——
+            那是詐騙的紅旗。
+          </p>
+
+          <p>
+            產生器就在頁面頂端。貼上密鑰，看即時驗證碼倒數——免費、私密、可離線，永遠如此。
+          </p>
+        </div>
+      </article>
+    </section>
+
+    <section id="faq" class="scroll-mt-20" aria-labelledby="faq-title">
+      <div class="mx-auto max-w-[1200px] px-4 py-20 sm:px-6 lg:py-24 xl:px-0">
+        <div class="grid gap-12 lg:grid-cols-[4fr_8fr]">
+          <div>
+            <p class="section-label">常見問題</p>
+            <h2 id="faq-title" class="mt-3 font-display text-3xl tracking-normal text-ink sm:text-4xl lg:text-section-display">
+              問題，直白作答
+            </h2>
+          </div>
+          <div class="divide-y-2 divide-dashed divide-hairline-strong">
+            {faq.map(({ q, a }) => (
+              <details class="group px-1 py-1">
+                <summary class="flex cursor-pointer list-none items-center justify-between gap-4 py-4 text-left text-lg font-bold text-ink select-none marker:hidden">
+                  {q}
+                  <svg class="h-4 w-4 shrink-0 text-ink transition-transform group-open:rotate-45" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"></path></svg>
+                </summary>
+                <p class="pb-5 text-sm font-medium text-ink">{a}</p>
+              </details>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section aria-label="開始使用">
+      <div class="on-dark bg-ink px-4 py-20 text-center sm:px-6 lg:py-24">
+        <h2 class="mx-auto max-w-[11em] font-display text-display-xl tracking-normal text-primary lg:text-display-xxl">
+          再也不用伸手拿手機
+        </h2>
+        <p class="mx-auto mt-5 max-w-2xl text-lg font-medium text-cream/80">
+          密鑰放在密碼管理員裡，驗證碼就地產生，任何裝置上都能登入——即使完全沒有網路。
+        </p>
+        <a href="#generator" class="btn-primary mt-10 inline-flex">
+          立即產生 2FA 驗證碼
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <SiteFooter
+    columns={[
+      {
+        title: '產品',
+        links: [
+          { href: '/#generator', label: '線上產生器' },
+          { href: '/zh-tw/#features', label: '功能' },
+          { href: '/what-is-2fa/', label: '什麼是兩步驟驗證？' },
+          { href: '/zh-tw/#compatibility', label: '相容性' },
+        ],
+      },
+      {
+        title: '使用指南',
+        links: [
+          { href: '/guides/', label: '全部指南' },
+          { href: '/guides/google/', label: 'Google 2FA' },
+          { href: '/guides/microsoft/', label: 'Microsoft 2FA' },
+          { href: '/guides/discord/', label: 'Discord 2FA' },
+          { href: '/guides/github/', label: 'GitHub 2FA' },
+          { href: '/guides/steam/', label: 'Steam 2FA' },
+          { href: '/guides/binance/', label: 'Binance 2FA' },
+        ],
+      },
+      {
+        title: '關於',
+        links: [
+          { href: '/about/', label: '關於我們' },
+          { href: '/methodology/', label: '編審流程' },
+          { href: '/contact/', label: '聯絡方式' },
+        ],
+      },
+      {
+        title: '法律條款',
+        links: [
+          { href: '/privacy/', label: '隱私政策' },
+          { href: '/terms/', label: '服務條款' },
+          { href: '/disclaimer/', label: '免責聲明' },
+          { href: '/contact/', label: '回報安全問題' },
+        ],
+      },
+    ]}
+    tagline="一款零知識的 2FA 驗證器，完全執行於你的瀏覽器（2facounter.com）。沒有帳戶，沒有伺服器，也不需要手機。"
+    languagesTitle="語言"
+  />
+</Layout>

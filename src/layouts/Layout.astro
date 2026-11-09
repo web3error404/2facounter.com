@@ -1,0 +1,159 @@
+---
+// Fonts are bundled locally at build time — the site makes zero third-party
+// requests, so it truly keeps working offline (core FAQ promise).
+import '@fontsource-variable/fredoka';
+import '@fontsource-variable/inter';
+import '@fontsource/titan-one';
+import '@fontsource-variable/jetbrains-mono';
+// Preload sources: importing the exact same .woff2 files with ?url makes Vite
+// resolve the content-hashed /_astro/ URL at build time — the preloads can
+// never drift from the @font-face URLs after a fontsource version bump.
+import fredokaLatinWoff2 from '@fontsource-variable/fredoka/files/fredoka-latin-wght-normal.woff2?url';
+import interLatinWoff2 from '@fontsource-variable/inter/files/inter-latin-wght-normal.woff2?url';
+import titanOneWoff2 from '@fontsource/titan-one/files/titan-one-latin-400-normal.woff2?url';
+import '../styles/global.css';
+import DeliBackdrop from '../components/DeliBackdrop.astro';
+import SEO from '../components/SEO.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  /** Relative path for canonical + og:URL construction */
+  path?: string;
+  /** Social-share image path, relative to the site root (defaults to /og.png) */
+  image?: string;
+  /** BCP 47 language of the page (defaults to "en") */
+  lang?: string;
+  /** hreflang alternates for translated versions of this page */
+  alternates?: Array<{ hreflang: string; href: string }>;
+  /** Force the page out of the index (dev-only pages) */
+  noindex?: boolean;
+  /** Additional JSON-LD graph to inject */
+  jsonLd?: object[];
+  /** Render page without the marketing header/footer chrome */
+  bare?: boolean;
+  /** Article published date ISO 8601 (for guide/article pages) */
+  datePublished?: string;
+  /** Article modified date ISO 8601 (for guide/article pages) */
+  dateModified?: string;
+}
+
+const {
+  title,
+  description,
+  path = '/',
+  image = '/og.png',
+  lang = 'en',
+  alternates,
+  noindex,
+  jsonLd = [],
+  datePublished,
+  dateModified,
+} = Astro.props;
+const isDev = import.meta.env.DEV;
+
+// Site-wide Organization JSON-LD — injected on every page so Google can
+// associate all pages with a single publisher entity. SameAs stays empty
+// until real, verified profiles exist — an invented one is "dishonest
+// declarations" bait.
+const orgJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: '2FA COUNTER',
+  url: 'https://2facounter.com',
+  logo: 'https://2facounter.com/favicon-96x96.png',
+  sameAs: [],
+  description:
+    'Free, browser-based 2FA authenticator and TOTP code generator. Zero-knowledge, no accounts, no servers.',
+  contactPoint: [
+    {
+      '@type': 'ContactPoint',
+      contactType: 'customer support',
+      email: 'mailto:support@2facounter.com',
+      availableLanguage: 'en',
+    },
+    {
+      '@type': 'ContactPoint',
+      contactType: 'security',
+      email: 'mailto:security@2facounter.com',
+      availableLanguage: 'en',
+    },
+  ],
+};
+
+const allJsonLd = [orgJsonLd, ...jsonLd];
+
+// ── Search-engine ownership verification ──────────────────────────────
+// 1. Add your site at https://search.google.com/search-console → choose
+//    "HTML tag" verification → copy the content token into the string below.
+// 2. Same at https://www.bing.com/webmasters (imports settings from Google
+//    automatically; provides its own token for the two-step verify).
+// 3. After verifying in Search Console: Sitemaps → submit
+//    https://2facounter.com/sitemap-index.xml. Bing File sitemaps tab takes
+//    the same URL.
+// Rebuild after pasting; the metas render only when non-empty.
+const googleVerification = '';
+const bingVerification = '';
+---
+
+<!doctype html>
+<html lang={lang} class="h-full">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <SEO
+      title={title}
+      description={description}
+      canonicalPath={path}
+      ogImage={image}
+      lang={lang}
+      alternates={alternates}
+      noindex={noindex}
+      jsonLd={allJsonLd}
+      datePublished={datePublished}
+      dateModified={dateModified}
+    />
+    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-title" content="2FA LIVE" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <meta name="theme-color" content="#e87a35" />
+    <meta name="generator" content={Astro.generator} />
+
+    <!-- Font preload: the above-the-fold latin variable subsets (Fredoka headings,
+         Inter body, Titan One wordmark). Hrefs are resolved from the fontsource
+         packages themselves (?url import) so they always match the @font-face
+         assets — no manual hash refresh ever. crossorigin is required even same-origin. -->
+    <link rel="preload" as="font" type="font/woff2" crossorigin fetchpriority="high" href={fredokaLatinWoff2} />
+    <link rel="preload" as="font" type="font/woff2" crossorigin fetchpriority="high" href={interLatinWoff2} />
+    <link rel="preload" as="font" type="font/woff2" crossorigin fetchpriority="high" href={titanOneWoff2} />
+
+    {googleVerification && <meta name="google-site-verification" content={googleVerification} />}
+    {bingVerification && <meta name="msvalidate.01" content={bingVerification} />}
+
+    {!isDev && (
+      <script is:inline>
+        // PWA: network-first pages + cached assets — fully offline once installed or visited
+        if ('serviceWorker' in navigator) {
+          window.addEventListener('load', () => {
+            navigator.serviceWorker.register('/sw.js').catch(() => {});
+          });
+        }
+      </script>
+    )}
+  </head>
+  <body class="flex min-h-full flex-col bg-canvas font-sans text-body">
+    <a
+      href="#main"
+      class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:rounded-md focus:border-2 focus:border-cream focus:bg-ink focus:px-4 focus:py-2 focus:font-mono focus:text-sm focus:font-bold focus:text-cream"
+    >
+      Skip to content
+    </a>
+    <!-- decorative shield-logo tile backdrop, fixed under all content -->
+    <DeliBackdrop />
+    <slot />
+  </body>
+</html>
