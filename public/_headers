@@ -1,0 +1,17 @@
+# Cloudflare Pages header rules — served from dist/ at build time
+# (public/ is copied verbatim into dist/)
+
+# Hashed, immutable build assets — cache forever
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Service worker must revalidate so updates ship immediately
+/sw.js
+  Cache-Control: no-cache
+
+# Site-wide security headers
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  X-Frame-Options: DENY
+  Permissions-Policy: camera=(self), geolocation=(), microphone=()

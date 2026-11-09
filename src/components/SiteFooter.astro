@@ -126,17 +126,28 @@ const hreflangOf = (href: string) => LANG_BY_HREF.get(href)?.hreflang ?? 'en';
             </div>
           ))
         }
-        <div>
+        {/* Language block spans two footer nav columns at every size: the
+            nav is 2/4/5 columns wide (mobile/sm/lg), one column is ~120px
+            even on desktop — two sub-columns of language names under one
+            nav column would force "Tiếng Việt"-style wraps. Two nav columns
+            give each item room for a single line at full 14px text.
+            (The language column already wrapped to the nav's second row
+            at lg — 6 items in a 5-column grid — so this only widens it.) */}
+        <div class="col-span-2 min-w-0">
           <h2 class="font-mono text-[13px] font-bold tracking-wide text-cream uppercase">
             {languagesTitle}
           </h2>
-          <ul class="mt-4 space-y-2">
+          {/* Two-column language grid: row-major order halves the column
+              height (8 + 7 rows). 12px column / 8px row gaps; each link is
+              a one-line flex row — nowrap prevents wraps, flex keeps the
+              text vertically centered, and RTL pages mirror automatically. */}
+          <ul class="mt-4 grid grid-cols-2 gap-x-3 gap-y-2">
             {languages.map(({ href, label }) => (
-              <li>
+              <li class="min-w-0">
                 <a
                   hreflang={hreflangOf(href)}
                   href={href}
-                  class="-mx-2 -my-1 inline-block rounded-sm px-2 py-3 text-sm text-cream/75 hover:text-primary hover:underline hover:decoration-2 hover:underline-offset-2"
+                  class="flex min-w-0 items-center whitespace-nowrap rounded-sm px-2 py-1 text-sm text-cream/75 hover:text-primary hover:underline hover:decoration-2 hover:underline-offset-2"
                 >
                   {label}
                 </a>
