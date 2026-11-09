@@ -1,6 +1,9 @@
 ---
-// Fonts are bundled locally at build time — the site makes zero third-party
-// requests, so it truly keeps working offline (core FAQ promise).
+// Fonts are bundled locally at build time — all first-party assets
+// (fonts, QR decoder) are served from this domain. The single third-party
+// request is the Cloudflare Web Analytics RUM beacon below (cookieless,
+// aggregate performance data only), self-managed so it is version-controlled
+// and never silently toggled at the edge.
 import '@fontsource-variable/fredoka';
 import '@fontsource-variable/inter';
 import '@fontsource/titan-one';
@@ -179,6 +182,23 @@ const bingVerification = import.meta.env.PUBLIC_BING_TOKEN ?? '';
           window.addEventListener('load', () => {
             navigator.serviceWorker.register('/sw.js').catch(() => {});
           });
+        }
+      </script>
+    )}
+
+    {/* Cloudflare Web Analytics RUM beacon — the site's ONLY third-party request.
+        Cookieless, no personal data, no browser storage (per Cloudflare's RUM
+        privacy docs). Loaded deferred so it never blocks rendering; fails
+        silently offline. Injected at runtime only on the production host so
+        localhost previews and the browser test suites see zero beacon noise. */}
+    {!isDev && (
+      <script is:inline>
+        if (location.hostname === '2facounter.com') {
+          var cfBeacon = document.createElement('script');
+          cfBeacon.defer = true;
+          cfBeacon.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+          cfBeacon.setAttribute('data-cf-beacon', '{"token": "f08eeadbd7224b8faf5ba9a985542562"}');
+          document.head.appendChild(cfBeacon);
         }
       </script>
     )}
