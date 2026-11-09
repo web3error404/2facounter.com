@@ -156,8 +156,10 @@ const services = [
 ];
 ---
 
-<Layout title={title} description={description} path="/de/" lang="de" jsonLd={jsonLd} alternates={homeAlternates}>
-  <SiteHeader
+
+  <Layout title={title} description={description} path="/de/" lang="de" jsonLd={jsonLd} alternates={homeAlternates} image="/og-de.png">
+
+  
     links={[
       { href: '/de/#how-it-works', label: 'So funktioniert es' },
       { href: '/de/#features', label: 'Funktionen' },
@@ -264,7 +266,7 @@ const services = [
             </p>
             <p class="mt-4 text-sm font-medium text-ink">
               Neu im Thema? Lesen Sie den verständlichen Erklärartikel:{" "}
-              <a href="/what-is-2fa/" class="link">Was ist 2FA? Wie TOTP funktioniert</a>
+              <a href="/de/what-is-2fa/" class="link">Was ist 2FA? Wie TOTP funktioniert</a>
             </p>
             <a href="#generator" class="btn-primary mt-8">Jetzt ausprobieren</a>
           </div>
@@ -395,7 +397,7 @@ const services = [
             bei der Sie sich anmelden, dieselbe Berechnung ausführt und die Ergebnisse vergleicht. Weil der Code
             alle 30 Sekunden rotiert, öffnet ein gestohlenes Passwort allein nichts mehr. Wenn Sie die komplette
             Kryptografie erklärt bekommen möchten, lesen Sie den verständlichen Erklärartikel{" "}
-            <a href="/what-is-2fa/">Was ist 2FA? Wie Zwei-Faktor-Authentifizierung &amp; TOTP funktionieren</a>,
+            <a href="/de/what-is-2fa/">Was ist 2FA? Wie Zwei-Faktor-Authentifizierung &amp; TOTP funktionieren</a>,
             und erzeugen Sie danach Ihren ersten Code.
           </p>
 
@@ -509,7 +511,7 @@ const services = [
         links: [
           { href: '/#generator', label: 'Live-Generator' },
           { href: '/how-to-get-2fa-code/', label: '2FA-Code abrufen' },
-          { href: '/what-is-2fa/', label: 'Was ist 2FA?' },
+          { href: '/de/what-is-2fa/', label: 'Was ist 2FA?' },
           { href: '/#features', label: 'Funktionen' },
           { href: '/#compatibility', label: 'Kompatibilität' },
         ],

@@ -185,8 +185,10 @@ const services = [
 ];
 ---
 
-<Layout title={title} description={description} path="/ko/" lang="ko" jsonLd={jsonLd} alternates={homeAlternates}>
-  <SiteHeader
+
+  <Layout title={title} description={description} path="/ko/" lang="ko" jsonLd={jsonLd} alternates={homeAlternates} image="/og-ko.png">
+
+  
     links={[
       { href: '/ko/#how-it-works', label: '작동 방식' },
       { href: '/ko/#features', label: '기능' },
@@ -298,7 +300,7 @@ const services = [
             </p>
             <p class="mt-4 text-sm font-medium text-ink">
               처음이신가요? 쉽게 쓴 설명서를 읽어 보세요:{" "}
-              <a href="/what-is-2fa/" class="link">2FA란 무엇인가? TOTP는 어떻게 작동하나</a>
+              <a href="/ko/what-is-2fa/" class="link">2FA란 무엇인가? TOTP는 어떻게 작동하나</a>
             </p>
             <a href="#generator" class="btn-primary mt-8">지금 써 보기</a>
           </div>
@@ -432,7 +434,7 @@ const services = [
             TOTP 표준, RFC 6238이죠. 동시에 로그인 중인 사이트도 같은 계산을 해 결과를
             비교합니다. 코드는 30초마다 바뀌므로, 유출된 비밀번호 하나로는 이제 아무것도 열 수
             없습니다. 암호학적 원리를 끝까지 들여다보고 싶다면 쉽게 쓴 설명서를 읽어 보세요{" "}
-            <a href="/what-is-2fa/">2FA란 무엇인가? 2단계 인증과 TOTP의 작동 원리</a> — 그리고
+            <a href="/ko/what-is-2fa/">2FA란 무엇인가? 2단계 인증과 TOTP의 작동 원리</a> — 그리고
             돌아와서 첫 코드를 만들어 보세요.
           </p>
 
@@ -543,7 +545,7 @@ const services = [
         links: [
           { href: '/ko/#generator', label: '실시간 코드 생성기' },
           { href: '/how-to-get-2fa-code/', label: '2FA 코드 받는 법' },
-          { href: '/what-is-2fa/', label: '2FA란 무엇인가?' },
+          { href: '/ko/what-is-2fa/', label: '2FA란 무엇인가?' },
           { href: '/ko/#features', label: '기능' },
           { href: '/ko/#compatibility', label: '호환성' },
         ],

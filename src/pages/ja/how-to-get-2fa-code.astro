@@ -1,0 +1,251 @@
+---
+/* 日本語 — 翻訳版記事 (hreflang: ja)。how-to-get-2fa-code.astro と並行構成。
+   ハウツーガイド：ジェネレーターで2FAコードを取得する手順。サービス別ガイドと
+   ホームページのツールへリンクします。 */
+import Layout from '../../layouts/Layout.astro';
+import SiteHeader from '../../components/SiteHeader.astro';
+import SiteFooter from '../../components/SiteFooter.astro';
+
+const title = '2FAコードの取得方法：ステップバイステップガイド（TOTP）';
+const description =
+  '2FAコードの取得方法を3ステップで解説：セットアップキーを表示させ、オンラインのTOTPジェネレーターに貼り付け、ライブのワンタイムパスワードをコピーして入力する手順と、コードが拒否されたときの対処法。';
+
+const faq = [
+  {
+    q: 'セットアップキーはどこにありますか？',
+    a: '認証アプリ用のQRコードをサービスが表示するのと同じ画面にあります。「スキャンできない場合」「コードを手動で入力」「セットアップキーを表示」といったリンクを探してください。リンクから Base32 文字列（または otpauth:// URI 全体）が表示されます — どちらの形式もジェネレーターで使えます。',
+  },
+  {
+    q: 'コードが拒否されます — どうすればいいですか？',
+    a: 'ほとんどの場合、時計のずれが原因です。TOTP は時刻基準なので、端末の時計がわずか30秒でもずれていれば、無効なコードが生成されてしまいます。OS の時刻を自動同期に設定してから、もう一度お試しください。',
+  },
+  {
+    q: 'スマホのアプリが生成するコードと同じですか？',
+    a: '同じです。どの認証アプリ — Google Authenticator、Authy、Microsoft Authenticator、あるいはこのブラウザツール — も、同じシークレットと同じ時計から、同じ RFC 6238 TOTP コードを計算します。互換があります。',
+  },
+  {
+    q: 'リカバリーコードは今も必要ですか？',
+    a: 'はい。このツールとは別の場所に、オフラインで保管してください。シークレットキーを保存した端末へのアクセスを失ったとき、アカウントに戻る道はリカバリーコードです。',
+  },
+];
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: '2FA COUNTER', item: 'https://2facounter.com/ja/' },
+      { '@type': 'ListItem', position: 2, name: '2FAコードの取得方法', item: 'https://2facounter.com/ja/how-to-get-2fa-code/' },
+    ],
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'HowTo',
+    name: 'オンライン TOTP ジェネレーターで2FAコードを取得する方法',
+    totalTime: 'PT3M',
+    step: [
+      { '@type': 'HowToStep', position: 1, name: '2FAをオンにしてセットアップキーを表示させる', text: 'サービスのセキュリティ設定を開き、認証アプリの選択肢を選んで、QRコードが読み取れないときに備えてセットアップキーを表示させます。' },
+      { '@type': 'HowToStep', position: 2, name: '鍵をジェネレーターに貼り付ける', text: 'Base32 文字列または otpauth:// URI を、2FA COUNTER ホームページのジェネレーターに貼り付けます。すべての計算はブラウザ内でローカルに行われます。' },
+      { '@type': 'HowToStep', position: 3, name: 'ライブコードをコピーして確定する', text: '6桁のコードを、30秒の有効期間のうちにサービスの確認画面に入力して設定を確定します — 以後のサインインも毎回同じ流れで行います。' },
+    ],
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faq.map(({ q, a }) => ({
+      '@type': 'Question',
+      name: q,
+      acceptedAnswer: { '@type': 'Answer', text: a },
+    })),
+  },
+];
+
+const alternates = [
+  { hreflang: 'en', href: 'https://2facounter.com/how-to-get-2fa-code/' },
+  { hreflang: 'es', href: 'https://2facounter.com/es/how-to-get-2fa-code/' },
+  { hreflang: 'ja', href: 'https://2facounter.com/ja/how-to-get-2fa-code/' },
+  { hreflang: 'fr', href: 'https://2facounter.com/fr/how-to-get-2fa-code/' },
+  { hreflang: 'de', href: 'https://2facounter.com/de/how-to-get-2fa-code/' },
+  { hreflang: 'pt', href: 'https://2facounter.com/pt/how-to-get-2fa-code/' },
+  { hreflang: 'ko', href: 'https://2facounter.com/ko/how-to-get-2fa-code/' },
+  { hreflang: 'it', href: 'https://2facounter.com/it/how-to-get-2fa-code/' },
+  { hreflang: 'x-default', href: 'https://2facounter.com/how-to-get-2fa-code/' },
+];
+---
+
+
+  <Layout title={title} description={description} path="/ja/how-to-get-2fa-code/" lang="ja" jsonLd={jsonLd} alternates={alternates} image="/og-ja.png">
+
+  
+    links={[
+      { href: '/ja/', label: '2FAコード生成' },
+      { href: '/ja/what-is-2fa/', label: '2FAとは？' },
+      { href: '/guides/', label: 'ガイド' },
+      { href: '/privacy/', label: 'プライバシー' },
+    ]}
+    cta="コードを生成"
+  />
+  <main id="main">
+    <article class="mx-auto max-w-[820px] px-4 py-20 sm:px-6 lg:py-24 xl:px-0">
+      <p class="section-label">2FAハウツー</p>
+      <h1 class="mt-3 font-display text-4xl tracking-normal text-ink sm:text-5xl">
+        2FAコードの取得方法
+      </h1>
+      <p class="mt-5 text-lg font-medium text-ink">
+        全体の所要時間は1分ほどです。セットアップキーを表示させ、ここに貼り付け、できあがったコードを要求してきた
+        画面に入力します。スマホは不要 — 計算のリファレンス実装が、
+        <a href="/ja/">ホームページのジェネレーター</a>の最上部で動いています。
+      </p>
+
+      <div class="rich-text mt-10">
+        <h2>始める前に揃えるもの</h2>
+        <p>
+          まずはアカウントへのアクセスです — 保護したいサービスにサインイン済みであることが前提になります。そのうえで、
+          2つのことが重要です。第一に、サービスが第二要素として<strong>認証アプリ</strong>の選択肢を用意していること。
+          Google、Microsoft、GitHub、Discord、Steam、AWS、Coinbase、Kraken、Binance、X、そして多くの銀行や取引所が
+          これに該当します。第二に、認証アプリを<em>動かす</em>場所です。スマホのアプリでもいいし — そしてこれこそが
+          本サイトの主眼ですが — 何もインストールせずにまったく同じコードを計算する、このブラウザツールでも構いません。
+        </p>
+        <p>
+          呼び名についてひとこと。この第二要素は、サービスによって「二段階認証」「2FA」「2ステップ認証」「TOTP」
+          「認証アプリ」と呼ばれます。名前の裏側は同じもの — 共有シークレットから導かれる、時間ベースのワンタイム
+          コードです。使い方ではなく仕組みの解説が読みたい場合は、
+          <a href="/ja/what-is-2fa/">2FAとは？TOTPの仕組み</a> をご覧ください。
+        </p>
+
+        <h2>ステップ1：2FAをオンにしてセットアップキーを表示させる</h2>
+        <p>
+          アカウントのセキュリティ設定を開き、二段階認証のセクションを探します。<em>認証アプリ</em>の選択肢を
+          選んでください。サービスはスマホで読み取るためのQRコードを表示しますが、その画面にはほぼ必ず別の手段も
+          用意されています。<em>「スキャンできない場合」</em>、<em>「コードを手動で入力」</em>、
+          <em>「セットアップキー」</em>といったリンクです。リンクを辿ると、本当の秘密が現れます。
+          <code>JBSWY3DPEHPK3PXP</code> のような Base32 文字列で、ときにはアカウントラベル、桁数、更新周期、
+          ハッシュアルゴリズムまで一緒に運ぶ完全な <code>otpauth://</code> URI の形で渡されることもあります。
+        </p>
+        <p>
+          この鍵こそが<strong>認証情報の実体</strong>です — 第二要素における、あなたのパスワードの持ち運び可能な
+          同等物です。この画面はリカバリー画面と同じ扱いで接してください。正規の相手が、セットアップキーをメールや
+          チャットに貼り込むよう頼むことは決してありません。鍵をコピーし、2FAの有効化を完了させ（多くのサービスは
+          確認用に、一つの有効なコードを要求します）、原本はパスワードマネージャーのような暗号化された場所に
+          保管しましょう。
+        </p>
+
+        <h2>ステップ2：鍵をジェネレーターに貼り付ける</h2>
+        <p>
+          <a href="/ja/">ホームページ最上部のジェネレーター</a>に、コピーしたものを貼り付けます — Base32 文字列
+          そのものでも、<code>otpauth://</code> リンク全文でも、どちらでも構いません。数秒で6桁のライブコードが
+          現れ、30秒ごとに更新されます。鍵を画像から取り込むこともできます。QRコードのスクリーンショットを
+          Ctrl+V でページに貼る、画像ファイルをドロップする、カメラで読み取る — デコードはすべてローカルで行われ、
+          何もアップロードされません。サービスが非標準の設定（8桁コード、15／30／60秒周期、SHA-256、カウンタ方式の
+          HOTP）を発行している場合も、完全な <code>otpauth://</code> URI がそれらのパラメータをすべて運んでくれ、
+          ジェネレーターが自動で反映します。
+        </p>
+
+        <h2>ステップ3：ライブコードをコピーしてサインインを完了する</h2>
+        <p>
+          コードが交代する前に、現在の値を確認画面に入力します。各コードの有効期間は1つの30秒の窓です（独自周期の
+          サービスなら、それより短くも長くもなります）。表示が残り数秒まで来ていたら、古いコードを急いで入力するの
+          ではなく、次のコードを待ちましょう。これ以後、このサービスとのサインインは毎回同じ繰り返しになります。
+          ジェネレーターを開く → コードをコピー → 貼り付ける。最後に入力した鍵は
+          <a href="/privacy/">自分のブラウザのローカルストレージだけに</a>記憶されるので、次の訪問は
+          ワンクリックで済みます。
+        </p>
+
+        <h2>人気のサービスでセットアップキーを見つける場所</h2>
+        <p>
+          認証アプリの選択肢が置かれている場所は、サービスごとに少しずつ違います。そこで、このジェネレーターと
+          併用する<a href="/guides/">ステップバイステップの設定ガイド</a>を公開しています — 最後にはここで鍵を
+          貼り付けて、設定を完了させられます。よく読まれているのは：
+          <a href="/guides/google/">Google</a>、{" "}
+          <a href="/guides/microsoft/">Microsoft</a>、<a href="/guides/discord/">Discord</a>、{" "}
+          <a href="/guides/github/">GitHub</a>、<a href="/guides/steam/">Steam</a>、{" "}
+          <a href="/guides/aws/">AWS</a>、<a href="/guides/coinbase/">Coinbase</a>、{" "}
+          <a href="/guides/kraken/">Kraken</a>、そして <a href="/guides/binance/">Binance</a> です。
+        </p>
+
+        <h2>困ったときの対処法</h2>
+        <p>
+          <strong>コードが拒否される。</strong>実際にはほぼ常に、ジェネレーターを動かしている端末の時計のずれが
+          原因です。TOTPは、あなたのコードを<strong>サービス側の</strong>時計から導かれたコードと比較します。
+          システム時刻がわずか30秒でもずれていれば、2つは食い違ってしまいます。OS の時刻を自動同期に設定し
+          （Windows なら日付と時刻の設定にある「今すぐ同期」、macOS なら「日付と時刻を自動的に設定」）、
+          次のコードで再試行してください。
+        </p>
+        <p>
+          <strong>QRコードが読み取れない。</strong><em>「スキャンできない場合」</em>のリンクから、代わりに
+          セットアップキーを表示させてください — テキストの鍵のほうが、画面を撮影するより常に確実です。
+          スクリーンショットしかない場合は、QRコードの部分だけに切り取ってください。圧縮が強い画像や斜めの
+          撮影は、しばしばデコードに失敗します。
+        </p>
+        <p>
+          <strong>鍵のあるスマホを失くした。</strong>このツールが作られたときに想定されたのは、まさにその状況です。
+          原本のシークレットをパスワードマネージャーに保管してあったなら — あるいはスマホがまだ使えたときに
+          ここへ貼り付けてあったなら — どのコンピュータでもコードを再生成できます。スマホなし、復元なし、
+          サポートチケットなしで。
+        </p>
+
+        <h2>身につけておきたい2つの習慣</h2>
+        <p>
+          2FAを有効にしたときには、サービスの<strong>リカバリーコード</strong>をオフラインで保存しましょう。
+          シークレットを保管した端末を失ったとき、それが命綱になります。そして、ライブの2FAコードを共有対象とは
+          決して考えないこと。サポート担当者も、銀行も、取引所も、頼んでもいないのにあなたの現在のコードを
+          必要とすることはありません。コードが役に立つのは、あなただけが選んだログイン画面の、その30秒の
+          有効期間だけなのです。
+        </p>
+      </div>
+    </article>
+  </main>
+  <SiteFooter
+    columns={[
+      {
+        title: '製品',
+        links: [
+          { href: '/ja/#generator', label: 'ライブジェネレーター' },
+          { href: '/ja/how-to-get-2fa-code/', label: '2FAコードの取得方法' },
+          { href: '/ja/what-is-2fa/', label: '2FAとは？' },
+          { href: '/ja/#features', label: '機能' },
+          { href: '/ja/#compatibility', label: '互換性' },
+        ],
+      },
+      {
+        title: '読み物',
+        links: [
+          { href: '/totp-vs-passkeys/', label: 'TOTPとパスキーの違い' },
+          { href: '/sim-swap-attacks/', label: 'SIMスワップ攻撃' },
+          { href: '/authenticator-cloud-sync/', label: '認証アプリのクラウド同期を比較' },
+        ],
+      },
+      {
+        title: 'ガイド',
+        links: [
+          { href: '/guides/', label: 'すべてのガイド' },
+          { href: '/guides/google/', label: 'Google 2FA' },
+          { href: '/guides/microsoft/', label: 'Microsoft 2FA' },
+          { href: '/guides/discord/', label: 'Discord 2FA' },
+          { href: '/guides/github/', label: 'GitHub 2FA' },
+          { href: '/guides/steam/', label: 'Steam 2FA' },
+          { href: '/guides/binance/', label: 'Binance 2FA' },
+        ],
+      },
+      {
+        title: '運営',
+        links: [
+          { href: '/about/', label: '運営者情報' },
+          { href: '/methodology/', label: '編集方針' },
+          { href: '/contact/', label: 'お問い合わせ' },
+        ],
+      },
+      {
+        title: '法的事項',
+        links: [
+          { href: '/privacy/', label: 'プライバシーポリシー' },
+          { href: '/terms/', label: '利用規約' },
+          { href: '/disclaimer/', label: '免責事項' },
+          { href: '/contact/', label: 'セキュリティ問題の報告' },
+        ],
+      },
+    ]}
+    tagline="2facounter.com で動く、ブラウザ内だけで完結するゼロ知識の2FA認証アプリ。アカウント登録もサーバーもスマホも必要ありません。"
+    languagesTitle="言語"
+  />
+</Layout>

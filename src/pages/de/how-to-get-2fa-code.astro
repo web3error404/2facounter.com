@@ -1,0 +1,271 @@
+---
+/* Deutsch â€” Ã¼bersetzte Anleitung (hreflang: de). Struktur parallel zu
+   how-to-get-2fa-code.astro; SEO-optimierte Ãœbersetzung. */
+import Layout from '../../layouts/Layout.astro';
+import SiteHeader from '../../components/SiteHeader.astro';
+import SiteFooter from '../../components/SiteFooter.astro';
+
+const title = '2FA-Code erhalten: Schritt-fÃ¼r-Schritt-Anleitung (TOTP) â€” 2FA COUNTER';
+const description =
+  'Wie Sie in drei Schritten einen 2FA-Code erhalten: EinrichtungsschlÃ¼ssel anzeigen lassen, in den Online-TOTP-Generator eingeben und den 6-stelligen Live-Code eingeben â€” plus LÃ¶sungen fÃ¼r abgelehnte Codes.';
+
+const faq = [
+  {
+    q: 'Wo finde ich den EinrichtungsschlÃ¼ssel?',
+    a: 'Auf demselben Bildschirm, auf dem der Dienst den QR-Code fÃ¼r seine Authenticator-App anzeigt. Suchen Sie nach einem Link wie â€žScannt nicht? SchlÃ¼ssel anzeigenâ€œ, â€žCode manuell eingebenâ€œ oder â€žEinrichtungsschlÃ¼sselâ€œ. Er enthÃ¼llt eine Base32-Zeichenkette (oder eine vollstÃ¤ndige otpauth://-URI) â€” beides funktioniert im Generator.',
+  },
+  {
+    q: 'Mein Code wird abgelehnt â€” was nun?',
+    a: 'Fast immer liegt es an einer Uhrabweichung. TOTP basiert auf der Zeit; ein GerÃ¤t, dessen Uhr auch nur um eine halbe Minute daneben liegt, erzeugt ungÃ¼ltige Codes. Stellen Sie die Systemzeit auf automatische Synchronisierung ein und versuchen Sie es erneut.',
+  },
+  {
+    q: 'Ist das derselbe Code, den meine Handy-App erzeugen wÃ¼rde?',
+    a: 'Ja. Jede Authenticator-App â€” Google Authenticator, Authy, Microsoft Authenticator oder dieses Browser-Werkzeug â€” berechnet aus demselben Geheimnis und derselben Uhr denselben RFC-6238-TOTP-Code. Sie sind untereinander austauschbar.',
+  },
+  {
+    q: 'Brauche ich meine Wiederherstellungscodes trotzdem noch?',
+    a: 'Ja. Bewahren Sie sie offline auf, getrennt von diesem Werkzeug. Sollten Sie jemals den Zugang zu dem GerÃ¤t verlieren, auf dem Ihr geheimer SchlÃ¼ssel liegt, sind die Wiederherstellungscodes der Weg zurÃ¼ck ins Konto.',
+  },
+];
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: '2FA COUNTER', item: 'https://2facounter.com/de/' },
+      { '@type': 'ListItem', position: 2, name: '2FA-Code erhalten', item: 'https://2facounter.com/de/how-to-get-2fa-code/' },
+    ],
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'HowTo',
+    name: 'So erhalten Sie einen 2FA-Code mit einem Online-TOTP-Generator',
+    totalTime: 'PT3M',
+    step: [
+      { '@type': 'HowToStep', position: 1, name: '2FA aktivieren und den EinrichtungsschlÃ¼ssel anzeigen', text: 'Ã–ffnen Sie die Sicherheitseinstellungen des Dienstes, wÃ¤hlen Sie die Option â€žAuthenticator-Appâ€œ und lassen Sie sich den EinrichtungsschlÃ¼ssel anzeigen, wenn Sie den QR-Code nicht scannen kÃ¶nnen.' },
+      { '@type': 'HowToStep', position: 2, name: 'Den SchlÃ¼ssel in den Generator eingeben', text: 'FÃ¼gen Sie die Base32-Zeichenkette oder die otpauth://-URI in den Generator auf der 2FA-LIVE-CODE-Startseite ein. Alles wird lokal im Browser berechnet.' },
+      { '@type': 'HowToStep', position: 3, name: 'Den Live-Code eingeben und bestÃ¤tigen', text: 'Geben Sie den 6-stelligen Code innerhalb seines 30-Sekunden-Fensters in die Verifizierungsabfrage des Dienstes ein, um die Einrichtung abzuschlieÃŸen â€” danach wiederholen Sie denselben Ablauf bei jeder kÃ¼nftigen Anmeldung.' },
+    ],
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faq.map(({ q, a }) => ({
+      '@type': 'Question',
+      name: q,
+      acceptedAnswer: { '@type': 'Answer', text: a },
+    })),
+  },
+];
+
+const alternates = [
+  { hreflang: 'en', href: 'https://2facounter.com/how-to-get-2fa-code/' },
+  { hreflang: 'es', href: 'https://2facounter.com/es/how-to-get-2fa-code/' },
+  { hreflang: 'ja', href: 'https://2facounter.com/ja/how-to-get-2fa-code/' },
+  { hreflang: 'fr', href: 'https://2facounter.com/fr/how-to-get-2fa-code/' },
+  { hreflang: 'de', href: 'https://2facounter.com/de/how-to-get-2fa-code/' },
+  { hreflang: 'pt', href: 'https://2facounter.com/pt/how-to-get-2fa-code/' },
+  { hreflang: 'ko', href: 'https://2facounter.com/ko/how-to-get-2fa-code/' },
+  { hreflang: 'it', href: 'https://2facounter.com/it/how-to-get-2fa-code/' },
+  { hreflang: 'x-default', href: 'https://2facounter.com/how-to-get-2fa-code/' },
+];
+---
+
+
+  <Layout title={title} description={description} path="/de/how-to-get-2fa-code/" lang="de" jsonLd={jsonLd} alternates={alternates} image="/og-de.png">
+
+  
+    links={[
+      { href: '/de/', label: '2FA-Code generieren' },
+      { href: '/de/what-is-2fa/', label: 'Was ist 2FA?' },
+      { href: '/guides/', label: 'Anleitungen' },
+      { href: '/privacy/', label: 'Datenschutz' },
+    ]}
+    cta="Code generieren"
+  />
+  <main id="main">
+    <article class="mx-auto max-w-[820px] px-4 py-20 sm:px-6 lg:py-24 xl:px-0">
+      <p class="section-label">2FA-Anleitung</p>
+      <h1 class="mt-3 font-display text-4xl tracking-normal text-ink sm:text-5xl">
+        So erhalten Sie Ihren 2FA-Code
+      </h1>
+      <p class="mt-5 text-lg font-medium text-ink">
+        Der ganze Vorgang dauert etwa eine Minute: EinrichtungsschlÃ¼ssel anzeigen lassen, hier
+        einfÃ¼gen und den daraus entstandenen Code in den Bildschirm eingeben, der ihn verlangt.
+        Kein Handy nÃ¶tig â€” die Referenzimplementierung der Mathematik lÃ¤uft oben auf dem{" "}
+        <a href="/de/">Startseiten-Generator</a>.
+      </p>
+
+      <div class="rich-text mt-10">
+        <h2>Was Sie vor dem Start brauchen</h2>
+        <p>
+          Zugang zum Konto natÃ¼rlich â€” Sie sollten bereits bei dem Dienst angemeldet sein, den Sie
+          schÃ¼tzen mÃ¶chten. DarÃ¼ber hinaus zÃ¤hlen zwei Dinge. Erstens muss der Dienst eine
+          <strong>Authenticator-App</strong> als zweiten Faktor anbieten; das umfasst Google,
+          Microsoft, GitHub, Discord, Steam, AWS, Coinbase, Kraken, Binance, X sowie die meisten
+          Banken und BÃ¶rsen. Zweitens brauchen Sie einen Ort, um den Authenticator
+          <em>laufen zu lassen</em>: eine Handy-App oder â€” der Kern dieser Website â€” dieses
+          Browser-Werkzeug, das exakt dieselben Codes berechnet, ohne dass Sie etwas installieren.
+        </p>
+        <p>
+          Ein Wort zur Benennung: Dienste nennen diesen zweiten Faktor â€žZwei-Faktor-Authentifizierungâ€œ,
+          â€ž2FAâ€œ, â€žZwei-Schritt-Verifizierungâ€œ, â€žTOTPâ€œ oder â€žAuthenticator-Appâ€œ. Hinter den Begriffen
+          steckt dasselbe â€” ein zeitbasiertes Einmalpasswort, das aus einem gemeinsam geheimen
+          SchlÃ¼ssel abgeleitet wird. Wenn Sie eher den Mechanismus erklÃ¤rt bekommen mÃ¶chten als ihn
+          zu benutzen, lesen Sie{" "}
+          <a href="/de/what-is-2fa/">Was ist 2FA? Wie TOTP funktioniert</a>.
+        </p>
+
+        <h2>Schritt 1: 2FA aktivieren und den EinrichtungsschlÃ¼ssel anzeigen</h2>
+        <p>
+          Ã–ffnen Sie die Sicherheitseinstellungen Ihres Kontos und suchen Sie den Abschnitt zur
+          Zwei-Faktor-Authentifizierung. WÃ¤hlen Sie die Option <em>Authenticator-App</em>. Der
+          Dienst zeigt Ihnen einen QR-Code zum Scannen mit dem Handy â€” und dieser Bildschirm
+          bietet fast immer eine Alternative: einen Link mit der Aufschrift <em>â€žScannt nicht?â€œ</em>,
+          <em>â€žCode manuell eingebenâ€œ</em> oder <em>â€žEinrichtungsschlÃ¼sselâ€œ</em>. Ãœber diesen Link
+          erscheint das eigentliche Geheimnis: eine Base32-Zeichenkette wie{" "}
+          <code>JBSWY3DPEHPK3PXP</code>, gelegentlich verpackt in eine vollstÃ¤ndige{" "}
+          <code>otpauth://</code>-URI, die zusÃ¤tzlich die Kontobezeichnung, die Ziffernanzahl, die
+          Aktualisierungsperiode und den Hash-Algorithmus enthÃ¤lt.
+        </p>
+        <p>
+          Dieser SchlÃ¼ssel <strong>ist</strong> der Berechtigungsnachweis â€” er ist das tragbare
+          Ã„quivalent zu Ihrem Passwort fÃ¼r den zweiten Faktor. Behandeln Sie den Bildschirm wie
+          einen Wiederherstellungsbildschirm: Niemand, der seriÃ¶s ist, wird Sie je bitten, einen
+          EinrichtungsschlÃ¼ssel in eine E-Mail oder einen Chat einzufÃ¼gen. Kopieren Sie ihn,
+          schlieÃŸen Sie die Aktivierung von 2FA ab (die meisten Dienste verlangen zur BestÃ¤tigung
+          einen funktionierenden Code) und bewahren Sie das Original verschlÃ¼sselt auf, etwa in
+          einem Passwort-Manager.
+        </p>
+
+        <h2>Schritt 2: Den SchlÃ¼ssel in den Generator eingeben</h2>
+        <p>
+          FÃ¼gen Sie im <a href="/de/">Generator oben auf unserer Startseite</a> das soeben
+          kopierte ein â€” die nackte Base32-Zeichenkette oder den vollstÃ¤ndigen{" "}
+          <code>otpauth://</code>-Link, beides funktioniert. Innerhalb weniger Sekunden erscheint
+          ein Live-6-stelliger Code, der sich alle 30 Sekunden erneuert. Sie kÃ¶nnen den SchlÃ¼ssel
+          auch aus einem Bild importieren: FÃ¼gen Sie einen Screenshot des QR-Codes direkt mit
+          Strg+V auf der Seite ein, ziehen Sie eine Bilddatei hinein oder scannen Sie den QR-Code
+          mit der Kamera â€” das Dekodieren passiert lokal, nichts wird hochgeladen. Liefert der
+          Dienst eine vom Standard abweichende Konfiguration (8-stellige Codes, 15/30/60-Sekunden-
+          Perioden, SHA-256 oder zÃ¤hlerbasiertes HOTP), trÃ¤gt eine vollstÃ¤ndige{" "}
+          <code>otpauth://</code>-URI all diese Parameter, und der Generator beachtet sie
+          automatisch.
+        </p>
+
+        <h2>Schritt 3: Den Live-Code eingeben und die Anmeldung abschlieÃŸen</h2>
+        <p>
+          Geben Sie den aktuellen Code in die Verifizierungsabfrage ein, bevor er rotiert. Jeder
+          Code gilt fÃ¼r genau ein 30-Sekunden-Fenster (kÃ¼rzer oder lÃ¤nger bei Diensten mit
+          eigenen Perioden); steht der ZÃ¤hler also auf den letzten Sekunden, warten Sie lieber
+          auf den nÃ¤chsten Code, statt einen abgelaufenen zu versenden. Von nun an wiederholt
+          sich bei jeder Anmeldung bei diesem Dienst derselbe Ablauf: Generator Ã¶ffnen â†’ Code
+          kopieren â†’ Code eingeben. Ihren letzten SchlÃ¼ssel merkt sich das Werkzeug{" "}
+          <a href="/privacy/">ausschlieÃŸlich im lokalen Speicher Ihres eigenen Browsers</a>, der
+          nÃ¤chste Besuch ist also nur einen Klick entfernt.
+        </p>
+
+        <h2>Wo Sie den EinrichtungsschlÃ¼ssel bei populÃ¤ren Diensten finden</h2>
+        <p>
+          Jeder Dienst versteckt die Authenticator-Option an einem etwas anderen Ort, deshalb
+          verÃ¶ffentlichen wir <a href="/guides/">Schritt-fÃ¼r-Schritt-Einrichtungsanleitungen</a>,
+          die zu diesem Generator passen â€” am Ende fÃ¼gen Sie den SchlÃ¼ssel hier ein und
+          schlieÃŸen die Einrichtung ab. Am hÃ¤ufigsten gefragt: <a href="/guides/google/">Google</a>,{" "}
+          <a href="/guides/microsoft/">Microsoft</a>, <a href="/guides/discord/">Discord</a>,{" "}
+          <a href="/guides/github/">GitHub</a>, <a href="/guides/steam/">Steam</a>,{" "}
+          <a href="/guides/aws/">AWS</a>, <a href="/guides/coinbase/">Coinbase</a>,{" "}
+          <a href="/guides/kraken/">Kraken</a> und <a href="/guides/binance/">Binance</a>.
+        </p>
+
+        <h2>Fehlersuche: Was tun, wenn es nicht funktioniert</h2>
+        <p>
+          <strong>Der Code wird abgelehnt.</strong> In der Praxis liegt das fast immer an einer
+          Uhrabweichung auf dem GerÃ¤t, auf dem der Generator lÃ¤uft. TOTP vergleicht Ihren Code mit
+          einem Code, der aus der Uhr des <em>Dienstes</em> abgeleitet wird; liegt Ihre Systemzeit
+          auch nur um eine halbe Minute daneben, entfernen sich die beiden Werte. Stellen Sie Ihr
+          Betriebssystem auf automatische Zeitsynchronisierung ein (Windows: â€žJetzt
+          synchronisierenâ€œ in den Datums- und Uhrzeiteinstellungen; macOS: â€žDatum und Uhrzeit
+          automatisch festlegenâ€œ) und probieren Sie den nÃ¤chsten Code.
+        </p>
+        <p>
+          <strong>Der QR-Code lÃ¤sst sich nicht scannen.</strong> Nutzen Sie stattdessen den
+          Link <em>â€žScannt nicht?â€œ</em>, um den EinrichtungsschlÃ¼ssel anzuzeigen â€” der
+          TextschlÃ¼ssel ist immer zuverlÃ¤ssiger als das Abfotografieren eines Bildschirms.
+          Liegt Ihnen nur ein Screenshot vor, schneiden Sie ihn auf den QR-Code selbst zu;
+          stark komprimierte oder schrÃ¤g aufgenommene Aufnahmen scheitern oft am Dekodieren.
+        </p>
+        <p>
+          <strong>Sie haben das Handy verloren, auf dem der SchlÃ¼ssel lag.</strong> Genau fÃ¼r
+          diese Situation wurde dieses Werkzeug gebaut: Wenn Sie das Original-Geheimnis in Ihrem
+          Passwort-Manager aufbewahrt haben â€” oder es hier eingefÃ¼gt haben, solange das Handy noch
+          funktionierte â€”, kÃ¶nnen Sie die Codes auf jedem Computer neu erzeugen. Kein Handy, keine
+          Wiederherstellung, kein Support-Ticket.
+        </p>
+
+        <h2>Zwei Gewohnheiten, die sich lohnen</h2>
+        <p>
+          Speichern Sie die <strong>Wiederherstellungscodes</strong> des Dienstes offline, wenn
+          Sie 2FA aktivieren; sie sind die Rettung, falls Sie jemals das GerÃ¤t verlieren, auf dem
+          das Geheimnis liegt. Und betrachten Sie einen Live-2FA-Code nie als etwas zum
+          Weitergeben: kein Support-Mitarbeiter, keine Bank, keine BÃ¶rse braucht Ihren aktuellen
+          Code je unaufgefordert. Ein Code ist nur innerhalb seines 30-Sekunden-Fensters an dem
+          Anmeldebildschirm nÃ¼tzlich, den Sie selbst gewÃ¤hlt haben.
+        </p>
+      </div>
+    </article>
+  </main>
+  <SiteFooter
+    columns={[
+      {
+        title: 'Produkt',
+        links: [
+          { href: '/#generator', label: 'Live-Generator' },
+          { href: '/de/how-to-get-2fa-code/', label: '2FA-Code abrufen' },
+          { href: '/de/what-is-2fa/', label: 'Was ist 2FA?' },
+          { href: '/#features', label: 'Funktionen' },
+          { href: '/#compatibility', label: 'KompatibilitÃ¤t' },
+        ],
+      },
+      {
+        title: 'Wissen',
+        links: [
+          { href: '/totp-vs-passkeys/', label: 'TOTP gegen Passkeys' },
+          { href: '/sim-swap-attacks/', label: 'SIM-Swap-Angriffe' },
+          { href: '/authenticator-cloud-sync/', label: 'App-Cloud-Sync im Vergleich' },
+        ],
+      },
+      {
+        title: 'Anleitungen',
+        links: [
+          { href: '/guides/', label: 'Alle Anleitungen' },
+          { href: '/guides/google/', label: 'Google 2FA' },
+          { href: '/guides/microsoft/', label: 'Microsoft 2FA' },
+          { href: '/guides/discord/', label: 'Discord 2FA' },
+          { href: '/guides/github/', label: 'GitHub 2FA' },
+          { href: '/guides/steam/', label: 'Steam 2FA' },
+          { href: '/guides/binance/', label: 'Binance 2FA' },
+        ],
+      },
+      {
+        title: 'Ãœber uns',
+        links: [
+          { href: '/about/', label: 'Ãœber uns' },
+          { href: '/methodology/', label: 'Redaktionelle Methodik' },
+          { href: '/contact/', label: 'Kontakt' },
+        ],
+      },
+      {
+        title: 'Rechtliches',
+        links: [
+          { href: '/privacy/', label: 'DatenschutzerklÃ¤rung' },
+          { href: '/terms/', label: 'Nutzungsbedingungen' },
+          { href: '/disclaimer/', label: 'Haftungsausschluss' },
+          { href: '/contact/', label: 'Sicherheitsproblem melden' },
+        ],
+      },
+    ]}
+    tagline="Ein Zero-Knowledge-2FA-Authenticator, der vollstÃ¤ndig in Ihrem Browser lÃ¤uft, auf 2facounter.com. Keine Konten, keine Server, kein Handy nÃ¶tig."
+    languagesTitle="Sprachen"
+  />
+</Layout>

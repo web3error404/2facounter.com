@@ -185,8 +185,10 @@ const services = [
 ];
 ---
 
-<Layout title={title} description={description} path="/ja/" lang="ja" jsonLd={jsonLd} alternates={homeAlternates}>
-  <SiteHeader
+
+  <Layout title={title} description={description} path="/ja/" lang="ja" jsonLd={jsonLd} alternates={homeAlternates} image="/og-ja.png">
+
+  
     links={[
       { href: '/ja/#how-it-works', label: '仕組み' },
       { href: '/ja/#features', label: '機能' },
@@ -295,7 +297,7 @@ const services = [
             </p>
             <p class="mt-4 text-sm font-medium text-ink">
               初めての方は、平易な解説記事もどうぞ：{" "}
-              <a href="/what-is-2fa/" class="link">2FAとは？TOTPの仕組み</a>
+              <a href="/ja/what-is-2fa/" class="link">2FAとは？TOTPの仕組み</a>
             </p>
             <a href="#generator" class="btn-primary mt-8">今すぐ試す</a>
           </div>
@@ -425,7 +427,7 @@ const services = [
             一度きりの共有シークレットが渡されます。認証アプリは、そのシークレットと現在時刻から新しい6桁のコードを導出します
             （TOTP標準、RFC 6238）。ログイン先のサイト側ではまったく同じ計算が走り、結果が比較されます。コードは30秒ごとに
             交代するため、盗まれたパスワードだけではもう何も開けられません。暗号の全体像を知りたい方は、平易な解説記事{" "}
-            <a href="/what-is-2fa/">2FAとは？二段階認証とTOTPの仕組み</a> を読んでから、ここに戻って最初のコードを
+            <a href="/ja/what-is-2fa/">2FAとは？二段階認証とTOTPの仕組み</a> を読んでから、ここに戻って最初のコードを
             生成してみてください。
           </p>
 
@@ -531,7 +533,7 @@ const services = [
         links: [
           { href: '/#generator', label: 'ライブジェネレーター' },
           { href: '/how-to-get-2fa-code/', label: '2FAコードの取得方法' },
-          { href: '/what-is-2fa/', label: '2FAとは？' },
+          { href: '/ja/what-is-2fa/', label: '2FAとは？' },
           { href: '/#features', label: '機能' },
           { href: '/#compatibility', label: '互換性' },
         ],

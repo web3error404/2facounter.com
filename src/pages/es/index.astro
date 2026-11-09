@@ -156,8 +156,10 @@ const services = [
 ];
 ---
 
-<Layout title={title} description={description} path="/es/" lang="es" jsonLd={jsonLd} alternates={homeAlternates}>
-  <SiteHeader
+
+  <Layout title={title} description={description} path="/es/" lang="es" jsonLd={jsonLd} alternates={homeAlternates} image="/og-es.png">
+
+  
     links={[
       { href: '/es/#how-it-works', label: 'Cómo funciona' },
       { href: '/es/#features', label: 'Características' },
@@ -270,7 +272,7 @@ const services = [
             </p>
             <p class="mt-4 text-sm font-medium text-ink">
               ¿Llegas nuevo al tema? Lee la explicación en lenguaje llano:{" "}
-              <a href="/what-is-2fa/" class="link">¿Qué es la 2FA? Cómo funciona el TOTP</a>
+              <a href="/es/what-is-2fa/" class="link">¿Qué es la 2FA? Cómo funciona el TOTP</a>
             </p>
             <a href="#generator" class="btn-primary mt-8">Pruébalo ahora</a>
           </div>
@@ -407,7 +409,7 @@ const services = [
             resultados. Como el código rota cada 30
             segundos, una contraseña robada por sí sola ya no abre nada. Si quieres el recorrido
             criptográfico completo, lee la explicación en lenguaje llano{" "}
-            <a href="/what-is-2fa/">¿Qué es la 2FA? Cómo funcionan la autenticación en dos pasos y el TOTP</a>,
+            <a href="/es/what-is-2fa/">¿Qué es la 2FA? Cómo funcionan la autenticación en dos pasos y el TOTP</a>,
             y vuelve para generar tu primer código.
           </p>
 
@@ -526,7 +528,7 @@ const services = [
         links: [
           { href: '/es/#generator', label: 'Generador de códigos en vivo' },
           { href: '/es/#features', label: 'Características' },
-          { href: '/what-is-2fa/', label: '¿Qué es la 2FA?' },
+          { href: '/es/what-is-2fa/', label: '¿Qué es la 2FA?' },
           { href: '/es/#compatibility', label: 'Compatibilidad' },
         ],
       },

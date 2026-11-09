@@ -1,5 +1,6 @@
 // Renders tools/og/og-card.html to public/og.png with Playwright.
 // Re-run any time the card design changes:  node tools/og/render.mjs
+// For localized variants:                    node tools/og/build-cards.mjs
 import { chromium } from 'playwright';
 import { pathToFileURL } from 'node:url';
 import { resolve } from 'node:path';

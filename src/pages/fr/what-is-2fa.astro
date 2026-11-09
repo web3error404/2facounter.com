@@ -1,0 +1,395 @@
+---
+/* Français — traduction de l'article « What is 2FA? » (what-is-2fa.astro).
+   Structure parallèle à la page anglaise ; traduction adaptée au SEO francophone. */
+import Layout from '../../layouts/Layout.astro';
+import SiteHeader from '../../components/SiteHeader.astro';
+import SiteFooter from '../../components/SiteFooter.astro';
+
+const title = 'Qu’est-ce que la 2FA ? Double authentification et codes TOTP expliqués — 2FA COUNTER';
+const description =
+  'Qu’est-ce que la 2FA ? Un guide clair sur l’authentification à deux facteurs, les codes TOTP, la RFC 6238, pourquoi ils surpassent le SMS, et comment ne jamais rester bloqué hors de son compte. Générateur de code 2FA gratuit inclus.';
+
+const faqs = [
+  {
+    q: 'Qu’est-ce que la 2FA ?',
+    a: 'La 2FA (authentification à deux facteurs, ou double authentification) consiste à prouver qui vous êtes avec deux types de preuves différents : quelque chose que vous savez (votre mot de passe) plus quelque chose que vous avez (un code qui change toutes les 30 secondes, une clé de sécurité ou votre téléphone). Un mot de passe seul peut fuiter ou être deviné ; le second facteur rend un mot de passe divulgué inutile à lui tout seul.',
+  },
+  {
+    q: 'Pourquoi la 2FA est-elle si importante ?',
+    a: 'Parce que les mots de passe cessent de fonctionner. Des milliards de mots de passe réels circulent déjà publiquement à la suite de fuites de données, et des attaquants les rejouent jour et nuit sur d’autres comptes (credential stuffing). Microsoft estime que la 2FA bloque plus de 99,9 % des attaques automatisées de prise de contrôle de compte — elle protège votre messagerie, votre banque, vos réseaux sociaux, vos jeux et votre crypto contre exactement les menaces qui arrivent réellement.',
+  },
+  {
+    q: 'À quoi sert la 2FA ?',
+    a: 'Elle protège toute connexion qui mérite d’être volée : comptes de messagerie et cloud (Google, Microsoft, Apple), banque et finance, plateformes crypto (Binance, Coinbase, Kraken), outils de développement (GitHub, AWS), jeux (Steam, Discord, Twitch) et réseaux sociaux (X, Instagram). Les entreprises l’utilisent aussi pour leurs VPN, leur messagerie et leurs consoles d’administration. Chaque fois qu’un service propose une option « application d’authentification », la 2FA est le bon outil.',
+  },
+  {
+    q: 'Comment fonctionne la 2FA ?',
+    a: 'Après votre mot de passe, le service demande une deuxième preuve. Avec la méthode la plus courante (TOTP), votre application d’authentification dérive un code à 6 chiffres tout frais à partir d’un secret partagé et de l’heure actuelle (la norme RFC 6238), pendant que le serveur exécute exactement le même calcul et compare les résultats. Le code tourne toutes les 30 secondes et ne peut jamais être réutilisé : un attaquant qui ne disposerait que de votre mot de passe ne passe quand même pas.',
+  },
+  {
+    q: 'Comment un code TOTP est-il généré ?',
+    a: 'Le site web vous remet une clé secrète (généralement sous forme de code QR ou de chaîne Base32). Votre application calcule un HMAC (SHA-1, SHA-256 ou SHA-512) sur la fenêtre de temps de 30 secondes en cours à l’aide de ce secret, puis en extrait 6 chiffres. Le site web exécute le calcul identique et compare. Aucun réseau n’est nécessaire, car les deux côtés partagent déjà le secret.',
+  },
+  {
+    q: 'Comment obtenir la 2FA ?',
+    a: 'Vous activez la 2FA depuis le compte que vous voulez protéger : ouvrez ses paramètres, cherchez « Sécurité » ou « Connexion et sécurité », puis « Authentification à deux facteurs » ou « Vérification en deux étapes ». Choisissez l’option application d’authentification, scannez le code QR — ou affichez la clé de configuration — et saisissez le code affiché dans votre application pour valider. Notre guide pas à pas explique comment obtenir un code sans téléphone : /fr/how-to-get-2fa-code/.',
+  },
+  {
+    q: 'Comment activer la 2FA ?',
+    a: 'Quatre étapes : 1) Ouvrez les paramètres du compte ou de sécurité du service et sélectionnez « Authentification à deux facteurs ». 2) Choisissez « Utiliser une application d’authentification » (évitez le SMS si une meilleure option existe). 3) Scannez le code QR avec votre application — ou cliquez sur « scanner impossible ? » et enregistrez la clé de configuration. 4) Saisissez le code en direct pour terminer, puis téléchargez ou imprimez les codes de récupération qu’on vous montre. Nous publions des guides de configuration service par service pour Google, GitHub, Discord, Binance et bien d’autres sur /guides/.',
+  },
+  {
+    q: 'Quel est le niveau de protection réel de la 2FA ?',
+    a: 'Tout dépend du deuxième facteur choisi. Les codes SMS sont les plus fragiles — une attaque par SIM swap peut détourner votre numéro et intercepter les codes à votre place. Les codes TOTP d’application d’authentification — ceux valables 30 secondes — sont solides sur le plan cryptographique : un attaquant hors ligne ne peut pas les déduire, et chacun expire en quelques secondes. Les clés de sécurité matérielles et les clés d’accès (passkeys) sont les plus robustes de tous, car elles résistent au hameçonnage et sont cryptographiquement liées au vrai site web.',
+  },
+  {
+    q: 'La 2FA est-elle sûre à 100 % ?',
+    a: 'Aucun dispositif de sécurité n’est sûr à 100 %, et les guides honnêtes sur la 2FA le disent. La 2FA neutralise les mots de passe volés, mais un code tout frais peut encore être hameçonné si vous le saisissez sur un faux site pendant sa fenêtre de validité de 30 secondes ; un logiciel malveillant déjà présent sur votre appareil peut détourner la session elle-même ; et si le SMS est votre second facteur, le SIM swap demeure une menace réelle. Cela dit, activer la 2FA rend votre compte infiniment plus difficile à attaquer qu’un compte protégé par un simple mot de passe.',
+  },
+  {
+    q: 'La 2FA est-elle obligatoire ?',
+    a: 'Pas légalement, mais de plus en plus de services l’imposent : GitHub l’exige des contributeurs de code depuis 2023, de nombreuses banques et plateformes crypto l’activent d’office, et les employeurs la rendent souvent obligatoire pour les connexions professionnelles. Ailleurs, elle est facultative mais fortement recommandée. En pratique, traitez la 2FA comme obligatoire pour vos comptes les plus précieux : la messagerie d’abord, car une boîte mail piratée permet de réinitialiser tout le reste.',
+  },
+  {
+    q: 'Pourquoi tout le monde utilise-t-il désormais la 2FA ?',
+    a: 'Parce que l’ère du mot de passe seul s’est effondrée. Des fuites massives ont exposé des milliards d’identifiants, les attaques par credential stuffing sont devenues automatisées et bon marché, et les plateformes en avaient assez de payer les conséquences des comptes détournés. Les régulateurs ont suivi : le NIST a déconseillé l’authentification par SMS dans ses normes américaines, et les règles PSD2 de l’UE exigent une authentification forte du client. Une fois que quelques géants ont banalisé la 2FA, tous les autres services ont emboîté le pas.',
+  },
+  {
+    q: 'Quelle est la différence entre TOTP, HOTP et OTP ?',
+    a: 'OTP veut simplement dire « mot de passe à usage unique ». TOTP (Time-based OTP, RFC 6238) dérive le code de l’heure actuelle : il change toutes les 30 secondes. HOTP (RFC 4226) repose sur un compteur : chaque code sert une fois, puis le compteur s’incrémente. Presque tous les services à « application d’authentification » — Google, Microsoft, Discord, GitHub — utilisent le TOTP.',
+  },
+  {
+    q: 'Pourquoi le TOTP est-il préférable à la 2FA par SMS ?',
+    a: 'Les codes SMS circulent sur le réseau téléphonique, où ils peuvent être interceptés ou volés à la faveur d’un SIM swap — et la livraison des SMS peut tout simplement échouer. Les codes TOTP sont calculés sur votre appareil, jamais transmis, et expirent en quelques secondes. Plusieurs autorités en sécurité, dont le NIST, ont déconseillé le SMS pour l’authentification.',
+  },
+  {
+    q: 'Un site de hameçonnage peut-il voler les codes TOTP ?',
+    a: 'Oui — si vous saisissez un code tout frais sur une page de hameçonnage pendant ses 30 secondes de validité, l’attaquant obtient une connexion qui fonctionne. C’est pourquoi les facteurs résistants au hameçonnage (clés de sécurité matérielles et passkeys, liées cryptographiquement au vrai domaine) constituent l’option la plus solide quand ils sont proposés. Le TOTP surclasse le SMS et le mot de passe, mais pas les clés matérielles.',
+  },
+  {
+    q: 'Où conserver ma clé secrète 2FA ?',
+    a: 'Dans le coffre chiffré d’un gestionnaire de mots de passe, en guise de copie maîtresse. Vous pouvez ainsi régénérer les codes sur n’importe quel appareil de confiance — y compris dans un navigateur, avec un outil comme 2facounter.com — si votre téléphone devient indisponible. Enregistrez aussi les codes de récupération que chaque service affiche à l’activation de la 2FA : c’est votre véritable airbag.',
+  },
+];
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: 'Qu’est-ce que la 2FA ? Fonctionnement de la double authentification et du TOTP',
+    description,
+    url: 'https://2facounter.com/fr/what-is-2fa/',
+    datePublished: '2026-11-07',
+    dateModified: '2026-11-09',
+    author: { '@type': 'Organization', name: '2FA COUNTER', url: 'https://2facounter.com' },
+    publisher: {
+      '@type': 'Organization',
+      name: '2FA COUNTER',
+      url: 'https://2facounter.com',
+      logo: { '@type': 'ImageObject', url: 'https://2facounter.com/favicon-96x96.png' },
+    },
+    mainEntityOfPage: { '@type': 'WebPage', '@id': 'https://2facounter.com/fr/what-is-2fa/' },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map(({ q, a }) => ({
+      '@type': 'Question',
+      name: q,
+      acceptedAnswer: { '@type': 'Answer', text: a },
+    })),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: '2FA COUNTER', item: 'https://2facounter.com/fr/' },
+      { '@type': 'ListItem', position: 2, name: 'Qu’est-ce que la 2FA ?', item: 'https://2facounter.com/fr/what-is-2fa/' },
+    ],
+  },
+];
+
+const alternates = [
+  { hreflang: 'en', href: 'https://2facounter.com/what-is-2fa/' },
+  { hreflang: 'es', href: 'https://2facounter.com/es/what-is-2fa/' },
+  { hreflang: 'ja', href: 'https://2facounter.com/ja/what-is-2fa/' },
+  { hreflang: 'fr', href: 'https://2facounter.com/fr/what-is-2fa/' },
+  { hreflang: 'de', href: 'https://2facounter.com/de/what-is-2fa/' },
+  { hreflang: 'pt', href: 'https://2facounter.com/pt/what-is-2fa/' },
+  { hreflang: 'ko', href: 'https://2facounter.com/ko/what-is-2fa/' },
+  { hreflang: 'it', href: 'https://2facounter.com/it/what-is-2fa/' },
+  { hreflang: 'x-default', href: 'https://2facounter.com/what-is-2fa/' },
+];
+---
+
+
+  <Layout title={title} description={description} path="/fr/what-is-2fa/" lang="fr" jsonLd={jsonLd} alternates={alternates} image="/og-fr.png">
+
+  
+    links={[
+      { href: '/fr/', label: 'Générer un code 2FA' },
+      { href: '/fr/how-to-get-2fa-code/', label: 'Obtenir un code 2FA' },
+      { href: '/guides/', label: 'Guides' },
+      { href: '/privacy/', label: 'Confidentialité' },
+    ]}
+    cta="Générer mon code"
+  />
+  <main id="main">
+    <article class="mx-auto max-w-[820px] px-4 py-16 sm:px-6 lg:py-24">
+      <p class="section-label">Apprendre</p>
+      <h1 class="mt-3 font-display text-4xl tracking-normal text-ink sm:text-5xl">
+        Qu’est-ce que la 2FA ? Et comment fonctionnent réellement ces codes de 30 secondes ?
+      </h1>
+      <p class="mt-5 max-w-2xl text-lg font-medium text-ink">
+        Un guide complet et clair : ce qu’est l’authentification à deux facteurs, la
+        cryptographie qui se cache derrière les codes TOTP à six chiffres, quel facteur activer
+        sur quel compte, et comment ne jamais rester bloqué hors de son compte.
+      </p>
+
+      <nav aria-label="Sur cette page" class="mt-10 rounded-xl border-2 border-ink bg-cream p-6" style="box-shadow: var(--shadow-card)">
+        <p class="font-mono text-[13px] font-bold tracking-wide text-ink uppercase">Sur cette page</p>
+        <ul class="mt-3 space-y-2 text-sm font-medium text-ink">
+          <li><a class="link" href="#problemes">Pourquoi les mots de passe seuls échouent</a></li>
+          <li><a class="link" href="#facteurs">Les trois facteurs</a></li>
+          <li><a class="link" href="#totp">Le fonctionnement du TOTP, étape par étape</a></li>
+          <li><a class="link" href="#base32">Le secret et le code QR</a></li>
+          <li><a class="link" href="#sms">TOTP, SMS ou clés matérielles ?</a></li>
+          <li><a class="link" href="#limites">Ce que la 2FA ne règle pas</a></li>
+          <li><a class="link" href="#jamais-bloque">Ne jamais se retrouver bloqué hors de son compte</a></li>
+          <li><a class="link" href="#faq">FAQ</a></li>
+        </ul>
+      </nav>
+
+      <div class="rich-text mt-12">
+        <h2 id="problemes">Pourquoi les mots de passe seuls échouent</h2>
+        <p>
+          Chaque connexion exige un mot de passe, et les mots de passe ont trois défauts
+          structurels : ils sont réutilisés, devinés par des attaques de <em>credential
+          stuffing</em> sur des bases de données recyclées, et hameçonnés aux internautes.
+          L’authentification à deux facteurs (2FA) admet une vérité simple — l’humain est le
+          maillon faible — et ajoute une seconde chose, indépendante, que l’attaquant doit
+          également posséder. Avec la 2FA, un mot de passe divulgué ne suffit plus, à lui seul,
+          à ouvrir votre compte.
+        </p>
+        <p>
+          La plupart des grands services proposent désormais la 2FA ou l’exigent : GitHub la
+          rend obligatoire depuis 2023, les plateformes crypto (Binance, Coinbase, Kraken) la
+          poussent à chaque creux de marché, et Microsoft, Google et Apple l’ont intégrée par
+          défaut à la sécurité des comptes.
+        </p>
+
+        <h2 id="facteurs">Les trois facteurs</h2>
+        <p>
+          Les facteurs d’authentification se répartissent en trois catégories :
+        </p>
+        <ul>
+          <li><strong>Ce que vous savez</strong> — mots de passe, codes PIN. Peu coûteux à déployer et faciles à hameçonner.</li>
+          <li>
+            <strong>Ce que vous avez</strong> — une application qui produit des codes, une clé de
+            sécurité matérielle ou une passkey, un téléphone qui reçoit des SMS. C’est là que
+            vit la 2FA.
+          </li>
+          <li><strong>Ce que vous êtes</strong> — empreintes digitales, reconnaissance faciale. Pratique, mais enrollé sur l’appareil plutôt qu’utilisé comme facteur distant principal.</li>
+        </ul>
+        <p>
+          Une véritable double authentification combine des techniques issues de <em>deux
+          catégories différentes</em>. Un mot de passe plus un schéma de déverrouillage sur votre
+          téléphone, ce n’est pas de la 2FA ; un mot de passe plus un code tournant généré par
+          une application d’authentification, si.
+        </p>
+
+        <h2 id="totp">Le fonctionnement du TOTP, étape par étape</h2>
+        <ol>
+          <li>
+            <strong>Enrôlement.</strong> Quand vous activez la 2FA sur un service, celui-ci
+            génère un secret aléatoire et vous le partage <em>une seule fois</em> — sous forme
+            de code QR ou de clé de configuration en Base32. En matière de sécurité, ce seul
+            instant concentre tout le risque, d’où cette règle : ne révélez jamais la clé
+            ailleurs que là où vous avez confiance.
+          </li>
+          <li>
+            <strong>Le temps avance.</strong> L’heure actuelle est découpée en « pas » de
+            30 secondes : <code>step = floor(unixTime / 30)</code>. Le chiffre 30 n’a rien de
+            magique : la RFC 6238 laisse chaque service accepter 15, 30 ou 60 secondes.
+          </li>
+          <li>
+            <strong>HMAC.</strong> Votre application calcule un haché HMAC (SHA-1 pour la
+            plupart des services, parfois SHA-256/512) sur la valeur du pas, avec le secret
+            comme clé. HMAC est une construction à sens unique : voir le résultat n’apprend
+            rien sur le secret.
+          </li>
+          <li>
+            <strong>Extraction des chiffres.</strong> Quatre octets du résultat HMAC sont
+            choisis à partir du dernier quartet, le bit de poids fort est effacé, et le reste
+            modulo 10<sup>n</sup> devient votre code — généralement <code>n</code> = 6, parfois
+            7 ou 8.
+          </li>
+          <li>
+            <strong>Fenêtre de vérification.</strong> Le serveur recalcule la même valeur pour
+            le pas en cours et le précédent (pour tolérer un léger décalage d’horloge). Si la
+            preuve correspond, la connexion est acceptée.
+          </li>
+        </ol>
+        <p>
+          Tout cela s’exécute en quelques microsecondes, entièrement sur votre appareil.
+          C’est pourquoi un outil côté client comme <a href="/fr/#generator">2FA COUNTER</a>
+          peut accomplir tout le travail en local — chargez la page, déconnectez-vous
+          d’Internet, et les codes continuent de défiler toutes les 30 secondes, pour toujours.
+        </p>
+
+        <h2 id="base32">Le secret et le code QR</h2>
+        <p>
+          La chaîne Base32 n’est pas un format intermédiaire quelconque : ce sont les octets
+          bruts du secret encodés dans un alphabet adapté au clavier (A à Z plus 2 à 7, qui
+          exclut volontairement 0 et 1, aisément confondus, et qui passe sur n’importe quel
+          clavier). Quand une plateforme propose « scanner impossible ? », la chaîne obtenue contient
+          <em>exactement les mêmes données privées</em> que le code QR. Vous pouvez conserver
+          l’une ou l’autre forme ; la sémantique est identique :
+        </p>
+        <pre><code>otpauth://totp/GitHub:you%40example.com?secret=JBSWY3DPEHPK3PXP&amp;issuer=GitHub
+otpauth://totp/Binance:me?secret=JBSWY3DPEHPK3PXP&amp;digits=6&amp;period=30&amp;algorithm=SHA1
+otpauth://hotp/Steam:sda?secret=...&amp;counter=5   ← variante à compteur (HOTP)</code></pre>
+        <p>
+          Un générateur moderne respecte chaque paramètre : nombre de chiffres, période,
+          algorithme de hachage et compteur HOTP — car un service qui exige SHA-256 rejetera
+          toujours un code SHA-1 par défaut. Une clé Base32 seule revient aux valeurs standard
+          6 chiffres, 30 s, SHA-1, celles qu’utilise la majorité des services.
+        </p>
+
+        <h2 id="sms">TOTP, SMS ou clés matérielles ?</h2>
+        <ul>
+          <li><strong>Les codes SMS</strong> transitent par le réseau télécom. Une attaque par SIM swap permet à un adversaire de détourner votre numéro et de recevoir tous les codes. Le SMS est déconseillé pour l’authentification dans les normes américaines (NIST SP 800-63B).</li>
+          <li><strong>Le TOTP</strong> ne transmet rien — le code est calculé localement et expire au bout de 30 secondes. Gratuit, fondé sur les standards, et accepté partout. Son maillon faible : il peut être hameçonné pendant sa fenêtre de validité.</li>
+          <li><strong>Les clés de sécurité et les passkeys</strong> (WebAuthn/FIDO2) sont liées cryptographiquement au domaine <em>exact</em>, si bien que les fausses pages imitations échouent automatiquement. L’option la plus solide ; moins répandue et coûte une clé.</li>
+        </ul>
+        <p>
+          La règle pratique : le SMS seulement en dernier recours, le TOTP par défaut, les
+          clés matérielles ou les passkeys pour les comptes qui comptent le plus.
+        </p>
+        <p>
+          Pour approfondir ces choix :{" "}
+          <a href="/totp-vs-passkeys/">TOTP ou passkeys — quel facteur pour quel usage</a>,{" "}
+          <a href="/sim-swap-attacks/">comment les attaques par SIM swap neutralisent les codes SMS</a> et{" "}
+          <a href="/authenticator-cloud-sync/">ce que la synchronisation cloud des applications fait à vos clés secrètes</a>.
+        </p>
+
+        <h2 id="limites">Ce que la 2FA ne règle pas</h2>
+        <p>
+          La double authentification résout <em>le vol de mot de passe</em>. Elle n’empêche pas
+          le vol du cookie de session (un logiciel malveillant déjà présent sur votre machine),
+          les extensions de navigateur aux permissions trop larges, une adresse e-mail de
+          récupération dont vous avez perdu le contrôle, ni l’ingénierie sociale où un attaquant
+          vous presse de lui lire un code tout frais pendant sa fenêtre de 30 secondes.
+          Maintenez vos navigateurs à jour, éliminez les extensions sans pitié, et traitez
+          toute demande urgente de code pour ce qu’elle est : un signal d’alarme.
+        </p>
+
+        <h2 id="jamais-bloque">Ne jamais se retrouver bloqué hors de son compte</h2>
+        <ol>
+          <li>
+            <strong>Enregistrez les codes de récupération.</strong> Dès que vous activez la
+            2FA, chaque service imprime un lot de codes de secours à usage unique. Imprimez-les
+            ou rangez-les, chiffrés et hors ligne.
+          </li>
+          <li>
+            <strong>Conservez le secret, pas seulement l’outil.</strong> La clé Base32 versée
+            dans le coffre de votre gestionnaire de mots de passe permet de régénérer les codes
+            avec n’importe quelle application — une app de téléphone, ou{" "}
+            <a href="/fr/#generator">le générateur du navigateur</a> — sur l’appareil dont
+            vous disposez ce jour-là.
+          </li>
+          <li>
+            <strong>Enrôlez deux appareils, pas un seul.</strong> Une même clé peut cohabiter
+            sans danger sur deux appareils de confiance. Le TOTP est déterministe : même
+            secret, mêmes codes.
+          </li>
+          <li>
+            <strong>Surveillez votre horloge.</strong> Si les codes échouent régulièrement,
+            corrigez d’abord la synchronisation de l’heure de l’appareil — c’est la cause la
+            plus courante des erreurs « code invalide », et aucun outil ne peut la contourner.
+          </li>
+        </ol>
+      </div>
+
+      <!-- FAQ, sur le même modèle que la page d'accueil -->
+      <h2 id="faq" class="mt-16 font-display text-[28px] leading-[1.2] tracking-normal text-ink">FAQ</h2>
+      <div class="mt-6 divide-y-2 divide-dashed divide-hairline-strong">
+        {
+          faqs.map(({ q, a }) => (
+            <details class="group px-1 py-1">
+              <summary class="flex cursor-pointer list-none items-center justify-between gap-4 py-4 text-left font-bold text-ink select-none marker:hidden">
+                {q}
+                <svg class="h-4 w-4 shrink-0 text-ink transition-transform group-open:rotate-45" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"></path>
+                </svg>
+              </summary>
+              <p class="pb-5 text-sm font-medium text-ink">{a}</p>
+            </details>
+          ))
+        }
+      </div>
+
+      <div class="cta-banner on-dark mt-12">
+        <h2 class="font-display text-2xl tracking-normal text-primary">Essayez maintenant</h2>
+        <p class="mt-2 max-w-2xl font-medium text-cream/80">
+          Collez une clé secrète dans le générateur et regardez un code 2FA en direct
+          s’afficher — utilisable hors ligne, sans compte, rien n’est jamais envoyé à un serveur.
+        </p>
+        <a href="/fr/#generator" class="btn-primary mt-5">Ouvrir le générateur</a>
+      </div>
+    </article>
+  </main>
+  <SiteFooter
+    columns={[
+      {
+        title: 'Produit',
+        links: [
+          { href: '/fr/#generator', label: 'Générateur en direct' },
+          { href: '/fr/how-to-get-2fa-code/', label: 'Obtenir un code 2FA' },
+          { href: '/fr/what-is-2fa/', label: 'Qu’est-ce que la 2FA ?' },
+          { href: '/fr/#features', label: 'Fonctionnalités' },
+          { href: '/fr/#compatibility', label: 'Compatibilité' },
+        ],
+      },
+      {
+        title: 'Apprendre',
+        links: [
+          { href: '/totp-vs-passkeys/', label: 'TOTP vs clés d’accès (passkeys)' },
+          { href: '/sim-swap-attacks/', label: 'Attaques par SIM swap' },
+          { href: '/authenticator-cloud-sync/', label: 'Synchronisation cloud des applications, comparée' },
+        ],
+      },
+      {
+        title: 'Guides',
+        links: [
+          { href: '/guides/', label: 'Tous les guides' },
+          { href: '/guides/google/', label: '2FA Google' },
+          { href: '/guides/microsoft/', label: '2FA Microsoft' },
+          { href: '/guides/discord/', label: '2FA Discord' },
+          { href: '/guides/github/', label: '2FA GitHub' },
+          { href: '/guides/steam/', label: '2FA Steam' },
+          { href: '/guides/binance/', label: '2FA Binance' },
+        ],
+      },
+      {
+        title: 'À propos',
+        links: [
+          { href: '/about/', label: 'À propos de nous' },
+          { href: '/methodology/', label: 'Méthodologie éditoriale' },
+          { href: '/contact/', label: 'Contact' },
+        ],
+      },
+      {
+        title: 'Mentions légales',
+        links: [
+          { href: '/privacy/', label: 'Politique de confidentialité' },
+          { href: '/terms/', label: 'Conditions d’utilisation' },
+          { href: '/disclaimer/', label: 'Avertissement' },
+          { href: '/contact/', label: 'Signaler un problème de sécurité' },
+        ],
+      },
+    ]}
+    tagline="Authentificateur 2FA zero-knowledge qui fonctionne entièrement dans votre navigateur, sur 2facounter.com. Sans compte, sans serveur, sans téléphone."
+    languagesTitle="Langues"
+  />
+</Layout>

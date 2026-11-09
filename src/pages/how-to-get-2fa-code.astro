@@ -5,6 +5,20 @@ import Layout from '../layouts/Layout.astro';
 import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 
+// hreflang alternates for the 8 translated versions of this article
+// (+ x-default → English). vi/zh variants are not published yet.
+const alternates = [
+  { hreflang: 'en', href: 'https://2facounter.com/how-to-get-2fa-code/' },
+  { hreflang: 'es', href: 'https://2facounter.com/es/how-to-get-2fa-code/' },
+  { hreflang: 'ja', href: 'https://2facounter.com/ja/how-to-get-2fa-code/' },
+  { hreflang: 'fr', href: 'https://2facounter.com/fr/how-to-get-2fa-code/' },
+  { hreflang: 'de', href: 'https://2facounter.com/de/how-to-get-2fa-code/' },
+  { hreflang: 'pt', href: 'https://2facounter.com/pt/how-to-get-2fa-code/' },
+  { hreflang: 'ko', href: 'https://2facounter.com/ko/how-to-get-2fa-code/' },
+  { hreflang: 'it', href: 'https://2facounter.com/it/how-to-get-2fa-code/' },
+  { hreflang: 'x-default', href: 'https://2facounter.com/how-to-get-2fa-code/' },
+];
+
 const title = 'How to Get a 2FA Code: Step-by-Step Guide (TOTP)';
 const description =
   'How to get a 2FA code in three steps: reveal your setup key, paste it into the online TOTP generator, and copy the live code — plus fixes for rejected codes.';
@@ -60,7 +74,7 @@ const jsonLd = [
 ];
 ---
 
-<Layout title={title} description={description} path="/how-to-get-2fa-code/" jsonLd={jsonLd}>
+<Layout title={title} description={description} path="/how-to-get-2fa-code/" jsonLd={jsonLd} alternates={alternates}>
   <SiteHeader />
   <main id="main">
     <article class="mx-auto max-w-[820px] px-4 py-20 sm:px-6 lg:py-24 xl:px-0">

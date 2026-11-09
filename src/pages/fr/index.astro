@@ -156,8 +156,10 @@ const services = [
 ];
 ---
 
-<Layout title={title} description={description} path="/fr/" lang="fr" jsonLd={jsonLd} alternates={homeAlternates}>
-  <SiteHeader
+
+  <Layout title={title} description={description} path="/fr/" lang="fr" jsonLd={jsonLd} alternates={homeAlternates} image="/og-fr.png">
+
+  
     links={[
       { href: '/fr/#how-it-works', label: 'Fonctionnement' },
       { href: '/fr/#features', label: 'Fonctionnalités' },
@@ -270,7 +272,7 @@ const services = [
             </p>
             <p class="mt-4 text-sm font-medium text-ink">
               Nouveau sur le sujet ? Lisez l’explication grand public :{" "}
-              <a href="/what-is-2fa/" class="link">Qu’est-ce que la 2FA ? Comment fonctionne le TOTP</a>
+              <a href="/fr/what-is-2fa/" class="link">Qu’est-ce que la 2FA ? Comment fonctionne le TOTP</a>
             </p>
             <a href="#generator" class="btn-primary mt-8">Essayer maintenant</a>
           </div>
@@ -409,7 +411,7 @@ const services = [
             compare les résultats. Comme le code tourne toutes les 30 secondes, un mot de passe
             volé ne suffit plus à ouvrir quoi que ce soit. Pour la visite guidée complète de la
             cryptographie, lisez l’explication grand public{" "}
-            <a href="/what-is-2fa/">Qu’est-ce que la 2FA ? Comment fonctionnent l’authentification à deux facteurs et le TOTP</a>,
+            <a href="/fr/what-is-2fa/">Qu’est-ce que la 2FA ? Comment fonctionnent l’authentification à deux facteurs et le TOTP</a>,
             puis revenez générer votre premier code.
           </p>
 
@@ -530,7 +532,7 @@ const services = [
         links: [
           { href: '/#generator', label: 'Générateur en direct' },
           { href: '/how-to-get-2fa-code/', label: 'Obtenir un code 2FA' },
-          { href: '/what-is-2fa/', label: 'Qu’est-ce que la 2FA ?' },
+          { href: '/fr/what-is-2fa/', label: 'Qu’est-ce que la 2FA ?' },
           { href: '/#features', label: 'Fonctionnalités' },
           { href: '/#compatibility', label: 'Compatibilité' },
         ],

@@ -1,0 +1,369 @@
+---
+/* 日本語 — 翻訳版記事 (hreflang: ja)。what-is-2fa.astro と並行構成。 */
+import Layout from '../../layouts/Layout.astro';
+import SiteHeader from '../../components/SiteHeader.astro';
+import SiteFooter from '../../components/SiteFooter.astro';
+
+const title = '2FAとは？二段階認証とTOTPコードの仕組み — 2FA COUNTER';
+const description =
+  '2FAとは？二段階認証・TOTP・ワンタイムパスワードの仕組み（RFC 6238 の暗号技術）の基本から、SMSより優れている理由、スマホを失ってもロックアウトされない方法まで、やさしく解説します。無料の2FAコードジェネレーター付き。';
+
+const faqs = [
+  {
+    q: '2FAとは何ですか？',
+    a: '2FA（二段階認証）とは、2種類の異なる証拠で「自分であること」を証明する仕組みです。知っているもの（パスワード）に加えて、持っているもの（30秒ごとに変わるコード、セキュリティキー、スマホ）を組み合わせます。パスワード単体は漏えいしたり推測されたりする恐れがありますが、第二の要素が加われば、漏えいしたパスワードだけではアカウントを開けられなくなります。',
+  },
+  {
+    q: '2FAがこれほど重要なのはなぜですか？',
+    a: 'パスワードが、絶えず同じ経路で破られてきたからです。数十億件の実在するパスワードが情報流出事件で公開済みであり、攻撃者はそれを使って昼夜を問わず他人のアカウントへのログインを試みます（クレデンシャルスタッフィング）。Microsoft の報告によれば、2FAは自動化されたアカウント乗っ取り攻撃の99.9%以上を防ぎます。現実に起こる脅威から、メール・銀行・SNS・ゲーム・暗号資産のアカウントを守れるのです。',
+  },
+  {
+    q: '2FAは何に使われていますか？',
+    a: 'ログインを狙われるあらゆる窓口を守ります。メールとクラウド（Google、Microsoft、Apple）、銀行・金融、暗号資産取引所（Binance、Coinbase、Kraken）、開発者向けプラットフォーム（GitHub、AWS）、ゲーム（Steam、Discord、Twitch）、SNS（X、Instagram）など。職場でも VPN、メール、管理コンソールに使われています。サービスに「認証アプリ」の選択肢がある限り、2FAが最適な手段です。',
+  },
+  {
+    q: '2FAの仕組みはどうなっていますか？',
+    a: 'パスワードの入力後、サービスは本人確認の第二の証明を求めてきます。最も一般的な方式（TOTP）では、認証アプリが共有シークレットと現在時刻から新しい6桁のコードを算出し（RFC 6238 標準）、サーバー側でもまったく同じ計算を行って結果を照合します。コードは30秒ごとに再生成され、二度と再利用できないため、パスワードだけを手にした攻撃者はログインできません。',
+  },
+  {
+    q: 'TOTPコードはどのように生成されますか？',
+    a: 'ウェブサイトがシークレットキーを発行します（通常はQRコードの形、または Base32 文字列の形）。認証アプリはそのシークレットを使い、現在の30秒単位の時間窗口に対して HMAC（SHA-1、まれに SHA-256／SHA-512）を計算し、その結果から6桁の数字を読み出します。ウェブサイト側でまったく同じ計算と比較が行われます。両者がすでにシークレットを共有しているため、ネットワーク通信は一切不要です。',
+  },
+  {
+    q: '2FAを導入するにはどうすればいいですか？',
+    a: '保護したいアカウントから始めます。設定を開き、「セキュリティ」や「ログインとセキュリティ」の中から「二段階認証」や「2段階認証（2ステップ認証）」の項目を探します。認証アプリの選択肢を選び、QRコードを読み取るか（または「スキャンできない場合」からセットアップキーを表示させて）、認証アプリに表示されたコードを入力して確定します。スマホなしでコードを取得する手順は、ステップバイステップの解説記事 /ja/how-to-get-2fa-code/ をご覧ください。',
+  },
+  {
+    q: '2FAを有効にするにはどうすればいいですか？',
+    a: '手順は4つです。1) サービスのアカウント設定またはセキュリティ設定を開き、「二段階認証」を選択する。2) 「認証アプリを使う」を選ぶ（可能なら SMS は避けましょう）。3) 認証アプリでQRコードを読み取るか、「スキャンできない場合」からセットアップキーを保存する。4) ライブコードを入力して完了したら、表示されるリカバリーコード（バックアップコード）をダウンロードまたは印刷します。Google、GitHub、Discord、Binance などのサービス別ガイドは /guides/ で公開しています。',
+  },
+  {
+    q: '2FAの強度はどのくらいですか？',
+    a: '第二の要素に何を使うかで決まります。SMSコードが最も弱く、SIMスワップ攻撃で電話番号を乗っ取られるとコードも横取りされます。TOTP認証コード（30秒ごとに切り替わるタイプ）は計算量的に強固で、オフラインの攻撃者には導出できず、ライブコードは数秒で失効します。ハードウェアセキュリティキーとパスキーが最強で、フィッシング耐性があり、本来のドメインに暗号的に紐付いています。',
+  },
+  {
+    q: '2FAは100%安全ですか？',
+    a: 'いいえ。100%安全なセキュリティ対策は存在せず、誠実な2FA解説はそう明言しています。2FAは盗まれたパスワードをほぼ無力化しますが、コードそのものは有効な30秒の間に偽サイトへ入力されればフィッシングに悪用され得ますし、端末で既に動いているマルウェアはセッションを盗めますし、SMSを第二要素にしていればSIMスワップは現実の脅威です。それでも、2FAを有効にすれば、パスワードだけのアカウントよりはるかに攻撃されにくくなります。',
+  },
+  {
+    q: '2FAは義務ですか？',
+    a: '法律で義務化しているわけではありませんが、強制にするサービスは増え続けています。GitHub は2023年以降コードの投稿者に必須としており、多くの銀行や暗号資産取引所は強制にしており、職場のログインで求められるのも一般的です。それ以外では任意ですが、強く推奨されます。実際には、最も価値のあるアカウント — まずメール — では2FAを必須として扱いましょう。受信箱を乗っ取られると、それ以外のすべてのパスワードをリセットされてしまいます。',
+  },
+  {
+    q: 'なぜ今はどこも2FAを使うのですか？',
+    a: 'パスワードだけの時代が失敗したからです。大規模な情報流出事件で数十億件の認証情報が晒され、クレデンシャルスタッフィング攻撃は自動化されてほぼ無償で行えるようになり、プラットフォーム側も乗っ取られたアカウントのコストを負担するようになりました。規制も後押ししています。米国 NIST の標準は SMS 認証を非推奨とし、EU の PSD2 は強力な顧客認証を義務付けています。数社の大手が2FAを普通にしてしまえば、他のサービスが続くのは自然の成り行きです。',
+  },
+  {
+    q: 'TOTP、HOTP、OTPの違いは何ですか？',
+    a: 'OTP は「ワンタイムパスワード（使い捨てのパスワード）」を指す総称です。TOTP（時間ベースのOTP、RFC 6238）は現在時刻からコードを算出するため、30秒ごとに変わります。HOTP（RFC 4226）はカウンタ方式で、コードを一度使うごとにカウンタが進みます。認証アプリを受け付けるサービス — Google、Microsoft、Discord、GitHub — はほぼすべて TOTP を使っています。',
+  },
+  {
+    q: 'TOTPは SMS の2FAよりなぜ優れているのですか？',
+    a: 'SMSコードは電話回線を通るため、傍受されたり SIM スワップ攻撃で盗まれたりする恐れがあり、配信自体が単純に失敗することもあります。TOTPコードは端末上で計算され、一切送信されず、数秒で失効します。NIST をはじめとするセキュリティ機関は、認証手段としての SMS を非推奨としています。',
+  },
+  {
+    q: 'TOTPコードはフィッシングサイトに盗まれますか？',
+    a: 'はい — 有効なコードを30秒の有効期間の間にフィッシングページへ入力してしまうと、攻撃者は一度分の有効なログインを手にします。だからこそ、フィッシング耐性のある要素（本来のドメインに暗号的に紐付くハードウェアセキュリティキーとパスキー）が、対応しているサービスでは最強の選択肢なのです。TOTPが上回っているのは SMS とパスワードであって、ハードウェアキーではありません。',
+  },
+  {
+    q: '2FAのシークレットキーはどこに保管すべきですか？',
+    a: '暗号化されたパスワードマネージャーの金庫に、マスターコピーとして保管しましょう。そうすれば、スマホが使えないときでも、信頼できるどの端末でもコードを再生成できます — 2facounter.com のようなブラウザツールを使ってでも。また、2FAを有効にしたときに各サービスが表示するリカバリーコード（バックアップコード）も必ず保存してください。それこそが本当のエアバッグです。',
+  },
+];
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: '2FAとは？二段階認証とTOTPの仕組み',
+    description,
+    url: 'https://2facounter.com/ja/what-is-2fa/',
+    datePublished: '2026-11-07',
+    dateModified: '2026-11-09',
+    author: { '@type': 'Organization', name: '2FA COUNTER', url: 'https://2facounter.com' },
+    publisher: {
+      '@type': 'Organization',
+      name: '2FA COUNTER',
+      url: 'https://2facounter.com',
+      logo: { '@type': 'ImageObject', url: 'https://2facounter.com/favicon-96x96.png' },
+    },
+    mainEntityOfPage: { '@type': 'WebPage', '@id': 'https://2facounter.com/ja/what-is-2fa/' },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map(({ q, a }) => ({
+      '@type': 'Question',
+      name: q,
+      acceptedAnswer: { '@type': 'Answer', text: a },
+    })),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: '2FA COUNTER', item: 'https://2facounter.com/ja/' },
+      { '@type': 'ListItem', position: 2, name: '2FAとは？', item: 'https://2facounter.com/ja/what-is-2fa/' },
+    ],
+  },
+];
+
+const alternates = [
+  { hreflang: 'en', href: 'https://2facounter.com/what-is-2fa/' },
+  { hreflang: 'es', href: 'https://2facounter.com/es/what-is-2fa/' },
+  { hreflang: 'ja', href: 'https://2facounter.com/ja/what-is-2fa/' },
+  { hreflang: 'fr', href: 'https://2facounter.com/fr/what-is-2fa/' },
+  { hreflang: 'de', href: 'https://2facounter.com/de/what-is-2fa/' },
+  { hreflang: 'pt', href: 'https://2facounter.com/pt/what-is-2fa/' },
+  { hreflang: 'ko', href: 'https://2facounter.com/ko/what-is-2fa/' },
+  { hreflang: 'it', href: 'https://2facounter.com/it/what-is-2fa/' },
+  { hreflang: 'x-default', href: 'https://2facounter.com/what-is-2fa/' },
+];
+---
+
+
+  <Layout title={title} description={description} path="/ja/what-is-2fa/" lang="ja" jsonLd={jsonLd} alternates={alternates} image="/og-ja.png">
+
+  
+    links={[
+      { href: '/ja/', label: '2FAコード生成' },
+      { href: '/ja/how-to-get-2fa-code/', label: 'コードの取得方法' },
+      { href: '/guides/', label: 'ガイド' },
+      { href: '/privacy/', label: 'プライバシー' },
+    ]}
+    cta="コードを生成"
+  />
+  <main id="main">
+    <article class="mx-auto max-w-[820px] px-4 py-16 sm:px-6 lg:py-24">
+      <p class="section-label">解説</p>
+      <h1 class="mt-3 font-display text-4xl tracking-normal text-ink sm:text-5xl">
+        2FAとは？30秒ごとに変わるあのコードは、いったいどう動いているのか？
+      </h1>
+      <p class="mt-5 max-w-2xl text-lg font-medium text-ink">
+        やさしい日本語による完全解説：二段階認証とは何か、6桁の TOTP コードの背後にある暗号技術、
+        どのアカウントにどの要素を設定すべきか、そして二段階認証で二度とロックアウトされないための方法。
+      </p>
+
+      <nav aria-label="このページの内容" class="mt-10 rounded-xl border-2 border-ink bg-cream p-6" style="box-shadow: var(--shadow-card)">
+        <p class="font-mono text-[13px] font-bold tracking-wide text-ink uppercase">このページの内容</p>
+        <ul class="mt-3 space-y-2 text-sm font-medium text-ink">
+          <li><a class="link" href="#problems">パスワードだけではなぜ失敗するのか</a></li>
+          <li><a class="link" href="#factors">3つの認証要素</a></li>
+          <li><a class="link" href="#totp">TOTPの仕組み、ステップバイステップ</a></li>
+          <li><a class="link" href="#base32">シークレットとQRコード</a></li>
+          <li><a class="link" href="#sms">TOTP vs. SMS vs. ハードウェアキー</a></li>
+          <li><a class="link" href="#limitations">2FAで解決できないこと</a></li>
+          <li><a class="link" href="#never-locked-out">二度とロックアウトされない方法</a></li>
+          <li><a class="link" href="#faq">FAQ</a></li>
+        </ul>
+      </nav>
+
+      <div class="rich-text mt-12">
+        <h2 id="problems">パスワードだけではなぜ失敗するのか</h2>
+        <p>
+          あらゆるログインはパスワードを必要とします。そしてパスワードには、3つの構造的な問題があります。使い回されること、
+          流出済みのデータベースを突かれて<em>推測</em>されること（クレデンシャルスタッフィング）、そしてフィッシングで
+          <em>騙し取られる</em>こと。二段階認証（2FA）は「人間が最も弱いリンク」という単純な真実を受け入れ、攻撃者が
+          同時に手にしなければならない第二の独立したものを追加します。2FAがあれば、漏えいしたパスワードだけでは
+          もうあなたのアカウントに入り込めません。
+        </p>
+        <p>
+          現在、大手サービスのほとんどは二段階認証を提供するか義務化しています。GitHub は2023年以降これを強制し、
+          暗号資産取引所（Binance、Coinbase、Kraken）は相場の急落のたびに有効化を促し、Microsoft、Google、Apple は
+          アカウントセキュリティの標準機能として組み込みました。
+        </p>
+
+        <h2 id="factors">3つの認証要素</h2>
+        <p>
+          認証要素は3つのカテゴリに分けられます。
+        </p>
+        <ul>
+          <li><strong>知っているもの</strong> — パスワード、PIN。導入が安価で、フィッシングされやすい。</li>
+          <li>
+            <strong>持っているもの</strong> — コードを生成する認証アプリ、ハードウェアセキュリティキーやパスキー、
+            SMSを受け取るスマホ。2FAの担い手はここです。
+          </li>
+          <li><strong>自分であること</strong> — 指紋、顔認証。便利ですが、端末上で登録するものであり、リモート認証の主役という位置づけではありません。</li>
+        </ul>
+        <p>
+          本当の二要素認証は、<em>異なるカテゴリ</em>の技術を組み合わせます。パスワード＋スマホのパターンロックは2FAでは
+          ありません。パスワード＋ローテーションする認証コードなら、2FAです。
+        </p>
+
+        <h2 id="totp">TOTPの仕組み、ステップバイステップ</h2>
+        <ol>
+          <li>
+            <strong>登録。</strong>サービスで2FAをオンにすると、ランダムなシークレットが生成され、<em>一度だけ</em>あなたと
+            共有されます — QRコードとして描画されるか、Base32 のセットアップキーとして表示される形で。セキュリティの観点では、
+            この一瞬がすべてのリスクを背負う場面です。だからこそ、鍵を表示させるのは信頼できる場所だけにすべきなのです。
+          </li>
+          <li>
+            <strong>時間が進む。</strong>現在時刻は30秒単位の「ステップ」に区切られます：
+            <code>step = floor(unixTime / 30)</code>。30秒に特別な意味はありません。RFC 6238 は15秒、30秒、60秒の
+            いずれも認めています。
+          </li>
+          <li>
+            <strong>HMAC。</strong>認証アプリは、シークレットを鍵として、ステップ値の上に HMAC ハッシュを計算します
+            （多くのサービスは SHA-1、まれに SHA-256／512）。HMAC は一方向の構成であり、結果を見てもシークレットに
+            ついて何も分かりません。
+          </li>
+          <li>
+            <strong>桁の取り出し。</strong>HMAC 出力の4バイトが末尾のニブルで選択され、最上位ビットをクリアした結果を
+            10<sup>n</sup> で割った余りがコードになります — 通常は <code>n</code> = 6、まれに7桁や8桁です。
+          </li>
+          <li>
+            <strong>検証の許容範囲。</strong>サーバーは現在と直前のステップで同じ値を再計算し（わずかな時計のずれを
+            許容するため）、一致した証拠はログインとして受理されます。
+          </li>
+        </ol>
+        <p>
+          これらすべてはマイクロ秒のうちに、完全に端末内で完了します。だからこそ、<a href="/ja/#generator">2FA COUNTER</a>
+          のようなクライアントサイドのツールがすべての処理をローカルで行えるのです — ページを読み込んでネットから切断しても、
+          コードは30秒ごとに、永遠に流れ出し続けます。
+        </p>
+
+        <h2 id="base32">シークレットとQRコード</h2>
+        <p>
+          Base32 文字列は、けして何かの中間形式ではありません。シークレットという生のバイト列を、スマホとの相性が良い
+          アルファベット（A–Z と 2–7。紛らわしい 0/1 を意図的に除外した、どのキーボードでも安全な文字だけ）で符号化したもの
+          です。プラットフォームが「スキャンできない場合」を提示するとき、表示される文字列には QR コードが符号化しているのと
+          <em>同じプライベートな情報</em>が入っています。どちらの形式を保存しても、意味はまったく同じです。
+        </p>
+        <pre><code>otpauth://totp/GitHub:you%40example.com?secret=JBSWY3DPEHPK3PXP&amp;issuer=GitHub
+otpauth://totp/Binance:me?secret=JBSWY3DPEHPK3PXP&amp;digits=6&amp;period=30&amp;algorithm=SHA1
+otpauth://hotp/Steam:sda?secret=...&amp;counter=5   ← カウンタ方式（HOTP）のバリアント</code></pre>
+        <p>
+          モダンなジェネレーターは、あらゆるパラメータを尊重します。桁数、周期、ハッシュアルゴリズム、HOTP カウンタ —
+          SHA-256 を指定するサービスは、デフォルトの SHA-1 で作られたコードを依然として拒否するからです。Base32 の鍵だけを
+          渡した場合のデフォルトは6桁・30秒・SHA-1で、大多数のサービスがこのデフォルトを使っています。
+        </p>
+
+        <h2 id="sms">TOTP vs. SMS vs. ハードウェアキー</h2>
+        <ul>
+          <li><strong>SMSコード</strong>は電話回線を横切ります。SIMスワップ攻撃を仕掛けられれば、攻撃者はあなたの電話番号を乗っ取り、すべてのコードを受け取れます。SMS は米国の標準（NIST SP 800-63B）では認証手段として非推奨です。</li>
+          <li><strong>TOTP</strong>は何も送信しません — コードはローカルで計算され、30秒で失効します。無料で、標準に基づき、あらゆる場所で対応しています。弱点は、有効期間中にフィッシングされ得ることです。</li>
+          <li><strong>セキュリティキーとパスキー</strong>（WebAuthn/FIDO2）は<em>正確な</em>ドメインに暗号的に紐付くため、偽の類似ページは自動的に失敗します。最強の選択肢ですが、対応範囲は限られ、キーを買うコストがかかります。</li>
+        </ul>
+        <p>
+          実践的な階梯：SMS はどうしても必要なときだけ、TOTP をデフォルトに、最も大事なアカウントには
+          ハードウェアキーかパスキーを。
+        </p>
+        <p>
+          トレードオフについては、専用記事で深掘りしています：{" "}
+          <a href="/totp-vs-passkeys/">TOTP vs. パスキー — どの要素をどこへ配置すべきか</a>、{" "}
+          <a href="/sim-swap-attacks/">SIMスワップ攻撃はどう SMS コードを破るのか</a>、そして{" "}
+          <a href="/authenticator-cloud-sync/">アプリのクラウド同期がシークレットキーに何をもたらすのか</a>。
+        </p>
+
+        <h2 id="limitations">2FAで解決できないこと</h2>
+        <p>
+          二段階認証が解決するのは<em>パスワードの盗難</em>です。セッションクッキーの盗難（あなたの端末で既に動いている
+          マルウェア）、過剰な権限を持つブラウザ拡張、管理を失ったリカバリー用メール、そして攻撃者が30秒の有効期間中に
+          新しいコードを読み上げさせるソーシャルエンジニアリングまでは防げません。ブラウザは常に最新に保ち、拡張機能は
+          容赦なく整理し、「コードを読み上げて」といった狼狽した要求は、疑似画面と同じく赤い旗として扱いましょう。
+        </p>
+
+        <h2 id="never-locked-out">二度とロックアウトされない方法</h2>
+        <ol>
+          <li>
+            <strong>リカバリーコードを保存する。</strong>すべてのサービスは、2FAを有効にしたときに一回限りのリカバリー
+            コード一式を表示します。印刷するか、暗号化してオフラインに保管しましょう。
+          </li>
+          <li>
+            <strong>ツールだけでなく、鍵を残す。</strong>Base32 の鍵をパスワードマネージャーの金庫に書き留めておけば、
+            どの認証アプリでも — スマホのアプリでも、<a href="/ja/#generator">ブラウザのジェネレーター</a>でも —
+            その日使える端末でコードを再生成できます。
+          </li>
+          <li>
+            <strong>端末は2台登録する。</strong>鍵は、信頼できる2台の端末に同時に置いて安全です。TOTP は決定論的です。
+            同じシークレットなら、同じコード。
+          </li>
+          <li>
+            <strong>時計を確認する。</strong>コードが繰り返し拒否されるなら、まず端末の時刻同期を直しましょう —
+            「コードが無効です」エラーの最有力原因であり、どんなツールにも回避策はありません。
+          </li>
+        </ol>
+      </div>
+
+      <!-- FAQ、ホームページと同じパターン -->
+      <h2 id="faq" class="mt-16 font-display text-[28px] leading-[1.2] tracking-normal text-ink">FAQ</h2>
+      <div class="mt-6 divide-y-2 divide-dashed divide-hairline-strong">
+        {
+          faqs.map(({ q, a }) => (
+            <details class="group px-1 py-1">
+              <summary class="flex cursor-pointer list-none items-center justify-between gap-4 py-4 text-left font-bold text-ink select-none marker:hidden">
+                {q}
+                <svg class="h-4 w-4 shrink-0 text-ink transition-transform group-open:rotate-45" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"></path>
+                </svg>
+              </summary>
+              <p class="pb-5 text-sm font-medium text-ink">{a}</p>
+            </details>
+          ))
+        }
+      </div>
+
+      <div class="cta-banner on-dark mt-12">
+        <h2 class="font-display text-2xl tracking-normal text-primary">さあ、使ってみましょう</h2>
+        <p class="mt-2 max-w-2xl font-medium text-cream/80">
+          秘密鍵をジェネレーターに貼り付けて、ライブの2FAコードが現れるのをご覧ください —
+          オフライン対応、アカウント不要、サーバーへ送信されるものは一切ありません。
+        </p>
+        <a href="/ja/#generator" class="btn-primary mt-5">ジェネレーターを開く</a>
+      </div>
+    </article>
+  </main>
+  <SiteFooter
+    columns={[
+      {
+        title: '製品',
+        links: [
+          { href: '/ja/#generator', label: 'ライブジェネレーター' },
+          { href: '/ja/how-to-get-2fa-code/', label: '2FAコードの取得方法' },
+          { href: '/ja/what-is-2fa/', label: '2FAとは？' },
+          { href: '/ja/#features', label: '機能' },
+          { href: '/ja/#compatibility', label: '互換性' },
+        ],
+      },
+      {
+        title: '読み物',
+        links: [
+          { href: '/totp-vs-passkeys/', label: 'TOTPとパスキーの違い' },
+          { href: '/sim-swap-attacks/', label: 'SIMスワップ攻撃' },
+          { href: '/authenticator-cloud-sync/', label: '認証アプリのクラウド同期を比較' },
+        ],
+      },
+      {
+        title: 'ガイド',
+        links: [
+          { href: '/guides/', label: 'すべてのガイド' },
+          { href: '/guides/google/', label: 'Google 2FA' },
+          { href: '/guides/microsoft/', label: 'Microsoft 2FA' },
+          { href: '/guides/discord/', label: 'Discord 2FA' },
+          { href: '/guides/github/', label: 'GitHub 2FA' },
+          { href: '/guides/steam/', label: 'Steam 2FA' },
+          { href: '/guides/binance/', label: 'Binance 2FA' },
+        ],
+      },
+      {
+        title: '運営',
+        links: [
+          { href: '/about/', label: '運営者情報' },
+          { href: '/methodology/', label: '編集方針' },
+          { href: '/contact/', label: 'お問い合わせ' },
+        ],
+      },
+      {
+        title: '法的事項',
+        links: [
+          { href: '/privacy/', label: 'プライバシーポリシー' },
+          { href: '/terms/', label: '利用規約' },
+          { href: '/disclaimer/', label: '免責事項' },
+          { href: '/contact/', label: 'セキュリティ問題の報告' },
+        ],
+      },
+    ]}
+    tagline="2facounter.com で動く、ブラウザ内だけで完結するゼロ知識の2FA認証アプリ。アカウント登録もサーバーもスマホも必要ありません。"
+    languagesTitle="言語"
+  />
+</Layout>
