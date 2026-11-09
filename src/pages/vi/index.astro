@@ -39,6 +39,38 @@ const faq = [
     a: 'Bật xác thực hai yếu tố trên dịch vụ bạn muốn bảo vệ và chọn tùy chọn “ứng dụng xác thực”. Nếu hiện mã QR, hãy tìm liên kết “không thể quét?” để hiện khóa thiết lập (chuỗi Base32 hoặc URI otpauth://). Dán khóa đó vào trình tạo phía trên — mã 2FA sẽ xuất hiện ngay và tự làm mới mỗi 30 giây.',
   },
   {
+    q: 'Cách bật 2FA?',
+    a: 'Bốn bước, khoảng hai phút: 1) Mở phần cài đặt tài khoản hoặc bảo mật và chọn “Xác thực hai yếu tố”. 2) Chọn “Dùng ứng dụng xác thực” (tránh SMS nếu có lựa chọn tốt hơn). 3) Quét mã QR bằng trình xác thực của bạn — hoặc hiện và giữ lại khóa thiết lập. 4) Nhập mã trực tiếp để hoàn tất, rồi tải hoặc in mã dự phòng. Chúng tôi có hướng dẫn riêng cho Google, GitHub, Discord, Binance và nhiều dịch vụ khác.',
+  },
+  {
+    q: '2FA hoạt động như thế nào?',
+    a: 'Sau mật khẩu, dịch vụ yêu cầu một bằng chứng thứ hai về danh tính. Với phương thức tiêu chuẩn TOTP (RFC 6238), trình xác thực của bạn tính một mã 6 chữ số từ khóa bí mật dùng chung cộng thời gian hiện tại, còn máy chủ chạy chính phép tính đó và so sánh kết quả. Mã được sinh mỗi 30 giây và vô hiệu ngay khi hết hạn — nên một mật khẩu bị lộ đơn lẻ không còn mở được tài khoản của bạn.',
+  },
+  {
+    q: '2FA dùng để làm gì?',
+    a: 'Nó bảo vệ mọi đăng nhập mà ai đó muốn chiếm: thư điện tử và bộ ứng dụng đám mây (Google, Microsoft, Apple), tài khoản ngân hàng và môi giới, sàn tiền mã hóa (Binance, Coinbase, Kraken), nền tảng lập trình (GitHub, AWS), trò chơi (Steam, Discord, Twitch) và mạng xã hội (X, Instagram). Doanh nghiệp dùng nó cho VPN, email và bảng điều khiển quản trị. Ở đâu có tùy chọn “ứng dụng xác thực”, đó chính là lối 2FA.',
+  },
+  {
+    q: '2FA có an toàn 100% không?',
+    a: 'Không — không biện pháp bảo mật nào có, và hướng dẫn trung thực phải nói vậy. 2FA chặn kẻ dùng mật khẩu đánh cắp được, nhưng một mã tươi gõ vào trang giả trong vòng 30 giây sống còn vẫn bị lừa lấy, phần mềm độc hại đã ở sẵn trên thiết bị có thể chiếm phiên đăng nhập, và mã SMS có thể rơi vào tay hacker SIM-swap. Dù vậy, một tài khoản có 2FA khó bị đột nhập hơn hẳn tài khoản không có.',
+  },
+  {
+    q: '2FA có bắt buộc không?',
+    a: 'Không chính phủ nào bắt buộc, nhưng các nền tảng đang lan rộng: GitHub yêu cầu với người đóng góp mã từ 2023, ngân hàng và sàn tiền mã hóa bật băng biên, còn nhà tuyển dụng thường áp cho đăng nhập công việc. Ở những nơi khác là tùy chọn nhưng được khuyến nghị mạnh. Hãy coi như bắt buộc đối với tài khoản giá trị nhất của bạn — email — vì ai kiểm soát hộp thư của bạn có thể đặt lại mọi thứ khác.',
+  },
+  {
+    q: 'Tại sao 2FA quan trọng đến vậy?',
+    a: 'Vì mật khẩu liên tục thất bại theo đúng một cách. Hàng tỷ mật khẩu thật đã công khai từ các vụ rò rỉ, và kẻ tấn công dùng chúng thử khắp mọi trang web ngày đêm (credential stuffing). Microsoft cho biết 2FA chặn hơn 99,9% các cuộc tấn công tự động nhằm chiếm tài khoản — đây là nâng cấp rẻ nhất bảo vệ email, ngân hàng, trò chơi và tiền mã hóa của bạn trước những mối đe dọa thực sự xảy ra.',
+  },
+  {
+    q: '2FA mạnh đến mức nào?',
+    a: 'Phụ thuộc hoàn toàn vào yếu tố thứ hai. Mã SMS yếu nhất, vì SIM-swap cho phép kẻ tấn công chiếm số điện thoại của bạn và nhận mã. Mã trình xác thực TOTP — loại 30 giây — mạnh về mặt tính toán: không có gì được truyền đi, kẻ tấn công ngoại tuyến không thể suy ra chúng, và mỗi mã hết hạn trong vài giây. Chìa khóa phần cứng và passkey mạnh nhất, vì chống lừa đảo và ràng buộc mật mã vào đúng tên miền thật.',
+  },
+  {
+    q: 'Tại sao mọi thứ đều dùng 2FA bây giờ?',
+    a: 'Vì kỷ nguyên chỉ-có-mật khẩu đã sụp đổ. Các vụ rò rỉ công nghiệp phơi hàng tỷ thông tin đăng nhập, credential stuffing tự động khiến việc chiếm đoạt tài khoản gần như miễn phí, và các nền tảng ngại gánh hậu quả. Cơ quan quản lý góp phần — NIST hạn chế SMS trong tiêu chuẩn ở Mỹ, còn PSD2 của EU yêu cầu xác thực khách hàng mạnh. Sau khi vài gã khổng lồ chuẩn hóa 2FA, mọi dịch vụ khác nối bước.',
+  },
+  {
     q: 'Tôi có cần điện thoại để dùng công cụ này không?',
     a: 'Không. Đây là công cụ 2FA chạy trên trình duyệt: hoạt động trên máy tính, laptop hoặc máy tính bảng có trình duyệt hiện đại, kể cả khi không có internet sau khi cài đặt. Công cụ thay thế ứng dụng trên điện thoại khi điện thoại bị mất, bán, hư hỏng hoặc hết pin.',
   },
@@ -47,12 +79,24 @@ const faq = [
     a: 'Có. Mọi phép tính diễn ra ngay trong trình duyệt của bạn bằng Web Crypto API. Khóa bí mật không bao giờ được gửi đến — hay được máy chủ nào nhìn thấy. Bạn có thể tải trang, ngắt kết nối mạng và trình tạo vẫn chạy bình thường.',
   },
   {
+    q: 'Có thể dùng ngoại tuyến không?',
+    a: 'Hoàn toàn được. Cài 2FA COUNTER như một ứng dụng (Add to Home Screen / Install) và nó chạy ngoại tuyến hoàn toàn như một trình xác thực thật. Mã được sinh từ khóa bí mật cộng đồng hồ thiết bị — không cần mạng.',
+  },
+  {
     q: 'Tại sao mã 2FA của tôi bị từ chối?',
     a: 'Hầu như luôn do lệch đồng hồ. Mã TOTP dựa trên thời gian, nên nếu đồng hồ thiết bị lệch nửa phút thì mã sẽ không hợp lệ. Hãy đồng bộ thời gian tự động (Windows “Sync now”, macOS “Set date & time automatically”) rồi thử lại. Trình tạo tính mã theo thời gian máy bạn báo — nó không có đồng hồ riêng để sửa.',
   },
   {
+    q: 'Nó khác Google Authenticator hay Authy thế nào?',
+    a: 'Chúng là ứng dụng trên điện thoại; đây là trình xác thực trên trình duyệt. Nó dùng đúng thuật toán TOTP RFC 6238 và chạy được với mọi dịch vụ chấp nhận ứng dụng xác thực chuẩn — nhưng bạn không mất quyền truy cập khi điện thoại hư, bị bán hay hết pin.',
+  },
+  {
     q: 'Khóa của tôi được lưu ở đâu?',
-    a: 'Chỉ trong trình duyệt của bạn. Khóa cuối cùng và danh sách “khóa gần đây” (tối đa 8) được giữ trong localStorage của thiết bị để trang chịu được khi làm mới — không bao giờ lưu trên máy chủ. Khóa lưu dạng văn bản thuần: ai mở được trình duyệt này đều đọc được, hãy coi hồ sơ trình duyệt như két mật khẩu. Nút “Xóa hết” xóa sạch chỉ với một cú bấm; giữ bản gốc trong trình quản lý mật khẩu.',
+    a: 'Chỉ trong trình duyệt của bạn. Khóa cuối cùng và danh sách “khóa gần đây” (tối đa 8) được giữ trong localStorage của thiết bị để trang chịu được khi làm mới — không bao giờ lưu trên máy chủ. Khóa lưu dạng văn bản thuần: ai mở được hồ sơ trình duyệt này đều đọc được, hãy coi hồ sơ như két mật khẩu. Nút “Xóa hết” phía trên danh sách — có bật xác nhận — bấm vào ô nhập hay xóa dữ liệu trình duyệt đều xóa sạch vĩnh viễn; giữ bản gốc trong trình quản lý mật khẩu như bản chính.',
+  },
+  {
+    q: 'Nó chạy được với HOTP, mã 8 chữ số hay dịch vụ SHA-256 không?',
+    a: 'Có. Dán đầy đủ URI otpauth:// mà dịch vụ cung cấp, mọi tham số mà nó mang sẽ được áp dụng tự động — 6, 7 hay 8 chữ số, chu kỳ 15/30/60 giây, băm SHA-1/SHA-256/SHA-512, và HOTP theo bộ đếm. Khóa Base32 đơn dùng mặc định chuẩn (6 chữ số, 30 giây, SHA-1) — điều gần như mọi dịch vụ đều dùng.',
   },
   {
     q: 'Công cụ này có thực sự miễn phí?',
@@ -369,6 +413,19 @@ const services = [
             <a href="/vi/what-is-2fa/">2FA là gì?</a> — hoặc quay lại và tạo mã đầu tiên của bạn.
           </p>
 
+          <h3>Cách lấy mã trong ba bước</h3>
+          <p>
+            Bất cứ khi nào cần mã cho một lần đăng nhập, ba đầu vào là đủ. Thứ nhất, bật xác
+            thực hai yếu tố trên trang web và chọn “ứng dụng xác thực”; khi không quét được
+            mã QR, hãy hiện khóa thiết lập — một chuỗi Base32 hoặc liên kết otpauth:// hoàn
+            chỉnh. Thứ hai, dán khóa hoặc URI đó vào trình tạo ở đầu trang, kéo thả ảnh chụp
+            mã QR, hoặc dùng camera. Thứ ba, sao chép mã mới và hoàn tất đăng nhập. Trình tạo
+            áp dụng mọi tham số otpauth được cung cấp: mã 6, 7 hay 8 chữ số, chu kỳ
+            15/30/60 giây, băm SHA-1, SHA-256 hay SHA-512, và HOTP theo bộ đếm. Không gì được
+            tải lên và không gì được ghi lại — mã được tính trên thiết bị của bạn, và bạn có
+            thể tự kiểm chứng trong tab Network của trình duyệt.
+          </p>
+
           <h3>Trình xác thực không bao giờ cần điện thoại của bạn</h3>
           <p>
             Phần lớn người dùng đến đây vì điện thoại không còn bên họ — bán, hỏng, ngập nước,
@@ -415,6 +472,10 @@ const services = [
             <h2 id="faq-title" class="mt-3 font-display text-3xl tracking-normal text-ink sm:text-4xl lg:text-section-display">
               Câu hỏi được trả lời rõ ràng
             </h2>
+            <p class="mt-4 font-medium text-ink">
+              Vẫn còn băn khoăn? Mọi thứ công cụ này làm đều hiện rõ trong tab Network của
+              trình duyệt bạn: <span class="font-bold text-ink">không một yêu cầu nào</span> mang theo khóa của bạn.
+            </p>
           </div>
           <div class="divide-y-2 divide-dashed divide-hairline-strong">
             {faq.map(({ q, a }) => (

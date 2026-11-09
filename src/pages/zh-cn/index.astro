@@ -399,6 +399,17 @@ const services = [
             <a href="/zh-cn/what-is-2fa/">什么是 2FA？</a>，然后回来生成你的第一个验证码。
           </p>
 
+          <h3>三步拿到验证码</h3>
+          <p>
+            每次登录需要验证码时，三步就够。第一步，在网站上开启双重验证并选择“身份验证器应用”；
+            扫不了二维码时，点击显示设置密钥——一串 Base32 字符或完整的 otpauth:// 链接。
+            第二步，把密钥或链接粘贴到页面顶部的生成器里，拖入二维码截图，或者用摄像头扫描。
+            第三步，复制新的验证码并完成登录。生成器会遵循 otpauth 链接携带的每个参数：6、7 或
+            8 位数字，15/30/60 秒周期，SHA-1、SHA-256 或 SHA-512 哈希，以及基于计数器的 HOTP。
+            什么都不上传，什么都不记录——验证码在你的设备上计算，你可以在浏览器的 Network
+            标签页里亲自验证。
+          </p>
+
           <h3>从不需要你手机的验证器</h3>
           <p>
             大多数人来到这里，是因为手机离开了他们——卖了、摔了、进水了、被抹掉了，或者出门那天恰好没电——
@@ -440,6 +451,10 @@ const services = [
             <h2 id="faq-title" class="mt-3 font-display text-3xl tracking-normal text-ink sm:text-4xl lg:text-section-display">
               问题，直白作答
             </h2>
+            <p class="mt-4 font-medium text-ink">
+              还有疑问？这个工具做的每件事都在你浏览器的 DevTools Network 标签页里看得见：
+              <span class="font-bold text-ink">零请求</span>携带你的密钥。
+            </p>
           </div>
           <div class="divide-y-2 divide-dashed divide-hairline-strong">
             {faq.map(({ q, a }) => (

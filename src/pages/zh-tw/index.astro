@@ -399,6 +399,17 @@ const services = [
             <a href="/zh-tw/what-is-2fa/">什麼是 2FA？</a>，然後回來產生你的第一組驗證碼。
           </p>
 
+          <h3>三步驟拿到驗證碼</h3>
+          <p>
+            每次登入需要驗證碼時，三步驟就夠。第一步，在網站上開啟兩步驟驗證並選擇「驗證器應用程式」；
+            掃不了 QR 碼時，點擊顯示設定密鑰——一串 Base32 字元或完整的 otpauth:// 連結。
+            第二步，把密鑰或連結貼到頁面頂部的產生器裡，拖入 QR 碼截圖，或用相機掃描。
+            第三步，複製新的驗證碼並完成登入。產生器會遵循 otpauth 連結攜帶的每個參數：6、7 或
+            8 位數字，15/30/60 秒週期，SHA-1、SHA-256 或 SHA-512 雜湊，以及基於計數器的 HOTP。
+            什麼都不上傳，什麼都不記錄——驗證碼在你的裝置上運算，你可以在瀏覽器的 Network
+            分頁裡親自驗證。
+          </p>
+
           <h3>從不需要你手機的驗證器</h3>
           <p>
             大多數人來到這裡，是因為手機離開了他們——賣了、摔了、進水了、被清除了，或者出門那天剛好沒電——
@@ -440,6 +451,10 @@ const services = [
             <h2 id="faq-title" class="mt-3 font-display text-3xl tracking-normal text-ink sm:text-4xl lg:text-section-display">
               問題，直白作答
             </h2>
+            <p class="mt-4 font-medium text-ink">
+              還有疑問？這個工具做的每一件事都會顯示在你瀏覽器的 DevTools Network 分頁裡：
+              <span class="font-bold text-ink">零請求</span>攜帶你的密鑰。
+            </p>
           </div>
           <div class="divide-y-2 divide-dashed divide-hairline-strong">
             {faq.map(({ q, a }) => (
