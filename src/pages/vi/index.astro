@@ -92,7 +92,7 @@ const faq = [
   },
   {
     q: 'Khóa của tôi được lưu ở đâu?',
-    a: 'Chỉ trong trình duyệt của bạn. Khóa cuối cùng và danh sách “khóa gần đây” (tối đa 8) được giữ trong localStorage của thiết bị để trang chịu được khi làm mới — không bao giờ lưu trên máy chủ. Khóa lưu dạng văn bản thuần: ai mở được hồ sơ trình duyệt này đều đọc được, hãy coi hồ sơ như két mật khẩu. Nút “Xóa hết” phía trên danh sách — có bật xác nhận — bấm vào ô nhập hay xóa dữ liệu trình duyệt đều xóa sạch vĩnh viễn; giữ bản gốc trong trình quản lý mật khẩu như bản chính.',
+    a: 'Không lưu ở đâu cả. Khóa của bạn chỉ tồn tại trong ô nhập trong khi trang còn mở — không bao giờ được ghi vào localStorage, cookie hay bất kỳ bộ nhớ lưu trữ nào khác của trình duyệt, và cũng không rời khỏi thiết bị (không có máy chủ nào để gửi đến). Làm mới hay đóng trang đều xóa sạch khóa, mã và danh sách khóa gần đây, nên lần truy cập nào cũng bắt đầu bằng một ô nhập trống và riêng tư. Giữ bản gốc của khóa trong trình quản lý mật khẩu; cần mã thì dán khóa vào.',
   },
   {
     q: 'Nó chạy được với HOTP, mã 8 chữ số hay dịch vụ SHA-256 không?',
@@ -159,8 +159,8 @@ const features = [
     body: 'Khóa đơn dùng mặc định chuẩn; URI otpauth:// đầy đủ áp dụng mọi tham số: 6/7/8 chữ số, chu kỳ 15/30/60 giây, SHA-1/256/512, kể cả HOTP theo bộ đếm.',
   },
   {
-    title: 'Chịu được làm mới trang — và chuyển đổi nhanh',
-    body: 'Mở lại trang, khóa cuối cùng đã sẵn sàng. Danh sách khóa gần đây cho bạn đổi qua đổi lại chỉ bằng một cú nhấp — khôi phục từ localStorage của thiết bị.',
+    title: 'Chỉ nằm trong bộ nhớ — không lưu gì cả',
+    body: 'Khóa của bạn không chạm vào bộ nhớ lưu trữ nào: không localStorage, không cookie, không cache trên máy. Danh sách khóa gần đây giúp đổi khóa nhanh trong cùng một lần truy cập, nhưng làm mới trang hay đóng tab sẽ xóa sạch mọi thứ — mỗi lần truy cập đều bắt đầu bằng ô nhập trống.',
   },
   {
     title: 'Không cài đặt, không đăng ký',
@@ -451,7 +451,7 @@ const services = [
           <p>
             Không máy chủ để gửi khóa, không tài khoản, không gói cao cấp, không telemetry. Mã
             đều được tính cục bộ bằng Web Crypto API; khóa cuối cùng và danh sách khóa gần đây
-            nằm trong bộ lưu trữ của trình duyệt bạn, xóa sạch chỉ bằng một cú bấm “Xóa hết”.
+            chỉ nằm trong bộ nhớ của trang đang mở, và biến mất khi làm mới hay đóng trang.
             Luôn giữ bản gốc của mọi khóa trong trình quản lý mật khẩu mã hóa, và coi bất kỳ yêu
             cầu gấp gáp nào về mã mới là dấu hiệu lừa đảo.
           </p>

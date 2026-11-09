@@ -69,7 +69,7 @@ const faq = [
   },
   {
     q: 'Onde ficam armazenadas as minhas chaves?',
-    a: 'Somente no seu próprio navegador. A última chave e uma curta lista de “chaves recentes” (até 8) ficam no armazenamento local deste dispositivo, para que o gerador sobreviva a uma atualização da página e você possa alternar entre as chaves com um clique — nunca em nossos servidores, até porque não existe nenhum. As chaves são guardadas como texto puro, então quem conseguir abrir este perfil do navegador pode lê-las — trate o perfil como o cofre de um gerenciador de senhas. O botão “Limpar tudo” acima da lista (pede confirmação), limpar o campo ou apagar os dados do navegador as remove de vez; mantenha o segredo original no gerenciador de senhas como cópia mestre.',
+    a: 'Em nenhum lugar. Sua chave existe apenas no campo de entrada enquanto a página está aberta — nunca é gravada em localStorage, cookies ou qualquer outro armazenamento do navegador, e nunca sai do seu dispositivo (não há servidores para enviá-la). Recarregar ou fechar a página apaga chave, código e a lista de chaves recentes — cada visita começa com um campo limpo e privado. Guarde o segredo original no seu gerenciador de senhas e cole-o quando precisar de um código.',
   },
   {
     q: 'Funciona com HOTP, códigos de 8 dígitos ou serviços SHA-256?',
@@ -153,7 +153,7 @@ const features = [
   { title: 'Um campo, um token ao vivo', body: 'Cole uma chave secreta ou o link otpauth:// completo e o código correspondente começa a contagem regressiva imediatamente — sem configuração, sem formulários, sem cerimônia de “adicionar conta”.', v: 'cream' },
   { title: 'Cole uma captura de tela, receba a chave', body: 'Ctrl+V com uma imagem do QR Code, arraste um arquivo de imagem ou escaneie com a webcam. Três formas de importar, zero formas de a sua chave vazar.', v: 'cream' },
   { title: 'Suporte completo a parâmetros, detectado automaticamente', body: 'Uma chave pura usa os padrões da norma; um URI otpauth:// completo respeita cada parâmetro que trouxer — 6/7/8 dígitos, período de 15/30/60 s, SHA-1/256/512, e até HOTP com contador.', v: 'cream' },
-  { title: 'Sobrevive à atualização — e permite alternar', body: 'Reabra a página e a última chave já estará lá. A lista de chaves recentes permite saltar entre as suas chaves com um clique — restaurada apenas do armazenamento local deste dispositivo, nunca de servidor algum.', v: 'cream' },
+  { title: 'Só na memória — nada é salvo', body: 'Sua chave nunca toca nenhum armazenamento persistente: sem localStorage, sem cookies, sem cache do dispositivo. A lista de chaves recentes agiliza a troca dentro de uma visita, mas recarregar ou fechar a aba apaga tudo — cada visita começa em branco.', v: 'cream' },
   { title: 'Nada a instalar, nada a cadastrar', body: 'Sem aplicativo no telefone, sem conta, sem taxas de sincronização, sem rastreamento. Se você consegue abrir um navegador, consegue gerar um código.', v: 'cream' },
   { title: 'Offline e instalável', body: 'Funciona com a aba isolada do mundo — literalmente. E, como PWA, instala-se no dock ou na tela inicial como um aplicativo nativo.', v: 'dark' },
 ];
@@ -468,8 +468,9 @@ const services = [
             Esta é uma das pouquíssimas ferramentas de 2FA que não têm nada a esconder, porque não
             há nada que possa ser escondido. Não existem servidores para onde enviar chaves, contas
             a criar, plano premium ou telemetria. Cada código é calculado localmente com a Web
-            Crypto API; a última chave e uma curta lista de chaves recentes vivem apenas no
-            armazenamento do seu navegador e são removidas com um clique em “Limpar tudo”. Mantenha
+            Crypto API; sua chave existe apenas no campo de entrada enquanto a página está aberta —
+            nada é gravado no navegador, e recarregar ou fechar a aba apaga a lista de chaves
+            recentes junto com ela. Mantenha
             a cópia mestra de cada segredo em um gerenciador de senhas criptografado, salve também
             os códigos de recuperação de cada serviço e trate qualquer pedido urgente de um código
             novo como o sinal de alerta que ele é.

@@ -69,7 +69,7 @@ const faq = [
   },
   {
     q: 'Wo werden meine Schlüssel gespeichert?',
-    a: 'Nur in Ihrem eigenen Browser. Ihr letzter Schlüssel plus eine kurze „Letzte Schlüssel“-Liste (bis zu 8) liegen im lokalen Speicher dieses Geräts, damit der Generator einen Reload überlebt und Sie mit einem Klick zwischen Ihren Schlüsseln wechseln können — nie auf unseren Servern, weil es keine gibt. Die Schlüssel liegen als Klartext vor; wer dieses Browserprofil öffnen kann, kann sie also lesen — behandeln Sie das Profil wie einen Passwort-Manager-Tresor. „Alle löschen“ über der Liste (fragt nach Bestätigung), das Leeren des Feldes oder das Zurücksetzen Ihrer Browserdaten entfernt sie endgültig; bewahren Sie das Original in Ihrem Passwort-Manager als Hauptkopie auf.',
+    a: 'Nirgendwo. Ihr Schlüssel existiert nur im Eingabefeld, solange die Seite geöffnet ist — er wird nie in localStorage, Cookies oder sonstige Browser-Speicher geschrieben und verlässt Ihr Gerät nie (es gibt keine Server, an die man ihn senden könnte). Beim Neuladen oder Schließen der Seite verschwinden Schlüssel, Code und die Liste der letzten Schlüssel — jeder Besuch startet mit einem leeren, privaten Feld. Verwahren Sie das Original in Ihrem Passwort-Manager und fügen Sie es bei Bedarf erneut ein.',
   },
   {
     q: 'Funktioniert es mit HOTP, 8-stelligen Codes oder SHA-256-Diensten?',
@@ -153,7 +153,7 @@ const features = [
   { title: 'Ein Feld, ein Live-Token', body: 'Geheimschlüssel oder den ganzen otpauth://-Link einfügen, und der passende Code beginnt sofort herunterzuzählen — keine Einrichtung, keine Formulare, keine „Konto hinzufügen“-Zeremonie.', v: 'cream' },
   { title: 'Screenshot einfügen, Schlüssel erhalten', body: 'QR-Code-Bild mit Strg+V einfügen, eine Bilddatei hineinziehen oder mit der Webcam scannen. Drei Wege zum Importieren, kein Weg, über den Ihr Schlüssel entweichen kann.', v: 'cream' },
   { title: 'Vollständige Parameterunterstützung, automatisch erkannt', body: 'Ein nackter Schlüssel nutzt die Standardwerte; eine vollständige otpauth://-URI berücksichtigt jeden übergebenen Parameter — 6/7/8 Ziffern, 15/30/60 s Periode, SHA-1/256/512, sogar zählerbasiertes HOTP.', v: 'cream' },
-  { title: 'Überlebt einen Reload — und wechselt mit', body: 'Seite neu geöffnet, und Ihr letzter Schlüssel ist schon da. Über die Liste „Letzte Schlüssel“ springen Sie mit einem Klick zwischen Ihren Schlüsseln — nur aus dem lokalen Speicher dieses Geräts wiederhergestellt, nie von einem Server.', v: 'cream' },
+  { title: 'Nur im Speicher — nichts gespeichert', body: 'Ihr Schlüssel berührt keinen dauerhaften Speicher: kein localStorage, keine Cookies, kein Geräte-Cache. Die Liste der letzten Schlüssel erleichtert das Wechseln innerhalb eines Besuchs, aber ein Neuladen oder Schließen des Tabs löscht alles — jeder Besuch startet leer.', v: 'cream' },
   { title: 'Nichts zu installieren, nichts zu registrieren', body: 'Keine Handy-App, kein Konto, keine Sync-Gebühren, kein Tracking. Wer einen Browser öffnen kann, kann einen Code erzeugen.', v: 'cream' },
   { title: 'Offline & installierbar', body: 'Funktioniert, wenn die Verbindung zur Außenwelt getrennt ist — wortwörtlich. Und als PWA installiert es sich in Ihr Dock oder auf Ihren Startbildschirm wie eine native App.', v: 'dark' },
 ];
@@ -454,8 +454,8 @@ const services = [
             Dies ist eines der ganz wenigen 2FA-Werkzeuge ohne Versteck, weil es nichts gibt, das sich verstecken
             ließe. Es gibt keine Server, an die Schlüssel gesendet werden könnten, keine zu erstellenden Konten,
             keine Premium-Stufen, keine Telemetrie. Jeder Code wird lokal mit der Web Crypto API berechnet; Ihr
-            letzter Schlüssel und eine kurze „Letzte Schlüssel“-Liste liegen nur im Speicher Ihres eigenen Browsers und
-            lassen sich mit einem Klick auf „Alle löschen“ entfernen. Bewahren Sie die Hauptkopie jedes Geheimnisses
+            letzter Schlüssel und eine kurze „Letzte Schlüssel“-Liste existieren nur im Arbeitsspeicher Ihres Browsers —
+            ein Neuladen oder Schließen der Seite entfernt sie; „Alle löschen“ tut es auf Klick. Bewahren Sie die Hauptkopie jedes Geheimnisses
             in einem verschlüsselten Passwort-Manager auf, sichern Sie zusätzlich die Wiederherstellungscodes jedes
             Dienstes — und werten Sie jede drängende Aufforderung zu einem frischen Code als das Warnsignal, das
             sie ist.

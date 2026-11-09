@@ -93,7 +93,7 @@ const faq = [
   },
   {
     q: 'Où sont stockées mes clés ?',
-    a: 'Uniquement dans votre propre navigateur. Votre dernière clé et une courte liste de « clés récentes » (jusqu’à 8) sont conservées dans le stockage local de cet appareil, pour que le générateur survive à un rafraîchissement et que vous puissiez changer de clé en un clic — jamais sur nos serveurs, puisqu’il n’y en a pas. Les clés sont stockées en texte brut : quiconque peut ouvrir ce profil de navigateur peut les lire — traitez ce profil comme le coffre de votre gestionnaire de mots de passe. « Tout effacer » au-dessus de la liste — qui vous demande une confirmation —, vider le champ ou supprimer les données du navigateur les efface définitivement ; conservez le secret d’origine dans votre gestionnaire de mots de passe comme copie maîtresse.',
+    a: 'Nulle part. Votre clé n’existe que dans le champ de saisie tant que la page est ouverte — elle n’est jamais écrite dans le localStorage, les cookies ni aucun autre stockage du navigateur, et ne quitte jamais votre appareil (aucun serveur n’existe pour l’envoyer). Un rafraîchissement ou une fermeture de page efface la clé, le code et la liste des clés récentes : chaque visite commence sur un champ propre et privé. Gardez le secret d’origine dans votre gestionnaire de mots de passe et recollez-le chaque fois que vous avez besoin d’un code.',
   },
   {
     q: 'Fonctionne-t-il avec HOTP, les codes à 8 chiffres ou les services SHA-256 ?',
@@ -153,7 +153,7 @@ const features = [
   { title: 'Un seul champ, un seul code en direct', body: 'Collez une clé secrète ou le lien otpauth:// entier et le code correspondant commence aussitôt son compte à rebours — aucune configuration, aucun formulaire, aucun rituel d’« ajout de compte ».', v: 'cream' },
   { title: 'Collez une capture d’écran, obtenez la clé', body: 'Ctrl+V sur une image du code QR, déposez un fichier image, ou scannez avec votre webcam. Trois façons d’importer, zéro façon pour votre clé de fuiter.', v: 'cream' },
   { title: 'Tous les paramètres, détectés automatiquement', body: 'Une clé seule utilise les valeurs par défaut standard ; un URI otpauth:// complet respecte chaque paramètre qu’il contient — 6/7/8 chiffres, période 15/30/60 s, SHA-1/256/512, jusqu’au HOTP à compteur.', v: 'cream' },
-  { title: 'Survit à un rafraîchissement — et change de clé', body: 'Rouvrez la page : votre dernière clé est déjà là. La liste des clés récentes vous fait passer d’une clé à l’autre en un clic — restaurée depuis le stockage local de cet appareil, jamais depuis un serveur.', v: 'cream' },
+  { title: 'Uniquement en mémoire — rien n’est enregistré', body: 'Votre clé ne touche aucun stockage persistant : pas de localStorage, pas de cookies, pas de cache d’appareil. La liste des clés récentes accélère le changement de clé au sein d’une même visite, mais un rafraîchissement ou la fermeture de l’onglet efface tout — chaque visite commence à vide.', v: 'cream' },
   { title: 'Rien à installer, rien à créer', body: 'Pas d’application mobile, pas de compte, pas de frais de synchronisation, pas de pisteurs. Si vous pouvez ouvrir un navigateur, vous pouvez générer un code.', v: 'cream' },
   { title: 'Hors ligne et installable', body: 'Fonctionne avec l’onglet coupé du monde — au sens propre. Et en tant que PWA, il s’installe dans votre dock ou votre écran d’accueil comme une application native.', v: 'dark' },
 ];
@@ -472,8 +472,8 @@ const services = [
             C’est l’un des très rares outils 2FA qui n’a rien à cacher, parce qu’il n’y a rien qui
             puisse l’être. Aucun serveur pour recevoir les clés, aucun compte à créer, aucune offre
             premium, aucune télémétrie. Chaque code est calculé localement avec la Web Crypto API ;
-            votre dernière clé et une courte liste de clés récentes ne vivent que dans le stockage
-            de votre navigateur, et disparaissent d’un clic sur « Tout effacer ». Gardez la copie
+            votre dernière clé et une courte liste de clés récentes ne vivent que dans la mémoire
+            de la page ouverte, et disparaissent dès qu’elle est rafraîchie ou fermée. Gardez la copie
             maîtresse de chaque secret dans un gestionnaire de mots de passe chiffré, enregistrez
             aussi les codes de récupération de chaque service, et traitez toute demande urgente de
             code tout neuf comme le signal d’alarme qu’elle est.

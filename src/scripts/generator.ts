@@ -37,30 +37,40 @@ function fmt(tpl: string, vars: Record<string, string | number>): string {
   return tpl.replace(/\{(\w+)\}/g, (m, name) => (name in vars ? String(vars[name]) : m));
 }
 
-const LS_KEY = '2fac.key.v2';
+/* ── Key handling: in-memory only ─────────────────────────────
+   The secret key never touches persistent storage — no
+   localStorage, sessionStorage, cookies or IndexedDB. It lives in
+   the input field and the in-memory account object, so every page
+   refresh starts from a blank field (a deliberate privacy trade-
+   off: an accidental refresh can no longer leave a live secret on
+   a shared screen). Earlier versions cached the last key and a
+   recents list in localStorage ('2fac.key.v2' / '2fac.recent.v1');
+   those entries are never read again — wipeLegacyKeys() erases
+   them from device storage on every boot. */
 
-/* ── Storage: a deliberate trade-off ──────────────────────────
-   The last key and the "Recent keys" cache are saved UNENCRYPTED in
-   this browser's localStorage. Hashing or encrypting them would add
-   zero security — the key material has to be readable for the code
-   to compute, so any obfuscation would just move the secret into
-   the script. So instead:
-   - it never leaves the device: there is no server that could
-     receive it (a compromise would have to be on-page, visible to
-     DevTools, not a silent upload);
-   - the scope is one browser profile: whoever can open this profile
-     can read this cache — treat the profile like a vault;
-   - one armed click on "Clear all" removes both entries for good.
-   The wording is disclosed in the on-page privacy note and the FAQ
-   "Where are my keys stored?" answer on the home page. */
+/* Keys once written by the previous persistent versions — wiped at
+   boot, never read. */
+const LS_LEGACY_KEY = '2fac.key.v2';
+const LS_LEGACY_RECENT = '2fac.recent.v1';
 
-/* ── Recent keys: local cache of previously used keys ─────────
-   Stored only in this browser's localStorage (same privacy scope as
-   the last-key restore that already existed). One-click switching;
-   "Clear all" removes every trace. */
+/* ── Recent keys: session cache ───────────────────────────────
+   Keys entered during this page visit are kept in memory only so
+   the list and one-click switching still work — but the cache
+   evaporates on refresh or tab close, exactly like the input
+   field. Nothing reaches any persistent storage. */
 type RecentEntry = { key: string; label: string; ts: number };
-const LS_RECENT = '2fac.recent.v1';
 const RECENT_MAX = 8;
+
+/* Erase secrets saved by the earlier persistent versions. Read-only
+   access is never attempted — this is removal only. */
+function wipeLegacyKeys(): void {
+  try {
+    localStorage.removeItem(LS_LEGACY_KEY);
+    localStorage.removeItem(LS_LEGACY_RECENT);
+  } catch {
+    /* storage blocked — this version never writes anyway */
+  }
+}
 
 const $ = <T extends HTMLElement>(id: string): T => document.getElementById(id) as T;
 
@@ -108,21 +118,12 @@ function init() {
   buildBar(30);
   paintBar(0);
 
-  // Restore the recent-keys cache from this device (local storage only).
-  loadRecents();
+  // One-time cleanup: erase secrets cached by the older persistent builds.
+  wipeLegacyKeys();
+
+  // Recent keys are session-only — the list always starts empty.
   renderRecents();
   recentClearBtn?.addEventListener('click', () => armOrExecuteClear());
-
-  // Restore the last key from this device (kept in local storage only).
-  try {
-    const saved = localStorage.getItem(LS_KEY);
-    if (saved) {
-      keyInput.value = saved;
-      processInput(true);
-    }
-  } catch {
-    /* storage blocked (private browsing) — run without restore */
-  }
 
   // Paste the key from the clipboard
   pasteBtn.addEventListener('click', async () => {
@@ -130,7 +131,7 @@ function init() {
       const text = await navigator.clipboard.readText();
       if (!text.trim()) return toast(T.toastClipboardEmpty, false);
       keyInput.value = text;
-      processInput(true);
+      processInput();
     } catch {
       keyInput.focus();
       toast(T.toastClipboardBlocked, false);
@@ -141,13 +142,13 @@ function init() {
   keyInput.addEventListener('input', () => {
     if (!keyInput.value.trim()) invalidToastShown = false;
     if (processTimer) clearTimeout(processTimer);
-    processTimer = setTimeout(() => processInput(true, 'as-you-type'), 200);
+    processTimer = setTimeout(() => processInput('as-you-type'), 200);
   });
   keyInput.addEventListener('keydown', (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       invalidToastShown = false;
-      processInput(true, 'always');
+      processInput();
     }
   });
 
@@ -274,7 +275,7 @@ function init() {
 
 /* ── Key input handling ─────────────────────────────────────── */
 
-function processInput(persist = false, invalidToast: 'always' | 'as-you-type' = 'always') {
+function processInput(invalidToast: 'always' | 'as-you-type' = 'always') {
   // account still holds the previous state here — "editing a key that was
   // valid" is the case where a toast is informative.
   const hadValid = !!account;
@@ -297,13 +298,6 @@ function processInput(persist = false, invalidToast: 'always' | 'as-you-type' = 
     return;
   }
   invalidToastShown = false;
-  if (persist) {
-    try {
-      localStorage.setItem(LS_KEY, keyInput.value.trim());
-    } catch {
-      /* storage blocked (private browsing) — codes still work this session */
-    }
-  }
   setAccount({
     label: parsed.issuer || parsed.label || T.liveKey,
     secret: parsed.secret,
@@ -352,36 +346,9 @@ function secretOf(key: string): string | null {
   return parseKeyInput(key)?.secret ?? null;
 }
 
-function loadRecents(): void {
-  try {
-    const raw = localStorage.getItem(LS_RECENT);
-    const parsed: unknown = raw ? JSON.parse(raw) : [];
-    recents = Array.isArray(parsed)
-      ? (parsed as unknown[])
-          .filter(
-            (e): e is RecentEntry =>
-              typeof e === 'object' &&
-              e !== null &&
-              typeof (e as RecentEntry).key === 'string' &&
-              typeof (e as RecentEntry).label === 'string',
-          )
-          .slice(0, RECENT_MAX)
-      : [];
-  } catch {
-    recents = [];
-  }
-}
-
-function saveRecents(): void {
-  try {
-    localStorage.setItem(LS_RECENT, JSON.stringify(recents.slice(0, RECENT_MAX)));
-  } catch {
-    /* storage full/blocked — cache stays in memory for this session */
-  }
-}
-
 /* Called after every successful parse. Skips when the top entry is the
-   same secret, so re-rendering/churn never happens while typing. */
+   same secret, so re-rendering/churn never happens while typing. Memory
+   only — the cache dies with the page, so a refresh starts empty. */
 function rememberRecent(rawKey: string, parsed: ParsedKey): void {
   if (!rawKey) return;
   const entry: RecentEntry = { key: rawKey, label: describeKey(parsed), ts: Date.now() };
@@ -393,7 +360,6 @@ function rememberRecent(rawKey: string, parsed: ParsedKey): void {
     0,
     RECENT_MAX,
   );
-  saveRecents();
   renderRecents();
 }
 
@@ -428,7 +394,7 @@ function renderRecents(): void {
     open.append(nameEl, keyEl);
     open.addEventListener('click', () => {
       keyInput.value = entry.key;
-      processInput(true);
+      processInput();
       renderRecents();
     });
 
@@ -440,7 +406,6 @@ function renderRecents(): void {
     del.setAttribute('aria-label', fmt(T.removeKeyAria, { desc }));
     del.addEventListener('click', () => {
       recents = recents.filter((r) => r.key !== entry.key);
-      saveRecents();
       renderRecents();
     });
 
@@ -452,13 +417,6 @@ function renderRecents(): void {
 function clearAllRecents(): void {
   const wasEmpty = recents.length === 0;
   recents = [];
-  try {
-    localStorage.removeItem(LS_RECENT);
-    // "Clear all" means clear: drop the persisted last key too
-    localStorage.removeItem(LS_KEY);
-  } catch {
-    /* best-effort */
-  }
   renderRecents();
   if (!wasEmpty) {
     toast(T.toastRecentsCleared, true);
@@ -828,7 +786,7 @@ async function scanFile(file: File | Blob) {
         return;
       }
       keyInput.value = res.data;
-      processInput(true);
+      processInput();
       toast(T.toastQrImported, true);
     } else {
       toast(T.toastNoQr, false);
@@ -919,7 +877,7 @@ async function camLoop() {
         closeCamera();
         if (parsed) {
           keyInput.value = res.data;
-          processInput(true);
+          processInput();
           toast(T.toastQrImported, true);
         } else {
           toast(T.toastQrNotKey, false);

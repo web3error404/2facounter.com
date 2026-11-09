@@ -136,8 +136,9 @@ const jsonLd = [
             <strong>What happens to your secrets.</strong> Google Authenticator (since 2023, optional)
             uploads your secrets to your Google account cloud — encrypted in transit and at rest, but
             not end-to-end encrypted, meaning Google could technically read them. A browser generator
-            supports that model only if you paste the secret into cloud-synced browser storage — our
-            default is strictly local storage, with your vault as the master copy.
+            supports that model only if you paste the secret into cloud-synced browser storage — ours
+            never touches browser storage at all: keys live in the open page’s memory only, with your
+            vault as the master copy.
           </li>
           <li>
             <strong>Recovery story.</strong> Lose the phone with Google Authenticator and your recovery

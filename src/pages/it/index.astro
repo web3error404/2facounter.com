@@ -69,7 +69,7 @@ const faq = [
   },
   {
     q: 'Dove sono conservate le mie chiavi?',
-    a: 'Solo nel tuo browser. L’ultima chiave e una breve lista «Chiavi recenti» (fino a 8) restano nella memoria locale di questo dispositivo, così il generatore sopravvive a un aggiornamento della pagina e puoi cambiare chiave con un clic — mai sui nostri server, perché non esistono. Le chiavi sono salvate in testo semplice: chiunque possa aprire questo profilo del browser può leggerle — tratta il profilo come un caveau di un password manager. «Cancella tutto» sopra la lista — che chiede conferma — oppure svuotare il campo o azzerare i dati del browser le rimuove del tutto; conserva il segreto originale nel password manager come copia principale.',
+    a: 'Da nessuna parte. La tua chiave esiste solo nel campo di input finché la pagina è aperta — non viene mai scritta in localStorage, nei cookie né in qualsiasi altro storage del browser, e non lascia mai il tuo dispositivo (non ci sono server a cui inviarla). Un refresh o la chiusura della pagina cancella la chiave, il codice e la lista delle chiavi recenti: ogni visita riparte da un campo pulito e privato. Conserva il segreto originale nel password manager e incollalo ogni volta che ti serve un codice.',
   },
   {
     q: 'Funziona con HOTP, codici a 8 cifre o servizi SHA-256?',
@@ -153,7 +153,7 @@ const features = [
   { title: 'Un campo, un token live', body: 'Incolla una chiave segreta o l’intero link otpauth:// e il codice corrispondente inizia subito il conto alla rovescia — nessuna configurazione, nessun modulo, nessun rituale «aggiungi account».', v: 'cream' },
   { title: 'Incolla uno screenshot, ottieni la chiave', body: 'Ctrl+V un’immagine del codice QR, trascina un file immagine o scansiona con la webcam. Tre modi per importare, zero modi perché la tua chiave possa trapelare.', v: 'cream' },
   { title: 'Tutti i parametri, rilevati automaticamente', body: 'Una chiave da sola usa le impostazioni predefinite; un URI otpauth:// completo rispetta ogni parametro che contiene — 6/7/8 cifre, periodi di 15/30/60 secondi, SHA-1/256/512, perfino l’HOTP a contatore.', v: 'cream' },
-  { title: 'Sopravvive al refresh — e cambia chiave', body: 'Riapri la pagina e l’ultima chiave è già al suo posto. La lista delle chiavi recenti ti permette di passare da una chiave all’altra con un clic — ripristinata solo dalla memoria locale di questo dispositivo, mai da alcun server.', v: 'cream' },
+  { title: 'Solo in memoria — niente viene salvato', body: 'La tua chiave non tocca alcuno storage persistente: niente localStorage, niente cookie, niente cache del dispositivo. La lista delle chiavi recenti accelera il cambio di chiave durante una stessa visita, ma un refresh o la chiusura della scheda cancella tutto — ogni visita riparte da un campo vuoto.', v: 'cream' },
   { title: 'Niente da installare, niente registrazioni', body: 'Nessuna app per telefono, nessun account, nessun costo di sincronizzazione, nessun tracciamento. Se sai aprire un browser, puoi generare un codice.', v: 'cream' },
   { title: 'Offline e installabile', body: 'Funziona con la scheda chiusa al mondo — nel senso letterale della parola. E da PWA si installa nel dock o nella schermata Home come un’app nativa.', v: 'dark' },
 ];

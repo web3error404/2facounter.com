@@ -43,18 +43,18 @@ const jsonLd = [
         <p>
           <strong>Nothing.</strong> There are no accounts, no tracking cookies, no analytics, no
           form submissions, and no third-party tracking pixels. The site is statically generated
-          HTML plus JavaScript that runs locally in your browser. The one thing this site stores
-          on your device — the last key you used, in your browser’s local storage — is described
-          below under <a href="#local-storage">Local storage</a>, and cookies are covered under{" "}
-          <a href="#cookies">Cookies</a>.
+          HTML plus JavaScript that runs locally in your browser. The tool does not even write
+          your 2FA keys to browser storage — they live only in the open page’s memory, as
+          described below under <a href="#local-storage">Local storage</a>. Cookies are covered
+          under <a href="#cookies">Cookies</a>.
         </p>
 
         <h2 id="cookies">Cookies</h2>
         <p>
           2facounter.com does not set any cookies of its own, and nothing about your visit is
-          profiled or recorded by this site. The tool’s “remember my last key” behavior uses your
-          browser’s <code>localStorage</code> — a storage area that never leaves your device and
-          is not sent to us — rather than cookies. More on storage in the Local storage section
+          profiled or recorded by this site. The tool deliberately has no “remember my last
+          key” behavior — your keys exist only in the open page’s memory, never in
+          <code>localStorage</code> and never in cookies. More in the Local storage section
           below.
         </p>
 
@@ -103,7 +103,7 @@ const jsonLd = [
         <ul>
           <li>Your Base32 / <code>otpauth://</code> secret keys.</li>
           <li>Screenshots and images you drop in or paste for QR scanning.</li>
-          <li>Your saved key (the last one you entered, stored only in your browser’s local storage).</li>
+          <li>Anything you type into the generator — keys are held in the page’s memory only and are never written to browser storage.</li>
           <li>Generated TOTP codes and their timers.</li>
         </ul>
         <p>
@@ -120,10 +120,12 @@ const jsonLd = [
 
         <h2 id="local-storage">Local storage</h2>
         <p>
-          The most recent key you enter is kept in your browser’s <code>localStorage</code> under
-          the key <code>2fac.key.v2</code> so the generator restores it on a page refresh. That
-          data never leaves your device. Clearing the input field, clearing site data in your
-          browser, or using the generator in a private window means nothing is stored at all.
+          Nothing. The generator does not write your key, your codes, or your recent-keys list
+          to <code>localStorage</code>, <code>sessionStorage</code>, cookies, or IndexedDB —
+          they exist only in the open page’s memory, so refreshing or closing the page wipes
+          them all. Keys previously saved under <code>2fac.key.v2</code> and{" "}
+          <code>2fac.recent.v1</code> by older versions of the tool are erased from your
+          browser’s storage the next time you visit.
         </p>
         <p>
           There is no cloud sync and no export file: the tool intentionally has nothing to

@@ -1,7 +1,8 @@
-// Real-browser smoke test for http://localhost:4322/ (2facounter.com)
+// Real-browser smoke test (2facounter.com). Point BASE via E2E_BASE env var
+// if the preview server runs on another port.
 import { chromium } from 'playwright';
 
-const BASE = 'http://localhost:4322/';
+const BASE = process.env.E2E_BASE ?? 'http://localhost:4322/';
 const KEY1 = 'JBSWY3DPEHPK3PXPJBSW'; // valid base32, >16 chars
 const KEY2 = 'GAXG243EMR2XQZUBIKTY';
 
@@ -58,15 +59,36 @@ await page.waitForTimeout(500);
 const digitsAfterInvalid = await page.locator('#token-value .digit').allTextContents();
 check('invalid input clears code', digitsAfterInvalid.every((d) => d === '—'), digitsAfterInvalid.join(''));
 
-// 8. reload → last key restored from LS
+// 8. seed legacy storage entries, then reload → NOTHING may be restored,
+//    and the legacy 2fac.* localStorage entries must be wiped on boot
+await page.evaluate(() => {
+  localStorage.setItem('2fac.key.v2', 'LEAKEDSECRETKEY123456');
+  localStorage.setItem('2fac.recent.v1', '[{"key":"LEAKEDSECRETKEY123456","label":"legacy","ts":1}]');
+});
 await page.reload({ waitUntil: 'networkidle' });
 await page.waitForTimeout(800);
 const restoredKeys = await page.locator('#recent-keys > li').count();
-check('recent keys survive reload', restoredKeys >= 1, `rows=${restoredKeys}`);
+check('memory-only: recent keys do NOT survive reload', restoredKeys === 0, `rows=${restoredKeys}`);
 const restoredKey = await input.inputValue();
-check('last key restored into input', restoredKey !== '', restoredKey);
+check('memory-only: input empty after reload', restoredKey === '', restoredKey);
 const digitsReload = await page.locator('#token-value .digit').allTextContents();
-check('code generates after reload', digitsReload.filter((d) => /[0-9]/.test(d)).length === 6, digitsReload.join(''));
+check('memory-only: no code after reload', digitsReload.every((d) => d === '—'), digitsReload.join(''));
+const lsState = await page.evaluate(() => [
+  localStorage.getItem('2fac.key.v2'),
+  localStorage.getItem('2fac.recent.v1'),
+]);
+check('legacy localStorage entries wiped on boot', lsState[0] === null && lsState[1] === null, JSON.stringify(lsState));
+
+// 8b. re-enter key after reload → everything works again in this session
+await input.fill(KEY1);
+await page.waitForTimeout(600);
+const digitsFresh = await page.locator('#token-value .digit').allTextContents();
+check('code generates again after reload', digitsFresh.filter((d) => /[0-9]/.test(d)).length === 6, digitsFresh.join(''));
+const lsAfter = await page.evaluate(() => ({
+  key: localStorage.getItem('2fac.key.v2'),
+  recent: localStorage.getItem('2fac.recent.v1'),
+}));
+check('no key written to any localStorage slot', lsAfter.key === null && lsAfter.recent === null, JSON.stringify(lsAfter));
 
 // 9. clear all (two-step arm/confirm: first click arms, second click executes)
 const clearBtn = page.locator('#btn-recent-clear');

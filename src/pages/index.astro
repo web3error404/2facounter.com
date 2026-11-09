@@ -67,7 +67,7 @@ const faq = [
   },
   {
     q: 'Where are my keys stored?',
-    a: 'Only in your own browser. Your last key plus a short “Saved keys” list (up to 8) are kept in this device’s local storage so the generator survives a refresh and you can switch keys in one click — never on our servers, because there aren’t any. The keys are stored as plain text, so anyone who can open this browser profile can read them — treat the profile like a password-manager vault. The “Clear all” button above the list (it asks you to confirm), clearing the input field, or wiping your browser data removes them for good; keep the original secret in your password manager as the master copy.',
+    a: 'Nowhere. Your key lives only in the input field for as long as the page is open — it is never written to localStorage, cookies, or any other browser storage, and never leaves your device (there are no servers to send it to). Refreshing or closing the page wipes the key, the code, and the recent-keys list, so every visit starts with a clean, private field. Keep the original secret in your password manager; paste it in each time you need a code.',
   },
   {
     q: 'Does it work with HOTP, 8-digit codes, or SHA-256 services?',
@@ -151,7 +151,7 @@ const features = [
   { title: 'One field, one live token', body: 'Paste a secret key or the whole otpauth:// link and the matching code starts counting down immediately — no setup, no forms, no “add account” ceremony.', v: 'cream' },
   { title: 'Paste a screenshot, get a key', body: 'Ctrl+V an image of the QR code, drop an image file, or scan with your webcam. Three ways to import, zero ways for your key to leak.', v: 'cream' },
   { title: 'Full parameter support, auto-detected', body: 'A bare key uses the standard defaults; a full otpauth:// URI honors every parameter it carries — 6/7/8 digits, 15/30/60 s period, SHA-1/256/512, even counter-based HOTP.', v: 'cream' },
-  { title: 'Survives a refresh — and switches', body: 'Reopen the page and your last key is already there. The Recent-keys list lets you jump between your keys with one click — restored from this device’s local storage only, never from any server.', v: 'cream' },
+  { title: 'In-memory only — nothing saved', body: 'Your key never touches any persistent storage: no localStorage, no cookies, no device cache. The Recent-keys list speeds up switching within a visit, but a refresh or tab close wipes everything — every visit starts blank.', v: 'cream' },
   { title: 'Nothing to install or sign up for', body: 'No phone app, no account, no sync fees, no tracking. If you can open a browser, you can generate a code.', v: 'cream' },
   { title: 'Offline & installable', body: 'Works with the tab closed to the world — literally. And as a PWA it installs into your dock or home screen like a native app.', v: 'dark' },
 ];
@@ -456,8 +456,9 @@ const services = [
             This is one of the very few 2FA tools with nothing to hide, because there is nothing
             that could be hidden. There are no servers to send keys to, no accounts to create, no
             premium tier, no telemetry. Every code is computed locally with the Web Crypto API;
-            your last key and a short Recent-keys list live only in your own browser storage and
-            are removed with one click of “Clear all”. Keep the master copy of every secret in an
+            your key and a short Recent-keys list live only in the open page’s memory — never in
+            browser storage — and everything is wiped by a refresh or a tab close. Keep the master
+            copy of every secret in an
             encrypted password manager, save each service’s recovery codes as well, and treat any
             urgent request for a fresh code as the red flag that it is.
           </p>

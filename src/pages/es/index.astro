@@ -69,7 +69,7 @@ const faq = [
   },
   {
     q: '¿Dónde se guardan mis claves?',
-    a: 'Solo en tu navegador. Tu última clave y una breve lista de “claves recientes” (hasta 8) se guardan en el almacenamiento local de este dispositivo para que el generador sobreviva a una recarga y puedas cambiar de clave con un clic — nunca en nuestros servidores, porque no los hay. Las claves se guardan como texto plano: quien abra este perfil de navegador podrá leerlas, así que trata el perfil como la caja fuerte de un gestor de contraseñas. El botón “Borrar todo” encima de la lista (pide confirmación), vaciar el campo o limpiar los datos del navegador las elimina para siempre; conserva el secreto original en tu gestor de contraseñas como copia maestra.',
+    a: 'En ninguna parte. Tu clave existe solo en el campo de entrada mientras la página está abierta — nunca se escribe en localStorage, cookies ni ningún otro almacenamiento del navegador, y nunca sale de tu dispositivo (no hay servidores a los que enviarla). Al recargar o cerrar la página desaparecen la clave, el código y la lista de claves recientes — cada visita empieza con un campo limpio y privado. Guarda el original en tu gestor de contraseñas y pégalo cuando necesites un código.',
   },
   {
     q: '¿Funciona con HOTP, códigos de 8 dígitos o servicios SHA-256?',
@@ -153,7 +153,7 @@ const features = [
   { title: 'Un campo, un código en vivo', body: 'Pega una clave secreta o el enlace otpauth:// completo y el código 2FA online empieza a contar atrás de inmediato — sin configuración, sin formularios, sin el rito de “añadir cuenta”.', v: 'cream' },
   { title: 'Pega una captura, recibe una clave', body: 'Ctrl+V sobre la imagen del código QR, arrastra un archivo de imagen o escanea con la webcam. Tres formas de importar, cero formas de que tu clave se filtre.', v: 'cream' },
   { title: 'Todos los parámetros, detectados solos', body: 'Una clave a secas usa los valores estándar; un URI otpauth:// completo respeta cada parámetro que traiga — 6/7/8 dígitos, periodo de 15/30/60 s, SHA-1/256/512 e incluso HOTP por contador.', v: 'cream' },
-  { title: 'Sobrevive a una recarga — y cambia de clave', body: 'Vuelve a abrir la página y tu última clave ya está. La lista de claves recientes te deja saltar entre tus claves con un clic — restaurada solo del almacenamiento local de este dispositivo, nunca de un servidor.', v: 'cream' },
+  { title: 'Solo en memoria — nada se guarda', body: 'Tu clave no toca ningún almacenamiento persistente: ni localStorage, ni cookies, ni caché del dispositivo. La lista de claves recientes agiliza el cambio dentro de una visita, pero recargar o cerrar la pestaña borra todo — cada visita empieza en blanco.', v: 'cream' },
   { title: 'Nada que instalar ni registrarse', body: 'Sin app de móvil, sin cuenta, sin cuotas de sincronización, sin rastreo. Si puedes abrir un navegador, puedes generar tu código de verificación en dos pasos.', v: 'cream' },
   { title: 'Sin conexión e instalable', body: 'Funciona con la pestaña aislada del mundo — literalmente. Y como PWA se instala en tu dock o pantalla de inicio como una app nativa.', v: 'dark' },
 ];
@@ -468,8 +468,8 @@ const services = [
             Esta es una de las poquísimas herramientas 2FA sin nada que esconder, porque no hay
             nada que se pueda esconder. No hay servidores a los que enviar claves, ni cuentas que
             crear, ni nivel premium, ni telemetría. Cada código se calcula localmente con la Web
-            Crypto API; tu última clave y una breve lista de claves recientes viven solo en el
-            almacenamiento de tu propio navegador y se borran de un clic con “Borrar todo”. Guarda
+            Crypto API; tu última clave y una breve lista de claves recientes viven solo en la
+            memoria de tu navegador — al recargar o cerrar la página desaparecen, y “Borrar todo” las quita de un clic. Guarda
             la copia maestra de cada secreto en un gestor de contraseñas cifrado, guarda también
             los códigos de recuperación de cada servicio y considera cualquier petición urgente de
             un código fresco como la bandera roja que es.
