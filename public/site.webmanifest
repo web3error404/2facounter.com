@@ -1,6 +1,6 @@
 {
   "name": "2FA COUNTER",
-  "short_name": "2FA LIVE",
+  "short_name": "2FA Counter",
   "description": "A zero-knowledge 2FA authenticator that runs entirely in your browser. Paste a secret key, get a live TOTP/HOTP code — no phone, no app account, no servers.",
   "id": "/",
   "start_url": "/",
