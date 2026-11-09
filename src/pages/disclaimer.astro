@@ -6,9 +6,26 @@ import SiteFooter from '../components/SiteFooter.astro';
 const title = 'Disclaimer — 2FA COUNTER';
 const description =
   'Important disclaimers about 2FA COUNTER: what this tool should and should not be used for, and how to stay safe with your 2FA keys.';
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    name: title,
+    description,
+    url: 'https://2facounter.com/disclaimer/',
+    breadcrumb: {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: '2FA COUNTER', item: 'https://2facounter.com/' },
+        { '@type': 'ListItem', position: 2, name: 'Disclaimer', item: 'https://2facounter.com/disclaimer/' },
+      ],
+    },
+  },
+];
 ---
 
-<Layout title={title} description={description} path="/disclaimer/">
+<Layout title={title} description={description} path="/disclaimer/" jsonLd={jsonLd}>
   <SiteHeader />
   <main id="main">
     <div class="mx-auto max-w-[720px] px-4 py-20 sm:px-6 lg:py-24">

@@ -1,4 +1,4 @@
-﻿---
+---
 /* Tiếng Việt — homepage dịch (hreflang: vi). Cấu trúc song song với
    index.astro; văn bản đã được biên tập lại và rà lỗi dịch đợt 1 (2026-11-09). */
 import Layout from '../../layouts/Layout.astro';
@@ -22,7 +22,15 @@ const homeAlternates = [
   { hreflang: 'pt', href: 'https://2facounter.com/pt/' },
   { hreflang: 'ko', href: 'https://2facounter.com/ko/' },
   { hreflang: 'it', href: 'https://2facounter.com/it/' },
-  { hreflang: 'x-default', href: 'https://2facounter.com/' },
+  
+  { hreflang: 'hi', href: 'https://2facounter.com/hi/' },
+
+  { hreflang: 'ar', href: 'https://2facounter.com/ar/' },
+
+  { hreflang: 'bn', href: 'https://2facounter.com/bn/' },
+
+  { hreflang: 'ru', href: 'https://2facounter.com/ru/' },
+{ hreflang: 'x-default', href: 'https://2facounter.com/' },
 ];
 
 const faq = [
@@ -44,7 +52,7 @@ const faq = [
   },
   {
     q: 'Khóa của tôi được lưu ở đâu?',
-    a: 'Chỉ trong trình duyệt của bạn. Khóa cuối cùng và danh sách “khóa gần đây” (tối đa 8) được giữ trong localStorage của thiết bị để trang chịu được khi làm mới — không bao giờ lưu trên máy chủ. Khóa lưu dạng văn bản thuần: ai mở được trình duyệt này đều đọc được, hãy coi hồ sơ trình duyệt như két mật khẩu. Nút “Clear all” xóa sạch chỉ với một cú bấm; giữ bản gốc trong trình quản lý mật khẩu.',
+    a: 'Chỉ trong trình duyệt của bạn. Khóa cuối cùng và danh sách “khóa gần đây” (tối đa 8) được giữ trong localStorage của thiết bị để trang chịu được khi làm mới — không bao giờ lưu trên máy chủ. Khóa lưu dạng văn bản thuần: ai mở được trình duyệt này đều đọc được, hãy coi hồ sơ trình duyệt như két mật khẩu. Nút “Xóa hết” xóa sạch chỉ với một cú bấm; giữ bản gốc trong trình quản lý mật khẩu.',
   },
   {
     q: 'Công cụ này có thực sự miễn phí?',
@@ -61,6 +69,7 @@ const jsonLd = [
     description,
     applicationCategory: 'SecurityApplication',
     operatingSystem: 'Any (browser-based)',
+    inLanguage: ['en', 'vi', 'zh-CN', 'zh-TW', 'es', 'ja', 'fr', 'de', 'pt', 'ko', 'it', 'hi', 'ar', 'bn', 'ru'],
     offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
   },
   {
@@ -125,8 +134,8 @@ const services = [
 ];
 ---
 
-<Layout title={title} description={description} path="/vi/" lang="vi" jsonLd={jsonLd} alternates={homeAlternates}>
-  <SiteHeader
+<Layout title={title} description={description} path="/vi/" lang="vi" jsonLd={jsonLd} alternates={homeAlternates} image="/og-vi.png">
+  <SiteHeader locale="vi"
     links={[
       { href: '/vi/#how-it-works', label: 'Cách hoạt động' },
       { href: '/vi/#features', label: 'Tính năng' },
@@ -140,7 +149,7 @@ const services = [
   <main id="main">
     <section aria-label="Trình tạo mã 2FA trực tiếp">
       <div class="mx-auto max-w-[1200px] px-4 pt-10 pb-4 sm:px-6 sm:pt-16 xl:px-0">
-        <Generator />
+        <Generator locale="vi" />
       </div>
 
       <div class="mx-auto grid max-w-[1200px] items-center gap-12 px-4 pt-14 pb-12 sm:px-6 sm:pt-20 lg:grid-cols-[7fr_5fr] lg:pt-24 xl:px-0">
@@ -232,7 +241,7 @@ const services = [
             </p>
             <p class="mt-4 text-sm font-medium text-ink">
               Muốn biết chi tiết? Đọc bài giải thích:{" "}
-              <a href="/what-is-2fa/" class="link">What is 2FA? How TOTP works</a>
+              <a href="/vi/what-is-2fa/" class="link">2FA là gì? Mã TOTP hoạt động ra sao</a>
             </p>
             <a href="#generator" class="btn-primary mt-8">Thử ngay</a>
           </div>
@@ -357,7 +366,7 @@ const services = [
             thời gian hiện tại — tiêu chuẩn TOTP, RFC 6238 — trong khi trang web đăng nhập chạy
             cùng phép tính và so sánh kết quả. Vì mã xoay vòng mỗi 30 giây, một mật khẩu bị lộ
             đơn lẻ không còn mở được gì. Muốn hiểu toàn bộ phần mã hóa, đọc bài giải thích{" "}
-            <a href="/what-is-2fa/">What is 2FA?</a> — hoặc quay lại và tạo mã đầu tiên của bạn.
+            <a href="/vi/what-is-2fa/">2FA là gì?</a> — hoặc quay lại và tạo mã đầu tiên của bạn.
           </p>
 
           <h3>Trình xác thực không bao giờ cần điện thoại của bạn</h3>
@@ -377,7 +386,7 @@ const services = [
             dịch vụ có tùy chọn “dùng ứng dụng xác thực” đều nói cùng một giao thức, nên một
             công cụ phủ hết. Khi bị từ chối mã, nguyên nhân gần như luôn là đồng hồ thiết bị,
             không phải công cụ. Với các dịch vụ phổ biến, chúng tôi có{" "}
-            <a href="/how-to-get-2fa-code/">hướng dẫn từng bước lấy mã 2FA</a> và các{" "}
+            <a href="/vi/how-to-get-2fa-code/">hướng dẫn từng bước lấy mã 2FA</a> và các{" "}
             <a href="/guides/">hướng dẫn bật 2FA</a> theo từng dịch vụ.
           </p>
 
@@ -385,7 +394,7 @@ const services = [
           <p>
             Không máy chủ để gửi khóa, không tài khoản, không gói cao cấp, không telemetry. Mã
             đều được tính cục bộ bằng Web Crypto API; khóa cuối cùng và danh sách khóa gần đây
-            nằm trong bộ lưu trữ của trình duyệt bạn, xóa sạch chỉ bằng một cú bấm “Clear all”.
+            nằm trong bộ lưu trữ của trình duyệt bạn, xóa sạch chỉ bằng một cú bấm “Xóa hết”.
             Luôn giữ bản gốc của mọi khóa trong trình quản lý mật khẩu mã hóa, và coi bất kỳ yêu
             cầu gấp gáp nào về mã mới là dấu hiệu lừa đảo.
           </p>
@@ -445,7 +454,7 @@ const services = [
         links: [
           { href: '/#generator', label: 'Trình tạo mã trực tiếp' },
           { href: '/vi/#features', label: 'Tính năng' },
-          { href: '/what-is-2fa/', label: '2FA là gì?' },
+          { href: '/vi/what-is-2fa/', label: '2FA là gì?' },
           { href: '/vi/#compatibility', label: 'Tương thích' },
         ],
       },

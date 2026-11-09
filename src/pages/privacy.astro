@@ -6,9 +6,26 @@ import SiteFooter from '../components/SiteFooter.astro';
 const title = 'Privacy Policy — 2FA COUNTER';
 const description =
   '2FA COUNTER (2facounter.com) privacy policy: no accounts, no tracking, no telemetry. Your 2FA secret keys are processed exclusively in your browser.';
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    name: title,
+    description,
+    url: 'https://2facounter.com/privacy/',
+    breadcrumb: {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: '2FA COUNTER', item: 'https://2facounter.com/' },
+        { '@type': 'ListItem', position: 2, name: 'Privacy policy', item: 'https://2facounter.com/privacy/' },
+      ],
+    },
+  },
+];
 ---
 
-<Layout title={title} description={description} path="/privacy/">
+<Layout title={title} description={description} path="/privacy/" jsonLd={jsonLd}>
   <SiteHeader />
   <main id="main">
     <div class="mx-auto max-w-[720px] px-4 py-20 sm:px-6 lg:py-24">

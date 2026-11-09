@@ -6,9 +6,9 @@ import SiteHeader from '../../components/SiteHeader.astro';
 import SiteFooter from '../../components/SiteFooter.astro';
 import Generator from '../../components/Generator.astro';
 
-const title = 'Générateur de code 2FA en ligne — authentificateur 2FA gratuit (TOTP)';
+const title = 'Générateur de code 2FA en ligne — authentificateur gratuit (TOTP)';
 const description =
-  'Générez votre code 2FA en ligne instantanément. Application d’authentification gratuite dans votre navigateur : collez votre clé secrète et recevez un code TOTP en direct qui se renouvelle toutes les 30 secondes. Sans inscription, sans téléphone.';
+  'Générez votre code 2FA en ligne instantanément. Application d’authentification gratuite dans votre navigateur : collez votre clé secrète et recevez un code…';
 
 // Ensemble hreflang des pages d'accueil traduites (+ x-default → anglais)
 const homeAlternates = [
@@ -23,7 +23,15 @@ const homeAlternates = [
   { hreflang: 'pt', href: 'https://2facounter.com/pt/' },
   { hreflang: 'ko', href: 'https://2facounter.com/ko/' },
   { hreflang: 'it', href: 'https://2facounter.com/it/' },
-  { hreflang: 'x-default', href: 'https://2facounter.com/' },
+  
+  { hreflang: 'hi', href: 'https://2facounter.com/hi/' },
+
+  { hreflang: 'ar', href: 'https://2facounter.com/ar/' },
+
+  { hreflang: 'bn', href: 'https://2facounter.com/bn/' },
+
+  { hreflang: 'ru', href: 'https://2facounter.com/ru/' },
+{ hreflang: 'x-default', href: 'https://2facounter.com/' },
 ];
 
 const faq = [
@@ -122,7 +130,7 @@ const jsonLd = [
     ],
     offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
     isAccessibleForFree: true,
-    inLanguage: ['en', 'vi', 'zh-CN', 'zh-TW', 'es', 'ja', 'fr', 'de', 'pt', 'ko', 'it'],
+    inLanguage: ['en', 'vi', 'zh-CN', 'zh-TW', 'es', 'ja', 'fr', 'de', 'pt', 'ko', 'it', 'hi', 'ar', 'bn', 'ru'],
   },
   {
     '@context': 'https://schema.org',
@@ -158,6 +166,7 @@ const services = [
 
 
   <Layout title={title} description={description} path="/fr/" lang="fr" jsonLd={jsonLd} alternates={homeAlternates} image="/og-fr.png">
+    <SiteHeader locale="fr"
 
   
     links={[
@@ -175,7 +184,7 @@ const services = [
     <section aria-label="Générateur de code 2FA en direct — héros">
       <!-- SECTION 1 : l'interface du générateur 2FA tout en haut -->
       <div class="mx-auto max-w-[1200px] px-4 pt-10 pb-4 sm:px-6 sm:pt-16 xl:px-0">
-        <Generator />
+        <Generator locale="fr" />
       </div>
 
       <!-- SECTION 2 : contenu du héros directement sous le générateur -->

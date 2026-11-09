@@ -21,7 +21,15 @@ const homeAlternates = [
   { hreflang: 'pt', href: 'https://2facounter.com/pt/' },
   { hreflang: 'ko', href: 'https://2facounter.com/ko/' },
   { hreflang: 'it', href: 'https://2facounter.com/it/' },
-  { hreflang: 'x-default', href: 'https://2facounter.com/' },
+  
+  { hreflang: 'hi', href: 'https://2facounter.com/hi/' },
+
+  { hreflang: 'ar', href: 'https://2facounter.com/ar/' },
+
+  { hreflang: 'bn', href: 'https://2facounter.com/bn/' },
+
+  { hreflang: 'ru', href: 'https://2facounter.com/ru/' },
+{ hreflang: 'x-default', href: 'https://2facounter.com/' },
 ];
 
 const faq = [
@@ -120,7 +128,7 @@ const jsonLd = [
     ],
     offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
     isAccessibleForFree: true,
-    inLanguage: ['en', 'vi', 'zh-CN', 'zh-TW', 'es', 'ja', 'fr', 'de', 'pt', 'ko', 'it'],
+    inLanguage: ['en', 'vi', 'zh-CN', 'zh-TW', 'es', 'ja', 'fr', 'de', 'pt', 'ko', 'it', 'hi', 'ar', 'bn', 'ru'],
   },
   {
     '@context': 'https://schema.org',
@@ -187,6 +195,7 @@ const services = [
 
 
   <Layout title={title} description={description} path="/ja/" lang="ja" jsonLd={jsonLd} alternates={homeAlternates} image="/og-ja.png">
+    <SiteHeader locale="ja"
 
   
     links={[
@@ -204,7 +213,7 @@ const services = [
     <section aria-label="ライブ2FAコードジェネレーター — ヒーロー">
       <!-- セクション1：2FA Generator の操作面がページの最上段に -->
       <div class="mx-auto max-w-[1200px] px-4 pt-10 pb-4 sm:px-6 sm:pt-16 xl:px-0">
-        <Generator />
+        <Generator locale="ja" />
       </div>
 
       <!-- セクション2：ヒーローコピーはジェネレーターの直下 -->
@@ -532,7 +541,7 @@ const services = [
         title: '製品',
         links: [
           { href: '/#generator', label: 'ライブジェネレーター' },
-          { href: '/how-to-get-2fa-code/', label: '2FAコードの取得方法' },
+          { href: '/ja/how-to-get-2fa-code/', label: '2FAコードの取得方法' },
           { href: '/ja/what-is-2fa/', label: '2FAとは？' },
           { href: '/#features', label: '機能' },
           { href: '/#compatibility', label: '互換性' },

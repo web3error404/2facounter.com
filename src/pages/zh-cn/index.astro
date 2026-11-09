@@ -22,7 +22,15 @@ const homeAlternates = [
   { hreflang: 'pt', href: 'https://2facounter.com/pt/' },
   { hreflang: 'ko', href: 'https://2facounter.com/ko/' },
   { hreflang: 'it', href: 'https://2facounter.com/it/' },
-  { hreflang: 'x-default', href: 'https://2facounter.com/' },
+  
+  { hreflang: 'hi', href: 'https://2facounter.com/hi/' },
+
+  { hreflang: 'ar', href: 'https://2facounter.com/ar/' },
+
+  { hreflang: 'bn', href: 'https://2facounter.com/bn/' },
+
+  { hreflang: 'ru', href: 'https://2facounter.com/ru/' },
+{ hreflang: 'x-default', href: 'https://2facounter.com/' },
 ];
 
 const faq = [
@@ -84,7 +92,7 @@ const faq = [
   },
   {
     q: '我的密钥保存在哪里？',
-    a: '只保存在你自己的浏览器里。最近一次输入的密钥和“最近密钥”列表（最多 8 条）存储在本设备的 localStorage，刷新页面后仍在，也绝不上传服务器。密钥以纯文本保存：能打开这个浏览器配置文件的人都能读到，请像对待密码管理器金库一样对待它。一键“Clear all”即可全部清除；原始密钥请保存在密码管理器里。',
+    a: '只保存在你自己的浏览器里。最近一次输入的密钥和“最近密钥”列表（最多 8 条）存储在本设备的 localStorage，刷新页面后仍在，也绝不上传服务器。密钥以纯文本保存：能打开这个浏览器配置文件的人都能读到，请像对待密码管理器金库一样对待它。一键“全部清除”即可全部清除；原始密钥请保存在密码管理器里。',
   },
   {
     q: '它支持 HOTP、8 位验证码或 SHA-256 吗？',
@@ -105,6 +113,7 @@ const jsonLd = [
     description,
     applicationCategory: 'SecurityApplication',
     operatingSystem: 'Any (browser-based)',
+    inLanguage: ['en', 'vi', 'zh-CN', 'zh-TW', 'es', 'ja', 'fr', 'de', 'pt', 'ko', 'it', 'hi', 'ar', 'bn', 'ru'],
     offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
   },
   {
@@ -169,8 +178,8 @@ const services = [
 ];
 ---
 
-<Layout title={title} description={description} path="/zh-cn/" lang="zh-Hans" jsonLd={jsonLd} alternates={homeAlternates}>
-  <SiteHeader
+<Layout title={title} description={description} path="/zh-cn/" lang="zh-Hans" jsonLd={jsonLd} alternates={homeAlternates} image="/og-zh-cn.png">
+  <SiteHeader locale="zh-cn"
     links={[
       { href: '/zh-cn/#how-it-works', label: '工作原理' },
       { href: '/zh-cn/#features', label: '功能' },
@@ -184,7 +193,7 @@ const services = [
   <main id="main">
     <section aria-label="实时 2FA 验证码生成器">
       <div class="mx-auto max-w-[1200px] px-4 pt-10 pb-4 sm:px-6 sm:pt-16 xl:px-0">
-        <Generator />
+        <Generator locale="zh-cn" />
       </div>
 
       <div class="mx-auto grid max-w-[1200px] items-center gap-12 px-4 pt-14 pb-12 sm:px-6 sm:pt-20 lg:grid-cols-[7fr_5fr] lg:pt-24 xl:px-0">
@@ -272,7 +281,7 @@ const services = [
             </p>
             <p class="mt-4 text-sm font-medium text-ink">
               想了解原理？阅读通俗讲解：{" "}
-              <a href="/what-is-2fa/" class="link">What is 2FA? How TOTP works</a>
+              <a href="/zh-cn/what-is-2fa/" class="link">什么是 2FA？TOTP 如何工作</a>
             </p>
             <a href="#generator" class="btn-primary mt-8">立即试用</a>
           </div>
@@ -387,7 +396,7 @@ const services = [
             2FA 后，服务会给你一个一次性共享密钥。验证器用这个密钥加上当前时间算出 6 位验证码——
             TOTP 标准，RFC 6238——而登录网站运行完全相同的算式并比对结果。因为验证码每 30 秒轮换，
             单独泄露的密码再也无法打开任何东西。想看完整的加密原理讲解？阅读文章{" "}
-            <a href="/what-is-2fa/">What is 2FA?</a>，然后回来生成你的第一个验证码。
+            <a href="/zh-cn/what-is-2fa/">什么是 2FA？</a>，然后回来生成你的第一个验证码。
           </p>
 
           <h3>从不需要你手机的验证器</h3>
@@ -404,14 +413,14 @@ const services = [
             Google 账户、守住 Steam、Discord、X 或邮箱——只要服务提供“使用身份验证器应用”选项，
             讲的都是同一种协议，一个工具全部覆盖。验证码被拒绝时，原因几乎总是设备时钟而不是工具。
             我们还准备了{" "}
-            <a href="/how-to-get-2fa-code/">分步获取 2FA 验证码的指南</a>和按服务划分的{" "}
+            <a href="/zh-cn/how-to-get-2fa-code/">分步获取 2FA 验证码的指南</a>和按服务划分的{" "}
             <a href="/guides/">开启 2FA 指南</a>。
           </p>
 
           <h3>不上传、不存储、不收费</h3>
           <p>
             没有可以接收密钥的服务器，没有账户，没有付费版，没有遥测。每个验证码都用 Web Crypto API
-            在本地计算；上次的密钥和最近密钥列表只保存在你自己的浏览器存储里，点一下“Clear all”即可彻底清除。
+            在本地计算；上次的密钥和最近密钥列表只保存在你自己的浏览器存储里，点一下“全部清除”即可彻底清除。
             每把密钥的原始副本请始终保留在加密的密码管理器里；对任何催促你提供新验证码的要求保持警惕——
             那是诈骗的红旗。
           </p>
@@ -469,7 +478,7 @@ const services = [
         links: [
           { href: '/#generator', label: '在线生成器' },
           { href: '/zh-cn/#features', label: '功能' },
-          { href: '/what-is-2fa/', label: '什么是双重验证？' },
+          { href: '/zh-cn/what-is-2fa/', label: '什么是双重验证？' },
           { href: '/zh-cn/#compatibility', label: '兼容性' },
         ],
       },

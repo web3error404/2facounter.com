@@ -1,5 +1,6 @@
 ---
 import ShieldLogo from './ShieldLogo.astro';
+import { LANGUAGES } from '../i18n/languages';
 
 const year = new Date().getFullYear();
 
@@ -53,20 +54,6 @@ const defaultColumns = [
   },
 ];
 
-const defaultLanguages = [
-  { href: '/', label: 'English' },
-  { href: '/vi/', label: 'Tiếng Việt' },
-  { href: '/zh-cn/', label: '简体中文' },
-  { href: '/zh-tw/', label: '繁體中文' },
-  { href: '/es/', label: 'Español' },
-  { href: '/ja/', label: '日本語' },
-  { href: '/fr/', label: 'Français' },
-  { href: '/de/', label: 'Deutsch' },
-  { href: '/pt/', label: 'Português' },
-  { href: '/ko/', label: '한국어' },
-  { href: '/it/', label: 'Italiano' },
-];
-
 interface Props {
   /** Nav columns — override with translated labels on localized pages */
   columns?: Array<{ title: string; links: Array<{ href: string; label: string }> }>;
@@ -75,35 +62,19 @@ interface Props {
   /** Title of the language-switcher column */
   languagesTitle?: string;
   /** Language links (default: all homepage language variants) */
-  languages?: Array<{ href: string; label: string }>;
+  languages?: Array<{ href: string; label: string; hreflang?: string }>;
 }
 
 const {
   columns = defaultColumns,
   tagline = 'A zero-knowledge 2FA authenticator that runs entirely in your browser at 2facounter.com. No accounts, no servers, no phone required.',
   languagesTitle = 'Language',
-  languages = defaultLanguages,
+  languages = LANGUAGES,
 } = Astro.props;
 
 // hreflang value matching each language-switcher URL (self-linking alternates)
-const hreflangOf = (href: string) => {
-  const dir = href.replace(/\//g, '');
-  if (!dir) return 'en';
-  const map: Record<string, string> = {
-    en: 'en',
-    vi: 'vi',
-    'zh-cn': 'zh-Hans',
-    'zh-tw': 'zh-Hant',
-    es: 'es',
-    ja: 'ja',
-    fr: 'fr',
-    de: 'de',
-    pt: 'pt',
-    ko: 'ko',
-    it: 'it',
-  };
-  return map[dir.toLowerCase()] ?? dir;
-};
+const LANG_BY_HREF = new Map(LANGUAGES.map((l) => [l.href, l]));
+const hreflangOf = (href: string) => LANG_BY_HREF.get(href)?.hreflang ?? 'en';
 ---
 
 <footer class="on-dark bg-ink text-cream">

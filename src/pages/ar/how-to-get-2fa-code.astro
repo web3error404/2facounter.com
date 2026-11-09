@@ -1,0 +1,265 @@
+---
+/* الترجمة العربية لـ /how-to-get-2fa-code/ (hreflang: ar).
+   البنية موازية للأصل؛ والترجمة مصاغة بعربية فصحى واضحة. */
+import Layout from '../../layouts/Layout.astro';
+import SiteHeader from '../../components/SiteHeader.astro';
+import SiteFooter from '../../components/SiteFooter.astro';
+
+const title = 'كيف تحصل على رمز 2FA: دليل خطوة بخطوة (TOTP)';
+const description =
+  'كيف تحصل على رمز 2FA في ثلاث خطوات: اعرض مفتاح الإعداد، والصقه في مولّد TOTP عبر الإنترنت، وانسخ الرمز الفوري — مع حلول للرموز المرفوضة.';
+
+const faq = [
+  {
+    q: 'أين أجد مفتاح الإعداد؟',
+    a: 'في الشاشة نفسها التي تعرض فيها الخدمة رمز QR لتطبيق المصادقة. ابحث عن رابط من نوع «لا تستطيع المسح؟» أو «إدخال الرمز يدويًا» أو «عرض مفتاح الإعداد». وفتحه يكشف سلسلة Base32 (أو رابط otpauth:// كامل) — وكلاهما يعمل في المولّد.',
+  },
+  {
+    q: 'يُرفض الرمز، فماذا أفعل؟',
+    a: 'السبب في معظم الأحيان هو انحراف الساعة. فرموز TOTP تعتمد على الوقت: فساعة منحرفة ولو نصف دقيقة تُنتج رموزًا غير صالحة. اضبط وقت نظامك على المزامنة التلقائية وأعد المحاولة.',
+  },
+  {
+    q: 'هل هو الرمز نفسه الذي سيولّده تطبيق هاتفي؟',
+    a: 'نعم. كل تطبيق مصادقة — Google Authenticator وAuthy وMicrosoft Authenticator أو هذه الأداة في المتصفح — يحسب رمز TOTP نفسه من RFC 6238 انطلاقًا من السر نفسه والساعة نفسها. فهي قابلة للتبادل.',
+  },
+  {
+    q: 'هل ما زلت بحاجة إلى رموز الاسترداد؟',
+    a: 'نعم. احفظها دون اتصال، بعيدًا عن هذه الأداة. فإن فقدت الوصول يومًا إلى الجهاز الذي فيه مفتاحك السري، كانت رموز الاسترداد هي طريق العودة إلى حسابك.',
+  },
+];
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: '2FA COUNTER', item: 'https://2facounter.com/' },
+      { '@type': 'ListItem', position: 2, name: 'كيف تحصل على رمز 2FA', item: 'https://2facounter.com/ar/how-to-get-2fa-code/' },
+    ],
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'HowTo',
+    name: 'كيف تحصل على رمز 2FA بمولّد TOTP عبر الإنترنت',
+    totalTime: 'PT3M',
+    step: [
+      { '@type': 'HowToStep', position: 1, name: 'فعّل المصادقة الثنائية واعرض مفتاح الإعداد', text: 'افتح إعدادات الأمان في الخدمة، واختر خيار تطبيق المصادقة، واعرض مفتاح الإعداد حين تعجز عن مسح رمز QR.' },
+      { '@type': 'HowToStep', position: 2, name: 'الصق المفتاح في المولّد', text: 'الصق سلسلة Base32 أو رابط otpauth:// في المولّد في الصفحة الرئيسية لـ 2FA COUNTER. يُجرى الحساب كله محليًا في المتصفح.' },
+      { '@type': 'HowToStep', position: 3, name: 'انسخ الرمز الفوري وأكّد', text: 'أدخل الرمز من 6 أرقام في شاشة التحقق لدى الخدمة خلال نافذته البالغة 30 ثانية لتأكيد الإعداد — وكرر المسار نفسه في كل تسجيل دخول قادم.' },
+    ],
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faq.map(({ q, a }) => ({
+      '@type': 'Question',
+      name: q,
+      acceptedAnswer: { '@type': 'Answer', text: a },
+    })),
+  },
+];
+
+// hreflang cluster for the translated article (+ x-default → English)
+const alternates = [
+  { hreflang: 'en', href: 'https://2facounter.com/how-to-get-2fa-code/' },
+  { hreflang: 'vi', href: 'https://2facounter.com/vi/how-to-get-2fa-code/' },
+  { hreflang: 'zh-Hans', href: 'https://2facounter.com/zh-cn/how-to-get-2fa-code/' },
+  { hreflang: 'zh-Hant', href: 'https://2facounter.com/zh-tw/how-to-get-2fa-code/' },
+  { hreflang: 'es', href: 'https://2facounter.com/es/how-to-get-2fa-code/' },
+  { hreflang: 'ja', href: 'https://2facounter.com/ja/how-to-get-2fa-code/' },
+  { hreflang: 'fr', href: 'https://2facounter.com/fr/how-to-get-2fa-code/' },
+  { hreflang: 'de', href: 'https://2facounter.com/de/how-to-get-2fa-code/' },
+  { hreflang: 'pt', href: 'https://2facounter.com/pt/how-to-get-2fa-code/' },
+  { hreflang: 'ko', href: 'https://2facounter.com/ko/how-to-get-2fa-code/' },
+  { hreflang: 'it', href: 'https://2facounter.com/it/how-to-get-2fa-code/' },
+
+  { hreflang: 'hi', href: 'https://2facounter.com/hi/how-to-get-2fa-code/' },
+
+  { hreflang: 'ar', href: 'https://2facounter.com/ar/how-to-get-2fa-code/' },
+
+  { hreflang: 'bn', href: 'https://2facounter.com/bn/how-to-get-2fa-code/' },
+
+  { hreflang: 'ru', href: 'https://2facounter.com/ru/how-to-get-2fa-code/' },
+{ hreflang: 'x-default', href: 'https://2facounter.com/how-to-get-2fa-code/' },
+];
+---
+
+
+  <Layout title={title} description={description} path="/ar/how-to-get-2fa-code/" lang="ar" jsonLd={jsonLd} alternates={alternates} image="/og-ar.png">
+    <SiteHeader locale="ar"
+
+
+    links={[
+      { href: '/ar/', label: 'توليد رمز 2FA' },
+      { href: '/ar/what-is-2fa/', label: 'ما هي المصادقة الثنائية (2FA)؟' },
+      { href: '/guides/', label: 'الأدلة' },
+      { href: '/privacy/', label: 'الخصوصية' },
+    ]}
+    cta="أنشئ رمزي الآن"
+  />
+  <main id="main">
+    <article class="mx-auto max-w-[820px] px-4 py-20 sm:px-6 lg:py-24 xl:px-0">
+      <p class="section-label">دليل عملي في 2FA</p>
+      <h1 class="mt-3 font-display text-4xl tracking-normal text-ink sm:text-5xl">
+        كيف تحصل على رمز 2FA الخاص بك
+      </h1>
+      <p class="mt-5 text-lg font-medium text-ink">
+        تستغرق العملية كلها نحو دقيقة: اعرض مفتاح الإعداد، والصقه
+        هنا، ثم اكتب الرمز الناتج في الشاشة التي طلبته. بلا حاجة إلى هاتف —
+        فالتنفيذ المرجعي للرياضيات يعمل بالفعل في الجزء العلوي من{" "}
+        <a href="/ar/">الصفحة الرئيسية</a>.
+      </p>
+
+      <div class="rich-text mt-10">
+        <h2>ما تحتاجه قبل البدء</h2>
+        <p>
+          الوصول إلى الحساب، للسبب البديهي — فمن المفترض أنك مسجّل الدخول بالفعل إلى الخدمة التي
+          تريد حمايتها. وإلى جانب ذلك، يهم أمران. الأول: يجب أن توفر الخدمة خيار
+          <strong>تطبيق المصادقة</strong> كعامل ثانٍ؛
+          ويشمل ذلك Google وMicrosoft وGitHub وDiscord وSteam وAWS وCoinbase وKraken وBinance وX
+          ومعظم المصارف ومنصات التبادل. والثاني: تحتاج إلى مكان ما <em>لتشغيل</em>
+          المصادق عليه: تطبيق هاتف أو — وهذه سبب وجود هذا الموقع —
+          هذه الأداة في المتصفح، التي تحسب الرموز نفسها تمامًا دون تثبيت أي شيء.
+        </p>
+        <p>
+          ملاحظة عن التسميات: تسمّي الخدمات هذا العامل الثاني «المصادقة
+          الثنائية» أو «2FA» أو «التحقق بخطوتين» أو «TOTP» أو «تطبيق
+          المصادقة». وخلف العلامات كلها شيء واحد — رمز أحادي الاستخدام قائم على
+          الوقت ومشتق من سر مشترك. وإن أردت شرحًا للآلية
+          لا مجرد استخدام لها، فاقرأ{" "}
+          <a href="/ar/what-is-2fa/">ما هي المصادقة الثنائية (2FA)؟ وكيف يعمل TOTP</a>.
+        </p>
+
+        <h2>الخطوة 1: فعّل المصادقة الثنائية واعرض مفتاح الإعداد</h2>
+        <p>
+          افتح إعدادات الأمان في حسابك وابحث عن قسم المصادقة الثنائية. اختر خيار
+          <em>تطبيق المصادقة</em>. تعرض الخدمة رمز QR لتمسحه بهاتف — وتلك الشاشة تحمل في الغالب
+          بديلًا: رابطًا يقول <em>«لا تستطيع المسح؟»</em> أو{" "}
+          <em>«إدخال الرمز يدويًا»</em> أو <em>«مفتاح الإعداد»</em>. واتباعُ الرابط يكشف السر الحقيقي: سلسلة Base32 من قبيل{" "}
+          <code>JBSWY3DPEHPK3PXP</code>، وأحيانًا تكون ملفوفة في رابط <code>otpauth://</code>{" "}
+          كامل يحمل أيضًا بطاقة الحساب وعدد الأرقام وفترة
+          التجديد وخوارزمية التجزئة.
+        </p>
+        <p>
+          هذا المفتاح <strong>هو</strong> بذاتِه بيانات الاعتماد — فهو المكافئ المحمول
+          لكلمة مرورك بالنسبة إلى العامل الثاني. عامِل تلك الشاشة كشاشة
+          استرداد: لن يطلب منك أي جهة مشروعة أبدًا أن تلصق مفتاح إعداد
+          في بريد إلكتروني أو محادثة. انسخه، وأكمل تفعيل المصادقة الثنائية (معظم الخدمات
+          تطلب رمزًا يعمل للتأكيد)، واحفظ الأصل في مكان ما
+          مشفّر، كمدير كلمات مرور.
+        </p>
+
+        <h2>الخطوة 2: الصق المفتاح في المولّد</h2>
+        <p>
+          في{" "}
+          <a href="/ar/">مولّد الجزء العلوي من صفحتنا الرئيسية</a>، الصق ما
+          نسخته — سلسلة Base32 المجردة أو رابط <code>otpauth://</code> الكامل؛
+          وكلاهما صالح. يظهر خلال ثوانٍ رمز فوري من 6 أرقام يتجدد كل 30
+          ثانية. كما يمكنك استيراد المفتاح من صورة: الصق لقطة شاشة للـQR
+          مباشرة في الصفحة بضغط Ctrl+V، أو أفلت ملف صورة عليها أو امسح
+          الرمز بالكاميرا — فك الترميز يجري محليًا ولا يُرفع شيء. وإذا كانت الخدمة تستخدم إعدادًا غير قياسي (رموز من 8 أرقام، أو فترات
+          15/30/60 ثانية، أو SHA-256، أو HOTP قائمًا على العدّاد)، فإن رابط <code>otpauth://</code>{" "}
+          كاملًا يحمل كل تلك المعاملات والمولّد يحترمها تلقائيًا.
+        </p>
+
+        <h2>الخطوة 3: انسخ الرمز الفوري وأكمل تسجيل الدخول</h2>
+        <p>
+          اكتب الرمز الجاري في شاشة التحقق قبل أن يتجدد. لكل رمز صلاحية
+          نافذة من 30 ثانية (أقصر أو أطول في الخدمات ذات الفترات الخاصة)، فإذا بلغ العد التنازلي
+          ثوانِه الأخيرة، فانتظر الرمز التالي بدلًا من كتابة رمز
+          عتيق على عجل. ومن ثَمّ، يعيد كل تسجيل دخول إلى هذه الخدمة الدورة نفسها: افتح
+          المولّد ← انسخ الرمز ← الصقه. ويُذكر آخر مفتاح لديك{" "}
+          <a href="/privacy/">في التخزين المحلي لمتصفحك وحده</a>، فتكون الزيارة
+          القادمة على بعد نقرة.
+        </p>
+
+        <h2>أين تجد مفتاح الإعداد في الخدمات الشائعة</h2>
+        <p>
+          تخفي كل خدمة خيار المصادق في مكان يختلف عن غيره، لذا ننشر{" "}
+          <a href="/guides/">أدلة إعداد خطوة بخطوة</a> ترافق هذا
+          المولّد — وتنتهي بلصقك المفتاح هنا وإتمامك
+          الإعداد. الأكثر طلبًا: <a href="/guides/google/">Google</a>،{" "}
+          <a href="/guides/microsoft/">Microsoft</a>، <a href="/guides/discord/">Discord</a>،{" "}
+          <a href="/guides/github/">GitHub</a>، <a href="/guides/steam/">Steam</a>،{" "}
+          <a href="/guides/aws/">AWS</a>، <a href="/guides/coinbase/">Coinbase</a>،{" "}
+          <a href="/guides/kraken/">Kraken</a> و<a href="/guides/binance/">Binance</a>.
+        </p>
+
+        <h2>استكشاف الأخطاء وإصلاحها: ماذا تفعل حين لا يعمل الأمر</h2>
+        <p>
+          <strong>يُرفض الرمز.</strong> عمليًا، السبب في معظم الأحيان هو انحراف
+          ساعة الجهاز الذي يشغّل المولّد. فـTOTP يقارن رمزك بآخر
+          مشتق من ساعة <em>الخدمة</em>؛ فإن كان وقت نظامك منحرفًا ولو نصف
+          دقيقة، افترقا. اضبط نظام تشغيلك على المزامنة التلقائية
+          للوقت (في Windows، «المزامنة الآن» في إعدادات التاريخ والوقت؛ وفي
+          macOS، «ضبط التاريخ والوقت تلقائيًا») وجرّب الرمز التالي.
+        </p>
+        <p>
+          <strong>رمز QR لا يُمسح.</strong> استخدم رابط <em>«لا تستطيع المسح؟»</em>{" "}
+          لكشف مفتاح الإعداد — فالمفتاح النصي دائمًا أوثق من
+          تصوير شاشة. وإن لم يكن لديك سوى لقطة شاشة، فاقتصطها حتى الـQR نفسه؛ فالصور
+          شديدة الضغط أو المائلة كثيرًا ما ترفض فك ترميزها.
+        </p>
+        <p>
+          <strong>فقدت الهاتف الذي كان فيه المفتاح.</strong> تلك هي الحالة
+          التي بُنيت هذه الأداة من أجلها بالضبط: فإذا حفظت السر الأصلي في
+          مدير كلمات المرور — أو لصقته هنا بينما الهاتف كان يعمل بعد —
+          تستطيع إعادة توليد الرموز على أي حاسوب. بلا هاتف، وبلا استعادة، وبلا تذاكر دعم.
+        </p>
+
+        <h2>عادةان تستحقان عناء الاعتماد</h2>
+        <p>
+          احفظ <strong>رموز الاسترداد</strong> للخدمة دون اتصال عند
+          تفعيل المصادقة الثنائية؛ فهي عوامة النجاة إذا فقدت يومًا الجهاز الذي فيه
+          السر. ولا تتعامل أبدًا مع رمز 2FA الفوري كشيء يمكن مشاركته: فلا وكيل دعم، ولا مصرف، ولا منصة تبادل يحتاج إلى رمزك الجاري
+          من دون طلب منك. فالرمز لا يصلح إلا خلال نافذته البالغة 30 ثانية، وفي
+          شاشة تسجيل الدخول التي اخترتها أنت.
+        </p>
+      </div>
+    </article>
+  </main>
+  <SiteFooter
+    columns={[
+      {
+        title: 'المنتج',
+        links: [
+          { href: '/ar/#generator', label: 'مولّد الرموز الفوري' },
+          { href: '/ar/how-to-get-2fa-code/', label: 'كيف تحصل على رمز 2FA' },
+          { href: '/ar/what-is-2fa/', label: 'ما هي المصادقة الثنائية (2FA)؟' },
+          { href: '/ar/#features', label: 'المزايا' },
+        ],
+      },
+      {
+        title: 'الأدلة',
+        links: [
+          { href: '/guides/', label: 'جميع الأدلة' },
+          { href: '/guides/google/', label: '2FA لـ Google' },
+          { href: '/guides/microsoft/', label: '2FA لـ Microsoft' },
+          { href: '/guides/discord/', label: '2FA لـ Discord' },
+          { href: '/guides/github/', label: '2FA لـ GitHub' },
+          { href: '/guides/steam/', label: '2FA لـ Steam' },
+          { href: '/guides/binance/', label: '2FA لـ Binance' },
+        ],
+      },
+      {
+        title: 'عن الموقع',
+        links: [
+          { href: '/about/', label: 'من نحن' },
+          { href: '/methodology/', label: 'كيف نُعدّ المحتوى' },
+          { href: '/contact/', label: 'اتصل بنا' },
+        ],
+      },
+      {
+        title: 'قانوني',
+        links: [
+          { href: '/privacy/', label: 'سياسة الخصوصية' },
+          { href: '/terms/', label: 'شروط الخدمة' },
+          { href: '/disclaimer/', label: 'إخلاء المسؤولية' },
+          { href: '/contact/', label: 'الإبلاغ عن مشكلة أمنية' },
+        ],
+      },
+    ]}
+    tagline="مصادق 2FA المجاني الذي يعمل بالكامل داخل متصفحك، على 2facounter.com. بلا حسابات، وبلا خواديم، وبلا هاتف."
+    languagesTitle="اللغات"
+  />
+</Layout>

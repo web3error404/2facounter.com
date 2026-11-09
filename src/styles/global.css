@@ -514,3 +514,14 @@ h4 {
     translate: 0 0;
   }
 }
+
+/* ── RTL pages: keep technical content LTR ───────────────────────
+   Arabic pages render right-to-left, but code blocks, shell snippets,
+   and the secret-key input hold Base32 / otpauth:// URIs whose segment
+   order must never mirror. Isolate them back to LTR. */
+html[dir='rtl'] pre,
+html[dir='rtl'] #secret-key-input {
+  direction: ltr;
+  unicode-bidi: isolate;
+  text-align: left;
+}

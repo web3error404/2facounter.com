@@ -1,0 +1,570 @@
+---
+/* हिन्दी — homepage translated (hreflang: hi). Structure parallel to
+   index.astro; translation adapted for Hindi SEO. */
+import Layout from '../../layouts/Layout.astro';
+import SiteHeader from '../../components/SiteHeader.astro';
+import SiteFooter from '../../components/SiteFooter.astro';
+import Generator from '../../components/Generator.astro';
+
+const title = 'ऑनलाइन 2FA कोड जेनरेटर — फ्री 2FA ऑथेंटिकेटर (TOTP)';
+const description =
+  'अपना 2FA कोड ऑनलाइन, तुरंत बनाएँ। फ्री 2FA ऑथेंटिकेटर जो आपके ब्राउज़र में ही चलता है: सीक्रेट की पेस्ट करें और हर 30 सेकंड में रीन्यू होने वाला लाइव TOTP…';
+
+const faq = [
+  {
+    q: '2FA कैसे मिलता है?',
+    a: '2FA उसी अकाउंट से मिलता है जिसे आपको सुरक्षित करना है: उसकी सेटिंग्स खोलें, “सेक्योरिटी” या “साइन-इन और सिक्योरिटी” सेक्शन में जाएँ और “टू-फ़ैक्टर ऑथेंटिकेशन” या “टू-स्टेप वेरिफिकेशन” ढूँढें। ऑथेंटिकेशन ऐप का विकल्प चुनें, QR कोड स्कैन करें — या “स्कैन नहीं हो पा रहा?” पर क्लिक करके सेटअप की (एक Base32 स्ट्रिंग या otpauth:// URI) दिखाएँ — और उसे इस पेज के ऊपर मौजूद 2FA कोड जेनरेटर में पेस्ट करें। दिखने वाला लाइव कोड डालकर सेटअप कन्फ़र्म करें और सर्विस जो रिकवरी कोड दे, उन्हें संभाल कर रखें।',
+  },
+  {
+    q: '2FA कैसे चालू करें?',
+    a: 'चार स्टेप, करीब दो मिनट: 1) अकाउंट या सिक्योरिटी सेटिंग्स खोलें और “टू-फ़ैक्टर ऑथेंटिकेशन” चुनें। 2) “ऑथेंटिकेशन ऐप इस्तेमाल करें” चुनें (बेहतर विकल्प होने पर SMS से बचें)। 3) QR कोड अपने ऑथेंटिकेटर से स्कैन करें — या फिर सेटअप की दिखाकर सेव कर लें। 4) लाइव कोड डालकर प्रोसेस पूरी करें और बैकअप कोड डाउनलोड या प्रिंट कर लें। हम Google, GitHub, Discord, Binance समेत कई सर्विसेज़ के लिए गाइड प्रकाशित करते हैं।',
+  },
+  {
+    q: '2FA काम कैसे करता है?',
+    a: 'पासवर्ड के बाद सर्विस पहचान का दूसरा सबूत माँगती है। स्टैंडर्ड TOTP तरीके (RFC 6238) में आपका ऑथेंटिकेटर एक शेयर्ड सीक्रेट की और मौजूदा समय से 6 अंकों का कोड बनाता है, और सर्वर वही कैलकुलेशन करके दोनों की तुलना करता है। दो-स्टेप वेरिफिकेशन कोड हर 30 सेकंड में बदलता है और एक बार एक्सपायर होते ही बेकार हो जाता है — इस तरह अकेला लीक हुआ पासवर्ड आपका अकाउंट नहीं खोल सकता।',
+  },
+  {
+    q: '2FA किस काम आता है?',
+    a: 'हर उस लॉगिन की रक्षा करता है जिसे कोई चुराना चाहे: ईमेल और क्लाउड सूट्स (Google, Microsoft, Apple), बैंकिंग और ब्रोकरेज, क्रिप्टो एक्सचेंज (Binance, Coinbase, Kraken), डेवलपर प्लेटफ़ॉर्म (GitHub, AWS), गेमिंग (Steam, Discord, Twitch) और सोशल मीडिया (X, Instagram)। कंपनियाँ इसे VPN, ईमेल और एडमिन कंसोल के लिए भी इस्तेमाल करती हैं। जहाँ भी “ऑथेंटिकेशन ऐप” का विकल्प मिले, समझिए 2FA का रास्ता वहीं है।',
+  },
+  {
+    q: 'क्या 2FA 100% सुरक्षित है?',
+    a: 'नहीं — और कोई भी सिक्योरिटी कंट्रोल 100% नहीं होता; ईमानदार गाइड्स यही कहती हैं। 2FA चोरी हुए पासवर्ड वाले हमलों को तो नाकाम कर देता है, लेकिन फ़िशिंग साइट पर टाइप किया ताज़ा कोड वैलिडिटी के दौरान ही स्कैम में चला जाता है, डिवाइस में पहले से मौजूद मैलवेयर सेशन ही हाईजैक कर सकता है, और SMS कोड SIM-स्वैप हमलों के आगे टिक नहीं पाते। इन सबके बावजूद, 2FA वाला अकाउंट बिना 2FA वाले से कहीं ज़्यादा खोलना मुश्किल है।',
+  },
+  {
+    q: 'क्या 2FA ज़रूरी है?',
+    a: 'कोई सरकार इसे ज़रूरी नहीं कहती, लेकिन प्लेटफ़ॉर्म धीरे-धीरे इसे थोप रहे हैं: GitHub 2023 से कोड कंट्रिब्यूट करने वालों के लिए इसे माँगता है, बैंक और क्रिप्टो एक्सचेंज इसे ज़बरदस्ती चालू करते हैं, और नियोक्ता अक्सर ऑफ़िस एक्सेस के लिए इसे अनिवार्य रखते हैं। बाकी जगहों पर यह वैकल्पिक है, पर बेहद सिफ़ारिशी। अपने सबसे क़ीमती अकाउंट — ईमेल — में इसे ज़रूरी मानिए: जिसके पास आपका इनबॉक्स है, वही बाक़ी सब अकाउंट रीसेट कर सकता है।',
+  },
+  {
+    q: '2FA इतना ज़रूरी क्यों है?',
+    a: 'क्योंकि पासवर्ड हर बार एक ही तरह फेल होते हैं। लीक से अरबों असली पासवर्ड पहले से सार्वजनिक हैं, और हमलावर उन्हें साइट-दर-साइट बार-बार आज़माते हैं (क्रेडेंशियल स्टफ़िंग)। Microsoft के मुताबिक़ 2FA 99.9% से ज़्यादा ऑटोमेटेड अकाउंट-टेकओवर कोशिशों को रोकता है — यही सबसे सस्ता उपाय है जो आपके ईमेल, बैंक, गेम्स और क्रिप्टो को असली ख़तरों से बचाता है।',
+  },
+  {
+    q: '2FA कितना मज़बूत है?',
+    a: 'यह पूरी तरह दूसरे फ़ैक्टर पर टिका है। SMS कोड सबसे कमज़ोर हैं: SIM-स्वैप में हमलावर आपका नंबर हथियाकर कोड ख़ुद पाता है। ऑथेंटिकेटर के TOTP कोड — वाले 30 सेकंड वाले — कम्प्यूटेशनल तौर पर मज़बूत हैं: कुछ भी ट्रांसमिट नहीं होता, ऑफ़लाइन हमलावर उन्हें अंदाज़ा नहीं लगा सकता, और हर कोड सेकंडों में एक्सपायर हो जाता है। फ़िज़िकल सिक्योरिटी कीज़ और पासकीज़ सबसे मज़बूत हैं, क्योंकि वे फ़िशिंग के ख़िलाफ़ टिकती हैं और क्रिप्टोग्राफ़िक तौर पर असली डोमेन से बँधी होती हैं।',
+  },
+  {
+    q: 'अब सब जगह 2FA क्यों है?',
+    a: 'क्योंकि अकेले पासवर्ड का दौर ढह चुका है। बड़े पैमाने की लीक में अरबों क्रेडेंशियल सार्वजनिक हो गए, ऑटोमेटेड क्रेडेंशियल स्टफ़िंग से अकाउंट हाईजैक लगभग मुफ़्त हो गया, और प्लेटफ़ॉर्म अकाउंट चोरी की क़ीमत चुकाने से थक गए। रेगुलेटर्स ने भी धक्का दिया: NIST ने अपने अमेरिकी स्टैंडर्ड्स में SMS को ऑथेंटिकेशन से हटा दिया और यूरोपीय PSD2 मज़बूत कस्टमर ऑथेंटिकेशन माँगता है। जब कुछ दिग्गजों ने 2FA को नॉर्मल बनाया, बाक़ी सब सर्विसेज़ भी चल दीं।',
+  },
+  {
+    q: 'क्या इस 2FA ऑथेंटिकेटर के लिए मोबाइल चाहिए?',
+    a: 'नहीं। यह एक ब्राउज़र-आधारित 2FA टूल है: आधुनिक ब्राउज़र वाला कोई भी लैपटॉप, टैबलेट या डेस्कटॉप चलेगा — ऑनलाइन, या ऐप की तरह इंस्टॉल होने के बाद पूरी तरह ऑफ़लाइन। जब फ़ोन खो जाए, बिक जाए, टूट जाए, बैटरी ख़त्म हो जाए — या आपकी नौकरी में मोबाइल मना हो — तब यह मोबाइल ऐप की जगह ले लेता है।',
+  },
+  {
+    q: 'क्या 2FA COUNTER इस्तेमाल करना सुरक्षित है?',
+    a: 'हाँ। हर कैलकुलेशन Web Crypto API से आपके ब्राउज़र में ही होती है। आपकी सीक्रेट कीज़ कभी किसी सर्वर पर नहीं जातीं — न भेजी जाती हैं, न वहाँ उजागर होती हैं। पेज खोलकर इंटरनेट बंद कर दें, जेनरेटर फिर भी चलता रहेगा।',
+  },
+  {
+    q: 'क्या इसे ऑफ़लाइन इस्तेमाल कर सकते हैं?',
+    a: 'बिलकुल। 2FA COUNTER को ऐप की तरह इंस्टॉल करें (Add to Home Screen / Install) और यह नेटिव ऑथेंटिकेटर की तरह पूरी तरह ऑफ़लाइन चलेगा। कोड आपकी की और डिवाइस के घड़ी से बनते हैं — नेटवर्क की ज़रूरत नहीं।',
+  },
+  {
+    q: 'मेरा 2FA कोड क्यों रिजेक्ट हो रहा है?',
+    a: 'लगभग हमेशा घड़ी का अंतर होता है। TOTP कोड समय पर निर्भर हैं: डिवाइस की घड़ी आधे मिनट भी आगे-पीछे हो तो कोड अमान्य हो जाता है। सिस्टम टाइम ऑटोमैटिक सिंक पर रखें (Windows में, डेट और टाइम सेटिंग्स में “Sync now”; macOS में, “Set date and time automatically”) और दोबारा कोशिश करें। जेनरेटर वही समय इस्तेमाल करता है जो आपका डिवाइस रिपोर्ट करता है — उसकी अपनी कोई घड़ी नहीं जिसे ठीक करना पड़े।',
+  },
+  {
+    q: 'यह Google Authenticator या Authy से अलग कैसे है?',
+    a: 'वे मोबाइल ऐप्स हैं; यह ब्राउज़र ऑथेंटिकेटर है। एल्गोरिद्म बिलकुल वही RFC 6238 TOTP है और यह हर उस सर्विस पर चलता है जो स्टैंडर्ड ऑथेंटिकेशन ऐप स्वीकारती है — लेकिन फ़ोन टूटने, बिकने या बैटरी ख़त्म होने पर एक्सेस कभी नहीं खोना पड़ता।',
+  },
+  {
+    q: 'मेरी कीज़ कहाँ सेव रहती हैं?',
+    a: 'सिर्फ़ आपके ब्राउज़र में। आपकी आख़िरी की और “हाल की कीज़” की छोटी सूची (8 तक) इस डिवाइस की लोकल स्टोरेज में रहती है ताकि रीलोड पर जेनरेटर बरकरार रहे और एक क्लिक में की बदल सकें — हमारे सर्वर पर कभी नहीं, क्योंकि सर्वर हैं ही नहीं। कीज़ प्लेन टेक्स्ट में रहती हैं: यह ब्राउज़र प्रोफ़ाइल जो कोई भी खोले, वे पढ़ सकता है — इसलिए प्रोफ़ाइल को पासवर्ड मैनेजर के वॉल्ट की तरह संभालें। सूची के ऊपर वाला “सब साफ़ करें” — जो कन्फ़र्मेशन माँगता है — इनपुट खाली करना या ब्राउज़र डेटा साफ़ करना इन्हें हमेशा के लिए मिटा देता है; ओरिजिनल सीक्रेट पासवर्ड मैनेजर में मास्टर कॉपी की तरह रखें।',
+  },
+  {
+    q: 'क्या यह HOTP, 8 अंकों के कोड या SHA-256 सर्विसेज़ के साथ चलता है?',
+    a: 'हाँ। सर्विस का दिया हुआ पूरा otpauth:// URI पेस्ट करें — उसमें मौजूद हर पैरामीटर अपने-आप लागू हो जाता है: 6, 7 या 8 अंक, 15/30/60 सेकंड के पीरियड, SHA-1/SHA-256/SHA-512 हैश और काउंटर-आधारित HOTP। खालिस Base32 की पर स्टैंडर्ड डिफ़ॉल्ट (6 अंक, 30 सेकंड, SHA-1) लागू होते हैं — जो ज़्यादातर सर्विसेज़ इस्तेमाल करती हैं।',
+  },
+  {
+    q: 'क्या यह सच में फ्री है?',
+    a: 'हाँ — न अकाउंट, न प्रीमियम टियर, न लॉगिन। यह एक टूल है, सर्विस नहीं।',
+  },
+];
+
+// hreflang cluster for the translated homepages (+ x-default → English)
+const homeAlternates = [
+  { hreflang: 'en', href: 'https://2facounter.com/' },
+  { hreflang: 'vi', href: 'https://2facounter.com/vi/' },
+  { hreflang: 'zh-Hans', href: 'https://2facounter.com/zh-cn/' },
+  { hreflang: 'zh-Hant', href: 'https://2facounter.com/zh-tw/' },
+  { hreflang: 'es', href: 'https://2facounter.com/es/' },
+  { hreflang: 'ja', href: 'https://2facounter.com/ja/' },
+  { hreflang: 'fr', href: 'https://2facounter.com/fr/' },
+  { hreflang: 'de', href: 'https://2facounter.com/de/' },
+  { hreflang: 'pt', href: 'https://2facounter.com/pt/' },
+  { hreflang: 'ko', href: 'https://2facounter.com/ko/' },
+  { hreflang: 'it', href: 'https://2facounter.com/it/' },
+  
+  { hreflang: 'hi', href: 'https://2facounter.com/hi/' },
+
+  { hreflang: 'ar', href: 'https://2facounter.com/ar/' },
+
+  { hreflang: 'bn', href: 'https://2facounter.com/bn/' },
+
+  { hreflang: 'ru', href: 'https://2facounter.com/ru/' },
+{ hreflang: 'x-default', href: 'https://2facounter.com/' },
+];
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebApplication',
+    name: '2FA COUNTER',
+    alternateName: ['2FA Live Code', '2facounter', '2FA Online Authenticator', '2FA Auth Tool'],
+    url: 'https://2facounter.com/hi/',
+    description,
+    applicationCategory: 'SecurityApplication',
+    applicationSubCategory: 'Two-Factor Authentication',
+    operatingSystem: 'Any (browser-based)',
+    browserRequirements: 'Requires a modern browser with Web Crypto API support',
+    softwareVersion: '2.0',
+    featureList: [
+      'TOTP 2FA code generation (RFC 6238)',
+      'HOTP code generation (RFC 4226)',
+      'QR code scanning via camera or screenshot',
+      'Offline / PWA support',
+      'SHA-1, SHA-256, SHA-512 hashing',
+      '6, 7, and 8 digit code support',
+      'Recent keys list',
+      'Zero-knowledge — no server, no accounts',
+    ],
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+    isAccessibleForFree: true,
+    inLanguage: ['en', 'vi', 'zh-CN', 'zh-TW', 'es', 'ja', 'fr', 'de', 'pt', 'ko', 'it', 'hi', 'ar', 'bn', 'ru'],
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faq.map(({ q, a }) => ({
+      '@type': 'Question',
+      name: q,
+      acceptedAnswer: { '@type': 'Answer', text: a },
+    })),
+  },
+];
+
+const steps = [
+  { n: '01', title: 'सीक्रेट की लें', body: 'जब कोई सर्विस “टू-फ़ैक्टर ऑथेंटिकेशन → ऑथेंटिकेशन ऐप” दिखाए, तो “स्कैन नहीं हो पा रहा? सेटअप की दिखाएँ” चुनें। आपको JBSWY3DPEHPK3PXP जैसी Base32 स्ट्रिंग — या पूरा otpauth:// लिंक — मिलेगा। दोनों यहाँ चलते हैं।' },
+  { n: '02', title: 'पेस्ट, ड्रैग या स्कैन करें', body: 'की या URI जेनरेटर में पेस्ट करें, QR कोड का स्क्रीनशॉट पेज पर ड्रैग करें, या कैमरे से स्कैन करें। सब कुछ आपके डिवाइस पर ही डिकोड होता है — कुछ भी अपलोड नहीं होता।' },
+  { n: '03', title: 'लाइव कोड कॉपी करें', body: 'सेकंडों में नया टोकन दिखता है, आपके डिवाइस की घड़ी से सिंक में। कॉपी पर क्लिक करें और लॉगिन पूरा करें। हर 30 सेकंड में ख़ुद-ब-ख़ुद रीन्यू हो जाता है।' },
+];
+
+const features = [
+  { title: 'एक इनपुट, एक लाइव कोड', body: 'सीक्रेट की या पूरा otpauth:// लिंक पेस्ट करें और ऑनलाइन 2FA कोड काउंटडाउन शुरू कर देता है — न सेटअप, न फ़ॉर्म, न “अकाउंट जोड़ें” की रस्म।', v: 'cream' },
+  { title: 'स्क्रीनशॉट पेस्ट करें, की पाएँ', body: 'QR इमेज पर Ctrl+V, इमेज फ़ाइल ड्रैग करें, या वेबकैम से स्कैन करें। इंपोर्ट के तीन रास्ते, की लीक होने के शून्य रास्ते।', v: 'cream' },
+  { title: 'हर पैरामीटर, अपने-आप पहचाना', body: 'खालिस की पर स्टैंडर्ड वैल्यू लागू होती हैं; पूरा otpauth:// URI अपने साथ आए हर पैरामीटर की इज़्ज़त करता है — 6/7/8 अंक, 15/30/60 सेकंड का पीरियड, SHA-1/256/512, और काउंटर-आधारित HOTP भी।', v: 'cream' },
+  { title: 'रीलोड पर भी बरकरार — और की बदलें भी', body: 'पेज दोबारा खोलें, आख़िरी की पहले से मौजूद। हाल की कीज़ की सूची से एक क्लिक में कीज़ के बीच जाएँ — सिर्फ़ इसी डिवाइस की लोकल स्टोरेज से रिस्टोर होती है, किसी सर्वर से नहीं।', v: 'cream' },
+  { title: 'न इंस्टॉल करना, न रजिस्टर करना', body: 'न मोबाइल ऐप, न अकाउंट, न सिंक की फ़ीस, न ट्रैकिंग। ब्राउज़र खोल सकते हैं, तो अपना टू-स्टेप वेरिफिकेशन कोड बना भी सकते हैं।', v: 'cream' },
+  { title: 'ऑफ़लाइन और इंस्टॉल करने योग्य', body: 'टैब दुनिया से पूरी तरह कटा चलता है — सचमुच। और PWA की तरह डॉक या होम स्क्रीन पर नेटिव ऐप बनकर इंस्टॉल हो जाता है।', v: 'dark' },
+];
+
+const services = [
+  'Discord', 'GitHub', 'Steam', 'Binance', 'Google', 'X / Twitter',
+  'AWS', 'Coinbase', 'Kraken', 'Twitch', 'Microsoft', 'Proton Mail',
+];
+---
+
+
+  <Layout title={title} description={description} path="/hi/" lang="hi" jsonLd={jsonLd} alternates={homeAlternates} image="/og-hi.png">
+    <SiteHeader locale="hi"
+
+  
+    links={[
+      { href: '/hi/#how-it-works', label: 'यह कैसे काम करता है' },
+      { href: '/hi/#features', label: 'फ़ीचर्स' },
+      { href: '/hi/#faq', label: 'सामान्य सवाल' },
+      { href: '/guides/', label: 'गाइड्स' },
+      { href: '/privacy/', label: 'प्राइवेसी' },
+    ]}
+    cta="मेरा कोड बनाएँ"
+  />
+
+  <main id="main">
+    <!-- ── नारंगी कैनवस: ऊपर लाइव जेनरेटर, नीचे हीरो ── -->
+    <section aria-label="लाइव 2FA कोड जेनरेटर">
+      <!-- SECTION 1: the 2FA generator UI, right at the top -->
+      <div class="mx-auto max-w-[1200px] px-4 pt-10 pb-4 sm:px-6 sm:pt-16 xl:px-0">
+        <Generator locale="hi" />
+      </div>
+
+      <!-- SECTION 2: hero content right under the generator -->
+      <div class="mx-auto grid max-w-[1200px] items-center gap-12 px-4 pt-14 pb-12 sm:px-6 sm:pt-20 lg:grid-cols-[7fr_5fr] lg:pt-24 xl:px-0">
+        <div>
+          <span class="badge-eyebrow -rotate-1">100% आपके ब्राउज़र में · ज़ीरो-नॉलेज</span>
+          <h1 class="mt-6 max-w-[11em] font-display text-display-xl tracking-normal text-ink lg:text-display-xxl">
+            लाइव 2FA कोड जेनरेटर
+          </h1>
+          <p class="mt-6 max-w-xl text-lg leading-[1.5] font-medium text-ink lg:text-xl">
+            सीक्रेट की पेस्ट करें और 6 अंकों का कोड तुरंत पाएँ। Google Authenticator, Authy और
+            Microsoft Authenticator का विकल्प: तेज़, फ्री और प्राइवेट — जब फ़ोन खो गया हो, टूट गया हो
+            या आस-पास हो ही न।
+          </p>
+          <div class="mt-8 flex flex-wrap gap-4">
+            <a href="#generator" class="btn-primary">
+              अपना पहला कोड बनाएँ
+              <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14m0 0-6-6m6 6-6 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            </a>
+            <a href="#how-it-works" class="btn-secondary">यह कैसे काम करता है</a>
+          </div>
+          <p class="mt-5 font-mono text-label text-ink">न ऐप। न अकाउंट। कोई की सर्वर तक नहीं जाती।</p>
+        </div>
+        <!-- Code-window artifact: cream ticket with a dark header bar (stacks under hero text on mobile) -->
+        <div class="min-w-0 overflow-hidden rounded-xl border-4 border-ink bg-cream" style="box-shadow: var(--shadow-card)">
+          <div class="flex items-center gap-2 border-b-2 border-dashed border-hairline-strong bg-ink px-4 py-2.5">
+            <span class="h-2.5 w-2.5 rounded-full bg-accent-red"></span>
+            <span class="h-2.5 w-2.5 rounded-full bg-canvas"></span>
+            <span class="h-2.5 w-2.5 rounded-full bg-primary"></span>
+            <span class="ml-2 font-mono text-xs text-cream">otp.rfc-6238.js</span>
+          </div>
+          <pre class="overflow-x-auto p-5 font-mono text-[13px] leading-relaxed"><code>
+<span class="text-muted">// The whole tool. No servers involved.</span>
+<span class="font-bold text-accent-blue">const</span> <span class="text-ink">step</span> = Math.<span class="text-ink">floor</span>(Date.<span class="text-ink">now</span>() / 1000 / 30);
+
+<span class="font-bold text-accent-blue">const</span> <span class="text-ink">key</span> = <span class="font-bold text-accent-blue">await</span> crypto.subtle.<span class="text-ink">importKey</span>(
+  'raw', <span class="text-ink">base32</span>(secret), &#123; name: 'HMAC', hash: 'SHA-1' &#125;);
+
+<span class="font-bold text-accent-blue">const</span> <span class="text-ink">mac</span> = <span class="font-bold text-accent-blue">new</span> <span class="text-ink">Uint8Array</span>(
+  <span class="font-bold text-accent-blue">await</span> crypto.subtle.<span class="text-ink">sign</span>('HMAC', key, <span class="text-ink">u64</span>(step)));
+
+<span class="font-bold text-accent-blue">const</span> <span class="text-ink">o</span> = mac[19] &amp; 15;
+<span class="font-bold text-accent-blue">const</span> <span class="text-ink">code</span> = ((mac[o] &amp; 0x7f) << 24 | mac[o+1] << 16
+  | mac[o+2] << 8 | mac[o+3]) % <span class="text-ink">1e6</span>;
+<span class="text-ink">code</span>.<span class="text-ink">toString</span>().<span class="text-ink">padStart</span>(6, '0'); <span class="text-muted">// ← your 2FA code</span>
+</code></pre>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ── Perforated divider ─────────────────────────────────── -->
+    <div class="mx-auto max-w-[1200px] px-4 sm:px-6 xl:px-0" aria-hidden="true">
+      <hr class="border-t-2 border-dashed border-ink/40" />
+    </div>
+
+    <!-- ── Numbers: big sealed figures on the orange background ── -->
+    <section aria-label="आँकड़ों में ज़ीरो-नॉलेज">
+      <div class="mx-auto grid max-w-[1200px] grid-cols-1 gap-10 px-4 py-16 text-center sm:grid-cols-3 sm:px-6 lg:py-20 xl:px-0">
+        <div>
+          <p class="font-numeric text-5xl font-black tracking-[-0.03125em] text-ink lg:text-[56px]">0</p>
+          <p class="mt-2 text-sm font-medium text-ink">हमारी तरफ़ सेव की गई कीज़ — सर्वर हैं ही नहीं जिन पर सेव होतीं</p>
+        </div>
+        <div>
+          <p class="font-numeric text-5xl font-black tracking-[-0.03125em] text-ink lg:text-[56px]">100%</p>
+          <p class="mt-2 text-sm font-medium text-ink">कैलकुलेशन आपके डिवाइस पर ही, Web Crypto के ज़रिए</p>
+        </div>
+        <div>
+          <p class="font-numeric text-5xl font-black tracking-[-0.03125em] text-ink lg:text-[56px]">6238</p>
+          <p class="mt-2 text-sm font-medium text-ink">लागू RFC स्टैंडर्ड — हर ऑथेंटिकेशन ऐप से कंपैटिबल</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── How it works: deli tickets on the bar ── -->
+    <section id="how-it-works" class="scroll-mt-20" aria-labelledby="how-title">
+      <div class="mx-auto max-w-[1200px] px-4 py-20 sm:px-6 lg:py-24 xl:px-0">
+        <div class="grid items-start gap-12 lg:grid-cols-[5fr_7fr]">
+          <div>
+            <p class="section-label">यह कैसे काम करता है</p>
+            <h2 id="how-title" class="mt-3 font-display text-3xl tracking-normal text-ink sm:text-4xl lg:text-section-display">
+              लाइव 2FA कोड तक सिर्फ़ तीन स्टेप — बिना मोबाइल।
+            </h2>
+            <p class="mt-5 text-lg font-medium text-ink">
+              टू-स्टेप वेरिफिकेशन आपके अकाउंट्स पर दूसरा ताला लगाता है: एक कोड जो हर 30 सेकंड में
+              बदलता है और एक शेयर्ड सीक्रेट की व मौजूदा समय से बनता है (TOTP — RFC 6238)। यह पेज
+              वही दूसरा ताला है। आपका ब्राउज़र ठीक वही कैलकुलेशन चलाता है जो जिस साइट पर लॉगिन
+              कर रहे हैं वह चलाती है।
+            </p>
+            <p class="mt-4 font-medium text-ink">
+              चूँकि असल में सिर्फ़ सीक्रेट ही सब कुछ है, उसे एन्क्रिप्टेड पासवर्ड मैनेजर में रखकर
+              कोड कहीं भी दोबारा बनाए जा सकते हैं — लैपटॉप, ब्राउज़र का दूसरा प्रोफ़ाइल, सफ़र का
+              कंप्यूटर, ऑफ़लाइन भी।
+            </p>
+            <p class="mt-4 text-sm font-medium text-ink">
+              नए हैं इस विषय में? आसान भाषा में लिखी समझ देखें:{" "}
+              <a href="/hi/what-is-2fa/" class="link">2FA क्या है? TOTP कैसे काम करता है</a>
+            </p>
+            <a href="#generator" class="btn-primary mt-8">अभी आज़माएँ</a>
+          </div>
+          <ol class="grid gap-6 sm:grid-cols-3">
+            {steps.map((s) => (
+              <li class="relative flex flex-col rounded-xs border-2 border-ink bg-cream p-6 pt-7" style="box-shadow: var(--shadow-ticket)">
+                <!-- perforation along the top edge of the ticket -->
+                <span class="absolute inset-x-3 top-1.5 border-t-2 border-dashed border-hairline-strong" aria-hidden="true"></span>
+                <span class="font-numeric text-3xl font-black tracking-[-0.03125em] text-accent-red">{s.n}</span>
+                <h3 class="mt-3 text-lg font-bold text-ink">{s.title}</h3>
+                <p class="mt-2 text-sm font-medium text-ink">{s.body}</p>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Features: light cards + one special dark ── -->
+    <section id="features" class="scroll-mt-20" aria-labelledby="features-title">
+      <div class="mx-auto max-w-[1200px] px-4 py-20 sm:px-6 lg:py-24 xl:px-0">
+        <div class="mb-12 max-w-2xl">
+          <p class="section-label">फ़ीचर्स</p>
+          <h2 id="features-title" class="mt-3 font-display text-3xl tracking-normal text-ink sm:text-4xl lg:text-section-display">
+            वह सब जो 2FA ऐप करती है — और कई काम उससे बेहतर
+          </h2>
+        </div>
+        <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {features.map((f) => (
+            <article
+              class:list={[
+                'p-6 sm:p-8',
+                f.v === 'dark'
+                  ? 'on-dark rounded-xl border-4 border-ink bg-ink text-cream'
+                  : 'rounded-xl border-2 border-ink bg-cream',
+              ]}
+              style={f.v === 'dark' ? 'box-shadow: var(--shadow-card)' : undefined}
+            >
+              <h3 class:list={['text-lg font-bold', f.v === 'dark' ? 'text-primary' : 'text-ink']}>{f.title}</h3>
+              <p class:list={['mt-2.5 text-sm font-medium', f.v === 'dark' ? 'text-cream/80' : 'text-ink']}>{f.body}</p>
+            </article>
+          ))}
+        </div>
+        <div class="cta-banner on-dark mt-6">
+          <div class="flex flex-col items-start justify-between gap-6 lg:flex-row lg:items-center">
+            <div>
+              <h3 class="font-display text-2xl tracking-normal text-primary lg:text-[28px]">
+                आपकी कीज़ हमारा बिज़नेस मॉडल नहीं हैं
+              </h3>
+              <p class="mt-2 max-w-2xl font-medium text-cream/80">
+                न अकाउंट। न लॉगिन। न “डाइग्नॉस्टिक डेटा हमें भेजें”। टूल आपके कोड लोकल ही बनाता
+                है — यह इस डोमेन को USB स्टिक से भी सर्व किया जाए, तो वैसा ही चले।
+              </p>
+            </div>
+            <a href="#generator" class="btn-primary shrink-0">
+              जेनरेटर खोलें
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Perforated divider ─────────────────────────────────── -->
+    <div class="mx-auto max-w-[1200px] px-4 sm:px-6 xl:px-0" aria-hidden="true">
+      <hr class="border-t-2 border-dashed border-ink/40" />
+    </div>
+
+    <!-- ── Compatibility ──────────────────────────────────────── -->
+    <section id="compatibility" class="scroll-mt-20" aria-labelledby="compat-title">
+      <div class="mx-auto max-w-[1200px] px-4 py-20 sm:px-6 lg:py-24 xl:px-0">
+        <div class="mb-10 max-w-2xl">
+          <p class="section-label">कंपैटिबिलिटी</p>
+          <h2 id="compat-title" class="mt-3 font-display text-3xl tracking-normal text-ink sm:text-4xl lg:text-section-display">
+            जहाँ ऑथेंटिकेशन ऐप चले, यह भी वहीं चले
+          </h2>
+          <p class="mt-4 font-medium text-ink">
+            जिस सर्विस में “ऑथेंटिकेशन ऐप इस्तेमाल करें” का विकल्प है, वह यही स्टैंडर्ड TOTP कोड
+            बनाती है — इनमें शामिल हैं:
+          </p>
+        </div>
+        <ul class="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+          {services.map((s) => (
+            <li class="flex items-center justify-center rounded-full border-2 border-ink bg-surface px-3 py-3 text-sm font-semibold text-ink">{s}</li>
+          ))}
+        </ul>
+        <p class="mt-6 text-sm font-medium text-ink">
+          किसी का सेटअप कर रहे हैं? स्टेप-बाय-स्टेप गाइड पढ़ें:{" "}
+          {[
+            ['Google', 'google'],
+            ['Microsoft', 'microsoft'],
+            ['Discord', 'discord'],
+            ['GitHub', 'github'],
+            ['X', 'x'],
+            ['AWS', 'aws'],
+            ['Coinbase', 'coinbase'],
+            ['Kraken', 'kraken'],
+            ['Steam', 'steam'],
+            ['Binance', 'binance'],
+          ].map(([name, slug], i) => (
+            <>
+              {i > 0 && <span aria-hidden="true"> · </span>}
+              <a href={`/guides/${slug}/`} class="link">{name}</a>
+            </>
+          ))}
+        </p>
+      </div>
+    </section>
+
+    <!-- ── About the tool: long-form text ─────────────────────── -->
+    <section id="about" class="scroll-mt-20" aria-labelledby="about-title">
+      <article class="mx-auto max-w-[820px] px-4 py-20 sm:px-6 lg:py-24 xl:px-0">
+        <p class="section-label">इस 2FA टूल के बारे में</p>
+        <h2 id="about-title" class="mt-3 font-display text-3xl tracking-normal text-ink sm:text-4xl lg:text-section-display">
+          2FA COUNTER — वह फ्री 2FA ऑथेंटिकेटर जो आपके ब्राउज़र में रहता है
+        </h2>
+        <div class="rich-text mt-8">
+          <p>
+            लोग यहाँ एक ही चाहत लेकर आते हैं: एक टू-स्टेप वेरिफिकेशन कोड जो अभी, इसी वक़्त चले,
+            बिना कुछ इंस्टॉल किए। 2FA COUNTER बिलकुल यही है। यह एक फ्री 2FA ऑथेंटिकेटर और
+            ब्राउज़र-आधारित 2FA कोड जेनरेटर है: सीक्रेट की पेस्ट करें, QR कोड का स्क्रीनशॉट डालें
+            या कैमरे से स्कैन करें — और मिलता-जुलता लाइव कोड सेकंडों में दिखता है और हर 30
+            सेकंड में अपने-आप रीन्यू होता है, ठीक मोबाइल ऐप की तरह — बस यहाँ इंस्टॉल करने को कुछ
+            नहीं है।
+          </p>
+
+          <h3>2FA क्या है? 60 सेकंड का जवाब</h3>
+          <p>
+            2FA — टू-फ़ैक्टर ऑथेंटिकेशन — आपके अकाउंट का दूसरा ताला है: कुछ जो आपको
+            <em>पता</em> है, उसके साथ कुछ जो आपके <em>पास</em> है। चालू करने पर सर्विस आपको एक
+            बार इस्तेमाल होने वाली शेयर्ड सीक्रेट की देती है। आपका ऑथेंटिकेटर उस सीक्रेट और
+            मौजूदा समय से 6 अंकों का कोड बनाता है — यानी TOTP स्टैंडर्ड, RFC 6238 — और जिस साइट
+            पर लॉगिन कर रहे हैं वह वही कैलकुलेशन करके नतीजे मिलाती है। चूँकि कोड हर 30
+            सेकंड में घूमता है, चोरी हुआ अकेला पासवर्ड कुछ भी नहीं खोलता। पूरी क्रिप्टोग्राफ़ी
+            का सफ़र देखना हो तो आसान भाषा की यह समझ पढ़ें:{" "}
+            <a href="/hi/what-is-2fa/">2FA क्या है? टू-स्टेप वेरिफिकेशन और TOTP कैसे काम करते हैं</a>,
+            और फिर लौटकर अपना पहला कोड बनाएँ।
+          </p>
+
+          <h3>एक की, तीन स्टेप — बस हो गया</h3>
+          <p>
+            लॉगिन के लिए जब भी कोड चाहिए, बस तीन चालें काफ़ी हैं। पहला, साइट पर टू-स्टेप
+            वेरिफिकेशन चालू करें और “ऑथेंटिकेशन ऐप” चुनें; QR स्कैन न हो तो सेटअप की दिखाएँ —
+            एक Base32 स्ट्रिंग या पूरा otpauth:// लिंक। दूसरा, वह की या URI इस पेज के ऊपर वाले
+            जेनरेटर में पेस्ट करें, QR का स्क्रीनशॉट डालें या कैमरा इस्तेमाल करें। तीसरा, ताज़ा
+            बना कोड कॉपी करके लॉगिन पूरा करें। जेनरेटर मिले हर otpauth पैरामीटर की इज़्ज़त
+            करता है: 6, 7 या 8 अंकों के कोड, 15/30/60 सेकंड के पीरियड, SHA-1, SHA-256 या
+            SHA-512 हैश, और काउंटर-आधारित HOTP। कुछ अपलोड नहीं होता, कुछ रिकॉर्ड नहीं होता —
+            कोड आपके डिवाइस पर बनता है, और ब्राउज़र के नेटवर्क टैब से ख़ुद जाँच सकते हैं।
+          </p>
+
+          <h3>एक 2FA ऑथेंटिकेटर जिसे कभी आपके मोबाइल की ज़रूरत नहीं</h3>
+          <p>
+            ज़्यादातर लोग यहाँ इसलिए आते हैं कि फ़ोन हाथ से निकल गया — बिक गया, टूट गया, डूब
+            गया, फ़ॉर्मेट हो गया या सफ़र के बीच बैटरी मर गई — और Google Authenticator, Authy व
+            Microsoft Authenticator सिर्फ़ उसी डिवाइस पर रहते हैं। ब्राउज़र-आधारित 2FA टूल यही
+            अकेला फेल पॉइंट हटा देता है: सीक्रेट आपके पासवर्ड मैनेजर के वॉल्ट में महफ़ूज़ रहता
+            है, और ऑनलाइन 2FA कोड किसी भी भरोसेमंद कंप्यूटर पर दोबारा बनाए जा सकते हैं। यह
+            डेस्कटॉप काम के लिए भी फ़िट है — GitHub या AWS कंसोल में दूसरे मॉनिटर के साथ लॉगिन,
+            हाल की कीज़ की सूची से कई अकाउंट्स संभालना, ऐसी मशीन पर काम जहाँ मोबाइल मना है।
+            ऐप की तरह इंस्टॉल करें और नेटवर्क पूरी तरह बंद होने पर भी जेनरेटर चलता रहेगा। वही
+            RFC 6238 का हिसाब जो हर सर्विस पहले से स्वीकारती है — बस जेब से निकालकर डेस्क पर
+            रख दिया।
+          </p>
+
+          <h3>क्रिप्टो, क्लाउड, गेमिंग और सोशल के लिए एक ही टूल</h3>
+          <p>
+            जो भी सुरक्षित करें, स्टैंडर्ड TOTP ही सबकी आम ज़ुबान है। Binance, Coinbase या
+            Kraken पर ट्रेडिंग, AWS, Microsoft या Google के अकाउंट्स की सुरक्षा, Steam, Discord,
+            X या ईमेल की हिफ़ाज़त — जो भी सर्विस “ऑथेंटिकेशन ऐप इस्तेमाल करें” देती है, वही
+            प्रोटोकॉल बोलती है, इसलिए एक टूल सब संभाल लेता है। जब कोई साइट आपका कोड रिजेक्ट
+            करे, तो लगभग हमेशा डिवाइस की घड़ी दोषी होती है, टूल नहीं: सिस्टम टाइम ऑटोमैटिक सिंक
+            पर रखें, कोड फिर से मैच होने लगेंगे। मशहूर सर्विसेज़ के लिए हम इस जेनरेटर के साथ
+            चलने वाली <a href="/guides/">स्टेप-बाय-स्टेप सेटअप गाइड्स</a> प्रकाशित करते हैं —
+            फ़ीचर चालू करने से लेकर आख़िरी कोड पेस्ट करने तक।
+          </p>
+
+          <h3>कुछ भेजा नहीं जाता, कुछ सेव नहीं होता, कुछ देना नहीं पड़ता</h3>
+          <p>
+            यह उन चंद 2FA टूल्स में से है जिनके पास छिपाने को कुछ नहीं — क्योंकि छिपाने लायक़
+            कुछ है ही नहीं। न कीज़ भेजने वाले सर्वर, न बनाने के लिए अकाउंट, न प्रीमियम टियर, न
+            टेलीमेट्री। हर कोड Web Crypto API से लोकल बनता है; आख़िरी की और हाल की कीज़ की छोटी
+            सूची सिर्फ़ आपके अपने ब्राउज़र की स्टोरेज में रहती है और “सब साफ़ करें” से एक क्लिक
+            में मिट जाती है। हर सीक्रेट की मास्टर कॉपी एन्क्रिप्टेड पासवर्ड मैनेजर में रखें,
+            हर सर्विस के रिकवरी कोड भी संभाल कर रखें, और ताज़ा कोड की जल्दी की कोई भी माँग —
+            वही लाल झंडा समझें जो वह है।
+          </p>
+
+          <p>
+            जब आप तैयार हों: जेनरेटर पेज के ऊपर है। एक की पेस्ट करें और देखिए लाइव कोड काउंटडाउन
+            करता है — फ्री, प्राइवेट, ऑफ़लाइन चलता है, हमेशा के लिए।
+          </p>
+        </div>
+      </article>
+    </section>
+
+    <!-- ── FAQ: perforated list with dotted rules ─────────────── -->
+    <section id="faq" class="scroll-mt-20" aria-labelledby="faq-title">
+      <div class="mx-auto max-w-[1200px] px-4 py-20 sm:px-6 lg:py-24 xl:px-0">
+        <div class="grid gap-12 lg:grid-cols-[4fr_8fr]">
+          <div>
+            <p class="section-label">सामान्य सवाल</p>
+            <h2 id="faq-title" class="mt-3 font-display text-3xl tracking-normal text-ink sm:text-4xl lg:text-section-display">
+              सवाल, सीधे-सीधे जवाब
+            </h2>
+            <p class="mt-4 font-medium text-ink">
+              अब भी शक है? यह टूल जो कुछ भी करता है, आपके ब्राउज़र की DevTools के नेटवर्क टैब में
+              दिखता है: आपकी की ले जाने वाली <span class="font-bold text-ink">शून्य रिक्वेस्ट</span>।
+            </p>
+          </div>
+          <div class="divide-y-2 divide-dashed divide-hairline-strong">
+            {faq.map(({ q, a }) => (
+              <details class="group px-1 py-1">
+                <summary class="flex cursor-pointer list-none items-center justify-between gap-4 py-4 text-left text-lg font-bold text-ink select-none marker:hidden">
+                  {q}
+                  <svg class="h-4 w-4 shrink-0 text-ink transition-transform group-open:rotate-45" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"></path></svg>
+                </summary>
+                <p class="pb-5 text-sm font-medium text-ink">{a}</p>
+              </details>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Final CTA: the dark specials board ─────────────────── -->
+    <section aria-label="अभी शुरू करें">
+      <div class="on-dark bg-ink px-4 py-20 text-center sm:px-6 lg:py-24">
+        <h2 class="mx-auto max-w-[11em] font-display text-display-xl tracking-normal text-primary lg:text-display-xxl">
+          फ़ोन ढूँढना बंद करें
+        </h2>
+        <p class="mx-auto mt-5 max-w-2xl text-lg font-medium text-cream/80">
+          अपने सीक्रेट पासवर्ड मैनेजर में रखें, टू-स्टेप वेरिफिकेशन कोड यहीं बनाएँ, और किसी भी
+          डिवाइस पर लॉग-इन रहें — इंटरनेट न हो तब भी।
+        </p>
+        <a href="#generator" class="btn-primary mt-10 inline-flex">
+          अभी 2FA कोड बनाएँ
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <SiteFooter
+    columns={[
+      {
+        title: 'प्रोडक्ट',
+        links: [
+          { href: '/hi/#generator', label: 'लाइव कोड जेनरेटर' },
+          { href: '/hi/#features', label: 'फ़ीचर्स' },
+          { href: '/hi/what-is-2fa/', label: '2FA क्या है?' },
+          { href: '/hi/#compatibility', label: 'कंपैटिबिलिटी' },
+        ],
+      },
+      {
+        title: 'गाइड्स',
+        links: [
+          { href: '/guides/', label: 'सभी गाइड्स' },
+          { href: '/guides/google/', label: 'Google 2FA' },
+          { href: '/guides/microsoft/', label: 'Microsoft 2FA' },
+          { href: '/guides/discord/', label: 'Discord 2FA' },
+          { href: '/guides/github/', label: 'GitHub 2FA' },
+          { href: '/guides/steam/', label: 'Steam 2FA' },
+          { href: '/guides/binance/', label: 'Binance 2FA' },
+        ],
+      },
+      {
+        title: 'हमारे बारे में',
+        links: [
+          { href: '/about/', label: 'हम कौन हैं' },
+          { href: '/methodology/', label: 'हम कंटेंट कैसे बनाते हैं' },
+          { href: '/contact/', label: 'संपर्क' },
+        ],
+      },
+      {
+        title: 'लीगल',
+        links: [
+          { href: '/privacy/', label: 'प्राइवेसी पॉलिसी' },
+          { href: '/terms/', label: 'सेवा की शर्तें' },
+          { href: '/disclaimer/', label: 'लीगल नोटिस' },
+          { href: '/contact/', label: 'सिक्योरिटी इशू रिपोर्ट करें' },
+        ],
+      },
+    ]}
+    tagline="वह फ्री 2FA ऑथेंटिकेटर जो पूरी तरह आपके ब्राउज़र में चलता है, 2facounter.com पर। न अकाउंट, न सर्वर, न मोबाइल।"
+    languagesTitle="भाषाएँ"
+  />
+</Layout>

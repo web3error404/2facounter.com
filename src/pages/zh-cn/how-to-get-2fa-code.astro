@@ -1,0 +1,243 @@
+---
+/* 简体中文 — 译文版文章 (hreflang: zh-Hans)。与 how-to-get-2fa-code.astro 并行结构。
+   操作指南：用生成器获取 2FA 验证码。链接到各服务的分步指南，并回链首页工具。 */
+import Layout from '../../layouts/Layout.astro';
+import SiteHeader from '../../components/SiteHeader.astro';
+import SiteFooter from '../../components/SiteFooter.astro';
+
+const title = '如何获取 2FA 验证码：分步指南（TOTP）';
+const description =
+  '三步拿到 2FA 验证码：显示设置密钥，粘贴到在线 TOTP 生成器，复制实时验证码完成登录——另有验证码被拒绝时的处理办法。';
+
+const faq = [
+  {
+    q: '设置密钥在哪里？',
+    a: '就在服务显示身份验证器应用二维码的那个屏幕上。找一条类似“无法扫码？”、“手动输入代码”或“显示设置密钥”的链接。它会显示一个 Base32 字符串（或完整的 otpauth:// URI）——两种形式在生成器里都能用。',
+  },
+  {
+    q: '验证码被拒绝了——怎么办？',
+    a: '几乎都是时钟偏差。TOTP 基于时间，设备时钟哪怕只偏差半分钟，生成的验证码就是无效的。把系统时间设为自动同步后再试一次。',
+  },
+  {
+    q: '这和手机应用的验证码是同一个吗？',
+    a: '是。所有身份验证器应用——Google Authenticator、Authy、Microsoft Authenticator，或这个浏览器工具——都从同一个密钥和同一只时钟，算出完全相同的 RFC 6238 TOTP 验证码。它们可以互相替代。',
+  },
+  {
+    q: '我仍然需要恢复代码吗？',
+    a: '需要。请离线保存，与这个工具分开存放。如果有一天你失去了存放密钥的设备的访问权，恢复代码就是回到账户的通道。',
+  },
+];
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: '2FA COUNTER', item: 'https://2facounter.com/zh-cn/' },
+      { '@type': 'ListItem', position: 2, name: '如何获取 2FA 验证码', item: 'https://2facounter.com/zh-cn/how-to-get-2fa-code/' },
+    ],
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'HowTo',
+    name: '用在线 TOTP 生成器获取 2FA 验证码',
+    totalTime: 'PT3M',
+    step: [
+      { '@type': 'HowToStep', position: 1, name: '开启 2FA 并显示设置密钥', text: '打开服务的安全设置，选择身份验证器应用选项，并在无法扫描二维码时显示设置密钥。' },
+      { '@type': 'HowToStep', position: 2, name: '把密钥粘贴进生成器', text: '把 Base32 字符串或 otpauth:// URI 粘贴到 2FA COUNTER 首页的生成器里。所有计算都在浏览器本地完成。' },
+      { '@type': 'HowToStep', position: 3, name: '复制实时验证码并确认', text: '在 30 秒有效期内把 6 位验证码输入服务的确认界面完成设置——之后每次登录都重复同样的流程。' },
+    ],
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faq.map(({ q, a }) => ({
+      '@type': 'Question',
+      name: q,
+      acceptedAnswer: { '@type': 'Answer', text: a },
+    })),
+  },
+];
+
+const alternates = [
+  { hreflang: 'en', href: 'https://2facounter.com/how-to-get-2fa-code/' },
+  { hreflang: 'vi', href: 'https://2facounter.com/vi/how-to-get-2fa-code/' },
+  { hreflang: 'zh-Hans', href: 'https://2facounter.com/zh-cn/how-to-get-2fa-code/' },
+  { hreflang: 'zh-Hant', href: 'https://2facounter.com/zh-tw/how-to-get-2fa-code/' },
+  { hreflang: 'es', href: 'https://2facounter.com/es/how-to-get-2fa-code/' },
+  { hreflang: 'ja', href: 'https://2facounter.com/ja/how-to-get-2fa-code/' },
+  { hreflang: 'fr', href: 'https://2facounter.com/fr/how-to-get-2fa-code/' },
+  { hreflang: 'de', href: 'https://2facounter.com/de/how-to-get-2fa-code/' },
+  { hreflang: 'pt', href: 'https://2facounter.com/pt/how-to-get-2fa-code/' },
+  { hreflang: 'ko', href: 'https://2facounter.com/ko/how-to-get-2fa-code/' },
+  { hreflang: 'it', href: 'https://2facounter.com/it/how-to-get-2fa-code/' },
+  
+  { hreflang: 'hi', href: 'https://2facounter.com/hi/how-to-get-2fa-code/' },
+
+  { hreflang: 'ar', href: 'https://2facounter.com/ar/how-to-get-2fa-code/' },
+
+  { hreflang: 'bn', href: 'https://2facounter.com/bn/how-to-get-2fa-code/' },
+
+  { hreflang: 'ru', href: 'https://2facounter.com/ru/how-to-get-2fa-code/' },
+{ hreflang: 'x-default', href: 'https://2facounter.com/how-to-get-2fa-code/' },
+];
+---
+
+<Layout title={title} description={description} path="/zh-cn/how-to-get-2fa-code/" lang="zh-Hans" jsonLd={jsonLd} alternates={alternates} image="/og-zh-cn.png">
+  <SiteHeader locale="zh-cn"
+    links={[
+      { href: '/zh-cn/', label: '2FA 验证码生成' },
+      { href: '/zh-cn/what-is-2fa/', label: '什么是 2FA？' },
+      { href: '/guides/', label: '使用指南' },
+      { href: '/privacy/', label: '隐私政策' },
+    ]}
+    cta="立即生成"
+  />
+  <main id="main">
+    <article class="mx-auto max-w-[820px] px-4 py-20 sm:px-6 lg:py-24 xl:px-0">
+      <p class="section-label">2FA 操作指南</p>
+      <h1 class="mt-3 font-display text-4xl tracking-normal text-ink sm:text-5xl">
+        如何获取你的 2FA 验证码
+      </h1>
+      <p class="mt-5 text-lg font-medium text-ink">
+        整个过程只要一分钟左右：显示设置密钥，粘贴到本页，再把得到的验证码输入向你要它的那个
+        界面。不需要手机——这套数学的标准参考实现正运行在<a href="/zh-cn/">首页生成器</a>的
+        最上方。
+      </p>
+
+      <div class="rich-text mt-10">
+        <h2>开工之前需要什么</h2>
+        <p>
+          首先是账户访问——显然，你应该已经登录了想保护的服务。除此之外只有两件事重要。其一，
+          服务必须提供<strong>身份验证器应用</strong>作为第二重因素；这涵盖了 Google、
+          Microsoft、GitHub、Discord、Steam、AWS、Coinbase、Kraken、Binance、X，以及大多数
+          银行和交易所。其二，你需要一个<em>运行</em>验证器的地方：手机应用，或者——这正是本
+          站的意义所在——这个浏览器工具，它不需要安装任何东西，就能算出完全相同的验证码。
+        </p>
+        <p>
+          顺带说说叫法：这个第二重因素在不同服务里叫“双重验证”、“2FA”、“两步验证”、“TOTP”或
+          “身份验证器应用”。标签背后的东西完全一样——基于时间、从共享密钥推导出的一次性
+          验证码。如果你想了解机制本身而不是用法，读
+          <a href="/zh-cn/what-is-2fa/">什么是 2FA？TOTP 如何工作</a>。
+        </p>
+
+        <h2>第 1 步：开启 2FA 并显示设置密钥</h2>
+        <p>
+          打开账户的安全设置，找到双重验证相关的部分。选择<em>身份验证器应用</em>选项。服务会
+          显示一个二维码让你用手机扫描——而那个屏幕几乎总会提供一个替代路径：写着
+          <em>“无法扫码？”</em>、<em>“手动输入代码”</em>或<em>“设置密钥”</em>的链接。点开它，
+          真正的秘密才会露面：一串形如 <code>JBSWY3DPEHPK3PXP</code> 的 Base32 字符串，偶尔还
+          裹在完整的 <code>otpauth://</code> URI 里，额外携带账户标签、位数、刷新周期和哈希
+          算法。
+        </p>
+        <p>
+          这个密钥<strong>就是</strong>凭据本身——它是第二重因素中你密码的“可携带等效物”。
+          把这一屏当作恢复界面来对待：没有任何正派的人会请你去往邮件或聊天工具里粘贴设置
+          密钥。复制它，完成 2FA 的开启（多数服务会要求一个有效验证码来确认），再把原件放进
+          密码管理器之类的加密地方。
+        </p>
+
+        <h2>第 2 步：把密钥粘贴进生成器</h2>
+        <p>
+          在<a href="/zh-cn/">首页最上方的生成器</a>里，粘贴你刚复制的内容——裸 Base32 字符串
+          或完整的 <code>otpauth://</code> 链接都可以。几秒内就会出现一个实时的 6 位验证码，
+          并每 30 秒刷新一次。你也可以从图片导入密钥：用 Ctrl+V 把二维码截图直接贴到页面，
+          或拖入一个图片文件，或用摄像头扫描二维码——解码全部在本地完成，什么都不上传。如果
+          服务给出了非标准配置（8 位验证码、15/30/60 秒周期、SHA-256，或基于计数器的 HOTP），
+          完整的 <code>otpauth://</code> URI 会带上全部参数，生成器会自动遵循。
+        </p>
+
+        <h2>第 3 步：复制实时验证码，完成登录</h2>
+        <p>
+          在验证码轮换之前，把当前的值输入验证提示框。每个验证码只在一个 30 秒窗口内有效
+          （自定义周期的服务会更短或更长），所以如果倒计时已经逼近最后几秒，宁可等下一个码，
+          也别赶着输一个快过期的。从现在起，你在这个服务的每次登录都重复同一循环：打开生成器
+          → 复制验证码 → 粘贴进输入框。上一个密钥只会<a href="/privacy/">记在你自己浏览器的
+          localStorage 里</a>，所以下次到访只差一击。
+        </p>
+
+        <h2>常见服务的设置密钥藏在哪</h2>
+        <p>
+          每个服务把身份验证器选项埋在略有不同的位置，所以我们发布了与这个生成器配套的
+          <a href="/guides/">分步设置指南</a>——每篇的终点都是把密钥粘贴到这里、完成设置。
+          被问最多的是：<a href="/guides/google/">Google</a>、{" "}
+          <a href="/guides/microsoft/">Microsoft</a>、<a href="/guides/discord/">Discord</a>、{" "}
+          <a href="/guides/github/">GitHub</a>、<a href="/guides/steam/">Steam</a>、{" "}
+          <a href="/guides/aws/">AWS</a>、<a href="/guides/coinbase/">Coinbase</a>、{" "}
+          <a href="/guides/kraken/">Kraken</a> 和 <a href="/guides/binance/">Binance</a>。
+        </p>
+
+        <h2>故障排查：不好用时该怎么办</h2>
+        <p>
+          <strong>验证码被拒绝。</strong>实践中几乎总是因为运行生成器的设备时钟有偏差。TOTP
+          要把你的验证码与从服务端<em>时钟</em>推导出的验证码相比对；如果系统时间偏差哪怕半
+          分钟，两者就会分岔。让操作系统自动同步时间（Windows：日期和时间设置里的“立即同步”；
+          macOS：“自动设置日期与时间”），再用下一个验证码试试。
+        </p>
+        <p>
+          <strong>二维码扫不出来。</strong>改用<em>“无法扫码？”</em>链接显示设置密钥——文字
+          密钥永远比拍屏幕可靠。如果你只有截图，把它裁剪到只剩二维码本身；压缩严重或拍摄角度
+          歪斜的图片经常解码失败。
+        </p>
+        <p>
+          <strong>放密钥的那部手机丢了。</strong>这正是这个工具被造出来的原因：只要密钥原件还
+          保存在你的密码管理器里——或者手机还能用的时候你已经把它粘贴到了这里——你就能在
+          任何一台电脑上重新生成验证码。不需要手机，不需要恢复备份，不需要提工单。
+        </p>
+
+        <h2>值得养成的两个习惯</h2>
+        <p>
+          开启 2FA 时就把服务的<strong>恢复代码</strong>离线保存；一旦丢失存放密钥的设备，它们
+          就是你的救命索。另外，别把实时的 2FA 验证码当成可以分享的东西：没有任何客服、银行、
+          交易所会主动要你当下的验证码。一个验证码只在它自己的 30 秒窗口里、在你自己选择的
+          登录页面上才有用。
+        </p>
+      </div>
+    </article>
+  </main>
+  <SiteFooter
+    columns={[
+      {
+        title: '产品',
+        links: [
+          { href: '/zh-cn/#generator', label: '在线生成器' },
+          { href: '/zh-cn/how-to-get-2fa-code/', label: '如何获取 2FA 验证码' },
+          { href: '/zh-cn/what-is-2fa/', label: '什么是双重验证？' },
+          { href: '/zh-cn/#features', label: '功能' },
+          { href: '/zh-cn/#compatibility', label: '兼容性' },
+        ],
+      },
+      {
+        title: '使用指南',
+        links: [
+          { href: '/guides/', label: '全部指南' },
+          { href: '/guides/google/', label: 'Google 2FA' },
+          { href: '/guides/microsoft/', label: 'Microsoft 2FA' },
+          { href: '/guides/discord/', label: 'Discord 2FA' },
+          { href: '/guides/github/', label: 'GitHub 2FA' },
+          { href: '/guides/steam/', label: 'Steam 2FA' },
+          { href: '/guides/binance/', label: 'Binance 2FA' },
+        ],
+      },
+      {
+        title: '关于',
+        links: [
+          { href: '/about/', label: '关于我们' },
+          { href: '/methodology/', label: '编审流程' },
+          { href: '/contact/', label: '联系方式' },
+        ],
+      },
+      {
+        title: '法律条款',
+        links: [
+          { href: '/privacy/', label: '隐私政策' },
+          { href: '/terms/', label: '服务条款' },
+          { href: '/disclaimer/', label: '免责声明' },
+          { href: '/contact/', label: '报告安全问题' },
+        ],
+      },
+    ]}
+    tagline="一款零知识的 2FA 验证器，完全运行在你的浏览器中（2facounter.com）。没有账户，没有服务器，也不需要手机。"
+    languagesTitle="语言"
+  />
+</Layout>

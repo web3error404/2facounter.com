@@ -1,0 +1,257 @@
+---
+/* /how-to-get-2fa-code/ — বাংলা অনুবাদ (hreflang: bn)। মূলের সমান্তরাল
+   কাঠামো; বাংলা SEO-র জন্য অনুবাদ। */
+import Layout from '../../layouts/Layout.astro';
+import SiteHeader from '../../components/SiteHeader.astro';
+import SiteFooter from '../../components/SiteFooter.astro';
+
+const title = '2FA কোড কীভাবে পাব: ধাপে ধাপে গাইড (TOTP)';
+const description =
+  'তিন ধাপে 2FA কোড কীভাবে পাবেন: সেটআপ কী দেখান, অনলাইন TOTP জেনারেটরে পেস্ট করুন আর লাইভ কোড কপি করুন — সঙ্গে কোড না মানলে সমাধান।';
+
+const faq = [
+  {
+    q: 'সেটআপ কী কোথায় পাব?',
+    a: 'সার্ভিস যে পর্দায় অথেন্টিকেটর অ্যাপের জন্য QR কোড দেখায়, সেখানেই। “স্ক্যান করতে পারছেন না?”, “কোড ম্যানুয়ালি লিখুন” বা “সেটআপ কী দেখান” ধাঁচের একটি লিংক খুঁজুন। খুললেই একটি Base32 স্ট্রিং (বা সম্পূর্ণ otpauth:// URI) প্রকাশ হয় — দুটোরই জেনারেটরে কাজ করে।',
+  },
+  {
+    q: 'কোড গ্রহণ করা হচ্ছে না, কী করব?',
+    a: 'প্রায় সবসময়ই কারণ ঘড়ির ফারাক। TOTP সময়ের ওপর নির্ভরশীল: ঘড়ি অর্ধেক মিনিটও এদিক-ওদিক থাকলে কোড অবৈধ হয়। সিস্টেমের সময় অটোমেটিক সিঙ্কে রাখুন আর আবার চেষ্টা করুন।',
+  },
+  {
+    q: 'এটি কি আমার ফোনের অ্যাপের তৈরি কোডেরই সমান?',
+    a: 'হ্যাঁ। প্রতিটি অথেন্টিকেটর অ্যাপ — Google Authenticator, Authy, Microsoft Authenticator বা এই ব্রাউজার টুল — একই সিক্রেট আর একই ঘড়ি থেকে RFC 6238-এর একই TOTP কোড হিসাব করে। একে অপরের বিকল্প।',
+  },
+  {
+    q: 'রিকভারি কোডগুলো তবু দরকার?',
+    a: 'হ্যাঁ। এই টুল থেকে আলাদা করে অফলাইনে সংরক্ষণ করুন। সিক্রেট কী-এর ডিভাইসে অ্যাক্সেস কখনো হারালে অ্যাকাউন্টে ফেরার একমাত্র পথ রিকভারি কোডগুলোই।',
+  },
+];
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: '2FA COUNTER', item: 'https://2facounter.com/' },
+      { '@type': 'ListItem', position: 2, name: '2FA কোড কীভাবে পাব', item: 'https://2facounter.com/bn/how-to-get-2fa-code/' },
+    ],
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'HowTo',
+    name: 'অনলাইন TOTP জেনারেটর দিয়ে 2FA কোড কীভাবে পাব',
+    totalTime: 'PT3M',
+    step: [
+      { '@type': 'HowToStep', position: 1, name: '2FA চালু করে সেটআপ কী দেখান', text: 'সার্ভিসের সিকিউরিটি সেটিংস খুলুন, অথেন্টিকেটর অ্যাপের অপশন বেছে নিন, আর QR কোড স্ক্যান করা না গেলে সেটআপ কী দেখান।' },
+      { '@type': 'HowToStep', position: 2, name: 'কী জেনারেটরে পেস্ট করুন', text: 'Base32 স্ট্রিং বা otpauth:// URI 2FA COUNTER-এর হোমপেজের জেনারেটরে পেস্ট করুন। সব হিসাব হয় ব্রাউজারেই, লোকালি।' },
+      { '@type': 'HowToStep', position: 3, name: 'লাইভ কোড কপি করে নিশ্চিত করুন', text: '6 ডিজিটের কোডটি 30 সেকেন্ডের মেয়াদের মধ্যে সার্ভিসের ভেরিফিকেশন পর্দায় ঢুকিয়ে সেটআপ নিশ্চিত করুন — ভবিষ্যতের প্রতিটি লগইনে একই ধাপ ঘুরবে।' },
+    ],
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faq.map(({ q, a }) => ({
+      '@type': 'Question',
+      name: q,
+      acceptedAnswer: { '@type': 'Answer', text: a },
+    })),
+  },
+];
+
+// hreflang cluster for the translated article (+ x-default → English)
+const alternates = [
+  { hreflang: 'en', href: 'https://2facounter.com/how-to-get-2fa-code/' },
+  { hreflang: 'vi', href: 'https://2facounter.com/vi/how-to-get-2fa-code/' },
+  { hreflang: 'zh-Hans', href: 'https://2facounter.com/zh-cn/how-to-get-2fa-code/' },
+  { hreflang: 'zh-Hant', href: 'https://2facounter.com/zh-tw/how-to-get-2fa-code/' },
+  { hreflang: 'es', href: 'https://2facounter.com/es/how-to-get-2fa-code/' },
+  { hreflang: 'ja', href: 'https://2facounter.com/ja/how-to-get-2fa-code/' },
+  { hreflang: 'fr', href: 'https://2facounter.com/fr/how-to-get-2fa-code/' },
+  { hreflang: 'de', href: 'https://2facounter.com/de/how-to-get-2fa-code/' },
+  { hreflang: 'pt', href: 'https://2facounter.com/pt/how-to-get-2fa-code/' },
+  { hreflang: 'ko', href: 'https://2facounter.com/ko/how-to-get-2fa-code/' },
+  { hreflang: 'it', href: 'https://2facounter.com/it/how-to-get-2fa-code/' },
+  
+  { hreflang: 'hi', href: 'https://2facounter.com/hi/how-to-get-2fa-code/' },
+
+  { hreflang: 'ar', href: 'https://2facounter.com/ar/how-to-get-2fa-code/' },
+
+  { hreflang: 'bn', href: 'https://2facounter.com/bn/how-to-get-2fa-code/' },
+
+  { hreflang: 'ru', href: 'https://2facounter.com/ru/how-to-get-2fa-code/' },
+{ hreflang: 'x-default', href: 'https://2facounter.com/how-to-get-2fa-code/' },
+];
+---
+
+
+  <Layout title={title} description={description} path="/bn/how-to-get-2fa-code/" lang="bn" jsonLd={jsonLd} alternates={alternates} image="/og-bn.png">
+    <SiteHeader locale="bn"
+
+  
+    links={[
+      { href: '/bn/', label: '2FA কোড তৈরি করুন' },
+      { href: '/bn/what-is-2fa/', label: '2FA কী?' },
+      { href: '/guides/', label: 'গাইড' },
+      { href: '/privacy/', label: 'প্রাইভেসি' },
+    ]}
+    cta="আমার কোড তৈরি করুন"
+  />
+  <main id="main">
+    <article class="mx-auto max-w-[820px] px-4 py-20 sm:px-6 lg:py-24 xl:px-0">
+      <p class="section-label">ব্যবহারিক 2FA গাইড</p>
+      <h1 class="mt-3 font-display text-4xl tracking-normal text-ink sm:text-5xl">
+        আপনার 2FA কোড কীভাবে পাবেন
+      </h1>
+      <p class="mt-5 text-lg font-medium text-ink">
+        পুরো প্রক্রিয়া লাগে প্রায় এক মিনিট: সেটআপ কী দেখান, এখানে পেস্ট করুন আর কোডটি যে পর্দা
+        চেয়েছে সেখানে লিখে দিন। মোবাইল দরকার নেই — গণিতের রেফারেন্স ইমপ্লিমেন্টেশন চলছে{" "}
+        <a href="/bn/">হোমপেজের</a> ওপরেই।
+      </p>
+
+      <div class="rich-text mt-10">
+        <h2>শুরুর আগে যা যা দরকার</h2>
+        <p>
+          স্পষ্ট কারণেই অ্যাকাউন্টে অ্যাক্সেস — যে সার্ভিস সুরক্ষিত করতে চান সেখানে লগইন করা থাকার
+          কথা। তার বাইরে দুটি বিষয় মাথায় রাখুন। প্রথমত: সার্ভিসে দ্বিতীয় ফ্যাক্টর হিসেবে{" "}
+          <strong>অথেন্টিকেটর অ্যাপের</strong> অপশন থাকতে হবে; এতে Google, Microsoft, GitHub,
+          Discord, Steam, AWS, Coinbase, Kraken, Binance, X এবং বেশিরভাগ ব্যাংক ও এক্সচেঞ্জই ধরা
+          পড়ে। দ্বিতীয়ত: অথেন্টিকেটর <em>চালানোর</em> একটি জায়গা দরকার — মোবাইল অ্যাপ, অথবা
+          এই সাইটের জন্মকারণ — এই ব্রাউজার টুল, যা কিছু ইনস্টল না করেই হুবহু একই কোড তৈরি করে।
+        </p>
+        <p>
+          নাম নিয়ে একটি কথা: সার্ভিসগুলো এই দ্বিতীয় ফ্যাক্টরকে “টু-ফ্যাক্টর অথেন্টিকেশন”,
+          “2FA”, “দুই ধাপের ভেরিফিকেশন”, “TOTP” বা “অথেন্টিকেটর অ্যাপ” বলে ডাকে। লেবেলের নিচে
+          সব একই জিনিস — শেয়ার করা সিক্রেট থেকে সময়-ভিত্তিক তৈরি একবার ব্যবহারযোগ্য কোড।
+          ব্যবহার করার চেয়ে মেকানিজমটিও জানতে চাইলে পড়ুন{" "}
+          <a href="/bn/what-is-2fa/">2FA কী? TOTP কীভাবে কাজ করে</a>।
+        </p>
+
+        <h2>ধাপ 1: 2FA চালু করে সেটআপ কী দেখান</h2>
+        <p>
+          অ্যাকাউন্টের সিকিউরিটি সেটিংস খুলে টু-ফ্যাক্টর অথেন্টিকেশনের অংশটি খুঁজুন।{" "}
+          <em>অথেন্টিকেটর অ্যাপের</em> অপশনটি বেছে নিন। সার্ভিস একটি QR কোড দেখায় ফোন দিয়ে
+          স্ক্যান করার জন্য — আর সেই পর্দায় প্রায় সবসময়ই বিকল্প থাকে:{" "}
+          <em>“স্ক্যান করতে পারছেন না?”</em>, <em>“কোড ম্যানুয়ালি লিখুন”</em> বা{" "}
+          <em>“সেটআপ কী”</em> লেখা একটি লিংক। এতেই ফুটে ওঠে আসল সিক্রেট:{" "}
+          <code>JBSWY3DPEHPK3PXP</code>-এর মতো একটি Base32 স্ট্রিং, কখনো সম্পূর্ণ{" "}
+          <code>otpauth://</code> URI-তে মোড়ানো — সঙ্গে অ্যাকাউন্টের লেবেল, ডিজিটের সংখ্যা,
+          রিফ্রেশ পিরিয়ড আর হ্যাশ অ্যালগরিদম।
+        </p>
+        <p>
+          এই কীটি <strong>নিজেই</strong> ক্রেডেনশিয়াল — দ্বিতীয় ফ্যাক্টরের জন্য আপনার
+          পাসওয়ার্ডের পকেট-সংস্করণ। ওই পর্দাটিকে রিকভারি পর্দার মতোই সামলান: কোনো সত্যিকারের
+          পক্ষই কখনো ইমেল বা চ্যাটে সেটআপ কী পেস্ট করতে বলবে না। কী কপি করুন, 2FA চালু শেষ করুন
+          (নিশ্চিত করতে বেশিরভাগ সার্ভিস একটি কাজ করা কোড চায়) আর মূলটি এনক্রিপ্টেড কোথাও রাখুন —
+          যেমন পাসওয়ার্ড ম্যানেজারে।
+        </p>
+
+        <h2>ধাপ 2: কী জেনারেটরে পেস্ট করুন</h2>
+        <p>
+          <a href="/bn/">আমাদের হোমপেজের ওপরের জেনারেটরে</a> কপি করা জিনিসটি পেস্ট করুন — খালি
+          Base32 স্ট্রিং বা সম্পূর্ণ <code>otpauth://</code> লিংক; দুটোই চলে। কয়েক সেকেন্ডেই 6
+          ডিজিটের লাইভ কোড চলে আসে, প্রতি 30 সেকেন্ডে নতুন হয়। ছবি থেকেও কী আনা যায়: QR-এর
+          স্ক্রিনশট সরাসরি Ctrl+V চেপে পেজে পেস্ট করুন, ইমেজ ফাইল টেনে আনুন বা ক্যামেরা দিয়ে
+          স্ক্যান করুন — ডিকোডিং হয় লোকালি, কিছুই আপলোড হয় না। সার্ভিস স্ট্যান্ডার্ড বাইরের
+          কনফিগ ব্যবহার করলে (8 ডিজিটের কোড, 15/30/60 সেকেন্ডের পিরিয়ড, SHA-256 বা কাউন্টার-ভিত্তিক
+          HOTP), সম্পূর্ণ <code>otpauth://</code> URI সব প্যারামিটার বয়ে আনে আর জেনারেটর
+          স্বয়ংক্রিয়ভাবে সেগুলো মেনে চলে।
+        </p>
+
+        <h2>ধাপ 3: লাইভ কোড কপি করে লগইন শেষ করুন</h2>
+        <p>
+          কোড বদলানোর আগেই চলতি কোডটি ভেরিফিকেশন পর্দায় লিখুন। প্রতিটি কোডের মেয়াদ 30 সেকেন্ডের
+          উইন্ডো (নিজস্ব পিরিয়ড রাখা সার্ভিসে কম বা বেশি), তাই কাউন্টডাউন শেষ সেকেন্ডে ঢুকলে
+          পুরনো কোড তাড়াহুড়োয় টাইপ না করে পরেরটির অপেক্ষা করুন। এরপর এই সার্ভিসের প্রতিটি
+          লগইনে একই ঘূর্ণি: জেনারেটর খুলুন → কোড কপি করুন → পেস্ট করুন। আপনার শেষ কী মনে থাকে{" "}
+          <a href="/privacy/">শুধু আপনার নিজের ব্রাউজারের লোকাল স্টোরেজে</a>, তাই পরের বার
+          মাত্র এক ক্লিক দূরে।
+        </p>
+
+        <h2>জনপ্রিয় সার্ভিসে সেটআপ কী কোথায় পাবেন</h2>
+        <p>
+          প্রতিটি সার্ভিস অথেন্টিকেটরের অপশনটি সামান্য ভিন্ন জায়গায় লুকিয়ে রাখে, তাই আমরা এই
+          জেনারেটরের সঙ্গী হিসেবে <a href="/guides/">ধাপে ধাপে সেটআপ গাইড</a> প্রকাশ করি — যেগুলো
+          শেষ হয় আপনি এখানে কী পেস্ট করে সেটআপ সম্পূর্ণ করার মধ্য দিয়ে। সবচেয়ে চাহিদাসম্পন্ন:{" "}
+          <a href="/guides/google/">Google</a>, <a href="/guides/microsoft/">Microsoft</a>,{" "}
+          <a href="/guides/discord/">Discord</a>, <a href="/guides/github/">GitHub</a>,{" "}
+          <a href="/guides/steam/">Steam</a>, <a href="/guides/aws/">AWS</a>,{" "}
+          <a href="/guides/coinbase/">Coinbase</a>, <a href="/guides/kraken/">Kraken</a> এবং{" "}
+          <a href="/guides/binance/">Binance</a>।
+        </p>
+
+        <h2>সমস্যা সমাধান: কাজ না করলে কী করবেন</h2>
+        <p>
+          <strong>কোড গ্রহণ করা হচ্ছে না।</strong> বাস্তবে প্রায় সবসময়ই কারণ জেনারেটর চালানো
+          ডিভাইসের ঘড়ির ফারাক। TOTP আপনার কোডের সঙ্গে <em>সার্ভিসের</em> ঘড়ি থেকে আসা কোড মেলায়;
+          আপনার সিস্টেমের সময় অর্ধেক মিনিটও এদিক-ওদিক থাকলে দুটি আলাদা হয়ে যায়। অপারেটিং সিস্টেমে
+          সময় অটোমেটিক সিঙ্ক চালু করুন (Windows-এ ডেট অ্যান্ড টাইম সেটিংসে “Sync now”;
+          macOS-এ “Set date and time automatically”) আর পরের কোড দিয়ে চেষ্টা করুন।
+        </p>
+        <p>
+          <strong>QR কোড স্ক্যান হচ্ছে না।</strong> <em>“স্ক্যান করতে পারছেন না?”</em> লিংকটি
+          ব্যবহার করে সেটআপ কী দেখান — টেক্সট আকারের কী সবসময় স্ক্রিনের ছবি তোলার চেয়ে নির্ভরযোগ্য।
+          শুধু স্ক্রিনশট থাকলে QR পর্যন্ত ক্রপ করুন; অতিরিক্ত কমপ্রেসড বা তির্যক কোণার ছবি
+          প্রায়ই ডিকোড করতে অস্বীকার করে।
+        </p>
+        <p>
+          <strong>কী-ওয়ালা ফোন হারিয়ে গেছে।</strong> এই টুল ঠিক এই অবস্থার জন্যই বানানো: মূল
+          সিক্রেট পাসওয়ার্ড ম্যানেজারে রেখে থাকলে — বা ফোন চলাকালীন এখানে পেস্ট করে থাকলে —
+          যেকোনো কম্পিউটারে কোড আবার তৈরি করা যায়। মোবাইল নেই, রিস্টোর নেই, সাপোর্ট টিকেট নেই।
+        </p>
+
+        <h2>দুটি অভ্যাস যা কাজে দেয়</h2>
+        <p>
+          2FA চালুর সময় সার্ভিসের <strong>রিকভারি কোডগুলো</strong> অফলাইনে রেখে দিন; সিক্রেটের
+          ডিভাইস কখনো হারালে এগুলোই ভাসমান রক্ষাকবচ। আর লাইভ 2FA কোডকে কখনো শেয়ারযোগ্য জিনিস ভাববেন
+          না: কোনো সাপোর্ট এজেন্ট, কোনো ব্যাংক, কোনো এক্সচেঞ্জের আপনার চলতি কোড না চেয়েই দরকার হয়
+          না। একটি কোড কাজ করে শুধু নিজের 30 সেকেন্ডের মেয়াদে, শুধু আপনার বেছে নেওয়া লগইন পর্দায়।
+        </p>
+      </div>
+    </article>
+  </main>
+  <SiteFooter
+    columns={[
+      {
+        title: 'প্রোডাক্ট',
+        links: [
+          { href: '/bn/#generator', label: 'লাইভ কোড জেনারেটর' },
+          { href: '/bn/how-to-get-2fa-code/', label: '2FA কোড কীভাবে পাব' },
+          { href: '/bn/what-is-2fa/', label: '2FA কী?' },
+          { href: '/bn/#features', label: 'ফিচারসমূহ' },
+        ],
+      },
+      {
+        title: 'গাইড',
+        links: [
+          { href: '/guides/', label: 'সব গাইড' },
+          { href: '/guides/google/', label: 'Google 2FA' },
+          { href: '/guides/microsoft/', label: 'Microsoft 2FA' },
+          { href: '/guides/discord/', label: 'Discord 2FA' },
+          { href: '/guides/github/', label: 'GitHub 2FA' },
+          { href: '/guides/steam/', label: 'Steam 2FA' },
+          { href: '/guides/binance/', label: 'Binance 2FA' },
+        ],
+      },
+      {
+        title: 'আমাদের সম্পর্কে',
+        links: [
+          { href: '/about/', label: 'আমরা কারা' },
+          { href: '/methodology/', label: 'আমরা কীভাবে কনটেন্ট তৈরি করি' },
+          { href: '/contact/', label: 'যোগাযোগ' },
+        ],
+      },
+      {
+        title: 'লিগ্যাল',
+        links: [
+          { href: '/privacy/', label: 'প্রাইভেসি পলিসি' },
+          { href: '/terms/', label: 'সার্ভিসের শর্তাবলি' },
+          { href: '/disclaimer/', label: 'আইনি বিজ্ঞপ্তি' },
+          { href: '/contact/', label: 'সিকিউরিটি সমস্যা জানান' },
+        ],
+      },
+    ]}
+    tagline="ফ্রি 2FA অথেন্টিকেটর যা সম্পূর্ণ আপনার ব্রাউজারেই চলে, 2facounter.com-এ। অ্যাকাউন্ট নেই, সার্ভার নেই, মোবাইল লাগে না।"
+    languagesTitle="ভাষা"
+  />
+</Layout>

@@ -3,10 +3,13 @@ import Layout from '../layouts/Layout.astro';
 import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 
-// hreflang alternates for the 8 translated versions of this article
-// (+ x-default → English). vi/zh variants are not published yet.
+// hreflang alternates — translations now exist in all 10 locales
+// (+ x-default → English).
 const alternates = [
   { hreflang: 'en', href: 'https://2facounter.com/what-is-2fa/' },
+  { hreflang: 'vi', href: 'https://2facounter.com/vi/what-is-2fa/' },
+  { hreflang: 'zh-Hans', href: 'https://2facounter.com/zh-cn/what-is-2fa/' },
+  { hreflang: 'zh-Hant', href: 'https://2facounter.com/zh-tw/what-is-2fa/' },
   { hreflang: 'es', href: 'https://2facounter.com/es/what-is-2fa/' },
   { hreflang: 'ja', href: 'https://2facounter.com/ja/what-is-2fa/' },
   { hreflang: 'fr', href: 'https://2facounter.com/fr/what-is-2fa/' },
@@ -14,12 +17,20 @@ const alternates = [
   { hreflang: 'pt', href: 'https://2facounter.com/pt/what-is-2fa/' },
   { hreflang: 'ko', href: 'https://2facounter.com/ko/what-is-2fa/' },
   { hreflang: 'it', href: 'https://2facounter.com/it/what-is-2fa/' },
-  { hreflang: 'x-default', href: 'https://2facounter.com/what-is-2fa/' },
+  
+  { hreflang: 'hi', href: 'https://2facounter.com/hi/what-is-2fa/' },
+
+  { hreflang: 'ar', href: 'https://2facounter.com/ar/what-is-2fa/' },
+
+  { hreflang: 'bn', href: 'https://2facounter.com/bn/what-is-2fa/' },
+
+  { hreflang: 'ru', href: 'https://2facounter.com/ru/what-is-2fa/' },
+{ hreflang: 'x-default', href: 'https://2facounter.com/what-is-2fa/' },
 ];
 
-const title = 'What is 2FA? How Two-Factor Authentication & TOTP Codes Work — 2FA COUNTER';
+const title = 'What Is 2FA? TOTP Codes Explained — 2FA COUNTER';
 const description =
-  'What is 2FA? A plain-English guide to two-factor authentication, TOTP codes, RFC 6238, why they beat SMS, and how to never get locked out. Free 2FA code generator included.';
+  'What is 2FA? A plain-English guide to two-factor authentication and TOTP codes: why they beat SMS and how to never get locked out. Free generator included.';
 
 const faqs = [
   {

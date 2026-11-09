@@ -1,0 +1,369 @@
+---
+/* 简体中文 — 译文版文章 (hreflang: zh-Hans)。与 what-is-2fa.astro 并行结构。 */
+import Layout from '../../layouts/Layout.astro';
+import SiteHeader from '../../components/SiteHeader.astro';
+import SiteFooter from '../../components/SiteFooter.astro';
+
+const title = '什么是 2FA？TOTP 验证码详解 — 2FA COUNTER';
+const description =
+  '什么是 2FA？一份通俗易懂的指南：双重验证的原理、TOTP 验证码背后的加密技术（RFC 6238）、为什么它比短信更安全，以及如何永远不会被锁在账户外。附免费 2FA 验证码生成器。';
+
+const faqs = [
+  {
+    q: '什么是 2FA？',
+    a: '2FA（双重验证）是指用两种不同的凭证证明“你是你”：你“知道”的东西（密码）加上你“拥有”的东西（每 30 秒变化一次的验证码、安全密钥或手机）。密码本身可能泄露或被猜中；有了第二重因素，泄露的密码单凭自身就无法打开你的账户。',
+  },
+  {
+    q: '2FA 为什么如此重要？',
+    a: '因为密码一直在被攻破。数十亿个真实密码已经随数据泄露事件公开，攻击者昼夜不停地用它们登录别人的账户（撞库攻击）。据微软报告，2FA 能挡住超过 99.9% 的自动化账户接管攻击——它保护的正是你的邮箱、网银、社交媒体、游戏和加密资产账户中最真实发生的那类威胁。',
+  },
+  {
+    q: '2FA 用在哪些地方？',
+    a: '凡是值得偷的登录入口它都能保护：邮箱和云服务（Google、Microsoft、Apple）、银行与金融、加密货币交易所（Binance、Coinbase、Kraken）、开发者平台（GitHub、AWS）、游戏（Steam、Discord、Twitch）、社交媒体（X、Instagram）。企业也用它保护 VPN、邮箱和管理后台。只要某项服务提供“身份验证器应用”选项，2FA 就是正确的工具。',
+  },
+  {
+    q: '2FA 是怎么工作的？',
+    a: '你输入密码之后，服务会要求第二重证明。以最常用的方式（TOTP）为例：你的验证器用“共享密钥＋当前时间”算出一个新鲜的 6 位验证码（RFC 6238 标准），服务器上独立完成同样的计算并比对结果。验证码每 30 秒轮换一次、用过即作废，所以手握你密码的攻击者依然进不去。',
+  },
+  {
+    q: 'TOTP 验证码是怎么生成的？',
+    a: '网站给你一个密钥（通常以二维码或 Base32 字符串的形式）。你的验证器以该密钥为锁，对当前这个 30 秒时间窗口计算 HMAC（多数服务用 SHA-1，偶尔 SHA-256／SHA-512），再从结果中读出 6 位数字。网站执行完全相同的计算并比对。因为双方早已共享密钥，全程不需要联网。',
+  },
+  {
+    q: '如何获取 2FA？',
+    a: '就在你想保护的那个账户里获取：打开其设置，找到“安全”或“登录与安全”，再找“双重验证”或“两步验证”。选择身份验证器应用选项，扫描二维码（或显示设置密钥），然后输入验证器里显示的验证码完成确认。想了解不用手机拿码的完整流程，请看分步教程 /zh-cn/how-to-get-2fa-code/。',
+  },
+  {
+    q: '如何开启 2FA？',
+    a: '四步：1) 打开服务的账户或安全设置，选择“双重验证”。2) 选择“使用身份验证器应用”（能避开短信就避开）。3) 用验证器扫描二维码——或者点“无法扫码？”并保存设置密钥。4) 输入当前验证码完成设置，然后下载或打印它显示的备用/恢复代码。我们在 /guides/ 发布了 Google、GitHub、Discord、Binance 等服务的分步指南。',
+  },
+  {
+    q: '2FA 有多强？',
+    a: '取决于你用哪种第二重因素。短信验证码最弱——SIM 卡劫持可以夺走你的号码并截走所有验证码。TOTP 验证码（每 30 秒一换的那种）在计算上很稳固：离线攻击者推导不出来，而且实时验证码几秒内即失效。硬件安全密钥和通行密钥（passkey）最强，因为它们抗钓鱼，并与真实网站加密绑定。',
+  },
+  {
+    q: '2FA 100% 安全吗？',
+    a: '没有任何安全措施能到 100%，诚实的 2FA 指南都会这么说。2FA 能废掉被盗的密码，但验证码本身仍可能被钓走：只要你在 30 秒有效期内把新验证码输进假网站；已经运行在你设备上的恶意软件可以偷走会话；而如果短信是你的第二重因素，SIM 卡劫持就是现实威胁。话虽如此，开启 2FA 仍会让你比只用密码时难攻破得多。',
+  },
+  {
+    q: '2FA 是强制的吗？',
+    a: '法律上还没有，但越来越多的服务把它变成强制：GitHub 从 2023 年起要求代码贡献者必须开启，许多银行和加密货币交易所默认强制，用人单位也常把它作为工作登录的要求。其他地方它虽然可选，但强烈建议开启。实际操作中，请把你最重要的账户都当作必须开启 2FA：先是邮箱——因为收件箱被劫持后，其他一切密码都能被重置。',
+  },
+  {
+    q: '为什么现在到处都要 2FA？',
+    a: '因为只用密码的时代彻底失败了。大规模泄露把数十亿凭据晒在明处，撞库攻击被自动化到几乎零成本，平台也开始为被劫持的账户买单。监管同样在推：美国国家标准 NIST 已将短信认证降级为不推荐，欧盟 PSD2 规则要求强客户认证。几家巨头把 2FA 变成常态后，其余服务跟进是自然潮流。',
+  },
+  {
+    q: 'TOTP、HOTP 和 OTP 有什么区别？',
+    a: 'OTP 只是“一次性密码”的统称。TOTP（基于时间的 OTP，RFC 6238）用当前时间推算验证码，所以每 30 秒更换。HOTP（RFC 4226）基于计数器：每个验证码用一次，计数器随之加一。几乎所有“身份验证器应用”类型的服务——Google、Microsoft、Discord、GitHub——都用 TOTP。',
+  },
+  {
+    q: '为什么 TOTP 比短信 2FA 好？',
+    a: '短信验证码经过电话网络传输，可能被拦截或通过 SIM 卡劫持窃取——而且短信本身就可能送不到。TOTP 验证码在你的设备上计算，从不外发，几秒内过期。包括 NIST 在内的安全机构已不再推荐把短信用于认证。',
+  },
+  {
+    q: 'TOTP 验证码会被钓鱼网站偷走吗？',
+    a: '会——只要你在 30 秒有效期内把一个新验证码输进钓鱼页面，攻击者就得到了一次可用的登录。这正是抗钓鱼因素（硬件安全密钥和通行密钥，它们与真实域名加密绑定）在支持的服务上最强的原因。TOTP 赢的是短信和密码，不是硬件密钥。',
+  },
+  {
+    q: '2FA 密钥应该存在哪里？',
+    a: '存在密码管理器的加密金库里，作为你的母本。这样即使手机不在手边，你也能在任何可信设备上重新生成验证码——包括在浏览器里用 2facounter.com 这类工具。同时务必保存每个服务在开启 2FA 时给出的恢复/备用代码；那才是你真正的安全气囊。',
+  },
+];
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: '什么是 2FA？双重验证与 TOTP 的工作原理',
+    description,
+    url: 'https://2facounter.com/zh-cn/what-is-2fa/',
+    datePublished: '2026-11-07',
+    dateModified: '2026-11-09',
+    author: { '@type': 'Organization', name: '2FA COUNTER', url: 'https://2facounter.com' },
+    publisher: {
+      '@type': 'Organization',
+      name: '2FA COUNTER',
+      url: 'https://2facounter.com',
+      logo: { '@type': 'ImageObject', url: 'https://2facounter.com/favicon-96x96.png' },
+    },
+    mainEntityOfPage: { '@type': 'WebPage', '@id': 'https://2facounter.com/zh-cn/what-is-2fa/' },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map(({ q, a }) => ({
+      '@type': 'Question',
+      name: q,
+      acceptedAnswer: { '@type': 'Answer', text: a },
+    })),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: '2FA COUNTER', item: 'https://2facounter.com/zh-cn/' },
+      { '@type': 'ListItem', position: 2, name: '什么是 2FA？', item: 'https://2facounter.com/zh-cn/what-is-2fa/' },
+    ],
+  },
+];
+
+const alternates = [
+  { hreflang: 'en', href: 'https://2facounter.com/what-is-2fa/' },
+  { hreflang: 'vi', href: 'https://2facounter.com/vi/what-is-2fa/' },
+  { hreflang: 'zh-Hans', href: 'https://2facounter.com/zh-cn/what-is-2fa/' },
+  { hreflang: 'zh-Hant', href: 'https://2facounter.com/zh-tw/what-is-2fa/' },
+  { hreflang: 'es', href: 'https://2facounter.com/es/what-is-2fa/' },
+  { hreflang: 'ja', href: 'https://2facounter.com/ja/what-is-2fa/' },
+  { hreflang: 'fr', href: 'https://2facounter.com/fr/what-is-2fa/' },
+  { hreflang: 'de', href: 'https://2facounter.com/de/what-is-2fa/' },
+  { hreflang: 'pt', href: 'https://2facounter.com/pt/what-is-2fa/' },
+  { hreflang: 'ko', href: 'https://2facounter.com/ko/what-is-2fa/' },
+  { hreflang: 'it', href: 'https://2facounter.com/it/what-is-2fa/' },
+  
+  { hreflang: 'hi', href: 'https://2facounter.com/hi/what-is-2fa/' },
+
+  { hreflang: 'ar', href: 'https://2facounter.com/ar/what-is-2fa/' },
+
+  { hreflang: 'bn', href: 'https://2facounter.com/bn/what-is-2fa/' },
+
+  { hreflang: 'ru', href: 'https://2facounter.com/ru/what-is-2fa/' },
+{ hreflang: 'x-default', href: 'https://2facounter.com/what-is-2fa/' },
+];
+---
+
+<Layout title={title} description={description} path="/zh-cn/what-is-2fa/" lang="zh-Hans" jsonLd={jsonLd} alternates={alternates} image="/og-zh-cn.png">
+  <SiteHeader locale="zh-cn"
+    links={[
+      { href: '/zh-cn/', label: '2FA 验证码生成' },
+      { href: '/zh-cn/how-to-get-2fa-code/', label: '如何获取 2FA 验证码' },
+      { href: '/guides/', label: '使用指南' },
+      { href: '/privacy/', label: '隐私政策' },
+    ]}
+    cta="立即生成"
+  />
+  <main id="main">
+    <article class="mx-auto max-w-[820px] px-4 py-16 sm:px-6 lg:py-24">
+      <p class="section-label">详解</p>
+      <h1 class="mt-3 font-display text-4xl tracking-normal text-ink sm:text-5xl">
+        什么是 2FA？那些每 30 秒一换的验证码，究竟是怎么算出来的？
+      </h1>
+      <p class="mt-5 max-w-2xl text-lg font-medium text-ink">
+        一份完整而通俗的指南：双重验证到底是什么，6 位 TOTP 验证码背后的加密技术，
+        哪个账户该开启哪种因素，以及如何永远不被锁在门外。
+      </p>
+
+      <nav aria-label="本页内容" class="mt-10 rounded-xl border-2 border-ink bg-cream p-6" style="box-shadow: var(--shadow-card)">
+        <p class="font-mono text-[13px] font-bold tracking-wide text-ink uppercase">本页内容</p>
+        <ul class="mt-3 space-y-2 text-sm font-medium text-ink">
+          <li><a class="link" href="#problems">为什么只用密码不行</a></li>
+          <li><a class="link" href="#factors">三种认证因素</a></li>
+          <li><a class="link" href="#totp">TOTP 如何工作，一步步拆解</a></li>
+          <li><a class="link" href="#base32">密钥与二维码</a></li>
+          <li><a class="link" href="#sms">TOTP vs. 短信 vs. 硬件密钥</a></li>
+          <li><a class="link" href="#limitations">2FA 防不了什么</a></li>
+          <li><a class="link" href="#never-locked-out">如何永远不被锁在门外</a></li>
+          <li><a class="link" href="#faq">常见问题</a></li>
+        </ul>
+      </nav>
+
+      <div class="rich-text mt-12">
+        <h2 id="problems">为什么只用密码不行</h2>
+        <p>
+          每次登录都需要密码，而密码有三个结构性问题：它们会被<em>复用</em>，会被撞库攻击拿泄露
+          数据库去<em>猜</em>，也会被人从你嘴里<em>骗</em>走。双重验证（2FA）接受一个简单的事实——
+          人是最低一环——并补上一个攻击者必须同时掌握、彼此独立的第二样东西。开启 2FA 后，
+          泄露的密码本身不再足以进入你的账户。
+        </p>
+        <p>
+          如今多数主流服务要么提供要么强制 2FA：GitHub 从 2023 年起强制执行，加密交易所
+          （Binance、Coinbase、Kraken）每逢行情大跌就催你开启，Microsoft、Google 和 Apple
+          已把它作为账户安全的默认选项。
+        </p>
+
+        <h2 id="factors">三种认证因素</h2>
+        <p>
+          认证因素分为三类：
+        </p>
+        <ul>
+          <li><strong>你知道的东西</strong>——密码、PIN。部署便宜，但容易钓鱼。</li>
+          <li>
+            <strong>你拥有的东西</strong>——生成验证码的验证器、硬件安全密钥或通行密钥、
+            收短信的手机。2FA 主要活在这一层。
+          </li>
+          <li><strong>你本身是什么</strong>——指纹、人脸。很方便，但它是设备端注册的，而不是远程认证的主力因素。</li>
+        </ul>
+        <p>
+          真正的双重验证要组合来自<em>两个不同类别</em>的技术。密码＋手机解锁图案不是 2FA；
+          密码＋轮换的验证器验证码才是。
+        </p>
+
+        <h2 id="totp">TOTP 如何工作，一步步拆解</h2>
+        <ol>
+          <li>
+            <strong>注册。</strong>你为一个服务开启 2FA 时，它生成一个随机密钥并<em>只</em>与你
+            共享一次——画成二维码，或以 Base32 设置密钥的形式显示。从安全角度看，正是这一刻
+            承担了全部风险，所以你应该只在值得信任的地方展示它。
+          </li>
+          <li>
+            <strong>时间开始走。</strong>当前时间被切成 30 秒一档的“步”：
+            <code>step = floor(unixTime / 30)</code>。30 没有什么特别；RFC 6238 允许服务接受
+            15、30 或 60 秒。
+          </li>
+          <li>
+            <strong>HMAC。</strong>你的验证器以密钥为键，对步值计算 HMAC 哈希
+            （大多数服务用 SHA-1，偶尔 SHA-256／512）。HMAC 是单向构造：看到结果
+            推不出关于密钥的任何信息。
+          </li>
+          <li>
+            <strong>取位。</strong>从 HMAC 输出中按最后一个半字节（nibble）选出 4 个字节，
+            清除最高位，所得结果对 10<sup>n</sup> 取模就是你的验证码——通常
+            <code>n</code> = 6，偶尔是 7 或 8 位。
+          </li>
+          <li>
+            <strong>验证窗口。</strong>服务器对当前步和上一步重新计算同样的值（以容忍轻微的
+            时钟偏差）。匹配的证明被接受为登录。
+          </li>
+        </ol>
+        <p>
+          以上全部在几微秒内、完全在你的设备上完成。正因如此，<a href="/zh-cn/#generator">2FA COUNTER</a>
+          这样的客户端工具才能在本地完成整个工作——打开页面、断开网络，验证码照样
+          每 30 秒流出，永远。
+        </p>
+
+        <h2 id="base32">密钥与二维码</h2>
+        <p>
+          Base32 字符串并不是什么中间格式——它就是密钥的原始字节，用一套对手机友好的字母表
+          （A–Z 加 2–7，刻意排除容易混淆的 0/1，在任何键盘上都安全）编码而成。当平台给出
+          “无法扫码？”选项时，显示的字符串里装着二维码所编码的<em>同一份私密材料</em>。
+          两种形式存哪个都行；语义完全相同：
+        </p>
+        <pre><code>otpauth://totp/GitHub:you%40example.com?secret=JBSWY3DPEHPK3PXP&amp;issuer=GitHub
+otpauth://totp/Binance:me?secret=JBSWY3DPEHPK3PXP&amp;digits=6&amp;period=30&amp;algorithm=SHA1
+otpauth://hotp/Steam:sda?secret=...&amp;counter=5   ← 基于计数器的（HOTP）变体</code></pre>
+        <p>
+          一个现代化的生成器会尊重每一个参数：位数、周期、哈希算法和 HOTP 计数器——因为一个
+          指定 SHA-256 的服务依然会拒绝按默认 SHA-1 生成的验证码。一段裸 Base32 密钥的默认值
+          是 6 位、30 秒、SHA-1，这正是绝大多数服务使用的配置。
+        </p>
+
+        <h2 id="sms">TOTP vs. 短信 vs. 硬件密钥</h2>
+        <ul>
+          <li><strong>短信验证码</strong>横穿电信网络。SIM 卡劫持攻击能让对手夺走你的号码、收走每一条验证码。美国标准（NIST SP 800-63B）已经不再推荐用短信做认证。</li>
+          <li><strong>TOTP</strong> 不发送任何东西——验证码在本地计算，30 秒即作废。免费、有标准背书、到处都支持。薄弱环节：在有效期窗口内可能被钓走。</li>
+          <li><strong>安全密钥与通行密钥</strong>（WebAuthn/FIDO2）与<em>精确的</em>域名加密绑定，仿冒的相似网站自动失效。最强选项；支持范围较小，且要花钱买密钥。</li>
+        </ul>
+        <p>
+          实用的阶梯：非必要不用短信，默认用 TOTP，最重要的账户上硬件密钥或通行密钥。
+        </p>
+        <p>
+          想深挖这些取舍，我们另有专题文章：{" "}
+          <a href="/totp-vs-passkeys/">TOTP vs. 通行密钥——哪种因素该放在哪里</a>、{" "}
+          <a href="/sim-swap-attacks/">SIM 卡劫持如何击破短信验证码</a>，以及{" "}
+          <a href="/authenticator-cloud-sync/">应用的云同步会给你的密钥带来什么</a>。
+        </p>
+
+        <h2 id="limitations">2FA 防不了什么</h2>
+        <p>
+          双重验证解决的是<em>密码被盗</em>。它防不住会话 Cookie 被窃（已经潜伏在你机器上的
+          恶意软件）、权限过大的浏览器扩展、已经失控的恢复邮箱，也拦不住一种社会工程：
+          骗子在 30 秒有效期内催你把新验证码念给他听。保持浏览器更新、果断清理扩展，
+          把任何慌里慌张索要验证码的请求当作它应有的那面红旗。
+        </p>
+
+        <h2 id="never-locked-out">如何永远不被锁在门外</h2>
+        <ol>
+          <li>
+            <strong>保存备用代码。</strong>每个服务在被你开启 2FA 时都会打印一组一次性恢复代码。
+            打印出来，或者加密后离线保存。
+          </li>
+          <li>
+            <strong>留下密钥本身，而不只是工具。</strong>把 Base32 密钥写进密码管理器的金库里，
+            你就能用任何验证器——手机应用，或者<a href="/zh-cn/#generator">浏览器里的生成器</a>——
+            在当天真正可用的那台设备上重新生成验证码。
+          </li>
+          <li>
+            <strong>注册两台设备，而不是一台。</strong>把密钥同时放在两台可信设备上是安全的。
+            TOTP 是确定性的：同一密钥，同一验证码。
+          </li>
+          <li>
+            <strong>管好自己的时钟。</strong>如果验证码总是被拒，先修设备的时钟同步——这是
+            “验证码无效”错误最常见的原因，任何工具都绕不过去。
+          </li>
+        </ol>
+      </div>
+
+      <!-- FAQ，与主页相同的模式 -->
+      <h2 id="faq" class="mt-16 font-display text-[28px] leading-[1.2] tracking-normal text-ink">常见问题</h2>
+      <div class="mt-6 divide-y-2 divide-dashed divide-hairline-strong">
+        {
+          faqs.map(({ q, a }) => (
+            <details class="group px-1 py-1">
+              <summary class="flex cursor-pointer list-none items-center justify-between gap-4 py-4 text-left font-bold text-ink select-none marker:hidden">
+                {q}
+                <svg class="h-4 w-4 shrink-0 text-ink transition-transform group-open:rotate-45" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"></path>
+                </svg>
+              </summary>
+              <p class="pb-5 text-sm font-medium text-ink">{a}</p>
+            </details>
+          ))
+        }
+      </div>
+
+      <div class="cta-banner on-dark mt-12">
+        <h2 class="font-display text-2xl tracking-normal text-primary">现在就用起来</h2>
+        <p class="mt-2 max-w-2xl font-medium text-cream/80">
+          把密钥粘贴进生成器，看着实时的 2FA 验证码跳出来——可离线运行，无需账户，
+          不向服务器发送任何东西。
+        </p>
+        <a href="/zh-cn/#generator" class="btn-primary mt-5">打开生成器</a>
+      </div>
+    </article>
+  </main>
+  <SiteFooter
+    columns={[
+      {
+        title: '产品',
+        links: [
+          { href: '/zh-cn/#generator', label: '在线生成器' },
+          { href: '/zh-cn/how-to-get-2fa-code/', label: '如何获取 2FA 验证码' },
+          { href: '/zh-cn/what-is-2fa/', label: '什么是双重验证？' },
+          { href: '/zh-cn/#features', label: '功能' },
+          { href: '/zh-cn/#compatibility', label: '兼容性' },
+        ],
+      },
+      {
+        title: '使用指南',
+        links: [
+          { href: '/guides/', label: '全部指南' },
+          { href: '/guides/google/', label: 'Google 2FA' },
+          { href: '/guides/microsoft/', label: 'Microsoft 2FA' },
+          { href: '/guides/discord/', label: 'Discord 2FA' },
+          { href: '/guides/github/', label: 'GitHub 2FA' },
+          { href: '/guides/steam/', label: 'Steam 2FA' },
+          { href: '/guides/binance/', label: 'Binance 2FA' },
+        ],
+      },
+      {
+        title: '关于',
+        links: [
+          { href: '/about/', label: '关于我们' },
+          { href: '/methodology/', label: '编审流程' },
+          { href: '/contact/', label: '联系方式' },
+        ],
+      },
+      {
+        title: '法律条款',
+        links: [
+          { href: '/privacy/', label: '隐私政策' },
+          { href: '/terms/', label: '服务条款' },
+          { href: '/disclaimer/', label: '免责声明' },
+          { href: '/contact/', label: '报告安全问题' },
+        ],
+      },
+    ]}
+    tagline="一款零知识的 2FA 验证器，完全运行在你的浏览器中（2facounter.com）。没有账户，没有服务器，也不需要手机。"
+    languagesTitle="语言"
+  />
+</Layout>

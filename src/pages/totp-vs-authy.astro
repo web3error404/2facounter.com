@@ -1,0 +1,226 @@
+---
+import Layout from '../layouts/Layout.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+
+const title = 'Authy Alternative — Free Browser-Based 2FA (TOTP)';
+const description =
+  'An honest Authy vs browser TOTP comparison: no phone lock-in, no account required, no forced app update. What each does well — and where the browser fits.';
+
+const faqs = [
+  {
+    q: 'What happened to the Authy desktop app?',
+    a: 'Twilio retired Authy Desktop for Windows, macOS, and Linux in March 2024, moving all code generation into the phone apps. Users who relied on the desktop client had to migrate to a mobile device — or to another authenticator entirely. A browser-based generator never has that problem: any modern browser on any platform works, and there is no client to deprecate.',
+  },
+  {
+    q: 'Is a browser TOTP generator as safe as Authy?',
+    a: 'Both run the identical RFC 6238 algorithm, so the raw code generation is equally secure. The difference is operational: Authy encrypts secrets in Twilio\'s cloud keyed to your account and phone number, while a local generator like this one never receives secrets at all — calculation happens in your browser via the Web Crypto API, and the master copies live in your own encrypted password-manager vault.',
+  },
+  {
+    q: 'Do I need a phone number to use a browser generator?',
+    a: 'No. Authy requires an account and a phone number — which SMS-capable carriers create real attack surface (SIM-swap attackers historically targeted Authy accounts by exploiting the phone-number recovery path). A browser generator has no account, no phone number, and nothing to reset: you hold the Base32 secret as text, and that IS theauthentication factor.',
+  },
+  {
+    q: 'How do I move my accounts away from Authy?',
+    a: 'Authy does not export secrets — a deliberate decision several years back. The practical ways: for each account, log into the service, disable 2FA, then re-enable it and scan the new setup key with the browser generator (configuring your password-manager vault as the master copy); or use the account\'s "change authenticator" option where offered, or reveal the setup key when first enrolling. Add the backups codes for each service during the process.',
+  },
+  {
+    q: 'Does Authy multi-device sync still work?',
+    a: 'Yes, but with restrictions: Twilio has removed multi-device sync for new accounts since 2019 — new enrollments are single-device unless you deliberately re-enable the setting from an existing device within a time limit, and the option has been deprecated over time. A browser generator gives you a simpler multi-device story: the same secret text restored wherever you authorize it, from one source of truth.',
+  },
+  {
+    q: 'Does the browser generator work offline like Authy did on desktop?',
+    a: 'Yes — better. Install our page as a PWA (Add to Home Screen / Install) and codes compute entirely offline from your device clock plus the secret, like a native app. No network, no account session required: the coverage the retired Authy desktop app used to provide.',
+  },
+];
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: 'Authy Alternative — Free Browser-Based 2FA (TOTP)',
+    description,
+    url: 'https://2facounter.com/totp-vs-authy/',
+    datePublished: '2026-11-09',
+    dateModified: '2026-11-09',
+    author: { '@type': 'Organization', name: '2FA COUNTER', url: 'https://2facounter.com' },
+    publisher: {
+      '@type': 'Organization',
+      name: '2FA COUNTER',
+      url: 'https://2facounter.com',
+      logo: { '@type': 'ImageObject', url: 'https://2facounter.com/favicon-96x96.png' },
+    },
+    mainEntityOfPage: { '@type': 'WebPage', '@id': 'https://2facounter.com/totp-vs-authy/' },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map(({ q, a }) => ({
+      '@type': 'Question',
+      name: q,
+      acceptedAnswer: { '@type': 'Answer', text: a },
+    })),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: '2FA COUNTER', item: 'https://2facounter.com/' },
+      { '@type': 'ListItem', position: 2, name: 'Authy comparison', item: 'https://2facounter.com/totp-vs-authy/' },
+    ],
+  },
+];
+---
+
+<Layout title={title} description={description} path="/totp-vs-authy/" jsonLd={jsonLd}>
+  <SiteHeader />
+  <main id="main">
+    <article class="mx-auto max-w-[820px] px-4 py-16 sm:px-6 lg:py-24">
+      <p class="section-label">Learn</p>
+      <h1 class="mt-3 font-display text-4xl tracking-normal text-ink sm:text-5xl">
+        Authy vs a browser 2FA generator: an honest comparison
+      </h1>
+      <p class="mt-5 max-w-2xl text-lg font-medium text-ink">
+        Authy did popularize cloud token backup. But it also retired its desktop app, keys secrets to a
+        phone number, and makes exporting impossible. Here is the fair picture — and when a
+        zero-knowledge browser generator is simply the better tool for the job.
+      </p>
+
+      <nav aria-label="On this page" class="mt-10 rounded-xl border-2 border-ink bg-cream p-6" style="box-shadow: var(--shadow-card)">
+        <p class="font-mono text-[13px] font-bold tracking-wide text-ink uppercase">On this page</p>
+        <ul class="mt-3 space-y-2 text-sm font-medium text-ink">
+          <li><a class="link" href="#quick-answer">The 60-second answer</a></li>
+          <li><a class="link" href="#authy-good">What Authy still does well</a></li>
+          <li><a class="link" href="#compare">Where they differ</a></li>
+          <li><a class="link" href="#migrate">Leaving Authy (the export problem)</a></li>
+          <li><a class="link" href="#when">When each is the right pick</a></li>
+          <li><a class="link" href="#faq">FAQ</a></li>
+        </ul>
+      </nav>
+
+      <div class="rich-text mt-12">
+        <h2 id="quick-answer">The 60-second answer</h2>
+        <p>
+          <strong>Authy is the right tool if you value one-tap cloud restore above everything else</strong> —
+          buy a new phone tomorrow and your codes come back with your login. <strong>A browser TOTP
+          generator is the right tool when you control your secrets as data</strong>: no Twilio account, no
+          phone number in the identity chain, no desktop app that can be sunset under you — the Base32
+          secret lives in your vault and works from any browser, online or off.
+        </p>
+        <p>
+          Same TOTP math on both sides (RFC 6238), so every service that accepts an authenticator app
+          accepts either. The comparison is about architecture and philosophy, not code quality.
+        </p>
+
+        <h2 id="authy-good">What Authy still does well</h2>
+        <p>
+          To be fair: Authy was genuinely pioneering. <strong>Cloud token backup</strong> means a lost or
+          replaced phone is nearly painless — install the app, log in, and your token list restores with
+          the passphrase protecting them. <strong>Multi-service familiarity</strong> and PIN/biometric locks
+          on the app body are solid. If your threat model is "I break my phone every year" and "I never
+          want to think about vault hygiene," Authy is a reasonable home.
+        </p>
+        <p>
+          The honest criticism, then, is not that Authy is broken. It is that the architecture now costs
+          more than it used to: fewer platforms over time, no export path, and phone-number identity you
+          cannot change.
+        </p>
+
+        <h2 id="compare">Where they differ</h2>
+        <ul>
+          <li>
+            <strong>Platforms.</strong> Authy: iOS and Android only since the March 2024 desktop
+            retirement. Browser generator: any modern browser — Windows, macOS, Linux, ChromeOS,
+            tablets, a work laptop you can't install anything on. No version to be deprecated, ever.
+          </li>
+          <li>
+            <strong>Where secrets live.</strong> Authy: encrypted in Twilio's cloud, keyed to your
+            account + phone number; Twilio holds the ability to re-provision your token list. Browser
+            generator: nowhere — keys arrive in your browser, compute, and persist only in your local
+            browser storage plus whichever vault you keep them in.
+          </li>
+          <li>
+            <strong>Identity on the account.</strong> Authy enrollment requires a phone number — the
+            same address SIM-swap attackers have historically managed to hit for carrier support and
+            via a 2024 data incident (users' phone numbers exposed in a breach of the API).
+            A generator needs no number and no identity at all.
+          </li>
+          <li>
+            <strong>Export / lock-in.</strong> Authy has no export feature and has deliberately stopped
+            adding one. Browser generator secrets are plain Base32 text — copy from the vault, carry
+            anywhere, switch tools whenever.
+          </li>
+          <li>
+            <strong>Recovery paths.</strong> Authy: your account + passphrase + device. Generator:
+            your vault — the same encrypted place your passwords already live. One fewer independent
+            vendor holding a necessary credential.
+          </li>
+          <li>
+            <strong>Offline use.</strong> Both compute codes offline once set up (the installable PWA
+            behaves like the retired Authy desktop app did: no network, no session).
+          </li>
+          <li>
+            <strong>Multi-account workflows.</strong> A generator's Recent-keys list switches among your
+            accounts in one click on any device; on a phone app you scroll a token list meant for one
+            hand and one screen.
+          </li>
+        </ul>
+
+        <h2 id="migrate">Leaving Authy (the export problem)</h2>
+        <p>
+          Authy does not export secrets — so any migration means re-enrollment per service, one time,
+          with the service not Authy being where you act:
+        </p>
+        <ol class="list-decimal">
+          <li>Pick one service at a time (start with the low-stakes ones to learn the pattern).</li>
+          <li>In the service's security settings, disable 2FA — or use "setup a different authenticator" where offered.</li>
+          <li>Re-enable 2FA; when the QR appears, choose "can't scan?" to reveal the setup key.</li>
+          <li>Save that Base32 secret in your password manager's notes for the service, then paste it into <a href="/#generator">the generator on our homepage</a> and confirm the live code verifies.</li>
+          <li>Save the fresh recovery codes at the same time. Only then remove the token from Authy.</li>
+        </ol>
+        <p>
+          Two mimimum rules while migrating: never disable 2FA and leave it off overnight, and keep the
+          Authy token alive until the new one has produced a code the service actually verified.
+        </p>
+
+        <h2 id="when">When each is the right pick</h2>
+        <ul>
+          <li><strong>Stay on Authy</strong> when: effortless device migration matters more than anything; you are happy for Twilio to hold an encrypted copy; and your accounts are not the kind attackers target via phone-number resets.</li>
+          <li><strong>Move to a browser generator</strong> when: you want the desktop story back (the one Authy retired); secrets-as-text in a vault beats secrets-as-cloud-object for you; you want no phone number anywhere in the 2FA chain; or you manage multiple accounts and need fast switching on a real keyboard.</li>
+        </ul>
+        <p>
+          Plenty of people do both: Authy on the phone for habit, the browser generator for desktop sign-ins
+          and as insurance against the next deprecation announcement. Your secrets-as-text in the vault are
+          what keep both options open — that is the structural upgrade over any single app.
+        </p>
+      </div>
+
+      <h2 id="faq" class="mt-16 font-display text-[28px] leading-[1.2] tracking-normal text-ink">FAQ</h2>
+      <div class="mt-6 divide-y-2 divide-dashed divide-hairline-strong">
+        {
+          faqs.map(({ q, a }) => (
+            <details class="group px-1 py-1">
+              <summary class="flex cursor-pointer list-none items-center justify-between gap-4 py-4 text-left font-bold text-ink select-none marker:hidden">
+                {q}
+                <svg class="h-4 w-4 shrink-0 text-ink transition-transform group-open:rotate-45" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"></path>
+                </svg>
+              </summary>
+              <p class="pb-5 text-sm font-medium text-ink">{a}</p>
+            </details>
+          ))
+        }
+      </div>
+
+      <div class="cta-banner on-dark mt-12">
+        <h2 class="font-display text-2xl tracking-normal text-primary">The desktop story, back</h2>
+        <p class="mt-2 max-w-2xl font-medium text-cream/80">
+          Authy retired its desktop client. This site is one: open a browser, paste your secret from
+          the vault, get the live code — no account, no phone number, no app to sunset.
+        </p>
+        <a href="/#generator" class="btn-primary mt-5">Open the generator</a>
+      </div>
+    </article>
+  </main>
+  <SiteFooter />
+</Layout>

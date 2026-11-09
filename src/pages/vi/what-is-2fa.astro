@@ -1,0 +1,381 @@
+---
+/* Tiếng Việt — bản dịch bài viết (hreflang: vi). Song song với what-is-2fa.astro. */
+import Layout from '../../layouts/Layout.astro';
+import SiteHeader from '../../components/SiteHeader.astro';
+import SiteFooter from '../../components/SiteFooter.astro';
+
+const title = '2FA là gì? Giải thích mã TOTP — 2FA COUNTER';
+const description =
+  '2FA là gì? Cẩm nang dễ hiểu về xác thực hai yếu tố, mã TOTP, RFC 6238, vì sao chúng tốt hơn SMS và cách không bao giờ bị khóa ngoài tài khoản.';
+
+const faqs = [
+  {
+    q: '2FA là gì?',
+    a: '2FA (xác thực hai yếu tố) nghĩa là chứng minh bản thân bằng hai loại bằng chứng khác nhau: thứ bạn biết (mật khẩu) cộng với thứ bạn có (mã đổi mới mỗi 30 giây, khóa bảo mật hoặc điện thoại). Mật khẩu một mình có thể bị lộ hoặc bị đoán ra; có thêm yếu tố thứ hai, mật khẩu đã bị lộ sẽ mất tác dụng nếu đứng một mình.',
+  },
+  {
+    q: 'Vì sao 2FA quan trọng đến vậy?',
+    a: 'Vì mật khẩu cứ thất bại đều đặn. Hàng tỷ mật khẩu thật đã bị công khai qua các vụ rò rỉ dữ liệu, và kẻ tấn công dùng chúng để đăng nhập tài khoản của người khác (credential stuffing) suốt ngày đêm. Theo Microsoft, 2FA chặn trên 99,9% các cuộc tấn công tự động nhằm chiếm đoạt tài khoản — nó bảo vệ email, ngân hàng, mạng xã hội, game và tài khoản tiền điện tử của bạn trước đúng những mối đe dọa có thật ngoài kia.',
+  },
+  {
+    q: '2FA dùng để làm gì?',
+    a: 'Nó bảo vệ mọi đăng nhập mà kẻ khác muốn đoạt: email và tài khoản đám mây (Google, Microsoft, Apple), ngân hàng và tài chính, sàn tiền điện tử (Binance, Coinbase, Kraken), nền tảng lập trình (GitHub, AWS), game (Steam, Discord, Twitch), mạng xã hội (X, Instagram). Nơi làm việc cũng dùng nó cho VPN, email và bảng điều khiển quản trị. Bất cứ đâu một dịch vụ có tùy chọn “ứng dụng xác thực”, 2FA chính là công cụ phù hợp.',
+  },
+  {
+    q: '2FA hoạt động thế nào?',
+    a: 'Sau khi bạn nhập mật khẩu, dịch vụ yêu cầu thêm một bằng chứng thứ hai. Với phương pháp phổ biến nhất (TOTP), trình xác thực của bạn tạo ra một mã 6 chữ số mới từ “khóa bí mật dùng chung + thời gian hiện tại” (chuẩn RFC 6238), trong khi máy chủ tính toán y hệt và so kết quả. Mã xoay vòng mỗi 30 giây và không bao giờ dùng lại được, nên kẻ tấn công chỉ có mật khẩu của bạn vẫn không vào được.',
+  },
+  {
+    q: 'Mã TOTP được tạo ra thế nào?',
+    a: 'Website cấp cho bạn một khóa bí mật (thường dưới dạng mã QR hoặc chuỗi Base32). Trình xác thực tính HMAC (SHA-1, đôi khi SHA-256 hoặc SHA-512) trên cửa sổ thời gian 30 giây hiện tại với khóa đó, rồi đọc ra 6 chữ số từ kết quả. Website chạy phép tính y hệt và so sánh. Không cần kết nối mạng vì hai bên đã chia sẻ khóa từ trước.',
+  },
+  {
+    q: 'Làm sao để có 2FA?',
+    a: 'Bạn lấy 2FA ngay trong tài khoản muốn bảo vệ: mở mục cài đặt, tìm “Bảo mật” hoặc “Đăng nhập & bảo mật”, rồi tìm “Xác thực hai yếu tố” hoặc “Xác minh hai bước”. Chọn tùy chọn ứng dụng xác thực, quét mã QR (hoặc hiển thị khóa thiết lập), và nhập mã đang hiển thị trong trình xác thực để xác nhận. Bài hướng dẫn từng bước về cách lấy mã không cần điện thoại nằm tại /vi/how-to-get-2fa-code/.',
+  },
+  {
+    q: 'Làm sao bật 2FA?',
+    a: 'Bốn bước: 1) Mở cài đặt tài khoản hoặc cài đặt bảo mật của dịch vụ và chọn “Xác thực hai yếu tố”. 2) Chọn “Dùng ứng dụng xác thực” (tránh SMS nếu có thể). 3) Quét mã QR bằng trình xác thực — hoặc bấm “không thể quét?” và lưu khóa thiết lập. 4) Nhập mã trực tiếp để hoàn tất, sau đó tải xuống hoặc in các mã sao lưu/khôi phục màn hình hiển thị. Chúng tôi có hướng dẫn riêng cho Google, GitHub, Discord, Binance và nhiều dịch vụ khác tại /guides/.',
+  },
+  {
+    q: '2FA mạnh cỡ nào?',
+    a: 'Tùy vào yếu tố thứ hai bạn dùng. Mã SMS yếu nhất — tấn công SIM swap có thể chiếm đoạt số điện thoại và nhận mọi mã. Mã của trình xác thực TOTP (kiểu đổi mỗi 30 giây) mạnh về mặt tính toán: kẻ tấn công ngoại tuyến không thể suy ra, và mã trực tiếp hết hạn trong vài giây. Khóa bảo mật phần cứng và passkey mạnh nhất, vì chúng chống lừa đảo và gắn chặt bằng mật mã với website thật.',
+  },
+  {
+    q: '2FA có an toàn 100% không?',
+    a: 'Không có biện pháp bảo mật nào an toàn 100%, và các cẩm nang 2FA trung thực đều thừa nhận điều đó. 2FA vô hiệu hóa mật khẩu bị đánh cắp, nhưng bản thân mã vẫn có thể bị lừa nếu bạn nhập mã còn hạn vào một trang giả trong cửa sổ 30 giây của nó; mã độc đã chạy sẵn trên máy của bạn có thể đánh cắp phiên đăng nhập; còn nếu SMS là yếu tố thứ hai, SIM swap là mối đe dọa có thật. Dù vậy, bật 2FA khiến bạn khó bị tấn công hơn hẳn các tài khoản chỉ dùng mật khẩu.',
+  },
+  {
+    q: '2FA có bắt buộc không?',
+    a: 'Không phải theo luật, nhưng ngày càng nhiều dịch vụ làm nó bắt buộc: GitHub áp dụng với người đóng góp mã từ 2023, nhiều ngân hàng và sàn tiền điện tử bật mặc định, và nơi làm việc thường yêu cầu cho các đăng nhập công việc. Ở những nơi khác, nó là tùy chọn nhưng được khuyến khích mạnh. Trong thực tế, hãy coi 2FA là bắt buộc với những tài khoản giá trị nhất: email trước tiên, vì hộp thư bị chiếm đoạt có thể đặt lại tất cả những gì còn lại.',
+  },
+  {
+    q: 'Vì sao giờ đâu cũng dùng 2FA?',
+    a: 'Vì thời kỳ chỉ có mật khẩu đã thất bại. Các vụ rò rỉ hàng loạt công khai hàng tỷ thông tin đăng nhập, các tấn công credential stuffing được tự động hóa và trở nên rẻ mạt, và giờ chính các nền tảng phải gánh chi phí của tài khoản bị chiếm đoạt. Các cơ quan quản lý cũng thúc ép: NIST đã loại SMS khỏi chuẩn xác thực của Mỹ, và luật PSD2 của EU yêu cầu xác thực khách hàng mạnh. Khi vài gã khổng lồ biến 2FA thành chuyện bình thường, mọi dịch vụ khác nối gót là tự nhiên.',
+  },
+  {
+    q: 'TOTP, HOTP và OTP khác nhau thế nào?',
+    a: 'OTP đơn giản là “mật khẩu dùng một lần” (one-time password). TOTP (OTP theo thời gian, RFC 6238) tạo mã từ thời gian hiện tại, nên mã đổi mỗi 30 giây. HOTP (RFC 4226) dựa trên bộ đếm: mỗi mã dùng một lần rồi bộ đếm tăng lên. Gần như mọi dịch vụ kiểu “ứng dụng xác thực” — Google, Microsoft, Discord, GitHub — đều dùng TOTP.',
+  },
+  {
+    q: 'Vì sao TOTP tốt hơn SMS 2FA?',
+    a: 'Mã SMS đi qua mạng viễn thông, nơi nó có thể bị đánh chặn hay đánh cắp bằng tấn công SIM swap — và đôi khi SMS đơn giản là không tới. Mã TOTP được tính ngay trên thiết bị của bạn, không bao giờ gửi đi đâu, và hết hạn trong vài giây. Các cơ quan bảo mật, trong đó có NIST, đã không còn khuyến nghị SMS làm phương thức xác thực.',
+  },
+  {
+    q: 'Mã TOTP có thể bị đánh cắp bởi trang lừa đảo không?',
+    a: 'Có — nếu bạn nhập một mã còn hạn vào trang lừa đảo trong cửa sổ 30 giây của nó, kẻ tấn công có được một lần đăng nhập hợp lệ. Đó là lý do các yếu tố chống lừa đảo (khóa bảo mật phần cứng và passkey, vốn gắn chặt bằng mật mã với đúng tên miền thật) là lựa chọn mạnh nhất ở những dịch vụ có hỗ trợ. TOTP đánh bại SMS và mật khẩu, chứ không đánh bại khóa phần cứng.',
+  },
+  {
+    q: 'Nên giữ khóa bí mật 2FA ở đâu?',
+    a: 'Trong két mã hóa của một trình quản lý mật khẩu, như bản gốc của bạn. Như vậy bạn có thể tạo lại mã trên bất kỳ thiết bị đáng tin cậy nào — kể cả trong trình duyệt bằng công cụ như 2facounter.com — khi điện thoại không dùng được. Đồng thời hãy lưu các mã khôi phục (recovery code) mà mọi dịch vụ đều in ra khi bạn bật 2FA; đó mới là “túi khí” thật sự của bạn.',
+  },
+];
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: '2FA là gì? Xác thực hai yếu tố và TOTP hoạt động ra sao',
+    description,
+    url: 'https://2facounter.com/vi/what-is-2fa/',
+    datePublished: '2026-11-07',
+    dateModified: '2026-11-09',
+    author: { '@type': 'Organization', name: '2FA COUNTER', url: 'https://2facounter.com' },
+    publisher: {
+      '@type': 'Organization',
+      name: '2FA COUNTER',
+      url: 'https://2facounter.com',
+      logo: { '@type': 'ImageObject', url: 'https://2facounter.com/favicon-96x96.png' },
+    },
+    mainEntityOfPage: { '@type': 'WebPage', '@id': 'https://2facounter.com/vi/what-is-2fa/' },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map(({ q, a }) => ({
+      '@type': 'Question',
+      name: q,
+      acceptedAnswer: { '@type': 'Answer', text: a },
+    })),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: '2FA COUNTER', item: 'https://2facounter.com/vi/' },
+      { '@type': 'ListItem', position: 2, name: '2FA là gì?', item: 'https://2facounter.com/vi/what-is-2fa/' },
+    ],
+  },
+];
+
+const alternates = [
+  { hreflang: 'en', href: 'https://2facounter.com/what-is-2fa/' },
+  { hreflang: 'vi', href: 'https://2facounter.com/vi/what-is-2fa/' },
+  { hreflang: 'zh-Hans', href: 'https://2facounter.com/zh-cn/what-is-2fa/' },
+  { hreflang: 'zh-Hant', href: 'https://2facounter.com/zh-tw/what-is-2fa/' },
+  { hreflang: 'es', href: 'https://2facounter.com/es/what-is-2fa/' },
+  { hreflang: 'ja', href: 'https://2facounter.com/ja/what-is-2fa/' },
+  { hreflang: 'fr', href: 'https://2facounter.com/fr/what-is-2fa/' },
+  { hreflang: 'de', href: 'https://2facounter.com/de/what-is-2fa/' },
+  { hreflang: 'pt', href: 'https://2facounter.com/pt/what-is-2fa/' },
+  { hreflang: 'ko', href: 'https://2facounter.com/ko/what-is-2fa/' },
+  { hreflang: 'it', href: 'https://2facounter.com/it/what-is-2fa/' },
+  
+  { hreflang: 'hi', href: 'https://2facounter.com/hi/what-is-2fa/' },
+
+  { hreflang: 'ar', href: 'https://2facounter.com/ar/what-is-2fa/' },
+
+  { hreflang: 'bn', href: 'https://2facounter.com/bn/what-is-2fa/' },
+
+  { hreflang: 'ru', href: 'https://2facounter.com/ru/what-is-2fa/' },
+{ hreflang: 'x-default', href: 'https://2facounter.com/what-is-2fa/' },
+];
+---
+
+<Layout title={title} description={description} path="/vi/what-is-2fa/" lang="vi" jsonLd={jsonLd} alternates={alternates} image="/og-vi.png">
+  <SiteHeader locale="vi"
+    links={[
+      { href: '/vi/', label: 'Trình tạo mã 2FA' },
+      { href: '/vi/how-to-get-2fa-code/', label: 'Cách lấy mã 2FA' },
+      { href: '/guides/', label: 'Hướng dẫn' },
+      { href: '/privacy/', label: 'Quyền riêng tư' },
+    ]}
+    cta="Tạo mã ngay"
+  />
+  <main id="main">
+    <article class="mx-auto max-w-[820px] px-4 py-16 sm:px-6 lg:py-24">
+      <p class="section-label">Tìm hiểu</p>
+      <h1 class="mt-3 font-display text-4xl tracking-normal text-ink sm:text-5xl">
+        2FA là gì? Và những mã 30 giây ấy thực sự hoạt động ra sao?
+      </h1>
+      <p class="mt-5 max-w-2xl text-lg font-medium text-ink">
+        Cẩm nang đầy đủ, viết bằng tiếng người thường: xác thực hai yếu tố là gì, phần mật mã học
+        đứng sau mã TOTP 6 chữ số, nên bật yếu tố nào cho tài khoản nào, và làm sao không bao giờ
+        bị khóa ngoài tài khoản.
+      </p>
+
+      <nav aria-label="Nội dung trang này" class="mt-10 rounded-xl border-2 border-ink bg-cream p-6" style="box-shadow: var(--shadow-card)">
+        <p class="font-mono text-[13px] font-bold tracking-wide text-ink uppercase">Nội dung trang này</p>
+        <ul class="mt-3 space-y-2 text-sm font-medium text-ink">
+          <li><a class="link" href="#problems">Vì sao chỉ có mật khẩu là không đủ</a></li>
+          <li><a class="link" href="#factors">Ba loại yếu tố xác thực</a></li>
+          <li><a class="link" href="#totp">TOTP hoạt động thế nào, từng bước</a></li>
+          <li><a class="link" href="#base32">Khóa bí mật và mã QR</a></li>
+          <li><a class="link" href="#sms">TOTP vs. SMS vs. khóa phần cứng</a></li>
+          <li><a class="link" href="#limitations">Điều 2FA không giải quyết được</a></li>
+          <li><a class="link" href="#never-locked-out">Cách không bao giờ bị khóa ngoài</a></li>
+          <li><a class="link" href="#faq">Hỏi đáp</a></li>
+        </ul>
+      </nav>
+
+      <div class="rich-text mt-12">
+        <h2 id="problems">Vì sao chỉ có mật khẩu là không đủ</h2>
+        <p>
+          Mỗi lần đăng nhập cần một mật khẩu, và mật khẩu có ba vấn đề cấu trúc: chúng bị dùng lại
+          ở nhiều nơi, bị <em>đoán ra</em> bởi các tấn công credential stuffing qua các cơ sở dữ
+          liệu bị rò rỉ, và bị <em>lừa</em> lấy từ người dùng. Xác thực hai yếu tố (2FA) chấp nhận
+          một sự thật đơn giản — con người là mắt xích yếu nhất — và bổ sung một thứ thứ hai,
+          độc lập, mà kẻ tấn công cũng phải sở hữu. Với 2FA, mật khẩu bị lộ đứng một mình không
+          còn đủ để vào tài khoản của bạn.
+        </p>
+        <p>
+          Hầu hết dịch vụ lớn hiện nay hoặc đã cung cấp hoặc yêu cầu 2FA: GitHub áp dụng bắt buộc
+          từ 2023, các sàn tiền điện tử (Binance, Coinbase, Kraken) thúc mỗi khi thị trường lao
+          dốc, còn Microsoft, Google và Apple đã đưa nó vào bảo mật tài khoản như chế độ mặc định.
+        </p>
+
+        <h2 id="factors">Ba loại yếu tố xác thực</h2>
+        <p>
+          Các yếu tố xác thực thuộc ba nhóm:
+        </p>
+        <ul>
+          <li><strong>Thứ bạn biết</strong> — mật khẩu, mã PIN. Dễ triển khai và dễ bị lừa lấy.</li>
+          <li>
+            <strong>Thứ bạn có</strong> — một trình xác thực sinh mã, khóa bảo mật phần cứng hoặc
+            passkey, điện thoại nhận SMS. 2FA sống ở nhóm này.
+          </li>
+          <li><strong>Thứ bạn là</strong> — vân tay, nhận diện khuôn mặt. Thuận tiện, nhưng được đăng ký ngay trên thiết bị chứ không phải yếu tố chủ lực khi xác thực từ xa.</li>
+        </ul>
+        <p>
+          Một bước kiểm tra hai yếu tố đúng nghĩa phải kết hợp kỹ thuật từ <em>hai nhóm khác
+          nhau</em>. Mật khẩu cộng màn hình mở khóa bằng hình trên điện thoại không phải 2FA; mật
+          khẩu cộng mã xác thực xoay vòng thì là.
+        </p>
+
+        <h2 id="totp">TOTP hoạt động thế nào, từng bước</h2>
+        <ol>
+          <li>
+            <strong>Đăng ký.</strong> Khi bật 2FA cho một dịch vụ, nó sinh ra một khóa bí mật ngẫu
+            nhiên và chia sẻ với bạn <em>một lần duy nhất</em> — vẽ thành mã QR hoặc hiển thị dưới
+            dạng khóa thiết lập Base32. Nhìn từ góc bảo mật, đúng khoảnh khắc đó mang toàn bộ rủi
+            ro, đó là lý do bạn chỉ nên bao giờ thị khóa ở nơi bạn tin tưởng.
+          </li>
+          <li>
+            <strong>Thời gian trôi.</strong> Thời gian hiện tại được cắt thành các “bước” 30 giây:
+            <code>step = floor(unixTime / 30)</code>. Con số 30 chẳng có gì đặc biệt; RFC 6238 cho
+            phép dịch vụ chấp nhận 15, 30 hoặc 60 giây.
+          </li>
+          <li>
+            <strong>HMAC.</strong> Trình xác thực của bạn tính một mã băm HMAC (SHA-1 cho phần lớn
+            dịch vụ, đôi khi SHA-256/512) trên giá trị bước, với khóa bí mật làm chìa. HMAC là cấu
+            trúc một chiều: nhìn thấy kết quả không cho biết điều gì về khóa bí mật.
+          </li>
+          <li>
+            <strong>Rút chữ số.</strong> Bốn byte trong đầu ra HMAC được chọn bởi nibble cuối,
+            bit cao nhất được xóa, và kết quả lấy modulo 10<sup>n</sup> thành mã của bạn — thường
+            là <code>n</code> = 6, thỉnh thoảng 7 hoặc 8.
+          </li>
+          <li>
+            <strong>Cửa sổ xác minh.</strong> Máy chủ tính lại cùng giá trị cho bước hiện tại và
+            bước trước đó (để chịu được lệch đồng hồ nhỏ). Bằng chứng khớp sẽ được chấp nhận đăng
+            nhập.
+          </li>
+        </ol>
+        <p>
+          Toàn bộ trên chạy trong vài micro giây, hoàn toàn ngay trên thiết bị. Đó là lý do công
+          cụ phía client như <a href="/vi/#generator">2FA COUNTER</a> làm được trọn công việc ở
+          máy bạn — tải trang, ngắt mạng, và mã vẫn nhảy ra đều đặn mỗi 30 giây, mãi mãi.
+        </p>
+
+        <h2 id="base32">Khóa bí mật và mã QR</h2>
+        <p>
+          Chuỗi Base32 không phải định dạng trung gian nào đó — nó chính là các byte thô của khóa
+          bí mật, mã hóa bằng một bộ chữ thân thiện với bàn phím (A–Z cộng 2–7, cố ý loại bỏ 0/1
+          vì dễ nhầm, và an toàn trên mọi bàn phím). Khi một nền tảng đưa ra lựa chọn “không thể
+          quét?”, chuỗi bạn nhận được chứa <em>đúng dữ liệu riêng tư</em> mà mã QR mã hóa. Lưu
+          dạng nào cũng được; ý nghĩa là như nhau:
+        </p>
+        <pre><code>otpauth://totp/GitHub:you%40example.com?secret=JBSWY3DPEHPK3PXP&amp;issuer=GitHub
+otpauth://totp/Binance:me?secret=JBSWY3DPEHPK3PXP&amp;digits=6&amp;period=30&amp;algorithm=SHA1
+otpauth://hotp/Steam:sda?secret=...&amp;counter=5   ← biến thể dựa trên bộ đếm (HOTP)</code></pre>
+        <p>
+          Một trình tạo hiện đại tôn trọng mọi tham số: số chữ số, chu kỳ, thuật toán băm và bộ
+          đếm HOTP — vì một dịch vụ yêu cầu SHA-256 sẽ vẫn từ chối mã tạo bằng mặc định SHA-1. Một
+          khóa Base32 trơn mặc định là 6 chữ số, 30 giây, SHA-1 — cấu hình mà phần lớn dịch vụ dùng.
+        </p>
+
+        <h2 id="sms">TOTP vs. SMS vs. khóa phần cứng</h2>
+        <ul>
+          <li><strong>Mã SMS</strong> đi ngang qua mạng viễn thông. Tấn công SIM swap cho phép kẻ tấn công chiếm đoạt số điện thoại và nhận mọi mã. SMS đã bị loại khỏi chuẩn xác thực của Mỹ (NIST SP 800-63B).</li>
+          <li><strong>TOTP</strong> không truyền đi một thứ gì — mã được tính ngay tại máy và hết hạn sau 30 giây. Miễn phí, dựa trên chuẩn, được hỗ trợ ở khắp nơi. Điểm yếu duy nhất: mã có thể bị lừa trong cửa sổ hiệu lực của nó.</li>
+          <li><strong>Khóa bảo mật và passkey</strong> (WebAuthn/FIDO2) gắn chặt bằng mật mã với <em>đúng</em> tên miền, nên trang giả mạo tự động thất bại. Lựa chọn mạnh nhất; nhưng ít được hỗ trợ hơn và tốn tiền mua khóa.</li>
+        </ul>
+        <p>
+          Bậc thang thực dụng: chỉ dùng SMS khi buộc phải vậy, dùng TOTP làm mặc định, và dùng
+          khóa phần cứng hoặc passkey cho những tài khoản quan trọng nhất.
+        </p>
+        <p>
+          Đào sâu các lựa chọn này:{" "}
+          <a href="/totp-vs-passkeys/">TOTP vs. passkey — yếu tố nào nên đặt ở đâu</a>,{" "}
+          <a href="/sim-swap-attacks/">tấn công SIM swap đánh bại mã SMS thế nào</a>, và{" "}
+          <a href="/authenticator-cloud-sync/">đồng bộ đám mây trong ứng dụng ảnh hưởng thế nào tới khóa bí mật của bạn</a>.
+        </p>
+
+        <h2 id="limitations">Điều 2FA không giải quyết được</h2>
+        <p>
+          Hai yếu tố giải quyết đúng một thứ: <em>mật khẩu bị đánh cắp</em>. Nó không chặn được
+          đánh cắp cookie phiên (mã độc đang chạy sẵn trên máy của bạn), tiện ích trình duyệt với
+          quyền hạn quá rộng, email khôi phục mà bạn đã mất quyền kiểm soát, hay kỹ thuật xã hội
+          khi kẻ tấn công dồn bạn đọc to một mã còn hạn trong cửa sổ 30 giây của nó. Hãy giữ trình
+          duyệt luôn cập nhật, dọn tiện ích trong các mạnh, và coi bất kỳ lời cầu khẩn nào yêu
+          cầu đưa mã như một cờ đỏ chính như nó vốn là.
+        </p>
+
+        <h2 id="never-locked-out">Cách không bao giờ bị khóa ngoài</h2>
+        <ol>
+          <li>
+            <strong>Lưu các mã sao lưu.</strong> Mọi dịch vụ đều in một bộ mã khôi phục dùng một
+            lần khi bạn bật 2FA. Hãy in ra hoặc lưu ở dạng mã hóa và ngoại tuyến.
+          </li>
+          <li>
+            <strong>Giữ khóa, không chỉ giữ công cụ.</strong> Khóa Base32 nằm trong két trình quản
+            lý mật khẩu cho phép bạn tạo lại mã bằng bất kỳ trình xác thực nào — ứng dụng trên
+            điện thoại, hoặc <a href="/vi/#generator">trình tạo trong браузer</a> — trên bất kỳ
+            thiết bị nào bạn thật sự có trong ngày hôm đó.
+          </li>
+          <li>
+            <strong>Đăng ký hai thiết bị, không chỉ một.</strong> Đặt khóa trên hai thiết bị đáng
+            tin cùng lúc là an toàn. TOTP là quyết định: cùng khóa, cùng mã.
+          </li>
+          <li>
+            <strong>Để ý đồng hồ của bạn.</strong> Nếu mã thường xuyên bị từ chối, hãy sửa đồng bộ
+            thời gian trên thiết bị trước — đó là nguyên nhân phổ biến nhất của lỗi “mã không hợp
+            lệ”, và không công cụ nào có thể né được nó.
+          </li>
+        </ol>
+      </div>
+
+      <!-- Hỏi đáp, theo đúng mẫu của trang chủ -->
+      <h2 id="faq" class="mt-16 font-display text-[28px] leading-[1.2] tracking-normal text-ink">Hỏi đáp</h2>
+      <div class="mt-6 divide-y-2 divide-dashed divide-hairline-strong">
+        {
+          faqs.map(({ q, a }) => (
+            <details class="group px-1 py-1">
+              <summary class="flex cursor-pointer list-none items-center justify-between gap-4 py-4 text-left font-bold text-ink select-none marker:hidden">
+                {q}
+                <svg class="h-4 w-4 shrink-0 text-ink transition-transform group-open:rotate-45" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"></path>
+                </svg>
+              </summary>
+              <p class="pb-5 text-sm font-medium text-ink">{a}</p>
+            </details>
+          ))
+        }
+      </div>
+
+      <div class="cta-banner on-dark mt-12">
+        <h2 class="font-display text-2xl tracking-normal text-primary">Giờ thì dùng thử</h2>
+        <p class="mt-2 max-w-2xl font-medium text-cream/80">
+          Dán khóa bí mật vào trình tạo và xem mã 2FA trực tiếp xuất hiện — chạy được cả khi không
+          có mạng, không cần tài khoản, không có gì được gửi tới máy chủ.
+        </p>
+        <a href="/vi/#generator" class="btn-primary mt-5">Mở trình tạo</a>
+      </div>
+    </article>
+  </main>
+  <SiteFooter
+    columns={[
+      {
+        title: 'Sản phẩm',
+        links: [
+          { href: '/vi/#generator', label: 'Trình tạo mã trực tiếp' },
+          { href: '/vi/how-to-get-2fa-code/', label: 'Cách lấy mã 2FA' },
+          { href: '/vi/what-is-2fa/', label: '2FA là gì?' },
+          { href: '/vi/#features', label: 'Tính năng' },
+          { href: '/vi/#compatibility', label: 'Tương thích' },
+        ],
+      },
+      {
+        title: 'Hướng dẫn',
+        links: [
+          { href: '/guides/', label: 'Tất cả hướng dẫn' },
+          { href: '/guides/google/', label: 'Google 2FA' },
+          { href: '/guides/microsoft/', label: 'Microsoft 2FA' },
+          { href: '/guides/discord/', label: 'Discord 2FA' },
+          { href: '/guides/github/', label: 'GitHub 2FA' },
+          { href: '/guides/steam/', label: 'Steam 2FA' },
+          { href: '/guides/binance/', label: 'Binance 2FA' },
+        ],
+      },
+      {
+        title: 'Giới thiệu',
+        links: [
+          { href: '/about/', label: 'Về chúng tôi' },
+          { href: '/methodology/', label: 'Quy trình biên soạn' },
+          { href: '/contact/', label: 'Liên hệ' },
+        ],
+      },
+      {
+        title: 'Pháp lý',
+        links: [
+          { href: '/privacy/', label: 'Chính sách quyền riêng tư' },
+          { href: '/terms/', label: 'Điều khoản dịch vụ' },
+          { href: '/disclaimer/', label: 'Miễn trừ trách nhiệm' },
+          { href: '/contact/', label: 'Báo cáo vấn đề bảo mật' },
+        ],
+      },
+    ]}
+    tagline="Trình xác thực 2FA zero-knowledge chạy hoàn toàn trên trình duyệt của bạn tại 2facounter.com. Không tài khoản, không máy chủ, không cần điện thoại."
+    languagesTitle="Ngôn ngữ"
+  />
+</Layout>

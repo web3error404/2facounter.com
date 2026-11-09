@@ -1,5 +1,6 @@
 ---
 import ShieldLogo from './ShieldLogo.astro';
+import { LANGUAGES, LANG_BY_HREF, languageOptions } from '../i18n/languages';
 
 const defaultLinks = [
   { href: '/#how-it-works', label: 'How it works' },
@@ -14,9 +15,33 @@ interface Props {
   links?: Array<{ href: string; label: string }>;
   /** Label of the primary call-to-action button */
   cta?: string;
+  /** URL directory of this page's language ('' for English, 'zh-cn', …) — marks the active item */
+  locale?: string;
+  /** Override the switcher list when a page offers its own per-language URLs */
+  languages?: Array<{ href: string; label: string; hreflang?: string }>;
 }
 
-const { links = defaultLinks, cta = 'Generate a code' } = Astro.props;
+const { links = defaultLinks, cta = 'Generate a code', locale = '', languages: languageOverride } = Astro.props;
+
+type SwitcherItem = { href: string; label: string; hreflang?: string; current?: boolean };
+
+const currentHref = LANGUAGES.find((lang) => lang.href.replace(/\//g, '') === locale)?.href ?? '/';
+// Current page path without the leading locale dir ('' for the homepage,
+// 'what-is-2fa/', …). languageOptions() rewrites the per-language hrefs to
+// this page's own translated URL when one is guaranteed to exist.
+const parts = Astro.url.pathname.split('/').filter(Boolean);
+const basePathLen = LANG_BY_HREF.has(`/${parts[0]}/`) ? 1 : 0;
+const rest = parts.slice(basePathLen);
+// '' for the homepage, 'what-is-2fa/' for articles, 'guides/google/' for guides…
+const pageSlug = rest.length ? `${rest.join('/')}/` : '';
+const switcher: SwitcherItem[] = (
+  languageOverride ??
+  // languageOptions() already marks the current language and rewrites hrefs
+  // to the same page's translated URL when one exists
+  languageOptions(locale, pageSlug)
+).map((l) => ({ ...l }));
+
+const current = switcher.find((l) => l.current) ?? switcher[0];
 ---
 
 <!-- Deli nav-bar: orange band matching the canvas, 3px ink base border, segmented nav pills -->
@@ -46,6 +71,66 @@ const { links = defaultLinks, cta = 'Generate a code' } = Astro.props;
           </a>
         ))
       }
+
+      <!-- Language dropdown -->
+      <div class="relative">
+        <button
+          id="lang-toggle"
+          type="button"
+          class="flex items-center gap-1.5 rounded-full border-2 border-transparent px-3 py-1.5 text-sm font-semibold text-ink hover:border-ink hover:bg-surface"
+          aria-haspopup="true"
+          aria-expanded="false"
+          aria-controls="lang-menu"
+          aria-label={`Language — ${current.label}`}
+        >
+          <svg class="h-4 w-4 shrink-0" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"></circle>
+            <path
+              d="M3 12h18M12 3a9 9 0 0 1 0 18M12 3a9 9 0 0 0 0 18"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+            ></path>
+          </svg>
+          <span>{current.label}</span>
+          <svg class="h-3.5 w-3.5 shrink-0" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+          </svg>
+        </button>
+        <div
+          id="lang-menu"
+          hidden
+          class="absolute right-0 top-full z-50 mt-2 w-44 rounded-xl border-2 border-ink bg-canvas p-1.5 shadow-card"
+        >
+          {
+            switcher.map((l) => (
+              <a
+                href={l.href}
+                hreflang={l.hreflang}
+                aria-current={l.current ? 'true' : undefined}
+                class:list={[
+                  'flex items-center justify-between gap-3 rounded-lg px-3 py-2 text-sm font-semibold text-ink hover:bg-canvas-soft',
+                  l.current && 'bg-surface',
+                ]}
+              >
+                <span>{l.label}</span>
+                {l.current && (
+                  <svg class="h-4 w-4 shrink-0 text-primary" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path
+                      d="m5 13 4 4L19 7"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    ></path>
+                  </svg>
+                )}
+              </a>
+            ))
+          }
+        </div>
+      </div>
+
       <a href="/#generator" class="btn-primary ml-2">{cta}</a>
     </div>
 
@@ -73,12 +158,34 @@ const { links = defaultLinks, cta = 'Generate a code' } = Astro.props;
       }
       <a href="/#generator" class="btn-primary mt-2">{cta}</a>
     </div>
+
+    <nav aria-label="Language" class="mt-2 border-t-2 border-dashed border-ink/40 pt-2">
+      <div class="grid grid-cols-2 gap-1">
+        {
+          switcher.map((l) => (
+            <a
+              href={l.href}
+              hreflang={l.hreflang}
+              aria-current={l.current ? 'true' : undefined}
+              class:list={[
+                'flex items-center justify-between gap-2 rounded-full border-2 px-3 py-2 text-sm font-semibold text-ink hover:bg-canvas-soft',
+                l.current ? 'border-ink bg-surface' : 'border-transparent',
+              ]}
+            >
+              <span>{l.label}</span>
+            </a>
+          ))
+        }
+      </div>
+    </nav>
   </div>
 </header>
 
 <script>
   const toggle = document.getElementById('menu-toggle');
   const menu = document.getElementById('mobile-menu');
+  const langToggle = document.getElementById('lang-toggle');
+  const langMenu = document.getElementById('lang-menu');
 
   function menuIsOpen(): boolean {
     return toggle?.getAttribute('aria-expanded') === 'true';
@@ -91,6 +198,15 @@ const { links = defaultLinks, cta = 'Generate a code' } = Astro.props;
     toggle?.setAttribute('aria-label', 'Open menu');
   }
 
+  function langIsOpen(): boolean {
+    return langToggle?.getAttribute('aria-expanded') === 'true';
+  }
+
+  function closeLang(): void {
+    langToggle?.setAttribute('aria-expanded', 'false');
+    langMenu?.setAttribute('hidden', '');
+  }
+
   toggle?.addEventListener('click', () => {
     const expanded = menuIsOpen();
     toggle.setAttribute('aria-expanded', String(!expanded));
@@ -99,24 +215,41 @@ const { links = defaultLinks, cta = 'Generate a code' } = Astro.props;
     menu?.classList.toggle('block', !expanded);
   });
 
+  langToggle?.addEventListener('click', () => {
+    const open = langIsOpen();
+    langToggle.setAttribute('aria-expanded', String(!open));
+    langMenu?.toggleAttribute('hidden', open);
+  });
+
   // Route every link click through the same close path
   menu?.querySelectorAll('a').forEach((a) =>
     a.addEventListener('click', closeMenu),
   );
 
-  // Escape closes the menu and returns focus to the toggle
+  // Escape closes the menus and returns focus to their toggles
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && menuIsOpen()) {
       closeMenu();
       toggle?.focus();
     }
+    if (e.key === 'Escape' && langIsOpen()) {
+      closeLang();
+      langToggle?.focus();
+    }
   });
 
-  // A click anywhere outside the bar + menu closes it
+  // A click anywhere outside an open menu closes it
   document.addEventListener('click', (e) => {
     if (!menuIsOpen()) return;
     if (e.target instanceof Node && !menu?.contains(e.target) && !toggle?.contains(e.target)) {
       closeMenu();
+    }
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!langIsOpen()) return;
+    if (e.target instanceof Node && !langMenu?.contains(e.target) && !langToggle?.contains(e.target)) {
+      closeLang();
     }
   });
 </script>

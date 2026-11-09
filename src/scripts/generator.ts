@@ -14,6 +14,29 @@ type Account = {
   counter: number;
 };
 
+/* ── UI strings ───────────────────────────────────────────────
+   Every toast/label comes from the GeneratorStrings set for this
+   page's language, embedded by Generator.astro as a JSON data island
+   (#generator-i18n). The English set is the fallback for missing
+   keys or a missing island, so the widget can never render blanks. */
+import { GENERATOR_EN, type GeneratorStrings } from '../i18n/generator';
+
+function loadStrings(): GeneratorStrings {
+  const el = document.getElementById('generator-i18n');
+  if (!el?.textContent) return GENERATOR_EN;
+  try {
+    return { ...GENERATOR_EN, ...(JSON.parse(el.textContent) as Partial<GeneratorStrings>) };
+  } catch {
+    return GENERATOR_EN;
+  }
+}
+const T = loadStrings();
+
+/* Fill {name} placeholders in translated templates. */
+function fmt(tpl: string, vars: Record<string, string | number>): string {
+  return tpl.replace(/\{(\w+)\}/g, (m, name) => (name in vars ? String(vars[name]) : m));
+}
+
 const LS_KEY = '2fal.key.v2';
 
 /* ── Storage: a deliberate trade-off ──────────────────────────
@@ -105,12 +128,12 @@ function init() {
   pasteBtn.addEventListener('click', async () => {
     try {
       const text = await navigator.clipboard.readText();
-      if (!text.trim()) return toast('Clipboard is empty', false);
+      if (!text.trim()) return toast(T.toastClipboardEmpty, false);
       keyInput.value = text;
       processInput(true);
     } catch {
       keyInput.focus();
-      toast('Clipboard access blocked — use Ctrl + V in the input', false);
+      toast(T.toastClipboardBlocked, false);
     }
   });
 
@@ -130,7 +153,7 @@ function init() {
 
   // Copy the live code
   copyBtn.addEventListener('click', async () => {
-    if (!currentCode) return toast('No code yet — add a key first', false);
+    if (!currentCode) return toast(T.toastNoCode, false);
     try {
       await navigator.clipboard.writeText(currentCode);
     } catch {
@@ -141,11 +164,11 @@ function init() {
       document.execCommand('copy');
       ta.remove();
     }
-    copyLabel.textContent = 'Copied ✓';
+    copyLabel.textContent = T.copied;
     /* Announce via the toast (role="status" + aria-live) — a label swap
        alone is invisible to screen readers. */
-    toast('Code copied to clipboard ✓', true);
-    setTimeout(() => (copyLabel.textContent = 'Copy Code'), 2000);
+    toast(T.toastCopied, true);
+    setTimeout(() => (copyLabel.textContent = T.copyCode), 2000);
   });
 
   // QR import: camera half opens the scanner, upload half opens the picker
@@ -156,6 +179,25 @@ function init() {
   });
   qrCameraBtn.addEventListener('click', () => openCamera());
   qrUploadBtn.addEventListener('click', () => fileInput.click());
+
+  /* Prefetch the QR decoder on interaction intent, not on page load. A
+     pointerdown/touchstart fires ~100–500 ms before the click completes,
+     and a hover even earlier — enough for the ~40 KB gzipped chunk to
+     arrive so the first scan starts decoding immediately. loadJsQR()
+     caches its promise, so this is free and never double-fetches. */
+  const prefetchJsQR = () => {
+    loadJsQR();
+    qrCameraBtn.removeEventListener('pointerdown', prefetchJsQR);
+    qrCameraBtn.removeEventListener('pointerenter', prefetchJsQR);
+    qrUploadBtn.removeEventListener('pointerdown', prefetchJsQR);
+    qrUploadBtn.removeEventListener('pointerenter', prefetchJsQR);
+    window.removeEventListener('touchstart', prefetchJsQR);
+  };
+  qrCameraBtn.addEventListener('pointerdown', prefetchJsQR);
+  qrCameraBtn.addEventListener('pointerenter', prefetchJsQR);
+  qrUploadBtn.addEventListener('pointerdown', prefetchJsQR);
+  qrUploadBtn.addEventListener('pointerenter', prefetchJsQR);
+  window.addEventListener('touchstart', prefetchJsQR, { passive: true });
 
   // Paste an image of the QR anywhere on the page
   document.addEventListener('paste', async (e) => {
@@ -249,7 +291,7 @@ function processInput(persist = false, invalidToast: 'always' | 'as-you-type' = 
       const plausible = hadValid || keyInput.value.trim().length >= 16;
       if (invalidToast === 'always' || (plausible && !invalidToastShown)) {
         invalidToastShown = true;
-        toast('Not a valid Base32 key or otpauth:// URI', false);
+        toast(T.toastInvalid, false);
       }
     }
     return;
@@ -263,7 +305,7 @@ function processInput(persist = false, invalidToast: 'always' | 'as-you-type' = 
     }
   }
   setAccount({
-    label: parsed.issuer || parsed.label || 'Live key',
+    label: parsed.issuer || parsed.label || T.liveKey,
     secret: parsed.secret,
     digits: parsed.digits ?? 6,
     period: parsed.period ?? 30,
@@ -303,7 +345,7 @@ function setAccount(acc: Account) {
 /* Safest available display name: issuer/label from the otpauth URI,
    otherwise a masked tail so full secrets never show in the list. */
 function describeKey(parsed: ParsedKey): string {
-  return parsed.issuer || parsed.label || `Key ····${parsed.secret.slice(-4)}`;
+  return parsed.issuer || parsed.label || fmt(T.keyMask, { tail: parsed.secret.slice(-4) });
 }
 
 function secretOf(key: string): string | null {
@@ -375,7 +417,7 @@ function renderRecents(): void {
 
     const open = document.createElement('button');
     open.type = 'button';
-    open.title = 'Load this key';
+    open.title = T.loadKeyTitle;
     open.className = 'flex min-w-0 flex-1 items-center justify-between gap-3 text-left';
     const nameEl = document.createElement('span');
     nameEl.className = 'truncate text-sm font-semibold text-body group-hover:text-ink';    nameEl.textContent = entry.label;
@@ -395,7 +437,7 @@ function renderRecents(): void {
     del.className = 'btn-icon h-8 w-8 shrink-0 text-muted-soft hover:text-danger';
     del.innerHTML = X_SVG;
     const desc = entry.label;
-    del.setAttribute('aria-label', `Remove ${desc} from recent keys`);
+    del.setAttribute('aria-label', fmt(T.removeKeyAria, { desc }));
     del.addEventListener('click', () => {
       recents = recents.filter((r) => r.key !== entry.key);
       saveRecents();
@@ -419,7 +461,7 @@ function clearAllRecents(): void {
   }
   renderRecents();
   if (!wasEmpty) {
-    toast('Recent keys cleared from this browser ✓', true);
+    toast(T.toastRecentsCleared, true);
   }
 }
 
@@ -439,7 +481,7 @@ function disarmClear(): void {
   clearArmTimer = undefined;
   recentClearBtn?.classList.add('text-cream/70');
   recentClearBtn?.classList.remove('bg-danger', 'text-cream');
-  if (clearLabel) clearLabel.textContent = 'Clear all';
+  if (clearLabel) clearLabel.textContent = T.clearAll;
 }
 
 function armOrExecuteClear(): void {
@@ -448,7 +490,7 @@ function armOrExecuteClear(): void {
     clearArmed = true;
     recentClearBtn.classList.remove('text-cream/70');
     recentClearBtn.classList.add('bg-danger', 'text-cream');
-    if (clearLabel) clearLabel.textContent = 'Really clear?';
+    if (clearLabel) clearLabel.textContent = T.reallyClear;
     clearArmTimer = setTimeout(disarmClear, 3000);
     return;
   }
@@ -657,7 +699,17 @@ function buildBar(count = 30, period = 30) {
     t.className = 'min-w-0 flex-1 rounded-[2px] transition-colors duration-150';
     bar.appendChild(t);
   }
+  /* Fresh segments carry no lit-state yet — invalidate the paint guard
+     so the next tick is guaranteed to paint. */
+  lastLit = -1;
+  lastEnding = false;
 }
+
+/* Paint guard: the 250 ms tick only repaints the bar when the lit count
+   or the urgency state actually changed — 3 of every 4 ticks become
+   no-ops instead of 30×3 classList toggles. */
+let lastLit = -1;
+let lastEnding = false;
 
 function paintBar(litSeconds: number) {
   if (!bar) return;
@@ -669,6 +721,9 @@ function paintBar(litSeconds: number) {
   /* Last 5 seconds: the lit run flips from kiwi-green to stamp red
      — the same "ticket urgency" red as the countdown badge. */
   const ending = litSeconds <= 5;
+  if (lit === lastLit && ending === lastEnding) return;
+  lastLit = lit;
+  lastEnding = ending;
   for (let i = 0; i < count; i++) {
     const t = bar.children[i] as HTMLElement;
     t.classList.toggle('bg-primary', i < lit && !ending);
@@ -682,6 +737,8 @@ function paintBar(litSeconds: number) {
    the bar renders as an invisible empty strip. */
 function paintBarFull() {
   if (!bar) return;
+  lastLit = bar.children.length;
+  lastEnding = false;
   for (let i = 0; i < bar.children.length; i++) {
     const t = bar.children[i] as HTMLElement;
     t.classList.add('bg-primary');
@@ -702,7 +759,10 @@ async function renderCode(force = false) {
       if (code) showCode(code);
       lastStep = acc.counter;
     }
-    if (badgeSeconds) badgeSeconds.textContent = `#${acc.counter}`;
+    if (badgeSeconds) {
+      const txt = `#${acc.counter}`;
+      if (badgeSeconds.textContent !== txt) badgeSeconds.textContent = txt;
+    }
     return;
   }
 
@@ -715,7 +775,12 @@ async function renderCode(force = false) {
     lastStep = step;
   }
 
-  if (badgeSeconds) badgeSeconds.textContent = `${remaining} s`;
+  if (badgeSeconds) {
+    /* Write the badge text only when it actually changed — assigning the
+       same string every tick still dirties the text node 4×/s. */
+    const txt = `${remaining}${T.seconds}`;
+    if (badgeSeconds.textContent !== txt) badgeSeconds.textContent = txt;
+  }
   badge.classList.toggle('text-danger', remaining <= 5);
   badgeDot.classList.toggle('bg-ok', remaining > 5);
   badgeDot.classList.toggle('bg-danger', remaining <= 5);
@@ -732,16 +797,16 @@ function showCode(code: string) {
   tokenBox.classList.add('code-tick');
   /* One announcement per rotation, into the single sr-only live region —
      the visual chamber is not a live region (see Generator.astro). */
-  if (tokenAnnounce) tokenAnnounce.textContent = `New 2FA code ${code}`;
+  if (tokenAnnounce) tokenAnnounce.textContent = fmt(T.announceNewCode, { code });
 }
 
 /* ── QR scanning (file / paste / drop) ──────────────────────── */
 
 async function scanFile(file: File | Blob) {
-  toast('Decoding image…', true);
+  toast(T.toastDecoding, true);
   const jsQR = await loadJsQR();
   if (!jsQR) {
-    toast('Could not load the QR decoder (offline?). Paste the text key instead.', false);
+    toast(T.toastDecoderFail, false);
     return;
   }
   try {
@@ -759,17 +824,17 @@ async function scanFile(file: File | Blob) {
     if (res && res.data) {
       const parsed = parseKeyInput(res.data);
       if (!parsed) {
-        toast('QR found, but the payload was not a valid otpauth key.', false);
+        toast(T.toastQrInvalidPayload, false);
         return;
       }
       keyInput.value = res.data;
       processInput(true);
-      toast('Key imported from QR ✓', true);
+      toast(T.toastQrImported, true);
     } else {
-      toast('No QR code found in that image. Try a clearer crop, or paste the text key.', false);
+      toast(T.toastNoQr, false);
     }
   } catch {
-    toast('Could not read that file as an image.', false);
+    toast(T.toastFileUnreadable, false);
   }
 }
 
@@ -801,6 +866,7 @@ async function openCamera() {
   camClose.focus();
   try {
     stream = await navigator.mediaDevices.getUserMedia({
+      audio: false,
       video: { facingMode: 'environment', width: { ideal: 1280 } },
     });
     camVideo.srcObject = stream;
@@ -810,9 +876,7 @@ async function openCamera() {
     closeCamera();
     const denied = (err as Error)?.name === 'NotAllowedError';
     toast(
-      denied
-        ? 'Camera access was blocked. Allow it, or upload/paste a screenshot instead.'
-        : 'No camera available. Try uploading a QR screenshot instead.',
+      denied ? T.toastCamDenied : T.toastCamUnavailable,
       false,
     );
   }
@@ -835,9 +899,16 @@ async function camLoop() {
   if (!jsQR || !stream) return;
   const cv = document.createElement('canvas');
   const ctx = cv.getContext('2d', { willReadFrequently: true })!;
+  /* Decode at ~10 fps, not per animation frame: jsQR on a 480 px frame
+     is real CPU work, and at 60 Hz it heats a phone and drops UI frames
+     while the camera is open. 100 ms cadence still feels instant. */
+  const DECODE_EVERY_MS = 100;
+  let lastDecode = 0;
   const scan = () => {
     if (!stream) return;
-    if (camVideo.readyState >= 2 && camVideo.videoWidth) {
+    const nowTs = performance.now();
+    if (camVideo.readyState >= 2 && camVideo.videoWidth && nowTs - lastDecode >= DECODE_EVERY_MS) {
+      lastDecode = nowTs;
       const scale = 480 / camVideo.videoWidth;
       cv.width = 480;
       cv.height = Math.round(camVideo.videoHeight * scale);
@@ -849,9 +920,9 @@ async function camLoop() {
         if (parsed) {
           keyInput.value = res.data;
           processInput(true);
-          toast('Key imported from QR ✓', true);
+          toast(T.toastQrImported, true);
         } else {
-          toast('QR is not a 2FA key', false);
+          toast(T.toastQrNotKey, false);
         }
         return;
       }

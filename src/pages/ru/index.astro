@@ -1,0 +1,575 @@
+---
+/* Русская версия — переведённая главная страница (hreflang: ru). Структура
+   параллельна index.astro; перевод адаптирован под русскоязычный SEO. */
+import Layout from '../../layouts/Layout.astro';
+import SiteHeader from '../../components/SiteHeader.astro';
+import SiteFooter from '../../components/SiteFooter.astro';
+import Generator from '../../components/Generator.astro';
+
+const title = 'Генератор кодов 2FA онлайн — бесплатный 2FA-аутентификатор (TOTP)';
+const description =
+  'Сгенерируйте код 2FA онлайн за секунды. Бесплатный 2FA-аутентификатор, который работает прямо в браузере: вставьте секретный ключ и получите живой TOTP-код,…';
+
+const faq = [
+  {
+    q: 'Как получить 2FA?',
+    a: '2FA включается в настройках того аккаунта, который вы хотите защитить: откройте настройки, перейдите в раздел «Безопасность» или «Вход и безопасность» и найдите пункт «Двухфакторная аутентификация» или «Двухэтапная проверка». Выберите вариант с приложением-аутентификатором, отсканируйте QR-код — или нажмите «не удаётся отсканировать?», чтобы показать ключ настройки (строку Base32 или URI otpauth://) — и вставьте его в генератор кодов 2FA в начале этой страницы. Введите появившийся живой код для подтверждения настройки и сохраните коды восстановления, которые покажет сервис.',
+  },
+  {
+    q: 'Как включить 2FA?',
+    a: 'Четыре шага, около двух минут: 1) Откройте настройки аккаунта или безопасности и выберите «Двухфакторная аутентификация». 2) Выберите «Использовать приложение-аутентификатор» (избегайте SMS, если есть вариант получше). 3) Отсканируйте QR-код своим аутентификатором — или покажите и сохраните ключ настройки. 4) Введите живой код для завершения и скачайте или распечатайте резервные коды. Мы публикуем руководства по сервисам для Google, GitHub, Discord, Binance и других.',
+  },
+  {
+    q: 'Как работает 2FA?',
+    a: 'После пароля сервис запрашивает второе подтверждение личности. При стандартном методе TOTP (RFC 6238) ваш аутентификатор вычисляет 6-значный код на основе общего секретного ключа и текущего времени, а сервер выполняет точно такой же расчёт и сравнивает результаты. Код двухэтапной проверки выводится заново каждые 30 секунд и перестаёт действовать сразу после истечения срока — так один только украденный пароль уже не откроет ваш аккаунт.',
+  },
+  {
+    q: 'Для чего нужна 2FA?',
+    a: 'Она защищает любой вход, который кто-то захочет перехватить: почту и облачные сервисы (Google, Microsoft, Apple), онлайн-банкинг и брокеров, криптобиржи (Binance, Coinbase, Kraken), платформы для разработчиков (GitHub, AWS), игры (Steam, Discord, Twitch) и соцсети (X, Instagram). Компании используют её для VPN, почты и консолей администрирования. Везде, где есть опция «приложение-аутентификатор», проходит путь 2FA.',
+  },
+  {
+    q: 'Безопасна ли 2FA на 100%?',
+    a: 'Нет — как и любой инструмент безопасности; честные руководства говорят об этом прямо. 2FA сводит на нет атаки с украденными паролями, но свежесгенерированный код, введённый на поддельном сайте, пока он действует, всё же может попасть к фишерам, вредоносное ПО, уже присутствующее на вашем устройстве, способно перехватить саму сессию, а SMS-коды уступают атакам с подменой SIM-карты. При всех этих оговорках аккаунт с 2FA взломать несравнимо труднее, чем без неё.',
+  },
+  {
+    q: 'Является ли 2FA обязательной?',
+    a: 'Ни одно государство не делает её обязательной, но платформы вводят её всё активнее: GitHub требует её от разработчиков с 2023 года, банки и криптобиржи включают её принудительно, а работодатели часто требуют её для рабочих доступов. В остальных случаях она необязательна, но крайне рекомендуется. Относитесь к ней как к обязательной на самом ценном аккаунте — почте: кто контролирует ваш почтовый ящик, может восстановить доступ ко всем остальным.',
+  },
+  {
+    q: 'Почему 2FA так важна?',
+    a: 'Потому что пароли проваливаются всегда одинаково. Миллиарды реальных паролей уже опубликованы после утечек, и злоумышленники без устали подставляют их снова и снова на одном сайте за другим (credential stuffing). По данным Microsoft, 2FA блокирует более 99,9 % автоматических попыток захвата аккаунтов — это самая дешёвая мера, которая защищает вашу почту, банк, игры и криптовалюту от угроз, которые действительно происходят.',
+  },
+  {
+    q: 'Насколько надёжна 2FA?',
+    a: 'Это полностью зависит от второго фактора. SMS-коды — самые слабые: при подмене SIM-карты злоумышленник крадёт ваш номер и получает коды сам. TOTP-коды аутентификатора — те, что обновляются каждые 30 секунд, — вычислительно надёжны: ничего не передаётся по сети, офлайн-злоумышленник не сможет их вычислить, и каждый код истекает за секунды. Физические ключи безопасности и passkey — самый сильный вариант: они устойчивы к фишингу и криптографически привязаны к настоящему домену.',
+  },
+  {
+    q: 'Почему теперь все используют 2FA?',
+    a: 'Потому что эпоха «просто пароля» рухнула. Масштабные утечки обнародовали миллиарды учётных данных, автоматический credential stuffing сделал захват аккаунтов почти бесплатным, а платформам надоело расплачиваться за последствия. Подключились и регуляторы: NIST исключил SMS как способ аутентификации из своих стандартов США, а европейский PSD2 требует усиленной аутентификации клиента. Когда несколько гигантов сделали 2FA нормой, все остальные сервисы подтянулись.',
+  },
+  {
+    q: 'Нужен ли телефон для этого 2FA-аутентификатора?',
+    a: 'Нет. Это 2FA-инструмент, работающий в браузере: он запускается на любом ноутбуке, планшете или настольном компьютере с современным браузером, онлайн или полностью офлайн после установки как приложение. Он заменяет мобильное приложение, когда телефон потерян, продан, сломан, разряжен — или просто запрещён там, где вы работаете.',
+  },
+  {
+    q: 'Безопасно ли пользоваться 2FA COUNTER?',
+    a: 'Да. Все вычисления выполняются локально в вашем браузере с помощью Web Crypto API. Ваши секретные ключи никогда не отправляются — и не раскрываются — ни одному серверу. Можно открыть страницу, отключить интернет — и генератор продолжит работать.',
+  },
+  {
+    q: 'Можно ли пользоваться без интернета?',
+    a: 'Конечно. Установите 2FA COUNTER как приложение («Добавить на главный экран» / «Установить») — и оно будет работать полностью офлайн, как обычный аутентификатор. Коды вычисляются из вашего ключа и часов устройства — сеть не нужна.',
+  },
+  {
+    q: 'Почему код 2FA не принимается?',
+    a: 'Почти всегда дело в расхождении часов. TOTP-коды зависят от времени: если часы устройства расходятся хотя бы на полминуты, код недействителен. Убедитесь, что системное время синхронизируется автоматически (в Windows — «Синхронизировать сейчас» в настройках даты и времени; в macOS — «Установить дату и время автоматически») и попробуйте снова. Генератор считает по времени, которое сообщает ваше устройство, — собственных часов, которые нужно поправить, у него нет.',
+  },
+  {
+    q: 'Чем это отличается от Google Authenticator или Authy?',
+    a: 'Это мобильные приложения, а это — аутентификатор в браузере. Используется ровно тот же алгоритм TOTP из RFC 6238, и он работает с любым сервисом, принимающим стандартное приложение-аутентификатор, — но доступ не потеряется, если телефон сломается, будет продан или разрядится.',
+  },
+  {
+    q: 'Где хранятся мои ключи?',
+    a: 'Только в вашем браузере. Последний ключ и краткий список «недавних ключей» (до 8) сохраняются в локальном хранилище этого устройства, чтобы генератор переживал перезагрузку страницы и вы могли переключаться между ключами одним нажатием, — и никогда на наших серверах, потому что их просто нет. Ключи хранятся как обычный текст: любой, кто откроет этот профиль браузера, сможет их прочитать, поэтому обращайтесь с профилем как с сейфом менеджера паролей. Кнопка «Очистить всё» над списком (она требует подтверждения), очистка поля или удаление данных браузера стирают их навсегда; храните оригинал секрета в менеджере паролей как главную копию.',
+  },
+  {
+    q: 'Работает ли это с HOTP, 8-значными кодами или сервисами SHA-256?',
+    a: 'Да. Вставьте полный URI otpauth://, который выдаёт сервис, — и все содержащиеся в нём параметры будут учтены автоматически: 6, 7 или 8 знаков, периоды 15/30/60 с, хеши SHA-1/SHA-256/SHA-512 и HOTP со счётчиком. Голая строка Base32 использует стандартные значения по умолчанию (6 знаков, 30 с, SHA-1) — их применяет подавляющее большинство сервисов.',
+  },
+  {
+    q: 'Это действительно бесплатно?',
+    a: 'Да — без аккаунтов, без премиум-тарифов, без входа. Это инструмент, а не сервис.',
+  },
+];
+
+// hreflang cluster for the translated homepages (+ x-default → English)
+const homeAlternates = [
+  { hreflang: 'en', href: 'https://2facounter.com/' },
+  { hreflang: 'vi', href: 'https://2facounter.com/vi/' },
+  { hreflang: 'zh-Hans', href: 'https://2facounter.com/zh-cn/' },
+  { hreflang: 'zh-Hant', href: 'https://2facounter.com/zh-tw/' },
+  { hreflang: 'es', href: 'https://2facounter.com/es/' },
+  { hreflang: 'ja', href: 'https://2facounter.com/ja/' },
+  { hreflang: 'fr', href: 'https://2facounter.com/fr/' },
+  { hreflang: 'de', href: 'https://2facounter.com/de/' },
+  { hreflang: 'pt', href: 'https://2facounter.com/pt/' },
+  { hreflang: 'ko', href: 'https://2facounter.com/ko/' },
+  { hreflang: 'it', href: 'https://2facounter.com/it/' },
+  
+  { hreflang: 'hi', href: 'https://2facounter.com/hi/' },
+
+  { hreflang: 'ar', href: 'https://2facounter.com/ar/' },
+
+  { hreflang: 'bn', href: 'https://2facounter.com/bn/' },
+
+  { hreflang: 'ru', href: 'https://2facounter.com/ru/' },
+{ hreflang: 'x-default', href: 'https://2facounter.com/' },
+];
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebApplication',
+    name: '2FA COUNTER',
+    alternateName: ['2FA Live Code', '2facounter', '2FA Online Authenticator', '2FA Auth Tool'],
+    url: 'https://2facounter.com/ru/',
+    description,
+    applicationCategory: 'SecurityApplication',
+    applicationSubCategory: 'Two-Factor Authentication',
+    operatingSystem: 'Любая (браузерное приложение)',
+    browserRequirements: 'Требуется современный браузер с поддержкой Web Crypto API',
+    softwareVersion: '2.0',
+    featureList: [
+      'Генерация кодов 2FA TOTP (RFC 6238)',
+      'Генерация кодов HOTP (RFC 4226)',
+      'Сканирование QR-кодов камерой или из снимка экрана',
+      'Поддержка офлайн-режима и PWA',
+      'Хеширование SHA-1, SHA-256, SHA-512',
+      'Поддержка кодов из 6, 7 и 8 знаков',
+      'Список недавних ключей',
+      'Zero-knowledge — без серверов и аккаунтов',
+    ],
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+    isAccessibleForFree: true,
+    inLanguage: ['en', 'vi', 'zh-CN', 'zh-TW', 'es', 'ja', 'fr', 'de', 'pt', 'ko', 'it', 'hi', 'ar', 'bn', 'ru'],
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faq.map(({ q, a }) => ({
+      '@type': 'Question',
+      name: q,
+      acceptedAnswer: { '@type': 'Answer', text: a },
+    })),
+  },
+];
+
+const steps = [
+  { n: '01', title: 'Получите секретный ключ', body: 'Когда сервис предлагает «двухфакторную аутентификацию → приложение-аутентификатор», выберите «не удаётся отсканировать? показать ключ настройки». Вы получите строку Base32 вида JBSWY3DPEHPK3PXP — или полную ссылку otpauth://. Оба варианта работают здесь.' },
+  { n: '02', title: 'Вставьте, перетащите или отсканируйте', body: 'Вставьте ключ или URI в генератор, перетащите снимок QR-кода на страницу или отсканируйте его камерой. Всё декодируется на вашем устройстве — ничто не загружается в сеть.' },
+  { n: '03', title: 'Скопируйте живой код', body: 'Новый токен появится через секунды, синхронизированный с часами вашего устройства. Нажмите «копировать» и завершите вход. Код автоматически обновляется каждые 30 секунд.' },
+];
+
+const features = [
+  { title: 'Одно поле — один живой код', body: 'Вставьте секретный ключ или полную ссылку otpauth:// — и онлайн-код 2FA тут же начнёт обратный отсчёт: без настройки, без форм, без ритуала «добавить аккаунт».', v: 'cream' },
+  { title: 'Вставьте снимок — получите ключ', body: 'Ctrl+V поверх изображения QR-кода, перетащите файл картинки или отсканируйте веб-камерой. Три способа импорта — и ни одного способа, которым ваш ключ мог бы утечь.', v: 'cream' },
+  { title: 'Все параметры определяются сами', body: 'Голая строка ключа использует стандартные значения; полный URI otpauth:// учитывает каждый содержащийся в нём параметр — 6/7/8 знаков, период 15/30/60 с, SHA-1/256/512 и даже HOTP со счётчиком.', v: 'cream' },
+  { title: 'Переживает перезагрузку — и позволяет менять ключи', body: 'Откройте страницу снова — ваш последний ключ уже на месте. Список недавних ключей позволяет переключаться между ними одним нажатием — восстанавливается только из локального хранилища этого устройства, никогда с сервера.', v: 'cream' },
+  { title: 'Ничего не нужно устанавливать и регистрировать', body: 'Без мобильного приложения, без аккаунта, без платы за синхронизацию, без отслеживания. Если вы можете открыть браузер, вы можете сгенерировать свой код двухэтапной проверки.', v: 'cream' },
+  { title: 'Работает офлайн и устанавливается как приложение', body: 'Работает, пока вкладка отрезана от мира — в буквальном смысле. А как PWA устанавливается в ваш док или на главный экран как обычное приложение.', v: 'dark' },
+];
+
+const services = [
+  'Discord', 'GitHub', 'Steam', 'Binance', 'Google', 'X / Twitter',
+  'AWS', 'Coinbase', 'Kraken', 'Twitch', 'Microsoft', 'Proton Mail',
+];
+---
+
+
+  <Layout title={title} description={description} path="/ru/" lang="ru" jsonLd={jsonLd} alternates={homeAlternates} image="/og-ru.png">
+    <SiteHeader locale="ru"
+
+  
+    links={[
+      { href: '/ru/#how-it-works', label: 'Как это работает' },
+      { href: '/ru/#features', label: 'Возможности' },
+      { href: '/ru/#faq', label: 'Частые вопросы' },
+      { href: '/guides/', label: 'Руководства' },
+      { href: '/privacy/', label: 'Приватность' },
+    ]}
+    cta="Сгенерировать код"
+  />
+
+  <main id="main">
+    <!-- ── Оранжевый холст: живой генератор сверху, герой сразу под ним ── -->
+    <section aria-label="Генератор кодов 2FA в реальном времени">
+      <!-- СЕКЦИЯ 1: интерфейс 2FA-генератора на самом верху -->
+      <div class="mx-auto max-w-[1200px] px-4 pt-10 pb-4 sm:px-6 sm:pt-16 xl:px-0">
+        <Generator locale="ru" />
+      </div>
+
+      <!-- СЕКЦИЯ 2: контент-герой сразу под генератором -->
+      <div class="mx-auto grid max-w-[1200px] items-center gap-12 px-4 pt-14 pb-12 sm:px-6 sm:pt-20 lg:grid-cols-[7fr_5fr] lg:pt-24 xl:px-0">
+        <div>
+          <span class="badge-eyebrow -rotate-1">100% в вашем браузере · zero-knowledge</span>
+          <h1 class="mt-6 max-w-[11em] font-display text-display-xl tracking-normal text-ink lg:text-display-xxl">
+            Генератор живых кодов 2FA
+          </h1>
+          <p class="mt-6 max-w-xl text-lg leading-[1.5] font-medium text-ink lg:text-xl">
+            Вставьте секретный ключ и мгновенно получите 6-значный код. Альтернатива
+            Google Authenticator, Authy и Microsoft Authenticator: быстрая, бесплатная и
+            приватная — на случай, когда телефон потерян, сломан или просто не под рукой.
+          </p>
+          <div class="mt-8 flex flex-wrap gap-4">
+            <a href="#generator" class="btn-primary">
+              Сгенерируйте первый код
+              <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14m0 0-6-6m6 6-6 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            </a>
+            <a href="#how-it-works" class="btn-secondary">Как это работает</a>
+          </div>
+          <p class="mt-5 font-mono text-label text-ink">Без приложения. Без аккаунта. Ни один ключ не попадает на сервер.</p>
+        </div>
+        <!-- Code-window artifact: cream ticket with a dark header bar (stacks under hero text on mobile) -->
+        <div class="min-w-0 overflow-hidden rounded-xl border-4 border-ink bg-cream" style="box-shadow: var(--shadow-card)">
+          <div class="flex items-center gap-2 border-b-2 border-dashed border-hairline-strong bg-ink px-4 py-2.5">
+            <span class="h-2.5 w-2.5 rounded-full bg-accent-red"></span>
+            <span class="h-2.5 w-2.5 rounded-full bg-canvas"></span>
+            <span class="h-2.5 w-2.5 rounded-full bg-primary"></span>
+            <span class="ml-2 font-mono text-xs text-cream">otp.rfc-6238.js</span>
+          </div>
+          <pre class="overflow-x-auto p-5 font-mono text-[13px] leading-relaxed"><code>
+<span class="text-muted">// Весь инструмент целиком. Без единого сервера.</span>
+<span class="font-bold text-accent-blue">const</span> <span class="text-ink">step</span> = Math.<span class="text-ink">floor</span>(Date.<span class="text-ink">now</span>() / 1000 / 30);
+
+<span class="font-bold text-accent-blue">const</span> <span class="text-ink">key</span> = <span class="font-bold text-accent-blue">await</span> crypto.subtle.<span class="text-ink">importKey</span>(
+  'raw', <span class="text-ink">base32</span>(secret), &#123; name: 'HMAC', hash: 'SHA-1' &#125;);
+
+<span class="font-bold text-accent-blue">const</span> <span class="text-ink">mac</span> = <span class="font-bold text-accent-blue">new</span> <span class="text-ink">Uint8Array</span>(
+  <span class="font-bold text-accent-blue">await</span> crypto.subtle.<span class="text-ink">sign</span>('HMAC', key, <span class="text-ink">u64</span>(step)));
+
+<span class="font-bold text-accent-blue">const</span> <span class="text-ink">o</span> = mac[19] &amp; 15;
+<span class="font-bold text-accent-blue">const</span> <span class="text-ink">code</span> = ((mac[o] &amp; 0x7f) << 24 | mac[o+1] << 16
+  | mac[o+2] << 8 | mac[o+3]) % <span class="text-ink">1e6</span>;
+<span class="text-ink">code</span>.<span class="text-ink">toString</span>().<span class="text-ink">padStart</span>(6, '0'); <span class="text-muted">// ← ваш код 2FA</span>
+</code></pre>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ── Перфорированный разделитель ────────────────────────── -->
+    <div class="mx-auto max-w-[1200px] px-4 sm:px-6 xl:px-0" aria-hidden="true">
+      <hr class="border-t-2 border-dashed border-ink/40" />
+    </div>
+
+    <!-- ── Цифры: крупные числа, запечатанные на оранжевом фоне ── -->
+    <section aria-label="Zero-knowledge в цифрах">
+      <div class="mx-auto grid max-w-[1200px] grid-cols-1 gap-10 px-4 py-16 text-center sm:grid-cols-3 sm:px-6 lg:py-20 xl:px-0">
+        <div>
+          <p class="font-numeric text-5xl font-black tracking-[-0.03125em] text-ink lg:text-[56px]">0</p>
+          <p class="mt-2 text-sm font-medium text-ink">ключей хранится на нашей стороне — серверов, где их можно хранить, просто нет</p>
+        </div>
+        <div>
+          <p class="font-numeric text-5xl font-black tracking-[-0.03125em] text-ink lg:text-[56px]">100%</p>
+          <p class="mt-2 text-sm font-medium text-ink">вычислений выполняется на вашем устройстве — средствами Web Crypto</p>
+        </div>
+        <div>
+          <p class="font-numeric text-5xl font-black tracking-[-0.03125em] text-ink lg:text-[56px]">6238</p>
+          <p class="mt-2 text-sm font-medium text-ink">номер реализованного нами стандарта RFC — совместим с любым приложением-аутентификатором</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Как это работает: «гастрономические» талоны на полосе ── -->
+    <section id="how-it-works" class="scroll-mt-20" aria-labelledby="how-title">
+      <div class="mx-auto max-w-[1200px] px-4 py-20 sm:px-6 lg:py-24 xl:px-0">
+        <div class="grid items-start gap-12 lg:grid-cols-[5fr_7fr]">
+          <div>
+            <p class="section-label">Как это работает</p>
+            <h2 id="how-title" class="mt-3 font-display text-3xl tracking-normal text-ink sm:text-4xl lg:text-section-display">
+              Три шага до вашего живого кода 2FA — без телефона.
+            </h2>
+            <p class="mt-5 text-lg font-medium text-ink">
+              Двухэтапная аутентификация добавляет второй замок к вашим аккаунтам: код,
+              который меняется каждые 30 секунд и вычисляется из общего секретного ключа
+              плюс текущего времени (TOTP — RFC 6238). Эта страница и есть тот второй замок.
+              Ваш браузер выполняет ровно тот же расчёт, что и сайт, на который вы входите.
+            </p>
+            <p class="mt-4 font-medium text-ink">
+              Поскольку секрет — единственное, что по-настоящему важно, вы можете хранить его
+              в зашифрованном менеджере паролей и генерировать коды где угодно — на ноутбуке,
+              во втором профиле браузера, на «походном» компьютере, даже офлайн.
+            </p>
+            <p class="mt-4 text-sm font-medium text-ink">
+              Впервые сталкиваетесь с темой? Читайте простое объяснение по-человечески:{" "}
+              <a href="/ru/what-is-2fa/" class="link">Что такое 2FA и как работает TOTP</a>
+            </p>
+            <a href="#generator" class="btn-primary mt-8">Попробовать сейчас</a>
+          </div>
+          <ol class="grid gap-6 sm:grid-cols-3">
+            {steps.map((s) => (
+              <li class="relative flex flex-col rounded-xs border-2 border-ink bg-cream p-6 pt-7" style="box-shadow: var(--shadow-ticket)">
+                <!-- перфорация вдоль верхнего края талона -->
+                <span class="absolute inset-x-3 top-1.5 border-t-2 border-dashed border-hairline-strong" aria-hidden="true"></span>
+                <span class="font-numeric text-3xl font-black tracking-[-0.03125em] text-accent-red">{s.n}</span>
+                <h3 class="mt-3 text-lg font-bold text-ink">{s.title}</h3>
+                <p class="mt-2 text-sm font-medium text-ink">{s.body}</p>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Возможности: светлые карточки + одна особая тёмная ── -->
+    <section id="features" class="scroll-mt-20" aria-labelledby="features-title">
+      <div class="mx-auto max-w-[1200px] px-4 py-20 sm:px-6 lg:py-24 xl:px-0">
+        <div class="mb-12 max-w-2xl">
+          <p class="section-label">Возможности</p>
+          <h2 id="features-title" class="mt-3 font-display text-3xl tracking-normal text-ink sm:text-4xl lg:text-section-display">
+            Всё, что умеет приложение 2FA — и многое из этого лучше
+          </h2>
+        </div>
+        <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {features.map((f) => (
+            <article
+              class:list={[
+                'p-6 sm:p-8',
+                f.v === 'dark'
+                  ? 'on-dark rounded-xl border-4 border-ink bg-ink text-cream'
+                  : 'rounded-xl border-2 border-ink bg-cream',
+              ]}
+              style={f.v === 'dark' ? 'box-shadow: var(--shadow-card)' : undefined}
+            >
+              <h3 class:list={['text-lg font-bold', f.v === 'dark' ? 'text-primary' : 'text-ink']}>{f.title}</h3>
+              <p class:list={['mt-2.5 text-sm font-medium', f.v === 'dark' ? 'text-cream/80' : 'text-ink']}>{f.body}</p>
+            </article>
+          ))}
+        </div>
+        <div class="cta-banner on-dark mt-6">
+          <div class="flex flex-col items-start justify-between gap-6 lg:flex-row lg:items-center">
+            <div>
+              <h3 class="font-display text-2xl tracking-normal text-primary lg:text-[28px]">
+                Ваши ключи — не бизнес-модель
+              </h3>
+              <p class="mt-2 max-w-2xl font-medium text-cream/80">
+                Без аккаунтов. Без входов. Без «отправьте нам диагностические данные». Инструмент
+                вычисляет коды локально и работал бы точно так же, даже если бы этот домен
+                раздавался с флешки.
+              </p>
+            </div>
+            <a href="#generator" class="btn-primary shrink-0">
+              Открыть генератор
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Перфорированный разделитель ────────────────────────── -->
+    <div class="mx-auto max-w-[1200px] px-4 sm:px-6 xl:px-0" aria-hidden="true">
+      <hr class="border-t-2 border-dashed border-ink/40" />
+    </div>
+
+    <!-- ── Совместимость ──────────────────────────────────────── -->
+    <section id="compatibility" class="scroll-mt-20" aria-labelledby="compat-title">
+      <div class="mx-auto max-w-[1200px] px-4 py-20 sm:px-6 lg:py-24 xl:px-0">
+        <div class="mb-10 max-w-2xl">
+          <p class="section-label">Совместимость</p>
+          <h2 id="compat-title" class="mt-3 font-display text-3xl tracking-normal text-ink sm:text-4xl lg:text-section-display">
+            Работает везде, где работает приложение-аутентификатор
+          </h2>
+          <p class="mt-4 font-medium text-ink">
+            Любой сервис с опцией «использовать приложение-аутентификатор» генерирует тот же
+            стандартный TOTP-код — в том числе перечисленные ниже:
+          </p>
+        </div>
+        <ul class="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+          {services.map((s) => (
+            <li class="flex items-center justify-center rounded-full border-2 border-ink bg-surface px-3 py-3 text-sm font-semibold text-ink">{s}</li>
+          ))}
+        </ul>
+        <p class="mt-6 text-sm font-medium text-ink">
+          Настраиваете один из этих сервисов? Читайте пошаговое руководство:{" "}
+          {[
+            ['Google', 'google'],
+            ['Microsoft', 'microsoft'],
+            ['Discord', 'discord'],
+            ['GitHub', 'github'],
+            ['X', 'x'],
+            ['AWS', 'aws'],
+            ['Coinbase', 'coinbase'],
+            ['Kraken', 'kraken'],
+            ['Steam', 'steam'],
+            ['Binance', 'binance'],
+          ].map(([name, slug], i) => (
+            <>
+              {i > 0 && <span aria-hidden="true"> · </span>}
+              <a href={`/guides/${slug}/`} class="link">{name}</a>
+            </>
+          ))}
+        </p>
+      </div>
+    </section>
+
+    <!-- ── Об инструменте: развёрнутый текст ──────────────────── -->
+    <section id="about" class="scroll-mt-20" aria-labelledby="about-title">
+      <article class="mx-auto max-w-[820px] px-4 py-20 sm:px-6 lg:py-24 xl:px-0">
+        <p class="section-label">Об этом инструменте 2FA</p>
+        <h2 id="about-title" class="mt-3 font-display text-3xl tracking-normal text-ink sm:text-4xl lg:text-section-display">
+          2FA COUNTER — бесплатный 2FA-аутентификатор, который живёт в вашем браузере
+        </h2>
+        <div class="rich-text mt-8">
+          <p>
+            Сюда приходят с одним и тем же желанием: получить код двухэтапной проверки,
+            который работает прямо сейчас и не требует ничего устанавливать. Именно это и есть
+            2FA COUNTER. Это бесплатный 2FA-аутентификатор и генератор кодов 2FA в браузере:
+            вставьте секретный ключ, перетащите снимок QR-кода или отсканируйте его камерой — и
+            соответствующий живой код появится через секунды и будет сам обновляться каждые
+            30 секунд, как приложение на телефоне, только устанавливать ничего не нужно.
+          </p>
+
+          <h3>Что такое 2FA? Ответ за 60 секунд</h3>
+          <p>
+            2FA — двухфакторная аутентификация — это второй замок вашего аккаунта: нечто,
+            чем вы <em>владеете</em>, в дополнение к тому, что вы <em>знаете</em>. При её включении
+            сервис выдаёт вам одноразовый общий секретный ключ. Ваш аутентификатор вычисляет из
+            этого секрета плюс текущего времени 6-значный код — стандарт TOTP, RFC 6238, — а сайт,
+            на который вы входите, выполняет точно такой же расчёт и сравнивает результаты.
+            Поскольку код обновляется каждые 30 секунд, один украденный пароль больше ничего
+            не открывает. Если нужен полный криптографический разбор, прочитайте простое
+            объяснение{" "}
+            <a href="/ru/what-is-2fa/">Что такое 2FA? Как работают двухэтапная аутентификация и TOTP</a>,
+            а затем вернитесь и сгенерируйте свой первый код.
+          </p>
+
+          <h3>Один ключ, три шага — и готово</h3>
+          <p>
+            Каждый раз, когда вам нужен код для входа, достаточно трёх действий. Сначала включите
+            двухэтапную проверку на сайте и выберите «приложение-аутентификатор»; если не можете
+            отсканировать QR-код, покажите ключ настройки — строку Base32 или полную ссылку
+            otpauth://. Затем вставьте этот ключ или URI в генератор в начале этой страницы,
+            перетащите снимок QR-кода или используйте камеру. Наконец, скопируйте свежесгенерированный
+            код и завершите вход. Генератор учитывает все полученные параметры otpauth: коды из 6, 7
+            или 8 знаков, периоды 15/30/60 секунд, хеши SHA-1, SHA-256 или SHA-512 и HOTP со счётчиком.
+            Ничего не загружается и не записывается — код вычисляется на вашем устройстве, и вы можете
+            сами убедиться в этом во вкладке «Сеть» браузера.
+          </p>
+
+          <h3>2FA-аутентификатор, которому не нужен ваш телефон</h3>
+          <p>
+            Большинство попадает сюда, потому что телефон ушёл — продан, сломан, утоплен, стёрт
+            или сел в самый неподходящий момент, — а Google Authenticator, Authy и Microsoft
+            Authenticator живут только на этом устройстве. Браузерный 2FA-инструмент устраняет эту
+            единственную точку отказа: секрет лежит в сейфе вашего менеджера паролей, а онлайн-код
+            2FA можно заново получить на любом доверенном компьютере. Это удобно и для работы за
+            столом — вход в GitHub или консоль AWS со вторым монитором, работа с несколькими
+            аккаунтами через список недавних ключей, использование машины, где телефоны запрещены.
+            Установите инструмент как приложение — и генератор продолжит работать при полностью
+            выключенной сети. Это та же математика RFC 6238, которую принимает любой сервис,
+            просто она больше не привязана к карману.
+          </p>
+
+          <h3>Один инструмент для крипты, облака, игр и соцсетей</h3>
+          <p>
+            Что бы вы ни защищали, стандартный TOTP — общий язык для всех. Торговля на Binance,
+            Coinbase или Kraken, защита аккаунтов AWS, Microsoft или Google, сохранность Steam,
+            Discord, X или вашей почты — любой сервис с опцией «использовать
+            приложение-аутентификатор» говорит на том же протоколе, поэтому одного инструмента
+            хватает на всё. Когда сайт не принимает ваш код, почти всегда виноваты часы устройства,
+            а не инструмент: включите автоматическую синхронизацию системного времени — и коды
+            снова сойдутся. Для самых популярных сервисов мы публикуем <a href="/guides/">пошаговые руководства по настройке</a>,
+            которые дополняют этот генератор — от включения функции до вставки финального кода.
+          </p>
+
+          <h3>Ничего не отправляется, ничего не хранится, ничего не стоит</h3>
+          <p>
+            Это один из немногих 2FA-инструментов, которым нечего скрывать, — потому что скрывать
+            нечего. Здесь нет серверов, куда можно было бы отправлять ключи, нет аккаунтов, нет
+            премиум-тарифов, нет телеметрии. Каждый код вычисляется локально с помощью Web Crypto
+            API; ваш последний ключ и краткий список недавних ключей живут только в хранилище
+            вашего браузера и удаляются одним нажатием «Очистить всё». Храните главную копию
+            каждого секрета в зашифрованном менеджере паролей, сохраняйте коды восстановления
+            каждого сервиса и относитесь к любой настойчивой просьбе назвать свежий код как к
+            красному флагу, которым она и является.
+          </p>
+
+          <p>
+            Готово, когда готовы вы: генератор находится в начале страницы. Вставьте ключ и
+            посмотрите, как живой код ведёт обратный отсчёт — бесплатно, приватно, работает
+            офлайн, навсегда.
+          </p>
+        </div>
+      </article>
+    </section>
+
+    <!-- ── FAQ: отрываемый список с пунктирными линиями ───────── -->
+    <section id="faq" class="scroll-mt-20" aria-labelledby="faq-title">
+      <div class="mx-auto max-w-[1200px] px-4 py-20 sm:px-6 lg:py-24 xl:px-0">
+        <div class="grid gap-12 lg:grid-cols-[4fr_8fr]">
+          <div>
+            <p class="section-label">Частые вопросы</p>
+            <h2 id="faq-title" class="mt-3 font-display text-3xl tracking-normal text-ink sm:text-4xl lg:text-section-display">
+              Вопросы — с прямыми ответами
+            </h2>
+            <p class="mt-4 font-medium text-ink">
+              Всё ещё сомневаетесь? Всё, что делает этот инструмент, видно во вкладке «Сеть»
+              инструментов разработчика вашего браузера: <span class="font-bold text-ink">ноль запросов</span> передают ваш ключ.
+            </p>
+          </div>
+          <div class="divide-y-2 divide-dashed divide-hairline-strong">
+            {faq.map(({ q, a }) => (
+              <details class="group px-1 py-1">
+                <summary class="flex cursor-pointer list-none items-center justify-between gap-4 py-4 text-left text-lg font-bold text-ink select-none marker:hidden">
+                  {q}
+                  <svg class="h-4 w-4 shrink-0 text-ink transition-transform group-open:rotate-45" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"></path></svg>
+                </summary>
+                <p class="pb-5 text-sm font-medium text-ink">{a}</p>
+              </details>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Финальный CTA: тёмная «доска specials» ─────────────── -->
+    <section aria-label="Начните прямо сейчас">
+      <div class="on-dark bg-ink px-4 py-20 text-center sm:px-6 lg:py-24">
+        <h2 class="mx-auto max-w-[11em] font-display text-display-xl tracking-normal text-primary lg:text-display-xxl">
+          Хватит искать свой телефон
+        </h2>
+        <p class="mx-auto mt-5 max-w-2xl text-lg font-medium text-cream/80">
+          Храните секреты в менеджере паролей, генерируйте коды двухэтапной проверки прямо здесь
+          и оставайтесь на связи с любого устройства — даже без доступа к интернету.
+        </p>
+        <a href="#generator" class="btn-primary mt-10 inline-flex">
+          Сгенерировать код 2FA сейчас
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <SiteFooter
+    columns={[
+      {
+        title: 'Продукт',
+        links: [
+          { href: '/ru/#generator', label: 'Генератор живых кодов' },
+          { href: '/ru/#features', label: 'Возможности' },
+          { href: '/ru/what-is-2fa/', label: 'Что такое 2FA?' },
+          { href: '/ru/#compatibility', label: 'Совместимость' },
+        ],
+      },
+      {
+        title: 'Руководства',
+        links: [
+          { href: '/guides/', label: 'Все руководства' },
+          { href: '/guides/google/', label: '2FA для Google' },
+          { href: '/guides/microsoft/', label: '2FA для Microsoft' },
+          { href: '/guides/discord/', label: '2FA для Discord' },
+          { href: '/guides/github/', label: '2FA для GitHub' },
+          { href: '/guides/steam/', label: '2FA для Steam' },
+          { href: '/guides/binance/', label: '2FA для Binance' },
+        ],
+      },
+      {
+        title: 'О проекте',
+        links: [
+          { href: '/about/', label: 'О нас' },
+          { href: '/methodology/', label: 'Как мы готовим материалы' },
+          { href: '/contact/', label: 'Контакты' },
+        ],
+      },
+      {
+        title: 'Правовая информация',
+        links: [
+          { href: '/privacy/', label: 'Политика конфиденциальности' },
+          { href: '/terms/', label: 'Условия использования' },
+          { href: '/disclaimer/', label: 'Юридический дисклеймер' },
+          { href: '/contact/', label: 'Сообщить о проблеме безопасности' },
+        ],
+      },
+    ]}
+    tagline="Бесплатный 2FA-аутентификатор, который полностью работает в вашем браузере, на 2facounter.com. Без аккаунтов, без серверов, без телефона."
+    languagesTitle="Языки"
+  />
+</Layout>

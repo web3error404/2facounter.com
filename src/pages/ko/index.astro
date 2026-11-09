@@ -22,7 +22,15 @@ const homeAlternates = [
   { hreflang: 'pt', href: 'https://2facounter.com/pt/' },
   { hreflang: 'ko', href: 'https://2facounter.com/ko/' },
   { hreflang: 'it', href: 'https://2facounter.com/it/' },
-  { hreflang: 'x-default', href: 'https://2facounter.com/' },
+  
+  { hreflang: 'hi', href: 'https://2facounter.com/hi/' },
+
+  { hreflang: 'ar', href: 'https://2facounter.com/ar/' },
+
+  { hreflang: 'bn', href: 'https://2facounter.com/bn/' },
+
+  { hreflang: 'ru', href: 'https://2facounter.com/ru/' },
+{ hreflang: 'x-default', href: 'https://2facounter.com/' },
 ];
 
 const faq = [
@@ -84,7 +92,7 @@ const faq = [
   },
   {
     q: '내 키는 어디에 저장되나요?',
-    a: '여러분의 브라우저에만 저장됩니다. 마지막 키와 “최근 키” 목록(최대 8개)은 이 기기의 로컬 스토리지에 유지되어 새로고침을 견디고 클릭 한 번으로 키를 넘나들 수 있게 해 주며, 우리 서버에는 절대 저장되지 않습니다. 사실 서버 자체가 없습니다. 키는 평문으로 저장되므로 이 브라우저 프로필을 열 수 있는 사람은 누구든 읽을 수 있고, 프로필을 비밀번호 관리자 금고처럼 다루세요. 목록 위의 “Clear all” 버튼(확인을 요구합니다), 입력창을 비우는 것, 또는 브라우저 데이터 삭제 중 하나면 완전히 사라집니다. 원본 시크릿은 비밀번호 관리자에 마스터 사본으로 보관하세요.',
+    a: '여러분의 브라우저에만 저장됩니다. 마지막 키와 “최근 키” 목록(최대 8개)은 이 기기의 로컬 스토리지에 유지되어 새로고침을 견디고 클릭 한 번으로 키를 넘나들 수 있게 해 주며, 우리 서버에는 절대 저장되지 않습니다. 사실 서버 자체가 없습니다. 키는 평문으로 저장되므로 이 브라우저 프로필을 열 수 있는 사람은 누구든 읽을 수 있고, 프로필을 비밀번호 관리자 금고처럼 다루세요. 목록 위의 “모두 지우기” 버튼(확인을 요구합니다), 입력창을 비우는 것, 또는 브라우저 데이터 삭제 중 하나면 완전히 사라집니다. 원본 시크릿은 비밀번호 관리자에 마스터 사본으로 보관하세요.',
   },
   {
     q: 'HOTP, 8자리 코드, SHA-256 서비스에서도 동작하나요?',
@@ -121,7 +129,7 @@ const jsonLd = [
     ],
     offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
     isAccessibleForFree: true,
-    inLanguage: ['en', 'vi', 'zh-CN', 'zh-TW', 'es', 'ja', 'fr', 'de', 'pt', 'ko', 'it'],
+    inLanguage: ['en', 'vi', 'zh-CN', 'zh-TW', 'es', 'ja', 'fr', 'de', 'pt', 'ko', 'it', 'hi', 'ar', 'bn', 'ru'],
   },
   {
     '@context': 'https://schema.org',
@@ -187,6 +195,7 @@ const services = [
 
 
   <Layout title={title} description={description} path="/ko/" lang="ko" jsonLd={jsonLd} alternates={homeAlternates} image="/og-ko.png">
+    <SiteHeader locale="ko"
 
   
     links={[
@@ -204,7 +213,7 @@ const services = [
     <section aria-label="실시간 2FA 코드 생성기 — 히어로">
       <!-- SECTION 1: the 2FA Generator interface sits at the very top -->
       <div class="mx-auto max-w-[1200px] px-4 pt-10 pb-4 sm:px-6 sm:pt-16 xl:px-0">
-        <Generator />
+        <Generator locale="ko" />
       </div>
 
       <!-- SECTION 2: hero content directly under the generator -->
@@ -478,7 +487,7 @@ const services = [
             숨길 것이 아예 없기 때문에, 이는 숨길 것이 하나도 없는 몇 안 되는 2FA 도구 중
             하나입니다. 키를 보낼 서버도 없고, 만들 계정도 없고, 프리미엄 요금제도, 텔레메트리도
             없습니다. 모든 코드는 Web Crypto API로 로컬에서 계산되고, 마지막 키와 짧은 최근 키
-            목록은 여러분 브라우저의 스토리지에만 살다가 “Clear all” 클릭 한 번으로 지워집니다.
+            목록은 여러분 브라우저의 스토리지에만 살다가 “모두 지우기” 클릭 한 번으로 지워집니다.
             모든 시크릿의 원본은 암호화된 비밀번호 관리자에 보관하고, 각 서비스의 복구 코드도 함께
             저장하며, 급하다는 듯 새 코드를 요구하는 요청은 본색 그대로 위험 신호로 다루세요.
           </p>
@@ -544,7 +553,7 @@ const services = [
         title: '제품',
         links: [
           { href: '/ko/#generator', label: '실시간 코드 생성기' },
-          { href: '/how-to-get-2fa-code/', label: '2FA 코드 받는 법' },
+          { href: '/ko/how-to-get-2fa-code/', label: '2FA 코드 받는 법' },
           { href: '/ko/what-is-2fa/', label: '2FA란 무엇인가?' },
           { href: '/ko/#features', label: '기능' },
           { href: '/ko/#compatibility', label: '호환성' },

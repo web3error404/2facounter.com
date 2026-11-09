@@ -4,9 +4,9 @@ import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 import Generator from '../components/Generator.astro';
 
-const title = '2FA Live Code — Free Online 2FA Authenticator & TOTP Code Generator';
+const title = '2FA Code Generator – Free Online TOTP Authenticator';
 const description =
-  'Get your 2FA code online instantly. Free browser-based 2FA authenticator: paste your secret key and get a live TOTP code that refreshes every 30 seconds. No sign-up, no phone needed.';
+  'Free online 2FA authenticator: paste your secret key and get a live 2FA auth code (TOTP) in seconds. No app, no sign-up, no phone needed.';
 
 const faq = [
   {
@@ -92,7 +92,15 @@ const homeAlternates = [
   { hreflang: 'pt', href: 'https://2facounter.com/pt/' },
   { hreflang: 'ko', href: 'https://2facounter.com/ko/' },
   { hreflang: 'it', href: 'https://2facounter.com/it/' },
-  { hreflang: 'x-default', href: 'https://2facounter.com/' },
+  
+  { hreflang: 'hi', href: 'https://2facounter.com/hi/' },
+
+  { hreflang: 'ar', href: 'https://2facounter.com/ar/' },
+
+  { hreflang: 'bn', href: 'https://2facounter.com/bn/' },
+
+  { hreflang: 'ru', href: 'https://2facounter.com/ru/' },
+{ hreflang: 'x-default', href: 'https://2facounter.com/' },
 ];
 
 const jsonLd = [
@@ -120,7 +128,7 @@ const jsonLd = [
     ],
     offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
     isAccessibleForFree: true,
-    inLanguage: ['en', 'vi', 'zh-CN', 'zh-TW', 'es', 'ja', 'fr', 'de', 'pt', 'ko', 'it'],
+    inLanguage: ['en', 'vi', 'zh-CN', 'zh-TW', 'es', 'ja', 'fr', 'de', 'pt', 'ko', 'it', 'hi', 'ar', 'bn', 'ru'],
   },
   {
     '@context': 'https://schema.org',
@@ -170,7 +178,7 @@ const services = [
         <div>
           <span class="badge-eyebrow -rotate-1">100% client-side · zero-knowledge</span>
           <h1 class="mt-6 max-w-[11em] font-display text-display-xl tracking-normal text-ink lg:text-display-xxl">
-            Live 2FA Code Generator
+            Free 2FA Authenticator & Code Generator
           </h1>
           <p class="mt-6 max-w-xl text-lg leading-[1.5] font-medium text-ink lg:text-xl">
             Paste a secret key, get a live 6-digit code. A fast, free, private alternative to
@@ -418,7 +426,10 @@ const services = [
             dead battery on a travel day — and Google Authenticator, Authy and Microsoft
             Authenticator live only on that device. A browser 2FA tool removes that single point
             of failure: the secret stays in your password-manager vault, and the code
-            can be regenerated on any computer you trust. It also fits desktop workflows —
+            can be regenerated on any computer you trust. If you are weighing the switch, we
+            compare your options honestly, app by app:{" "}
+            <a href="/totp-vs-google-authenticator/">Google Authenticator vs a browser 2FA generator</a>{" "}
+            and <a href="/totp-vs-authy/">Authy vs a browser 2FA generator</a>. It also fits desktop workflows —
             signing into GitHub or an AWS console on a second monitor, managing multiple accounts
             through the Recent-keys list, working on a machine where phones are not allowed.
             Install it as an app and the generator keeps working with the network entirely

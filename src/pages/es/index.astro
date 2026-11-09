@@ -8,7 +8,7 @@ import Generator from '../../components/Generator.astro';
 
 const title = 'Generador de código 2FA online — autenticador 2FA gratis (TOTP)';
 const description =
-  'Genera tu código 2FA online al instante. Autenticador 2FA gratis que corre en tu navegador: pega tu clave secreta y recibe un código TOTP en vivo que se renueva cada 30 segundos. Sin registro, sin móvil.';
+  'Genera tu código 2FA online al instante. Autenticador 2FA gratis que corre en tu navegador: pega tu clave secreta y recibe un código TOTP en vivo que se…';
 
 const faq = [
   {
@@ -94,7 +94,15 @@ const homeAlternates = [
   { hreflang: 'pt', href: 'https://2facounter.com/pt/' },
   { hreflang: 'ko', href: 'https://2facounter.com/ko/' },
   { hreflang: 'it', href: 'https://2facounter.com/it/' },
-  { hreflang: 'x-default', href: 'https://2facounter.com/' },
+  
+  { hreflang: 'hi', href: 'https://2facounter.com/hi/' },
+
+  { hreflang: 'ar', href: 'https://2facounter.com/ar/' },
+
+  { hreflang: 'bn', href: 'https://2facounter.com/bn/' },
+
+  { hreflang: 'ru', href: 'https://2facounter.com/ru/' },
+{ hreflang: 'x-default', href: 'https://2facounter.com/' },
 ];
 
 const jsonLd = [
@@ -122,7 +130,7 @@ const jsonLd = [
     ],
     offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
     isAccessibleForFree: true,
-    inLanguage: ['en', 'vi', 'zh-CN', 'zh-TW', 'es', 'ja', 'fr', 'de', 'pt', 'ko', 'it'],
+    inLanguage: ['en', 'vi', 'zh-CN', 'zh-TW', 'es', 'ja', 'fr', 'de', 'pt', 'ko', 'it', 'hi', 'ar', 'bn', 'ru'],
   },
   {
     '@context': 'https://schema.org',
@@ -158,6 +166,7 @@ const services = [
 
 
   <Layout title={title} description={description} path="/es/" lang="es" jsonLd={jsonLd} alternates={homeAlternates} image="/og-es.png">
+    <SiteHeader locale="es"
 
   
     links={[
@@ -175,7 +184,7 @@ const services = [
     <section aria-label="Generador de código 2FA en vivo">
       <!-- SECCIÓN 1: la interfaz del generador 2FA, en lo más alto -->
       <div class="mx-auto max-w-[1200px] px-4 pt-10 pb-4 sm:px-6 sm:pt-16 xl:px-0">
-        <Generator />
+        <Generator locale="es" />
       </div>
 
       <!-- SECCIÓN 2: contenido héroe justo bajo el generador -->

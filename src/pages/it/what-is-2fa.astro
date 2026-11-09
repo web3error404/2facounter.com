@@ -6,9 +6,9 @@ import Layout from '../../layouts/Layout.astro';
 import SiteHeader from '../../components/SiteHeader.astro';
 import SiteFooter from '../../components/SiteFooter.astro';
 
-const title = 'Che cos’è la 2FA? Come funzionano l’autenticazione a due fattori e i codici TOTP — 2FA COUNTER';
+const title = 'Che cos’è la 2FA? Autenticazione a due fattori e TOTP';
 const description =
-  'Che cos’è la 2FA? Una guida semplice all’autenticazione a due fattori, ai codici TOTP e all’RFC 6238, perché battono gli SMS e come non restare mai escluso dal tuo account. Generatore di codici 2FA gratuito incluso.';
+  'Che cos’è la 2FA? Una guida semplice all’autenticazione a due fattori, ai codici TOTP e all’RFC 6238, perché battono gli SMS e come non restare mai escluso…';
 
 const faqs = [
   {
@@ -112,6 +112,9 @@ const jsonLd = [
 
 const alternates = [
   { hreflang: 'en', href: 'https://2facounter.com/what-is-2fa/' },
+  { hreflang: 'vi', href: 'https://2facounter.com/vi/what-is-2fa/' },
+  { hreflang: 'zh-Hans', href: 'https://2facounter.com/zh-cn/what-is-2fa/' },
+  { hreflang: 'zh-Hant', href: 'https://2facounter.com/zh-tw/what-is-2fa/' },
   { hreflang: 'es', href: 'https://2facounter.com/es/what-is-2fa/' },
   { hreflang: 'ja', href: 'https://2facounter.com/ja/what-is-2fa/' },
   { hreflang: 'fr', href: 'https://2facounter.com/fr/what-is-2fa/' },
@@ -119,12 +122,21 @@ const alternates = [
   { hreflang: 'pt', href: 'https://2facounter.com/pt/what-is-2fa/' },
   { hreflang: 'ko', href: 'https://2facounter.com/ko/what-is-2fa/' },
   { hreflang: 'it', href: 'https://2facounter.com/it/what-is-2fa/' },
-  { hreflang: 'x-default', href: 'https://2facounter.com/what-is-2fa/' },
+  
+  { hreflang: 'hi', href: 'https://2facounter.com/hi/what-is-2fa/' },
+
+  { hreflang: 'ar', href: 'https://2facounter.com/ar/what-is-2fa/' },
+
+  { hreflang: 'bn', href: 'https://2facounter.com/bn/what-is-2fa/' },
+
+  { hreflang: 'ru', href: 'https://2facounter.com/ru/what-is-2fa/' },
+{ hreflang: 'x-default', href: 'https://2facounter.com/what-is-2fa/' },
 ];
 ---
 
 
   <Layout title={title} description={description} path="/it/what-is-2fa/" lang="it" jsonLd={jsonLd} alternates={alternates} image="/og-it.png">
+    <SiteHeader locale="it"
 
   
     links={[

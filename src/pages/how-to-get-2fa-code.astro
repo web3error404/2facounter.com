@@ -5,10 +5,13 @@ import Layout from '../layouts/Layout.astro';
 import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 
-// hreflang alternates for the 8 translated versions of this article
-// (+ x-default → English). vi/zh variants are not published yet.
+// hreflang alternates — translations now exist in all 10 locales
+// (+ x-default → English).
 const alternates = [
   { hreflang: 'en', href: 'https://2facounter.com/how-to-get-2fa-code/' },
+  { hreflang: 'vi', href: 'https://2facounter.com/vi/how-to-get-2fa-code/' },
+  { hreflang: 'zh-Hans', href: 'https://2facounter.com/zh-cn/how-to-get-2fa-code/' },
+  { hreflang: 'zh-Hant', href: 'https://2facounter.com/zh-tw/how-to-get-2fa-code/' },
   { hreflang: 'es', href: 'https://2facounter.com/es/how-to-get-2fa-code/' },
   { hreflang: 'ja', href: 'https://2facounter.com/ja/how-to-get-2fa-code/' },
   { hreflang: 'fr', href: 'https://2facounter.com/fr/how-to-get-2fa-code/' },
@@ -16,7 +19,15 @@ const alternates = [
   { hreflang: 'pt', href: 'https://2facounter.com/pt/how-to-get-2fa-code/' },
   { hreflang: 'ko', href: 'https://2facounter.com/ko/how-to-get-2fa-code/' },
   { hreflang: 'it', href: 'https://2facounter.com/it/how-to-get-2fa-code/' },
-  { hreflang: 'x-default', href: 'https://2facounter.com/how-to-get-2fa-code/' },
+  
+  { hreflang: 'hi', href: 'https://2facounter.com/hi/how-to-get-2fa-code/' },
+
+  { hreflang: 'ar', href: 'https://2facounter.com/ar/how-to-get-2fa-code/' },
+
+  { hreflang: 'bn', href: 'https://2facounter.com/bn/how-to-get-2fa-code/' },
+
+  { hreflang: 'ru', href: 'https://2facounter.com/ru/how-to-get-2fa-code/' },
+{ hreflang: 'x-default', href: 'https://2facounter.com/how-to-get-2fa-code/' },
 ];
 
 const title = 'How to Get a 2FA Code: Step-by-Step Guide (TOTP)';

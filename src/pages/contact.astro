@@ -6,9 +6,26 @@ import SiteFooter from '../components/SiteFooter.astro';
 const title = 'Contact — 2FA COUNTER';
 const description =
   'Contact the 2FA COUNTER team: bug reports, unsupported services, security disclosures, and feedback for 2facounter.com.';
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'ContactPage',
+    name: title,
+    description,
+    url: 'https://2facounter.com/contact/',
+    breadcrumb: {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: '2FA COUNTER', item: 'https://2facounter.com/' },
+        { '@type': 'ListItem', position: 2, name: 'Contact', item: 'https://2facounter.com/contact/' },
+      ],
+    },
+  },
+];
 ---
 
-<Layout title={title} description={description} path="/contact/">
+<Layout title={title} description={description} path="/contact/" jsonLd={jsonLd}>
   <SiteHeader />
   <main id="main">
     <div class="mx-auto max-w-[880px] px-4 py-20 sm:px-6 lg:py-24">

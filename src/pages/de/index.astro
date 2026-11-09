@@ -8,7 +8,7 @@ import Generator from '../../components/Generator.astro';
 
 const title = '2FA-Code-Generator online — kostenloser 2FA-Authenticator (TOTP)';
 const description =
-  '2FA-Code online erzeugen: kostenloser browserbasierter 2FA-Code-Generator und TOTP-Authenticator. Geheimen Schlüssel einfügen und ein 6-stelliges Einmalpasswort berechnen lassen, das sich alle 30 Sekunden aktualisiert — eine private Google-Authenticator-Alternative ohne Anmeldung, ohne Handy.';
+  '2FA-Code online erzeugen: kostenloser browserbasierter 2FA-Code-Generator und TOTP-Authenticator. Geheimen Schlüssel einfügen und ein 6-stelliges…';
 
 const faq = [
   {
@@ -69,7 +69,7 @@ const faq = [
   },
   {
     q: 'Wo werden meine Schlüssel gespeichert?',
-    a: 'Nur in Ihrem eigenen Browser. Ihr letzter Schlüssel plus eine kurze „Recent keys“-Liste (bis zu 8) liegen im lokalen Speicher dieses Geräts, damit der Generator einen Reload überlebt und Sie mit einem Klick zwischen Ihren Schlüsseln wechseln können — nie auf unseren Servern, weil es keine gibt. Die Schlüssel liegen als Klartext vor; wer dieses Browserprofil öffnen kann, kann sie also lesen — behandeln Sie das Profil wie einen Passwort-Manager-Tresor. „Clear all“ über der Liste (fragt nach Bestätigung), das Leeren des Feldes oder das Zurücksetzen Ihrer Browserdaten entfernt sie endgültig; bewahren Sie das Original in Ihrem Passwort-Manager als Hauptkopie auf.',
+    a: 'Nur in Ihrem eigenen Browser. Ihr letzter Schlüssel plus eine kurze „Letzte Schlüssel“-Liste (bis zu 8) liegen im lokalen Speicher dieses Geräts, damit der Generator einen Reload überlebt und Sie mit einem Klick zwischen Ihren Schlüsseln wechseln können — nie auf unseren Servern, weil es keine gibt. Die Schlüssel liegen als Klartext vor; wer dieses Browserprofil öffnen kann, kann sie also lesen — behandeln Sie das Profil wie einen Passwort-Manager-Tresor. „Alle löschen“ über der Liste (fragt nach Bestätigung), das Leeren des Feldes oder das Zurücksetzen Ihrer Browserdaten entfernt sie endgültig; bewahren Sie das Original in Ihrem Passwort-Manager als Hauptkopie auf.',
   },
   {
     q: 'Funktioniert es mit HOTP, 8-stelligen Codes oder SHA-256-Diensten?',
@@ -94,7 +94,15 @@ const homeAlternates = [
   { hreflang: 'pt', href: 'https://2facounter.com/pt/' },
   { hreflang: 'ko', href: 'https://2facounter.com/ko/' },
   { hreflang: 'it', href: 'https://2facounter.com/it/' },
-  { hreflang: 'x-default', href: 'https://2facounter.com/' },
+  
+  { hreflang: 'hi', href: 'https://2facounter.com/hi/' },
+
+  { hreflang: 'ar', href: 'https://2facounter.com/ar/' },
+
+  { hreflang: 'bn', href: 'https://2facounter.com/bn/' },
+
+  { hreflang: 'ru', href: 'https://2facounter.com/ru/' },
+{ hreflang: 'x-default', href: 'https://2facounter.com/' },
 ];
 
 const jsonLd = [
@@ -122,7 +130,7 @@ const jsonLd = [
     ],
     offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
     isAccessibleForFree: true,
-    inLanguage: ['en', 'vi', 'zh-CN', 'zh-TW', 'es', 'ja', 'fr', 'de', 'pt', 'ko', 'it'],
+    inLanguage: ['en', 'vi', 'zh-CN', 'zh-TW', 'es', 'ja', 'fr', 'de', 'pt', 'ko', 'it', 'hi', 'ar', 'bn', 'ru'],
   },
   {
     '@context': 'https://schema.org',
@@ -145,7 +153,7 @@ const features = [
   { title: 'Ein Feld, ein Live-Token', body: 'Geheimschlüssel oder den ganzen otpauth://-Link einfügen, und der passende Code beginnt sofort herunterzuzählen — keine Einrichtung, keine Formulare, keine „Konto hinzufügen“-Zeremonie.', v: 'cream' },
   { title: 'Screenshot einfügen, Schlüssel erhalten', body: 'QR-Code-Bild mit Strg+V einfügen, eine Bilddatei hineinziehen oder mit der Webcam scannen. Drei Wege zum Importieren, kein Weg, über den Ihr Schlüssel entweichen kann.', v: 'cream' },
   { title: 'Vollständige Parameterunterstützung, automatisch erkannt', body: 'Ein nackter Schlüssel nutzt die Standardwerte; eine vollständige otpauth://-URI berücksichtigt jeden übergebenen Parameter — 6/7/8 Ziffern, 15/30/60 s Periode, SHA-1/256/512, sogar zählerbasiertes HOTP.', v: 'cream' },
-  { title: 'Überlebt einen Reload — und wechselt mit', body: 'Seite neu geöffnet, und Ihr letzter Schlüssel ist schon da. Über die Liste „Recent keys“ springen Sie mit einem Klick zwischen Ihren Schlüsseln — nur aus dem lokalen Speicher dieses Geräts wiederhergestellt, nie von einem Server.', v: 'cream' },
+  { title: 'Überlebt einen Reload — und wechselt mit', body: 'Seite neu geöffnet, und Ihr letzter Schlüssel ist schon da. Über die Liste „Letzte Schlüssel“ springen Sie mit einem Klick zwischen Ihren Schlüsseln — nur aus dem lokalen Speicher dieses Geräts wiederhergestellt, nie von einem Server.', v: 'cream' },
   { title: 'Nichts zu installieren, nichts zu registrieren', body: 'Keine Handy-App, kein Konto, keine Sync-Gebühren, kein Tracking. Wer einen Browser öffnen kann, kann einen Code erzeugen.', v: 'cream' },
   { title: 'Offline & installierbar', body: 'Funktioniert, wenn die Verbindung zur Außenwelt getrennt ist — wortwörtlich. Und als PWA installiert es sich in Ihr Dock oder auf Ihren Startbildschirm wie eine native App.', v: 'dark' },
 ];
@@ -158,6 +166,7 @@ const services = [
 
 
   <Layout title={title} description={description} path="/de/" lang="de" jsonLd={jsonLd} alternates={homeAlternates} image="/og-de.png">
+    <SiteHeader locale="de"
 
   
     links={[
@@ -173,7 +182,7 @@ const services = [
   <main id="main">
     <section aria-label="Live-2FA-Code-Generator — Startbereich">
       <div class="mx-auto max-w-[1200px] px-4 pt-10 pb-4 sm:px-6 sm:pt-16 xl:px-0">
-        <Generator />
+        <Generator locale="de" />
       </div>
 
       <div class="mx-auto grid max-w-[1200px] items-center gap-12 px-4 pt-14 pb-12 sm:px-6 sm:pt-20 lg:grid-cols-[7fr_5fr] lg:pt-24 xl:px-0">
@@ -445,8 +454,8 @@ const services = [
             Dies ist eines der ganz wenigen 2FA-Werkzeuge ohne Versteck, weil es nichts gibt, das sich verstecken
             ließe. Es gibt keine Server, an die Schlüssel gesendet werden könnten, keine zu erstellenden Konten,
             keine Premium-Stufen, keine Telemetrie. Jeder Code wird lokal mit der Web Crypto API berechnet; Ihr
-            letzter Schlüssel und eine kurze „Recent keys“-Liste liegen nur im Speicher Ihres eigenen Browsers und
-            lassen sich mit einem Klick auf „Clear all“ entfernen. Bewahren Sie die Hauptkopie jedes Geheimnisses
+            letzter Schlüssel und eine kurze „Letzte Schlüssel“-Liste liegen nur im Speicher Ihres eigenen Browsers und
+            lassen sich mit einem Klick auf „Alle löschen“ entfernen. Bewahren Sie die Hauptkopie jedes Geheimnisses
             in einem verschlüsselten Passwort-Manager auf, sichern Sie zusätzlich die Wiederherstellungscodes jedes
             Dienstes — und werten Sie jede drängende Aufforderung zu einem frischen Code als das Warnsignal, das
             sie ist.

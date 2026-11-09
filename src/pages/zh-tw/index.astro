@@ -22,7 +22,15 @@ const homeAlternates = [
   { hreflang: 'pt', href: 'https://2facounter.com/pt/' },
   { hreflang: 'ko', href: 'https://2facounter.com/ko/' },
   { hreflang: 'it', href: 'https://2facounter.com/it/' },
-  { hreflang: 'x-default', href: 'https://2facounter.com/' },
+  
+  { hreflang: 'hi', href: 'https://2facounter.com/hi/' },
+
+  { hreflang: 'ar', href: 'https://2facounter.com/ar/' },
+
+  { hreflang: 'bn', href: 'https://2facounter.com/bn/' },
+
+  { hreflang: 'ru', href: 'https://2facounter.com/ru/' },
+{ hreflang: 'x-default', href: 'https://2facounter.com/' },
 ];
 
 const faq = [
@@ -84,7 +92,7 @@ const faq = [
   },
   {
     q: '我的密鑰保存在哪裡？',
-    a: '只保存在你自己的瀏覽器裡。最近一次輸入的密鑰和「最近使用的密鑰」清單（最多 8 筆）儲存在本裝置的 localStorage，重新整理頁面後仍在，也絕不會上傳到伺服器。密鑰以純文字保存：任何人只要能開啟這個瀏覽器設定檔就能讀取，請像對待密碼管理員保管庫一樣對待它。一鍵「Clear all」即可全部清除；原始密鑰請保存在密碼管理員中。',
+    a: '只保存在你自己的瀏覽器裡。最近一次輸入的密鑰和「最近使用的密鑰」清單（最多 8 筆）儲存在本裝置的 localStorage，重新整理頁面後仍在，也絕不會上傳到伺服器。密鑰以純文字保存：任何人只要能開啟這個瀏覽器設定檔就能讀取，請像對待密碼管理員保管庫一樣對待它。一鍵「全部清除」即可全部清除；原始密鑰請保存在密碼管理員中。',
   },
   {
     q: '它支援 HOTP、8 位驗證碼或 SHA-256 嗎？',
@@ -105,6 +113,7 @@ const jsonLd = [
     description,
     applicationCategory: 'SecurityApplication',
     operatingSystem: 'Any (browser-based)',
+    inLanguage: ['en', 'vi', 'zh-CN', 'zh-TW', 'es', 'ja', 'fr', 'de', 'pt', 'ko', 'it', 'hi', 'ar', 'bn', 'ru'],
     offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
   },
   {
@@ -169,8 +178,8 @@ const services = [
 ];
 ---
 
-<Layout title={title} description={description} path="/zh-tw/" lang="zh-Hant" jsonLd={jsonLd} alternates={homeAlternates}>
-  <SiteHeader
+<Layout title={title} description={description} path="/zh-tw/" lang="zh-Hant" jsonLd={jsonLd} alternates={homeAlternates} image="/og-zh-tw.png">
+  <SiteHeader locale="zh-tw"
     links={[
       { href: '/zh-tw/#how-it-works', label: '運作方式' },
       { href: '/zh-tw/#features', label: '功能' },
@@ -184,7 +193,7 @@ const services = [
   <main id="main">
     <section aria-label="即時 2FA 驗證碼產生器">
       <div class="mx-auto max-w-[1200px] px-4 pt-10 pb-4 sm:px-6 sm:pt-16 xl:px-0">
-        <Generator />
+        <Generator locale="zh-tw" />
       </div>
 
       <div class="mx-auto grid max-w-[1200px] items-center gap-12 px-4 pt-14 pb-12 sm:px-6 sm:pt-20 lg:grid-cols-[7fr_5fr] lg:pt-24 xl:px-0">
@@ -272,7 +281,7 @@ const services = [
             </p>
             <p class="mt-4 text-sm font-medium text-ink">
               想了解原理？閱讀淺顯解說：{" "}
-              <a href="/what-is-2fa/" class="link">What is 2FA? How TOTP works</a>
+              <a href="/zh-tw/what-is-2fa/" class="link">什麼是 2FA？TOTP 如何運作</a>
             </p>
             <a href="#generator" class="btn-primary mt-8">立即試用</a>
           </div>
@@ -387,7 +396,7 @@ const services = [
             2FA 後，服務會給你一組一次性共享密鑰。驗證器用這個密鑰加上當前時間算出 6 位驗證碼——
             TOTP 標準，RFC 6238——而登入網站執行完全相同的算式並比對結果。因為驗證碼每 30 秒輪替，
             單獨外洩的密碼再也無法開啟任何東西。想看完整的密碼學解說？閱讀文章{" "}
-            <a href="/what-is-2fa/">What is 2FA?</a>，然後回來產生你的第一組驗證碼。
+            <a href="/zh-tw/what-is-2fa/">什麼是 2FA？</a>，然後回來產生你的第一組驗證碼。
           </p>
 
           <h3>從不需要你手機的驗證器</h3>
@@ -404,14 +413,14 @@ const services = [
             Google 帳戶、守住 Steam、Discord、X 或信箱——只要服務提供「使用驗證器應用程式」選項，
             講的都是同一種協定，一個工具全部涵蓋。驗證碼被拒絕時，原因幾乎總是裝置時鐘而不是工具。
             我們也準備了{" "}
-            <a href="/how-to-get-2fa-code/">逐步取得 2FA 驗證碼的指南</a>，以及按服務分類的{" "}
+            <a href="/zh-tw/how-to-get-2fa-code/">逐步取得 2FA 驗證碼的指南</a>，以及按服務分類的{" "}
             <a href="/guides/">開啟 2FA 指南</a>。
           </p>
 
           <h3>不上傳、不儲存、不收費</h3>
           <p>
             沒有可以接收密鑰的伺服器，沒有帳戶，沒有付費版，沒有遙測。每組驗證碼都用 Web Crypto API
-            在本機計算；上次的密鑰與最近密鑰清單只保存在你自己的瀏覽器儲存空間，點一下「Clear all」即可徹底清除。
+            在本機計算；上次的密鑰與最近密鑰清單只保存在你自己的瀏覽器儲存空間，點一下「全部清除」即可徹底清除。
             每把密鑰的原始副本請始終保留在加密的密碼管理員裡；對任何催促你提供新驗證碼的要求保持警覺——
             那是詐騙的紅旗。
           </p>
@@ -469,7 +478,7 @@ const services = [
         links: [
           { href: '/#generator', label: '線上產生器' },
           { href: '/zh-tw/#features', label: '功能' },
-          { href: '/what-is-2fa/', label: '什麼是兩步驟驗證？' },
+          { href: '/zh-tw/what-is-2fa/', label: '什麼是兩步驟驗證？' },
           { href: '/zh-tw/#compatibility', label: '相容性' },
         ],
       },

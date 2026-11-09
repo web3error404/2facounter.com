@@ -6,9 +6,26 @@ import SiteFooter from '../components/SiteFooter.astro';
 const title = 'Terms of Service — 2FA COUNTER';
 const description =
   'Terms of service for 2FA COUNTER (2facounter.com): a free, as-is, client-side TOTP tool. No accounts, no warranties, plain terms.';
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    name: title,
+    description,
+    url: 'https://2facounter.com/terms/',
+    breadcrumb: {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: '2FA COUNTER', item: 'https://2facounter.com/' },
+        { '@type': 'ListItem', position: 2, name: 'Terms of service', item: 'https://2facounter.com/terms/' },
+      ],
+    },
+  },
+];
 ---
 
-<Layout title={title} description={description} path="/terms/">
+<Layout title={title} description={description} path="/terms/" jsonLd={jsonLd}>
   <SiteHeader />
   <main id="main">
     <div class="mx-auto max-w-[720px] px-4 py-20 sm:px-6 lg:py-24">
@@ -84,6 +101,14 @@ const description =
           Steam, Binance) belong to their respective owners. Their use is nominative and for
           reference only; this site is <strong>not affiliated with, endorsed by, or sponsored
           by</strong> any of them.
+        </p>
+        <p>
+          You believe content on this site infringes your copyright, trademark, or other
+          intellectual property? Email{" "}
+          <a href="mailto:legal@2facounter.com">legal@2facounter.com</a> with the work
+          identified (URL and description), your contact details, and a statement of good-faith
+          authority. Every report gets a reply, and valid requests are resolved — typically
+          fixed or removed — within a few business days.
         </p>
 
         <h2>Security</h2>

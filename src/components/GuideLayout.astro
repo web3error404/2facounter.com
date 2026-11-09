@@ -23,6 +23,31 @@ export interface Props {
   deepDive?: { heading: string; blocks: { title: string; body: string }[] };
   /** ISO 8601 date the content was last fact-checked against the official docs */
   lastReviewed?: string;
+  /* ── UI chrome overridables (all default to the current English copy) ──
+     Present so a translated guide page can localize the layout without
+     touching this file. Per-service copy already flows in as props. */
+  /** "All guides" back-link target */
+  backHref?: string;
+  /** "All guides" back-link label */
+  backLabel?: string;
+  /** H1; defaults to “[service] 2FA setup” */
+  heading?: string;
+  /** Badge after the minutes count, defaults to “min · no app required” */
+  minutesSuffix?: string;
+  /** Start of the review line, before {service} — word-order varies by language */
+  reviewedPrefix?: string;
+  /** Label of the methodology link at the end of the review line */
+  reviewedLinkLabel?: string;
+  /** Primary CTA above the steps */
+  generatorCta?: string;
+  /** Steps heading */
+  stepsHeading?: string;
+  /** FAQ heading */
+  faqHeading?: string;
+  /** CTA banner button label */
+  ctaButton?: string;
+  /** Intl.DateTimeFormat locale for the visible review date (defaults en-GB) */
+  dateFormatLocale?: string;
 }
 
 const {
@@ -42,16 +67,32 @@ const {
           everything else is convenience.`,
   deepDive,
   lastReviewed,
+  backHref = '/guides/',
+  backLabel = 'All guides',
+  heading,
+  minutesSuffix = 'min · no app required',
+  reviewedPrefix = 'Fact-checked against',
+  reviewedLinkLabel = 'how we review guides',
+  generatorCta,
+  stepsHeading = 'Step by step',
+  faqHeading = 'FAQ',
+  ctaButton,
+  dateFormatLocale = 'en-GB',
 } = Astro.props;
 
 // Visible "fact-checked" line: editors keep the last-reviewed date in frontmatter
 // (falls back to dateModified so the JSON-LD and the visible line never drift).
 const reviewed = lastReviewed ?? dateModified;
 const reviewedLong = reviewed
-  ? new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }).format(
+  ? new Intl.DateTimeFormat(dateFormatLocale, { day: 'numeric', month: 'long', year: 'numeric' }).format(
       new Date(`${reviewed}T00:00:00Z`),
     )
   : undefined;
+
+// Service-dependent defaults that can't be expressed in the props destructure
+const headingText = heading ?? `${serviceName} 2FA setup`;
+const generatorCtaText = generatorCta ?? `Open the generator for ${serviceName}`;
+const ctaButtonText = ctaButton ?? `Generate ${serviceName} 2FA codes now`;
 
 const jsonLd = [
   {
@@ -96,16 +137,16 @@ const jsonLd = [
     <article class="mx-auto max-w-[820px] px-4 py-16 sm:px-6 lg:py-24">
       <div class="flex items-center gap-3">
         <a
-          href="/guides/"
+          href={backHref}
           class="section-label -mx-2 -my-1 inline-block px-2 py-3 hover:text-accent-red"
-        >← All guides</a>
+        >← {backLabel}</a>
       </div>
       <h1 class="mt-4 font-display text-4xl tracking-normal text-ink sm:text-5xl">
-        {serviceName} 2FA setup
+        {headingText}
       </h1>
       <p class="mt-4 max-w-2xl text-lg font-medium text-ink">{intro}</p>
       <div class="mt-6 flex flex-wrap items-center gap-3">
-        <span class="badge-stamp -rotate-2">{minutes} min · no app required</span>
+        <span class="badge-stamp -rotate-2">{minutes} {minutesSuffix}</span>
         {
           params.map((p) => (
             <span class="font-mono text-[11px] font-semibold tracking-tight text-ink">{p}</span>
@@ -114,17 +155,17 @@ const jsonLd = [
       </div>
       {reviewedLong && (
         <p class="mt-3 font-mono text-[13px] text-muted">
-          Fact-checked against {serviceName}'s official documentation · last reviewed{" "}
+          {reviewedPrefix} {serviceName}'s official documentation · last reviewed{" "}
           {reviewedLong} ·{" "}
-          <a href="/methodology/" class="link">how we review guides</a>
+          <a href="/methodology/" class="link">{reviewedLinkLabel}</a>
         </p>
       )}
       <a href="/#generator" class="btn-primary mt-8">
-        Open the generator for {serviceName}
+        {generatorCtaText}
         <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14m0 0-6-6m6 6-6 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
       </a>
 
-      <h2 class="mt-16 font-display text-[28px] leading-[1.2] tracking-normal text-ink">Step by step</h2>
+      <h2 class="mt-16 font-display text-[28px] leading-[1.2] tracking-normal text-ink">{stepsHeading}</h2>
       <ol class="mt-6 space-y-6">
         {
           steps.map((s, i) => (
@@ -160,7 +201,7 @@ const jsonLd = [
         )
       }
 
-      <h2 class="mt-16 font-display text-[28px] leading-[1.2] tracking-normal text-ink">FAQ</h2>
+      <h2 class="mt-16 font-display text-[28px] leading-[1.2] tracking-normal text-ink">{faqHeading}</h2>
       <div class="mt-6 divide-y-2 divide-dashed divide-hairline-strong">
         {
           faqs.map(({ q, a }) => (
@@ -180,7 +221,7 @@ const jsonLd = [
       <div class="cta-banner on-dark mt-12">
         <h2 class="font-display text-lg tracking-normal text-primary">{ctaTitle}</h2>
         <p class="mt-2 text-sm font-medium text-cream/80">{ctaBody}</p>
-        <a href="/#generator" class="btn-primary mt-5">Generate {serviceName} 2FA codes now</a>
+        <a href="/#generator" class="btn-primary mt-5">{ctaButtonText}</a>
       </div>
     </article>
   </main>

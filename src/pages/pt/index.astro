@@ -8,7 +8,7 @@ import Generator from '../../components/Generator.astro';
 
 const title = 'Gerador de código 2FA online — autenticador 2FA grátis (TOTP)';
 const description =
-  'Use o gerador de código 2FA online do 2FA COUNTER: cole a sua chave secreta e receba um código TOTP de 6 dígitos que se renova a cada 30 segundos. Autenticador 2FA grátis, alternativa ao Google Authenticator — sem cadastro e sem telefone, direto no navegador.';
+  'Use o gerador de código 2FA online do 2FA COUNTER: cole a sua chave secreta e receba um código TOTP de 6 dígitos que se renova a cada 30 segundos.';
 
 const faq = [
   {
@@ -94,7 +94,15 @@ const homeAlternates = [
   { hreflang: 'pt', href: 'https://2facounter.com/pt/' },
   { hreflang: 'ko', href: 'https://2facounter.com/ko/' },
   { hreflang: 'it', href: 'https://2facounter.com/it/' },
-  { hreflang: 'x-default', href: 'https://2facounter.com/' },
+  
+  { hreflang: 'hi', href: 'https://2facounter.com/hi/' },
+
+  { hreflang: 'ar', href: 'https://2facounter.com/ar/' },
+
+  { hreflang: 'bn', href: 'https://2facounter.com/bn/' },
+
+  { hreflang: 'ru', href: 'https://2facounter.com/ru/' },
+{ hreflang: 'x-default', href: 'https://2facounter.com/' },
 ];
 
 const jsonLd = [
@@ -122,7 +130,7 @@ const jsonLd = [
     ],
     offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
     isAccessibleForFree: true,
-    inLanguage: ['en', 'vi', 'zh-CN', 'zh-TW', 'es', 'ja', 'fr', 'de', 'pt', 'ko', 'it'],
+    inLanguage: ['en', 'vi', 'zh-CN', 'zh-TW', 'es', 'ja', 'fr', 'de', 'pt', 'ko', 'it', 'hi', 'ar', 'bn', 'ru'],
   },
   {
     '@context': 'https://schema.org',
@@ -158,6 +166,7 @@ const services = [
 
 
   <Layout title={title} description={description} path="/pt/" lang="pt" jsonLd={jsonLd} alternates={homeAlternates} image="/og-pt.png">
+    <SiteHeader locale="pt"
 
   
     links={[
@@ -175,7 +184,7 @@ const services = [
     <section aria-label="Gerador de código 2FA ao vivo — destaque">
       <!-- SEÇÃO 1: a interface do gerador 2FA fica no topo -->
       <div class="mx-auto max-w-[1200px] px-4 pt-10 pb-4 sm:px-6 sm:pt-16 xl:px-0">
-        <Generator />
+        <Generator locale="pt" />
       </div>
 
       <!-- SEÇÃO 2: conteúdo hero diretamente sob o gerador -->
@@ -272,7 +281,7 @@ const services = [
             </p>
             <p class="mt-4 text-sm font-medium text-ink">
               Novo no assunto? Leia a explicação em linguagem plana:{" "}
-              <a href="/pt/what-is-2fa/" class="link">What is 2FA? How TOTP works</a>
+              <a href="/pt/what-is-2fa/" class="link">O que é 2FA? Como o TOTP funciona</a>
             </p>
             <a href="#generator" class="btn-primary mt-8">Experimentar agora</a>
           </div>
@@ -409,7 +418,7 @@ const services = [
             Como o código é rotativo a cada 30 segundos, uma senha roubada, por si só, não abre mais
             nada. Se quiser o passeio completo pela criptografia, leia a explicação em linguagem
             plana{" "}
-            <a href="/pt/what-is-2fa/">What is 2FA? How two-factor authentication &amp; TOTP work</a>,
+            <a href="/pt/what-is-2fa/">O que é 2FA? Como funcionam a autenticação em dois fatores e o TOTP</a>,
             depois volte e gere o seu primeiro código.
           </p>
 

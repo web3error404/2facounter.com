@@ -1,0 +1,257 @@
+---
+/* Tiếng Việt — bản dịch bài viết (hreflang: vi). Song song với how-to-get-2fa-code.astro.
+   Hướng dẫn thực hành: lấy mã 2FA bằng trình tạo. Liên kết tới các hướng dẫn theo dịch vụ
+   và quay về công cụ trên trang chủ. */
+import Layout from '../../layouts/Layout.astro';
+import SiteHeader from '../../components/SiteHeader.astro';
+import SiteFooter from '../../components/SiteFooter.astro';
+
+const title = 'Cách lấy mã 2FA: hướng dẫn từng bước (TOTP)';
+const description =
+  'Cách lấy mã 2FA trong ba bước: hiển thị khóa thiết lập, dán vào trình tạo TOTP trực tuyến, và sao chép mã trực tiếp — kèm cách xử lý khi mã bị từ chối.';
+
+const faq = [
+  {
+    q: 'Khóa thiết lập nằm ở đâu?',
+    a: 'Ngay trên màn hình mà dịch vụ hiện mã QR cho ứng dụng xác thực. Tìm một liên kết kiểu “không thể quét?”, “nhập mã thủ công” hoặc “hiện khóa thiết lập”. Nó sẽ lộ ra một chuỗi Base32 (hoặc URI otpauth:// đầy đủ) — dạng nào cũng dùng được trong trình tạo.',
+  },
+  {
+    q: 'Mã của tôi bị từ chối — giờ sao?',
+    a: 'Gần như luôn là do lệch đồng hồ. TOTP dựa trên thời gian, nên thiết bị có đồng hồ lệch nửa phút cũng sinh ra mã không hợp lệ. Hãy đặt đồng hồ hệ thống đồng bộ tự động rồi thử lại.',
+  },
+  {
+    q: 'Mã này có giống mã mà ứng dụng trên điện thoại sẽ tạo không?',
+    a: 'Giống. Mọi ứng dụng xác thực — Google Authenticator, Authy, Microsoft Authenticator, hay công cụ trình duyệt này — đều tính cùng một mã TOTP theo RFC 6238, từ cùng khóa và cùng đồng hồ. Chúng có thể thay thế nhau.',
+  },
+  {
+    q: 'Tôi vẫn cần mã khôi phục chứ?',
+    a: 'Cần. Hãy lưu chúng ngoại tuyến, tách khỏi công cụ này. Nếu một ngày bạn mất quyền truy cập thiết bị chứa khóa bí mật, mã khôi phục chính là con đường trở lại tài khoản.',
+  },
+];
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: '2FA COUNTER', item: 'https://2facounter.com/vi/' },
+      { '@type': 'ListItem', position: 2, name: 'Cách lấy mã 2FA', item: 'https://2facounter.com/vi/how-to-get-2fa-code/' },
+    ],
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'HowTo',
+    name: 'Cách lấy mã 2FA bằng trình tạo TOTP trực tuyến',
+    totalTime: 'PT3M',
+    step: [
+      { '@type': 'HowToStep', position: 1, name: 'Bật 2FA và hiển thị khóa thiết lập', text: 'Mở cài đặt bảo mật của dịch vụ, chọn tùy chọn ứng dụng xác thực, và hiển thị khóa thiết lập khi không quét được mã QR.' },
+      { '@type': 'HowToStep', position: 2, name: 'Dán khóa vào trình tạo', text: 'Dán chuỗi Base32 hoặc URI otpauth:// vào trình tạo trên trang chủ 2FA COUNTER. Mọi phép tính được thực hiện ngay trong trình duyệt.' },
+      { '@type': 'HowToStep', position: 3, name: 'Sao chép mã trực tiếp và xác nhận', text: 'Nhập mã 6 chữ số vào ô xác minh của dịch vụ trong cửa sổ 30 giây để hoàn tất thiết lập — sau đó mỗi lần đăng nhập lặp lại đúng quy trình này.' },
+    ],
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faq.map(({ q, a }) => ({
+      '@type': 'Question',
+      name: q,
+      acceptedAnswer: { '@type': 'Answer', text: a },
+    })),
+  },
+];
+
+const alternates = [
+  { hreflang: 'en', href: 'https://2facounter.com/how-to-get-2fa-code/' },
+  { hreflang: 'vi', href: 'https://2facounter.com/vi/how-to-get-2fa-code/' },
+  { hreflang: 'zh-Hans', href: 'https://2facounter.com/zh-cn/how-to-get-2fa-code/' },
+  { hreflang: 'zh-Hant', href: 'https://2facounter.com/zh-tw/how-to-get-2fa-code/' },
+  { hreflang: 'es', href: 'https://2facounter.com/es/how-to-get-2fa-code/' },
+  { hreflang: 'ja', href: 'https://2facounter.com/ja/how-to-get-2fa-code/' },
+  { hreflang: 'fr', href: 'https://2facounter.com/fr/how-to-get-2fa-code/' },
+  { hreflang: 'de', href: 'https://2facounter.com/de/how-to-get-2fa-code/' },
+  { hreflang: 'pt', href: 'https://2facounter.com/pt/how-to-get-2fa-code/' },
+  { hreflang: 'ko', href: 'https://2facounter.com/ko/how-to-get-2fa-code/' },
+  { hreflang: 'it', href: 'https://2facounter.com/it/how-to-get-2fa-code/' },
+  
+  { hreflang: 'hi', href: 'https://2facounter.com/hi/how-to-get-2fa-code/' },
+
+  { hreflang: 'ar', href: 'https://2facounter.com/ar/how-to-get-2fa-code/' },
+
+  { hreflang: 'bn', href: 'https://2facounter.com/bn/how-to-get-2fa-code/' },
+
+  { hreflang: 'ru', href: 'https://2facounter.com/ru/how-to-get-2fa-code/' },
+{ hreflang: 'x-default', href: 'https://2facounter.com/how-to-get-2fa-code/' },
+];
+---
+
+<Layout title={title} description={description} path="/vi/how-to-get-2fa-code/" lang="vi" jsonLd={jsonLd} alternates={alternates} image="/og-vi.png">
+  <SiteHeader locale="vi"
+    links={[
+      { href: '/vi/', label: 'Trình tạo mã 2FA' },
+      { href: '/vi/what-is-2fa/', label: '2FA là gì?' },
+      { href: '/guides/', label: 'Hướng dẫn' },
+      { href: '/privacy/', label: 'Quyền riêng tư' },
+    ]}
+    cta="Tạo mã ngay"
+  />
+  <main id="main">
+    <article class="mx-auto max-w-[820px] px-4 py-20 sm:px-6 lg:py-24 xl:px-0">
+      <p class="section-label">Hướng dẫn 2FA</p>
+      <h1 class="mt-3 font-display text-4xl tracking-normal text-ink sm:text-5xl">
+        Cách lấy mã 2FA của bạn
+      </h1>
+      <p class="mt-5 text-lg font-medium text-ink">
+        Toàn bộ quy trình chỉ mất khoảng một phút: hiển thị khóa thiết lập, dán vào đây, rồi nhập
+        mã thu được vào màn hình nào đang đòi nó. Không cần điện thoại — "bản tham chiếu" của phép
+        toán đang chạy ngay trên <a href="/vi/">trình tạo ở trang chủ</a>.
+      </p>
+
+      <div class="rich-text mt-10">
+        <h2>Trước khi bắt đầu cần có gì</h2>
+        <p>
+          Trước hết là quyền truy cập tài khoản — hiển nhiên bạn phải đang đăng nhập vào dịch vụ
+          muốn bảo vệ. Ngoài ra chỉ còn hai điều đáng quan tâm. Một, dịch vụ phải có tùy chọn
+          <strong>ứng dụng xác thực</strong> làm yếu tố thứ hai; điều này bao phủ Google,
+          Microsoft, GitHub, Discord, Steam, AWS, Coinbase, Kraken, Binance, X, và phần lớn ngân
+          hàng hay sàn giao dịch. Hai, bạn cần một nơi để <em>chạy</em> trình xác thực: một ứng
+          dụng trên điện thoại, hoặc — chính là điểm của trang này — công cụ trình duyệt ngay đây,
+          tính ra mã y hệt mà không cài đặt gì.
+        </p>
+        <p>
+          Vài dòng về cách gọi tên: dịch vụ gọi yếu tố này là “xác thực hai yếu tố”, “2FA”, “xác
+          minh hai bước”, “TOTP”, hoặc “ứng dụng xác thực”. Phía sau các nhãn là cùng một thứ —
+          một mã dùng một lần, dựa trên thời gian, sinh từ khóa bí mật dùng chung. Nếu bạn muốn
+          giải thích cơ chế thay vì cách dùng, đọc{" "}
+          <a href="/vi/what-is-2fa/">2FA là gì? Cơ chế TOTP hoạt động ra sao</a>.
+        </p>
+
+        <h2>Bước 1: Bật 2FA và hiển thị khóa thiết lập</h2>
+        <p>
+          Mở cài đặt bảo mật của tài khoản và tìm mục xác thực hai yếu tố. Chọn tùy chọn
+          <em>ứng dụng xác thực</em>. Dịch vụ hiện một mã QR cho bạn quét bằng điện thoại — và màn
+          hình đó hầu như luôn kèm một lối thay thế: một liên kết ghi <em>“không thể quét?”</em>,
+          <em>“nhập mã thủ công”</em> hoặc <em>“khóa thiết lập”</em>. Theo liên kết đó, khóa bí
+          mật thật sự sẽ hiện ra: một chuỗi Base32 kiểu <code>JBSWY3DPEHPK3PXP</code>, thỉnh thoảng
+          bọc trong cả một URI <code>otpauth://</code> đầy đủ, mang thêm nhãn tài khoản, số chữ
+          số, chu kỳ làm mới và thuật toán băm.
+        </p>
+        <p>
+          Khóa này <strong>chính là</strong> thông tin đăng nhập — nó là phiên bản di động
+          của mật khẩu dành cho yếu tố thứ hai. Hãy đối xử với màn hình này như một màn khôi phục:
+          không một ai hợp lệ nào lại nhờ bạn dán khóa thiết lập vào email hay tin nhắn cả. Sao
+          chép nó, hoàn tất việc bật 2FA (hầu hết dịch vụ đòi một mã hợp lệ để xác nhận), và giữ
+          bản gốc ở nơi được mã hóa, như trình quản lý mật khẩu.
+        </p>
+
+        <h2>Bước 2: Dán khóa vào trình tạo</h2>
+        <p>
+          Trong <a href="/vi/">trình tạo trên đầu trang chủ</a>, dán thứ bạn vừa chép — chuỗi
+          Base32 trơn hoặc cả liên kết <code>otpauth://</code>, dạng nào cũng được. Mã 6 chữ số
+          trực tiếp xuất hiện trong vài giây và làm mới mỗi 30 giây. Bạn cũng có thể nạp khóa từ
+          ảnh: dán ảnh chụp mã QR trực tiếp lên trang bằng Ctrl+V, kéo thả một tệp ảnh, hoặc quét
+          mã QR bằng camera — việc giải mã diễn ra ngay tại máy, không có gì được tải lên. Nếu
+          dịch vụ phát hành cấu hình không chuẩn (mã 8 chữ số, chu kỳ 15/30/60 giây, SHA-256, hoặc
+          HOTP theo bộ đếm), một URI <code>otpauth://</code> đầy đủ mang theo mọi tham số đó và
+          trình tạo tự động tôn trọng chúng.
+        </p>
+
+        <h2>Bước 3: Sao chép mã trực tiếp và hoàn tất đăng nhập</h2>
+        <p>
+          Nhập mã hiện tại vào ô xác minh trước khi nó đổi. Mỗi mã chỉ còn hiệu lực đúng một cửa
+          sổ 30 giây (ngắn hơn hoặc dài hơn với dịch vụ có chu kỳ riêng), nên nếu đếm ngược đã vào
+          vài giây cuối, hãy đợi mã kế tiếp thay vì vội nhập mã cũ. Từ giờ, mỗi lần đăng nhập dịch
+          vụ này lặp lại cùng vòng lặp: mở trình tạo → sao chép mã → dán vào. Khóa cuối cùng được
+          nhớ <a href="/privacy/">chỉ trong localStorage của chính trình duyệt bạn</a>, nên lần
+          sau chỉ cần một cú nhấp.
+        </p>
+
+        <h2>Tìm khóa thiết lập ở đâu trong các dịch vụ phổ biến</h2>
+        <p>
+          Mỗi dịch vụ giấu tùy chọn ứng dụng xác thực ở một góc khác nhau, vì vậy chúng tôi phát
+          hành các <a href="/guides/">hướng dẫn thiết lập từng bước</a> đi cặp với trình tạo này —
+          kết thúc bằng việc bạn dán khóa vào đây và hoàn tất thiết lập. Được đọc nhiều nhất:
+          <a href="/guides/google/">Google</a>,{" "}
+          <a href="/guides/microsoft/">Microsoft</a>, <a href="/guides/discord/">Discord</a>,{" "}
+          <a href="/guides/github/">GitHub</a>, <a href="/guides/steam/">Steam</a>,{" "}
+          <a href="/guides/aws/">AWS</a>, <a href="/guides/coinbase/">Coinbase</a>,{" "}
+          <a href="/guides/kraken/">Kraken</a>, và <a href="/guides/binance/">Binance</a>.
+        </p>
+
+        <h2>Xử lý sự cố: làm gì khi nó không chạy</h2>
+        <p>
+          <strong>Mã bị từ chối.</strong> Thực tế gần như luôn do lệch đồng hồ trên thiết bị đang
+          chạy trình tạo. TOTP so mã của bạn với mã suy ra từ đồng hồ của <em>dịch vụ</em>; nếu
+          thời gian hệ thống lệch nửa phút, hai mã sẽ lệch nhau. Đặt hệ điều hành đồng bộ thời gian
+          tự động (Windows: “Đồng bộ ngay” trong cài đặt ngày giờ; macOS: “Đặt ngày giờ tự động”),
+          rồi thử mã kế tiếp.
+        </p>
+        <p>
+          <strong>Mã QR không quét được.</strong> Hãy dùng liên kết <em>“không thể quét?”</em> để
+          hiển thị khóa thiết lập thay thế — khóa dạng chữ luôn đáng tin hơn việc chụp màn hình.
+          Nếu bạn chỉ có ảnh chụp, hãy cắt ảnh quanh vùng mã QR; ảnh nén mạnh hoặc chụp xiên thường
+          giải mã thất bại.
+        </p>
+        <p>
+          <strong>Bạn làm mất chiếc điện thoại chứa khóa.</strong> Đó chính xác là tình huống mà
+          công cụ này được tạo ra để giải quyết: nếu bạn đã giữ khóa gốc trong trình quản lý mật
+          khẩu — hoặc đã dán nó vào đây khi điện thoại còn dùng được — bạn có thể tạo lại mã trên
+          bất kỳ máy tính nào. Không cần điện thoại, không cần khôi phục, không cần vé hỗ trợ.
+        </p>
+
+        <h2>Hai thói quen đáng hình thành</h2>
+        <p>
+          Lưu các <strong>mã khôi phục</strong> của dịch vụ ở nơi ngoại tuyến khi bạn bật 2FA; đó
+          là tấm phao cứu sinh nếu một ngày bạn mất thiết bị chứa khóa. Và đừng bao giờ coi mã 2FA
+          trực tiếp là thứ để chia sẻ: không nhân viên hỗ trợ, không ngân hàng, không sàn giao
+          dịch nào cần mã hiện tại của bạn mà không được yêu cầu trước. Một mã chỉ có ích trong
+          cửa sổ 30 giây của nó, trên đúng màn hình đăng nhập mà bạn lựa chọn.
+        </p>
+      </div>
+    </article>
+  </main>
+  <SiteFooter
+    columns={[
+      {
+        title: 'Sản phẩm',
+        links: [
+          { href: '/vi/#generator', label: 'Trình tạo mã trực tiếp' },
+          { href: '/vi/how-to-get-2fa-code/', label: 'Cách lấy mã 2FA' },
+          { href: '/vi/what-is-2fa/', label: '2FA là gì?' },
+          { href: '/vi/#features', label: 'Tính năng' },
+          { href: '/vi/#compatibility', label: 'Tương thích' },
+        ],
+      },
+      {
+        title: 'Hướng dẫn',
+        links: [
+          { href: '/guides/', label: 'Tất cả hướng dẫn' },
+          { href: '/guides/google/', label: 'Google 2FA' },
+          { href: '/guides/microsoft/', label: 'Microsoft 2FA' },
+          { href: '/guides/discord/', label: 'Discord 2FA' },
+          { href: '/guides/github/', label: 'GitHub 2FA' },
+          { href: '/guides/steam/', label: 'Steam 2FA' },
+          { href: '/guides/binance/', label: 'Binance 2FA' },
+        ],
+      },
+      {
+        title: 'Giới thiệu',
+        links: [
+          { href: '/about/', label: 'Về chúng tôi' },
+          { href: '/methodology/', label: 'Quy trình biên soạn' },
+          { href: '/contact/', label: 'Liên hệ' },
+        ],
+      },
+      {
+        title: 'Pháp lý',
+        links: [
+          { href: '/privacy/', label: 'Chính sách quyền riêng tư' },
+          { href: '/terms/', label: 'Điều khoản dịch vụ' },
+          { href: '/disclaimer/', label: 'Miễn trừ trách nhiệm' },
+          { href: '/contact/', label: 'Báo cáo vấn đề bảo mật' },
+        ],
+      },
+    ]}
+    tagline="Trình xác thực 2FA zero-knowledge chạy hoàn toàn trên trình duyệt của bạn tại 2facounter.com. Không tài khoản, không máy chủ, không cần điện thoại."
+    languagesTitle="Ngôn ngữ"
+  />
+</Layout>

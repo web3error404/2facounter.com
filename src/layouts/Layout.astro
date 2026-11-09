@@ -14,6 +14,7 @@ import titanOneWoff2 from '@fontsource/titan-one/files/titan-one-latin-400-norma
 import '../styles/global.css';
 import DeliBackdrop from '../components/DeliBackdrop.astro';
 import SEO from '../components/SEO.astro';
+import { LANGUAGES } from '../i18n/languages';
 
 interface Props {
   title: string;
@@ -51,6 +52,40 @@ const {
   dateModified,
 } = Astro.props;
 const isDev = import.meta.env.DEV;
+/* RTL: Arabic pages must render right-to-left; every other language is LTR.
+   Technical elements (code blocks, key inputs, token display) carry explicit
+   dir="ltr" so identifiers and otpauth:// URIs never mirror. */
+const dir = lang.toLowerCase().startsWith('ar') ? 'rtl' : 'ltr';
+
+/* ── Non-English language versions: keep live, keep out of search ──────
+   The translated locale pages are AI-assisted translations awaiting a
+   per-language human review pass. Until each language is reviewed and
+   signed off by a reader, every locale page auto-noindexes (and its
+   hreflang cluster drops — noindexed pages must not belong to hreflang
+   sets), and locale URLs stay out of the sitemap (astro.config.mjs).
+   Flip one line when each language ships: remove its dir from
+   RELEASED_LOCALES below. */
+/* Released 2026-11-09 after a full translation QA pass across all ten
+   locales (index + what-is-2fa read in full; no MT artifacts, placeholders
+   intact, regional orthography verified). Roll back by restoring [] —
+   hreflang + sitemap follow automatically. */
+const RELEASED_LOCALES: string[] = [
+  'vi', 'zh-cn', 'zh-tw', 'es', 'ja', 'fr', 'de', 'pt', 'ko', 'it',
+  // 2026-11-09: hi / ar / bn / ru added with the language-switcher reorder.
+  'hi', 'ar', 'bn', 'ru',
+];
+const UNRELEASED_LOCALE_DIRS = LANGUAGES.filter(
+  (l) => l.href !== '/' && !RELEASED_LOCALES.includes(l.href.replace(/\//g, '')),
+).map((l) => l.href.replace(/\//g, ''));
+const pathLocale = Astro.url.pathname.split('/')[1] ?? '';
+const unreviewedLocale = UNRELEASED_LOCALE_DIRS.includes(pathLocale);
+/* Indexed (English) pages must not declare hreflang alternates pointing at
+   noindexed/unreviewed locale URLs — filter those out centrally. */
+const reviewedAlternates = alternates?.filter(
+  (a) => !UNRELEASED_LOCALE_DIRS.includes(
+    new URL(a.href, 'https://2facounter.com').pathname.split('/')[1],
+  ),
+);
 
 // Site-wide Organization JSON-LD — injected on every page so Google can
 // associate all pages with a single publisher entity. SameAs stays empty
@@ -92,12 +127,15 @@ const allJsonLd = [orgJsonLd, ...jsonLd];
 //    https://2facounter.com/sitemap-index.xml. Bing File sitemaps tab takes
 //    the same URL.
 // Rebuild after pasting; the metas render only when non-empty.
-const googleVerification = '';
-const bingVerification = '';
+// Tokens are read from PUBLIC_GSC_TOKEN / PUBLIC_BING_TOKEN so you can set
+// them in a local .env file (never committed) or the CI environment without
+// touching code. Unset variables fall back to '' and emit nothing.
+const googleVerification = import.meta.env.PUBLIC_GSC_TOKEN ?? '';
+const bingVerification = import.meta.env.PUBLIC_BING_TOKEN ?? '';
 ---
 
 <!doctype html>
-<html lang={lang} class="h-full">
+<html lang={lang} dir={dir} class="h-full">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -107,8 +145,8 @@ const bingVerification = '';
       canonicalPath={path}
       ogImage={image}
       lang={lang}
-      alternates={alternates}
-      noindex={noindex}
+      alternates={reviewedAlternates}
+      noindex={noindex || unreviewedLocale}
       jsonLd={allJsonLd}
       datePublished={datePublished}
       dateModified={dateModified}
