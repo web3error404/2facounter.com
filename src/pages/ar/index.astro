@@ -216,7 +216,7 @@ const services = [
             <span class="h-2.5 w-2.5 rounded-full bg-primary"></span>
             <span class="ml-2 font-mono text-xs text-cream">otp.rfc-6238.js</span>
           </div>
-          <pre class="overflow-x-auto p-5 font-mono text-[13px] leading-relaxed"><code>
+          <pre dir="ltr" class="overflow-x-auto p-5 font-mono text-[13px] leading-relaxed"><code>
 <span class="text-muted">// The whole tool. No servers involved.</span>
 <span class="font-bold text-accent-blue">const</span> <span class="text-ink">step</span> = Math.<span class="text-ink">floor</span>(Date.<span class="text-ink">now</span>() / 1000 / 30);
 
@@ -534,9 +534,19 @@ const services = [
         title: 'المنتج',
         links: [
           { href: '/ar/#generator', label: 'مولّد الرموز الفوري' },
-          { href: '/ar/#features', label: 'المزايا' },
+          { href: '/ar/how-to-get-2fa-code/', label: 'كيف تحصل على رمز 2FA' },
           { href: '/ar/what-is-2fa/', label: 'ما هي المصادقة الثنائية (2FA)؟' },
+          { href: '/ar/#features', label: 'المزايا' },
           { href: '/ar/#compatibility', label: 'التوافق' },
+        ],
+      },
+      {
+        title: 'تعلَّم المزيد',
+        links: [
+          { href: '/totp-vs-passkeys/', label: 'TOTP مقابل مفاتيح المرور' },
+          { href: '/sim-swap-attacks/', label: 'هجمات الاستيلاء على شريحة SIM' },
+          { href: '/authenticator-cloud-sync/', label: 'مزامنة التطبيقات السحابية: مقارنة' },
+          { href: '/authenticator-for-pc/', label: 'مولّد 2FA للكمبيوتر' },
         ],
       },
       {

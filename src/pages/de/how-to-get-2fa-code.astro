@@ -44,7 +44,7 @@ const jsonLd = [
     totalTime: 'PT3M',
     step: [
       { '@type': 'HowToStep', position: 1, name: '2FA aktivieren und den Einrichtungsschlüssel anzeigen', text: 'Öffnen Sie die Sicherheitseinstellungen des Dienstes, wählen Sie die Option „Authenticator-App“ und lassen Sie sich den Einrichtungsschlüssel anzeigen, wenn Sie den QR-Code nicht scannen können.' },
-      { '@type': 'HowToStep', position: 2, name: 'Den Schlüssel in den Generator eingeben', text: 'Fügen Sie die Base32-Zeichenkette oder die otpauth://-URI in den Generator auf der 2FA-LIVE-CODE-Startseite ein. Alles wird lokal im Browser berechnet.' },
+      { '@type': 'HowToStep', position: 2, name: 'Den Schlüssel in den Generator eingeben', text: 'Fügen Sie die Base32-Zeichenkette oder die otpauth://-URI in den Generator auf der 2FA-COUNTER-Startseite ein. Alles wird lokal im Browser berechnet.' },
       { '@type': 'HowToStep', position: 3, name: 'Den Live-Code eingeben und bestätigen', text: 'Geben Sie den 6-stelligen Code innerhalb seines 30-Sekunden-Fensters in die Verifizierungsabfrage des Dienstes ein, um die Einrichtung abzuschließen — danach wiederholen Sie denselben Ablauf bei jeder künftigen Anmeldung.' },
     ],
   },
@@ -232,11 +232,11 @@ const alternates = [
       {
         title: 'Produkt',
         links: [
-          { href: '/#generator', label: 'Live-Generator' },
+          { href: '/de/#generator', label: 'Live-Generator' },
           { href: '/de/how-to-get-2fa-code/', label: '2FA-Code abrufen' },
           { href: '/de/what-is-2fa/', label: 'Was ist 2FA?' },
-          { href: '/#features', label: 'Funktionen' },
-          { href: '/#compatibility', label: 'Kompatibilität' },
+          { href: '/de/#features', label: 'Funktionen' },
+          { href: '/de/#compatibility', label: 'Kompatibilität' },
         ],
       },
       {
@@ -245,6 +245,7 @@ const alternates = [
           { href: '/totp-vs-passkeys/', label: 'TOTP gegen Passkeys' },
           { href: '/sim-swap-attacks/', label: 'SIM-Swap-Angriffe' },
           { href: '/authenticator-cloud-sync/', label: 'App-Cloud-Sync im Vergleich' },
+          { href: '/authenticator-for-pc/', label: 'Authenticator für den PC' },
         ],
       },
       {
