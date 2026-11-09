@@ -37,7 +37,7 @@ function fmt(tpl: string, vars: Record<string, string | number>): string {
   return tpl.replace(/\{(\w+)\}/g, (m, name) => (name in vars ? String(vars[name]) : m));
 }
 
-const LS_KEY = '2fal.key.v2';
+const LS_KEY = '2fac.key.v2';
 
 /* ── Storage: a deliberate trade-off ──────────────────────────
    The last key and the "Recent keys" cache are saved UNENCRYPTED in
@@ -59,7 +59,7 @@ const LS_KEY = '2fal.key.v2';
    the last-key restore that already existed). One-click switching;
    "Clear all" removes every trace. */
 type RecentEntry = { key: string; label: string; ts: number };
-const LS_RECENT = '2fal.recent.v1';
+const LS_RECENT = '2fac.recent.v1';
 const RECENT_MAX = 8;
 
 const $ = <T extends HTMLElement>(id: string): T => document.getElementById(id) as T;
