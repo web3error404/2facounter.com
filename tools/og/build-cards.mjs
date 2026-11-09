@@ -87,10 +87,105 @@ const CARDS = {
     tagline:
       'Incolla la chiave segreta, ottieni un codice a 6 cifre in tempo reale — gratuito, privato, senza app e senza account.',
     stamps: ['100% LATO CLIENT', 'ZERO SERVER', 'RFC 6238 TOTP'],
-    label: 'CHIAVE SEGRETA (SOLO LOCALE)',
+    label: 'CHIAVE SECRETA (SOLO LOCALE)',
     footStamp: 'CODICE VALIDO — FINESTRA DI 30 SECONDI',
     worksOffline: 'FUNZIONA OFFLINE',
     note: 'Senza app · senza account · la chiave non lascia mai il tuo dispositivo',
+  },
+  // ── Indic/Arabic scripts ─────────────────────────────────────────────
+  // Latin-subset @font-face rules above don't carry Devanagari/Bengali/Arabic
+  // glyphs; those fall back to the system UI font at render time (like the
+  // ja/ko cards already do) and are baked into the PNG, so every viewer sees
+  // exactly this render regardless of their device. Copy is taken from the
+  // on-page translations of /hi/, /ar/, /bn/ (hero, features, generator i18n).
+  hi: {
+    htmlLang: 'hi',
+    h1: 'लाइव 2FA <span class="accent">कोड जेनरेटर</span>',
+    tagline: 'सीक्रेट की पेस्ट करें और 6 अंकों का कोड तुरंत पाएँ — न ऐप, न अकाउंट।',
+    stamps: ['100% आपके ब्राउज़र में', 'कोई सर्वर नहीं', 'RFC 6238 TOTP'],
+    label: 'ऑथेंटिकेशन सीक्रेट की',
+    footStamp: 'वैध — 30 सेकंड की विंडो',
+    worksOffline: 'ऑफ़लाइन चलता है',
+    note: 'न ऐप · न अकाउंट · की कभी आपके डिवाइस से बाहर नहीं जाती',
+    // Devanagari matras run taller than Latin — trim the headline slightly
+    extraCss: 'html[lang="hi"] h1 { font-size: 50px; } html[lang="hi"] .tagline { font-size: 19px; }',
+  },
+  ar: {
+    htmlLang: 'ar',
+    h1: 'مولّد <span class="accent">رموز 2FA</span> الفوري',
+    tagline: 'الصق مفتاحًا سريًا واحصل على رمز من 6 أرقام فورًا — بلا تطبيق وبلا حساب.',
+    stamps: ['100% داخل متصفحك', 'بلا خواديم', 'RFC 6238 TOTP'],
+    label: 'المفتاح السري للمصادقة',
+    footStamp: 'صالح — نافذة 30 ثانية',
+    worksOffline: 'يعمل دون اتصال',
+    note: 'بلا تطبيق · بلا حساب · المفاتيح لا تغادر جهازك أبدًا',
+    // Mirror the whole card for RTL — the grid, rows, and stamps flip sides
+    extraCss: 'html[lang="ar"] body { direction: rtl; }',
+  },
+  bn: {
+    htmlLang: 'bn',
+    h1: 'লাইভ 2FA <span class="accent">কোড জেনারেটর</span>',
+    tagline: 'সিক্রেট কী পেস্ট করুন, সঙ্গে সঙ্গে 6 ডিজিটের কোড পান — অ্যাপ নেই, অ্যাকাউন্ট নেই।',
+    stamps: ['100% আপনার ব্রাউজারে', 'সার্ভার নেই', 'RFC 6238 TOTP'],
+    label: 'অথেন্টিকেশন সিক্রেট কী',
+    footStamp: 'বৈধ — ৩০ সেকেন্ডের মেয়াদ',
+    worksOffline: 'অফলাইনে চলে',
+    note: 'অ্যাপ নেই · অ্যাকাউন্ট নেই · কী কখনোই আপনার ডিভাইস ছাড়ে না',
+    // Bengali conjuncts + vowel signs run taller than Latin
+    extraCss: 'html[lang="bn"] h1 { font-size: 50px; } html[lang="bn"] .tagline { font-size: 19px; }',
+  },
+  // ── Remaining scripts ────────────────────────────────────────────────
+  // Copy is taken from the on-page translations of /vi/, /zh-cn/, /zh-tw/,
+  // /ru/ (hero, features, generator i18n). zh falls back to system CJK fonts
+  // at render time like ja/ko; ru is Cyrillic and needs no tweaks.
+  vi: {
+    htmlLang: 'vi',
+    h1: 'Trình tạo mã 2FA <span class="accent">trực tiếp</span>',
+    tagline:
+      'Dán khóa bí mật, nhận mã 6 chữ số ngay lập tức. Nhanh, miễn phí, riêng tư — thay cho Google Authenticator khi điện thoại mất, hỏng hoặc hết pin.',
+    stamps: ['100% chạy trên máy của bạn', 'Không có máy chủ', 'RFC 6238 TOTP'],
+    label: 'KHÓA BÍ MẬT XÁC THỰC',
+    footStamp: 'LÀM MỚI MỖI 30 GIÂY',
+    worksOffline: 'HOẠT ĐỘNG NGOẠI TUYẾN',
+    note: 'Không ứng dụng · không tài khoản · khóa không rời khỏi thiết bị',
+  },
+  'zh-cn': {
+    htmlLang: 'zh-cn',
+    h1: '2FA 验证码<span class="accent">在线生成</span>',
+    tagline:
+      '粘贴密钥，立即获得 6 位实时验证码。快速、免费、注重隐私，可替代 Google Authenticator 和 Microsoft Authenticator——专治手机丢失、损坏或没电的时刻。',
+    stamps: ['100% 本地运行', '没有服务器', 'RFC 6238 TOTP'],
+    label: '身份验证密钥',
+    footStamp: '每 30 秒自动刷新',
+    worksOffline: '离线可用',
+    note: '无需应用 · 无需账户 · 密钥绝不离开你的设备',
+    // CJK headline: reduce size so it fits the same line rhythm
+    extraCss:
+      'html[lang="zh-cn"] h1 { font-size: 48px; } html[lang="zh-cn"] .tagline { font-size: 18px; } html[lang="zh-cn"] .stamp { font-size: 13px; }',
+  },
+  'zh-tw': {
+    htmlLang: 'zh-tw',
+    h1: '2FA 驗證碼<span class="accent">線上產生</span>',
+    tagline:
+      '貼上密鑰，立即取得 6 位即時驗證碼。快速、免費、注重隱私，可取代 Google Authenticator 與 Microsoft Authenticator——專治手機遺失、損壞或沒電的時刻。',
+    stamps: ['100% 本機執行', '沒有伺服器', 'RFC 6238 TOTP'],
+    label: '驗證金鑰',
+    footStamp: '每 30 秒自動重新整理',
+    worksOffline: '離線可用',
+    note: '無需應用程式 · 無需帳戶 · 密鑰絕不離開你的裝置',
+    extraCss:
+      'html[lang="zh-tw"] h1 { font-size: 48px; } html[lang="zh-tw"] .tagline { font-size: 18px; } html[lang="zh-tw"] .stamp { font-size: 13px; }',
+  },
+  ru: {
+    htmlLang: 'ru',
+    h1: '<span class="accent">Генератор</span> живых кодов 2FA',
+    tagline:
+      'Вставьте секретный ключ и мгновенно получите 6-значный код. Альтернатива Google Authenticator: быстрая, бесплатная и приватная.',
+    stamps: ['100% в вашем браузере', 'Без серверов', 'RFC 6238 TOTP'],
+    label: 'СЕКРЕТНЫЙ КЛЮЧ АУТЕНТИФИКАЦИИ',
+    footStamp: 'ОБНОВЛЯЕТСЯ КАЖДЫЕ 30 СЕКУНД',
+    worksOffline: 'РАБОТАЕТ ОФЛАЙН',
+    note: 'Без приложения · без аккаунта · ни один ключ не попадает на сервер',
   },
 };
 
