@@ -15,15 +15,15 @@ const description =
   path="/guides/discord/"
   dateModified="2026-11-07"
   lastReviewed="2026-11-07"
-  intro="Discord throws you out if you lose both your phone and its authenticator. This browser-only route generates your Discord 6-digit codes on any device you’re actually logged in on — and 2FA is mandatory if you run a server or want moderation copy to stick."
+  intro="Discord throws you out if you lose both your phone and its authenticator. This browser-only route generates your Discord 6-digit codes on any device you’re actually logged in on — and server owners often require 2FA before moderation actions count, so it’s effectively mandatory if you run a community."
   minutes={4}
   params={['6 digits', '30s period', 'SHA-1']}
   ctaTitle="A Discord key is a permission key, not just a login key"
-  ctaBody="On Discord, 2FA also gates server moderation — bans, deletes, and bot setup checks it. If you run any community, losing your second-factor keys is losing the server itself. Recovery codes first, Base32 key second, both encrypted."
+  ctaBody="On Discord, 2FA also gates server moderation — bans, deletes, and bot setup can require it wherever the server turns that requirement on. If you run any community, losing your second-factor keys is losing the server itself. Recovery codes first, Base32 key second, both encrypted."
   steps={[
     {
       title: 'Open Discord settings',
-      body: 'Desktop or web: gear icon next to your username → “My Account”. On the account card, click “Enable Two-Factor Auth”.',
+      body: 'Desktop or web: gear icon next to your username → “My Account”. Under “Password and Authentication”, click “Enable Authenticator App”.',
     },
     {
       title: 'Verify your password',
@@ -31,7 +31,7 @@ const description =
     },
     {
       title: 'Get the secret key instead of using your phone',
-      body: 'The screen shows a QR code by default. Click the text link below it — “can’t scan? enter the key manually” — and you’ll see a Base32 key like abc123XYZ….',
+      body: 'The screen shows a QR code by default. Click the manual-entry/link option below it — “enter the key manually” — and you’ll see a Base32 key like abc123XYZ….',
     },
     {
       title: 'Paste it into 2FA COUNTER',

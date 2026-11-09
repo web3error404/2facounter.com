@@ -25,8 +25,8 @@ const description =
         body: 'Steam login codes are 5 characters (letters A–Z plus digits 2–9) instead of 6 digits, because Valve runs its own alphabet and character mapping over the RFC 6238 HMAC output. A standards-based generator literally cannot produce that string — which is exactly why this guide points you at Steam Guard itself instead of pretending a pasted secret will yield valid login codes. Beware of any tool that claims otherwise; it isn’t telling the truth.',
       },
       {
-        title: 'The 15-day cooldown on fresh enrollments',
-        body: 'Newly added Steam Guard locks the market and trading for 15 days. Enroll well before you plan to trade, not an hour before a sale is due. Trade and market confirmations are also their own flow inside the official app — a separate channel from login codes that no third-party tool can stand in for.',
+        title: 'The trading restrictions on fresh enrollments',
+        body: 'If the account had no Steam Guard at all, the Market and trading stay locked for 15 days after enrolling the app. If email Steam Guard was already active there are no new restrictions — but trades created during the first 7 days after adding the authenticator can still be held up to 15 days. Enroll well before you plan to trade, not an hour before a sale is due. Trade and market confirmations are also their own flow inside the official app — a separate channel from login codes that no third-party tool can stand in for.',
       },
       {
         title: 'The QR scam every trader eventually meets',
@@ -36,8 +36,8 @@ const description =
   }}
   steps={[
     {
-      title: 'Open Steam account settings',
-      body: 'In the Steam client (desktop), go to “Account” → “Account security”, then click “Manage Steam Guard”.',
+      title: 'Open account security',
+      body: 'Enrollment happens in the Steam mobile app: open the app and go to the Steam Guard tab → “Add authenticator”. On the web or desktop client, “Account Details” → “Manage Steam Guard” is where backup codes and authenticator management live (the desktop client also carries these under Settings → Security).',
     },
     {
       title: 'Enroll the official Steam Guard app',
@@ -49,7 +49,7 @@ const description =
     },
     {
       title: 'Keep trade/market protections in mind',
-      body: 'Newly added Steam Guard has a 15-day market/trading cooldown. Plan around it: enroll, wait the cooldown out, then use the app freely.',
+      body: 'If your account previously had no Steam Guard enabled at all, market and trading are restricted for 15 days after enrolling. Even if email Steam Guard was already on, trades created during the first 7 days after adding the app can be held for up to 15 days. Enroll well before you plan to trade, and use the app’s confirmations freely afterwards.',
     },
     {
       title: 'Write the recovery details down',

@@ -10,7 +10,7 @@ const description =
 const faqs = [
   {
     q: 'Are passkeys a replacement for 2FA?',
-    a: 'They can be. A synced passkey replaces both factors in one step: unlocking your device (something you have/are) plus the origin-bound key (something only that account on that platform holds). That is why vendors describe passkeys as "a single step that is two-factor". The caveat: it hinges on the unlock — a 6-digit PIN on a shared machine is a weaker gate than a hardware key’s touch confirmation.',
+    a: 'They can be. A synced passkey replaces both factors in one step: unlocking your device (something you have/are) plus the origin-bound key (something only that account on that platform holds). That is why passkeys are often described as a single step that combines both factors. The caveat: it hinges on the unlock — a 6-digit PIN on a shared machine is a weaker gate than a hardware key’s touch confirmation.',
   },
   {
     q: 'Can I use TOTP and a passkey on the same account?',
@@ -44,7 +44,7 @@ const jsonLd = [
       '@type': 'Organization',
       name: '2FA COUNTER',
       url: 'https://2facounter.com',
-      logo: { '@type': 'ImageObject', url: 'https://2facounter.com/favicon-96x96.png' },
+      logo: { '@type': 'ImageObject', url: 'https://2facounter.com/apple-touch-icon.png' },
     },
     mainEntityOfPage: { '@type': 'WebPage', '@id': 'https://2facounter.com/totp-vs-passkeys/' },
   },

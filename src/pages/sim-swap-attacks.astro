@@ -44,7 +44,7 @@ const jsonLd = [
       '@type': 'Organization',
       name: '2FA COUNTER',
       url: 'https://2facounter.com',
-      logo: { '@type': 'ImageObject', url: 'https://2facounter.com/favicon-96x96.png' },
+      logo: { '@type': 'ImageObject', url: 'https://2facounter.com/apple-touch-icon.png' },
     },
     mainEntityOfPage: { '@type': 'WebPage', '@id': 'https://2facounter.com/sim-swap-attacks/' },
   },
@@ -161,8 +161,10 @@ const jsonLd = [
           </li>
         </ul>
         <p>
-          That is why NIST’s US federal guidance has explicitly{" "}
-          <em>deprecated SMS and phone-bound out-of-band factors</em> — long before this article.
+          That is why NIST’s US federal guidance has formally{" "}
+          <em>restricted SMS and phone-bound out-of-band factors</em> — SP 800-63B classifies SMS
+          out-of-band authentication as RESTRICTED, allowed only under safeguards that consumer
+          services rarely meet — long before this article.
           The exchanges that push hard for "authenticator app" over SMS aren’t being difficult;
           they’re shipping the fix.
         </p>

@@ -18,7 +18,7 @@ const faqs = [
   },
   {
     q: 'Do I need a phone number to use a browser generator?',
-    a: 'No. Authy requires an account and a phone number — which SMS-capable carriers create real attack surface (SIM-swap attackers historically targeted Authy accounts by exploiting the phone-number recovery path). A browser generator has no account, no phone number, and nothing to reset: you hold the Base32 secret as text, and that IS theauthentication factor.',
+    a: 'No. Authy requires an account and a phone number — which SMS-capable carriers create real attack surface (SIM-swap attackers historically targeted Authy accounts by exploiting the phone-number recovery path). A browser generator has no account, no phone number, and nothing to reset: you hold the Base32 secret as text, and that IS the authentication factor.',
   },
   {
     q: 'How do I move my accounts away from Authy?',
@@ -26,7 +26,7 @@ const faqs = [
   },
   {
     q: 'Does Authy multi-device sync still work?',
-    a: 'Yes, but with restrictions: Twilio has removed multi-device sync for new accounts since 2019 — new enrollments are single-device unless you deliberately re-enable the setting from an existing device within a time limit, and the option has been deprecated over time. A browser generator gives you a simpler multi-device story: the same secret text restored wherever you authorize it, from one source of truth.',
+    a: 'Yes, but as a temporary action: Multi-Device ships disabled by default. You switch it on from an existing device only while pairing a new one, then switch it back off. If you ever lose every device, account recovery waits a fixed 24 hours — and tokens without a backups password can never be restored. A browser generator gives you a simpler multi-device story: the same secret text restored wherever you authorize it, from one source of truth.',
   },
   {
     q: 'Does the browser generator work offline like Authy did on desktop?',
@@ -48,7 +48,7 @@ const jsonLd = [
       '@type': 'Organization',
       name: '2FA COUNTER',
       url: 'https://2facounter.com',
-      logo: { '@type': 'ImageObject', url: 'https://2facounter.com/favicon-96x96.png' },
+      logo: { '@type': 'ImageObject', url: 'https://2facounter.com/apple-touch-icon.png' },
     },
     mainEntityOfPage: { '@type': 'WebPage', '@id': 'https://2facounter.com/totp-vs-authy/' },
   },
@@ -179,7 +179,7 @@ const jsonLd = [
           <li>Save the fresh recovery codes at the same time. Only then remove the token from Authy.</li>
         </ol>
         <p>
-          Two mimimum rules while migrating: never disable 2FA and leave it off overnight, and keep the
+          Two minimum rules while migrating: never disable 2FA and leave it off overnight, and keep the
           Authy token alive until the new one has produced a code the service actually verified.
         </p>
 

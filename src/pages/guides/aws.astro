@@ -39,7 +39,7 @@ const description =
     },
     {
       title: 'Confirm activation',
-      body: 'Enter both codes and click “Assign MFA”. The device flips to “Active”. Test sign-in once immediately — MFA failures at 2.mfa are usually clock drift, so check your device time sync if a code is rejected.',
+      body: 'Enter both codes and click “Add MFA”. The device flips to “Active”. Test sign-in once immediately — if a code is rejected at sign-in, it’s usually clock drift, so check your device time sync.',
     },
     {
       title: 'Back up the key',
@@ -57,7 +57,7 @@ const description =
     },
     {
       q: 'Can I enforce MFA on every IAM user with policy?',
-      a: 'Yes — an IAM policy condition on aws:MultiFactorAuthPresent turns MFA from advice into policy for console sessions, and AWS’s Well-Architected guidance treats that baseline as mandatory. Enrollment per user (this guide) is the prerequisite.',
+      a: 'Yes — an IAM policy condition on aws:MultiFactorAuthPresent turns MFA from advice into policy for console sessions, and AWS’s Well-Architected guidance treats that baseline as a required control. Enrollment per user (this guide) is the prerequisite.',
     },
     {
       q: 'Can I use one MFA entry for multiple AWS accounts?',

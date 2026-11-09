@@ -41,12 +41,12 @@ const description =
       body: 'Sign in at github.com, click your avatar → “Settings” → “Password and authentication” → “Enable two-factor authentication”.',
     },
     {
-      title: 'Skip the passkey prompt if you want TOTP',
-      body: 'GitHub offers passkeys first — great on personal machines. If your device is shared or headed-for-destruction (CI boxes, borrowed laptops), continue with “TOTP app” instead.',
+      title: 'Enter the wizard',
+      body: 'GitHub’s wizard walks you straight into authenticator-app setup. Passkeys and security keys can only be added as alternative methods after 2FA is already configured — enroll TOTP first, then consider adding a passkey from “Settings” → “Password and authentication” afterwards.',
     },
     {
       title: 'View the secret key, not just the QR',
-      body: 'GitHub shows a QR code. Below it, click “Write down the setup key instead” and a Base32 string (letters A–Z, digits 2–7) appears.',
+      body: 'GitHub shows a QR code. If you can’t scan it, click the “setup key” link below the QR and a Base32 string (letters A–Z, digits 2–7) appears.',
     },
     {
       title: 'Paste the key into the generator',
@@ -54,7 +54,7 @@ const description =
     },
     {
       title: 'Verify in GitHub',
-      body: 'Copy the live 6-digit code from the generator and enter it in GitHub’s confirm step. GitHub goes further: it now shows your security log with this change noted.',
+      body: 'Copy the live 6-digit code from the generator and enter it in GitHub’s confirm step to activate 2FA.',
     },
     {
       title: 'Download recovery codes — twice over',

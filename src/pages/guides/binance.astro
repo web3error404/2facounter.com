@@ -15,10 +15,10 @@ const description =
   path="/guides/binance/"
   dateModified="2026-11-07"
   lastReviewed="2026-11-07"
-  intro="Binance rewards strong 2FA with higher withdrawal limits and lower trading fees. Their TOTP setup is standard — you can run it on your browser keys, in an encrypted password manager, or on an offline machine. Two Binance-specific extras, the anti-phishing code and the withdrawal whitelist, are worth the extra two minutes."
+  intro="Enabling 2FA removes the friction Binance applies to weaker accounts. Their TOTP setup is standard — you can run it on your browser keys, in an encrypted password manager, or on an offline machine. Two Binance-specific extras, the anti-phishing code and the withdrawal whitelist, are worth the extra two minutes."
   minutes={5}
   params={['6 digits', '30s period', 'SHA-1']}
-  ctaTitle="Trading fees and limits are the small reward; keeping the robots out is the real one"
+  ctaTitle="Keeping the robots out is the real reward"
   ctaBody="Binance accounts sit in the highest-value attack category on the web right now. Finishing the anti-phishing code and withdrawal whitelist — not just the TOTP toggle — is what actually closes the door; screenshots of both belong in your encrypted vault."
   steps={[
     {
@@ -31,7 +31,7 @@ const description =
     },
     {
       title: 'Get the key text, not only the QR',
-      body: 'The dialog shows a QR code. Below it, click “view the key string” (or similar wording) and Binance reveals a Base32 secret like 26-char …you want that.',
+      body: 'The dialog shows a QR code. Below it, click “view the key string” (or similar wording) and Binance reveals a Base32 secret — typically 16 characters, with the alphabet it needs you to copy exactly.',
     },
     {
       title: 'Paste it into the generator',

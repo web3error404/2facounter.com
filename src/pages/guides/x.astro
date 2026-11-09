@@ -13,7 +13,7 @@ const description =
   path="/guides/x/"
   dateModified="2026-11-09"
   lastReviewed="2026-11-09"
-  intro="X (formerly Twitter) offers three 2FA factors, and since 2023 only the app-based one (TOTP) is free for every account. A browser authenticator works perfectly — you just have to catch the setup key behind the QR."
+  intro="X (formerly Twitter) offers three 2FA factors — SMS (Premium-only since 2023), authenticator app (TOTP), and security keys — and the app-based one is the free, portable option for every account. A browser authenticator works perfectly — you just have to catch the setup key behind the QR."
   minutes={5}
   params={['6 digits', '30s period', 'SHA-1']}
   ctaTitle="On X, your handle is your reputation"
@@ -23,15 +23,15 @@ const description =
     blocks: [
       {
         title: 'The phone-number gate',
-        body: 'Since mid-2023, X shows the two-factor menu only to accounts with a verified phone number — even when you pick the app-based option. That’s a hard requirement, not a suggestion: no verified number, no TOTP toggle. The number doesn’t become your 2FA (app codes are a separate factor), but one has to be registered for the section to exist at all.',
+        body: 'Accounts without a verified phone number have historically found the two-factor menu hidden — even for the app-based option. Verify a number is registered on the account before you try to enroll. The number doesn’t become your 2FA (app codes are a separate factor); it just has to exist for the section to appear.',
       },
       {
-        title: 'Why the SMS option is the one to skip',
-        body: 'X charges for the SMS factor on non-premium accounts, and SMS is also the weakest factor in the stack: a SIM-swap attacker reads those codes without touching your device. The “password confirmation” factor is just your existing password re-asked. TOTP is the only option here that adds a real second factor, computed on your side, for free.',
+        title: 'Why the SMS factor is the one to skip',
+        body: 'X restricts SMS 2FA to Premium subscribers, and SMS is also the weakest factor in the stack: a SIM-swap attacker reads those codes without touching your device. The third option, security keys, is the phishing-resistant one if you already own a hardware key or passkey — but TOTP is the factor that adds a real, free second factor computed on your side and portable to any device with the key.',
       },
       {
         title: 'The post-enrollment QR is your backup, not decoration',
-        body: 'Right after you confirm the code, X displays a one-time QR “for other devices”. It encodes the same secret in otpauth:// form. Screenshot it into your password-manager vault (or keep the Base32 key next to it) and you can restore the enrollment into a new phone app or browser later — without re-enrolling or contacting X support.',
+        body: 'When you finish verifying, X shows a confirmation screen that may include a one-time QR labelled “for other devices”. If yours shows it, screenshot it into your password-manager vault (or keep the Base32 key next to it) so you can restore the enrollment into a new phone app or browser later — without re-enrolling or contacting X support.',
       },
     ],
   }}
@@ -42,11 +42,11 @@ const description =
     },
     {
       title: 'Pick “Authentication app”',
-      body: 'Choose the app option (not SMS — X charges for SMS on non-verified accounts, and app codes are safer against SIM swaps anyway). Confirm with your current password.',
+      body: 'Choose the app option (not SMS — X restricts SMS to Premium accounts, and app codes are safer against SIM swaps anyway). Confirm with your current password if prompted.',
     },
     {
       title: 'Grab the setup key',
-      body: 'X shows a QR scan screen. Tap “Copy the key” below the QR to get the Base32 secret, or screenshot the QR and paste it into the generator — both routes work.',
+      body: 'X shows a QR scan screen. Look for the small copy/manual-entry link beneath the QR to get the Base32 secret, or screenshot the QR and paste it into the generator — both routes work.',
     },
     {
       title: 'Generate and verify',
@@ -54,7 +54,7 @@ const description =
     },
     {
       title: 'Screenshot the confirmation QR, too',
-      body: 'After verifying, X displays a one-time QR “for other devices”. Scan it back into the generator or screenshot it — it lets you restore the same key into any app later without re-enrollment.',
+      body: 'After verifying, X may display a one-time QR “for other devices”. If yours shows it, scan it back into the generator or screenshot it — it lets you restore the same key into any app later without re-enrollment.',
     },
     {
       title: 'Store backups',
@@ -64,11 +64,11 @@ const description =
   faqs={[
     {
       q: 'Why does X require a phone number for 2FA?',
-      a: 'Since mid-2023 X only shows the 2FA section to accounts with a verified phone number — even for TOTP. The browser authenticator replaces the need for an authenticator *app*, not for the number requirement.',
+      a: 'Accounts without a verified phone number have historically not seen the 2FA section — even when they only want the app-based option. The browser authenticator replaces the need for an authenticator *app*, not the number requirement.',
     },
     {
       q: 'Which of X’s three 2FA options is the safe one?',
-      a: 'TOTP is the strongest X currently offers without hardware keys: SMS is vulnerable to SIM-swap attacks and text-message interception, and password verification is just your existing password. App-based codes change every 30 seconds and are computed locally.',
+      a: 'A hardware security key or passkey is the phishing-resistant pick if you have one. Without hardware, TOTP is the factor to choose: SMS is vulnerable to SIM-swap attacks and text-message interception (and Premium-only anyway), while app-based codes change every 30 seconds and are computed locally.',
     },
     {
       q: 'Do the codes work across multiple devices?',

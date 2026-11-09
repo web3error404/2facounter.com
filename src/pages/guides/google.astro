@@ -38,7 +38,7 @@ const description =
   steps={[
     {
       title: 'Open 2-Step Verification',
-      body: 'Sign in at myaccount.google.com → Security → “2-Step Verification”. Confirm your password to proceed. If 2SV isn’t enabled yet, start it here.',
+      body: 'Sign in at myaccount.google.com → Security & sign-in → "Turn on 2-Step Verification" (under "How you sign in to Google"). Confirm your password to proceed. If 2SV isn’t enabled yet, start it here.',
     },
     {
       title: 'Choose “Authenticator app”',
@@ -46,7 +46,7 @@ const description =
     },
     {
       title: 'Reveal the setup key',
-      body: 'Click “Can’t scan it?” — a 32-character Base32 secret (e.g. JBSWY3DPEHPK3PXP) replaces the QR. Copy it. This is the same secret the Google Authenticator app would store, minus the cloud-sync upload.',
+      body: 'Click “Can’t scan it?” — a 32-character Base32 secret (e.g. JBSWY3DPEHPK3PXPJBSWY3DPEHPK3PXP) replaces the QR. Copy it. This is the same secret the Google Authenticator app would store, minus the cloud-sync upload.',
     },
     {
       title: 'Generate codes locally',
@@ -54,7 +54,7 @@ const description =
     },
     {
       title: 'Verify',
-      body: 'Click Next in Google’s dialog, enter the current code, and confirm. Google adds “Authenticator” to your list of active second steps.',
+      body: 'Click Next in Google’s dialog, enter the current code, and confirm. Google adds “Authenticator” to your list of active second steps. Note: the up-to-7-day trust delay that Google documents applies to newly added 2SV phone numbers, not to authenticator methods.',
     },
     {
       title: 'Save backups where they belong',

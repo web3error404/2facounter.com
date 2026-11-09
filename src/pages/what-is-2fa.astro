@@ -75,7 +75,7 @@ const faqs = [
   },
   {
     q: 'Why does everything use 2FA now?',
-    a: 'Because the password-only era failed. Mass breaches exposed billions of credentials, credential-stuffing attacks got automated and cheap, and platforms now carry the cost of hijacked accounts. Regulators pushed too: NIST deprecated SMS authentication in its US standards, and the EU\'s PSD2 rules require strong customer authentication. Once a few giants made 2FA normal, every other service followed.',
+    a: 'Because the password-only era failed. Mass breaches exposed billions of credentials, credential-stuffing attacks got automated and cheap, and platforms now carry the cost of hijacked accounts. Regulators pushed too: NIST\'s US standards formally restrict SMS-based authentication (SP 800-63B classifies SMS out-of-band codes as "RESTRICTED"), and the EU\'s PSD2 rules require strong customer authentication. Once a few giants made 2FA normal, every other service followed.',
   },
   {
     q: 'What is the difference between TOTP, HOTP, and OTP?',
@@ -83,7 +83,7 @@ const faqs = [
   },
   {
     q: 'Why is TOTP better than SMS 2FA?',
-    a: 'SMS codes travel over the phone network, where they can be intercepted or stolen by SIM-swap attacks — and SMS delivery can simply fail. TOTP codes are computed on your device, never transmitted, and expire within seconds. Security bodies including NIST have deprecated SMS for authentication.',
+    a: 'SMS codes travel over the phone network, where they can be intercepted or stolen by SIM-swap attacks — and SMS delivery can simply fail. TOTP codes are computed on your device, never transmitted, and expire within seconds. NIST\'s US standards formally restrict SMS as an authentication factor for federal services.',
   },
   {
     q: 'Can TOTP codes be stolen by a phishing site?',
@@ -109,7 +109,7 @@ const jsonLd = [
       '@type': 'Organization',
       name: '2FA COUNTER',
       url: 'https://2facounter.com',
-      logo: { '@type': 'ImageObject', url: 'https://2facounter.com/favicon-96x96.png' },
+      logo: { '@type': 'ImageObject', url: 'https://2facounter.com/apple-touch-icon.png' },
     },
     mainEntityOfPage: { '@type': 'WebPage', '@id': 'https://2facounter.com/what-is-2fa/' },
   },
@@ -205,8 +205,9 @@ const jsonLd = [
           </li>
           <li>
             <strong>Time ticks.</strong> The current time is divided into 30-second "steps":
-            <code>step = floor(unixTime / 30)</code>. There is nothing special about 30; RFC 6238
-            lets a service accept 15, 30 or 60 seconds.
+            <code>step = floor(unixTime / 30)</code>. There is nothing special about 30 — the
+            standard merely recommends it; each service picks its own time-step, and it has to
+            be agreed on both sides.
           </li>
           <li>
             <strong>HMAC.</strong> Your authenticator computes an HMAC hash
@@ -242,7 +243,7 @@ const jsonLd = [
         </p>
         <pre><code>otpauth://totp/GitHub:you%40example.com?secret=JBSWY3DPEHPK3PXP&amp;issuer=GitHub
 otpauth://totp/Binance:me?secret=JBSWY3DPEHPK3PXP&amp;digits=6&amp;period=30&amp;algorithm=SHA1
-otpauth://hotp/Steam:sda?secret=...&amp;counter=5   ← counter-based (HOTP) variant</code></pre>
+otpauth://hotp/Example:you%40example.com?secret=...&amp;counter=5   ← counter-based (HOTP) variant (rare)</code></pre>
         <p>
           A modern generator honors every parameter: digit count, period, hash algorithm and
           HOTP counter — because a service that specifies SHA-256 will still reject a default
@@ -252,7 +253,7 @@ otpauth://hotp/Steam:sda?secret=...&amp;counter=5   ← counter-based (HOTP) var
 
         <h2 id="sms">TOTP vs. SMS vs. hardware keys</h2>
         <ul>
-          <li><strong>SMS codes</strong> travel across the telecom network. SIM-swap attacks let an adversary hijack your phone number and receive every code. SMS is deprecated in the US standards (NIST SP 800-63B) for authentication.</li>
+          <li><strong>SMS codes</strong> travel across the telecom network. SIM-swap attacks let an adversary hijack your phone number and receive every code — and delivery can simply fail. NIST's US standards formally restrict phone-delivered codes (SP 800-63B classifies SMS out-of-band authentication as "RESTRICTED"), and the EU's PSD2 rules push services toward authenticator-app factors.</li>
           <li><strong>TOTP</strong> never transmits anything — the code is computed locally and expires in 30 seconds. Free, standards-based, and supported everywhere. Weaker link: it can be phished within its validity window.</li>
           <li><strong>Security keys and passkeys</strong> (WebAuthn/FIDO2) are cryptographically bound to the <em>exact</em> domain, so fake lookalike pages fail automatically. Strongest option; less widely supported and costs a key.</li>
         </ul>

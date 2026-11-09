@@ -40,7 +40,7 @@ const jsonLd = [
       '@type': 'Organization',
       name: '2FA COUNTER',
       url: 'https://2facounter.com',
-      logo: { '@type': 'ImageObject', url: 'https://2facounter.com/favicon-96x96.png' },
+      logo: { '@type': 'ImageObject', url: 'https://2facounter.com/apple-touch-icon.png' },
     },
     mainEntityOfPage: { '@type': 'WebPage', '@id': 'https://2facounter.com/authenticator-cloud-sync/' },
   },
@@ -139,8 +139,8 @@ const jsonLd = [
         <h2 id="microsoft">Microsoft Authenticator</h2>
         <p>
           Microsoft Authenticator’s story is cloud-forward from the start: personal-account
-          backups go into your Microsoft account (tied to its own 2FA, with the app re-import
-          gates by recovery code), and Microsoft also pushes the app as a sign-in factor with
+          backups go into your Microsoft account (bound to that account's own
+          2FA), and Microsoft also pushes the app as a sign-in factor with
           number-matching push approvals. That per-approval model is genuinely good against
           blind phishing, but the backup copies of your TOTP secrets ride on the Microsoft
           account; the same theme as Google, with Microsoft in the trust chain.
