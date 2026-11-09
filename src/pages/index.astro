@@ -152,7 +152,7 @@ const features = [
   { title: 'Paste a screenshot, get a key', body: 'Ctrl+V an image of the QR code, drop an image file, or scan with your webcam. Three ways to import, zero ways for your key to leak.', v: 'cream' },
   { title: 'Full parameter support, auto-detected', body: 'A bare key uses the standard defaults; a full otpauth:// URI honors every parameter it carries — 6/7/8 digits, 15/30/60 s period, SHA-1/256/512, even counter-based HOTP.', v: 'cream' },
   { title: 'In-memory only — nothing saved', body: 'Your key never touches any persistent storage: no localStorage, no cookies, no device cache. The Recent-keys list speeds up switching within a visit, but a refresh or tab close wipes everything — every visit starts blank.', v: 'cream' },
-  { title: 'Nothing to install or sign up for', body: 'No phone app, no account, no sync fees, no tracking. If you can open a browser, you can generate a code.', v: 'cream' },
+  { title: 'Nothing to install or sign up for', body: 'No phone app, no account, no sync fees, no ad tracking. If you can open a browser, you can generate a code.', v: 'cream' },
   { title: 'Offline & installable', body: 'Works with the tab closed to the world — literally. And as a PWA it installs into your dock or home screen like a native app.', v: 'dark' },
 ];
 
@@ -455,7 +455,7 @@ const services = [
           <p>
             This is one of the very few 2FA tools with nothing to hide, because there is nothing
             that could be hidden. There are no servers to send keys to, no accounts to create, no
-            premium tier, no telemetry. Every code is computed locally with the Web Crypto API;
+            premium tier, no ad tracking. Every code is computed locally with the Web Crypto API;
             your key and a short Recent-keys list live only in the open page’s memory — never in
             browser storage — and everything is wiped by a refresh or a tab close. Keep the master
             copy of every secret in an

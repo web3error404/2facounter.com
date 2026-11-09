@@ -5,7 +5,7 @@ import SiteFooter from '../components/SiteFooter.astro';
 
 const title = 'About 2FA COUNTER — Free Browser-Based 2FA Authenticator Tool';
 const description =
-  'Why 2FA COUNTER exists: a phone-free, zero-knowledge 2FA authenticator that runs in your browser. No accounts, no servers, no tracking — just live TOTP codes.';
+  'Why 2FA COUNTER exists: a phone-free, zero-knowledge 2FA authenticator that runs in your browser. No accounts, no servers, no ad trackers — just live TOTP codes.';
 
 const jsonLd = [
   {
@@ -61,7 +61,12 @@ const jsonLd = [
         <h2>Principles</h2>
         <ul>
           <li><strong>No accounts, ever.</strong> A login form on a security tool is an attack surface, not a feature.</li>
-          <li><strong>No telemetry.</strong> We don’t want to know how many keys you have — that’s the point.</li>
+          <li>
+            <strong>No ad tracking, no profiles.</strong> We don’t want to know how many keys
+            you have — that’s the point. The site’s one measurement tool is anonymous,
+            cookieless page-performance data (Cloudflare Web Analytics), and it never receives
+            anything you type.
+          </li>
           <li><strong>Verifiability.</strong> The network tab is your receipt: keys never cross the wire.</li>
           <li><strong>Works offline.</strong> Installed as a PWA, it never needs us again after the first visit.</li>
         </ul>
@@ -72,6 +77,19 @@ const jsonLd = [
           every guide carries a visible review date. Corrections are welcome —{" "}
           <a href="mailto:guides@2facounter.com">guides@2facounter.com</a>. See the full{" "}
           <a href="/methodology/">editorial &amp; fact-checking methodology</a>.
+        </p>
+
+        <h2>Open-source and font credits</h2>
+        <p>
+          This site bundles third-party software under permissive licenses, and we are glad to
+          credit it here: the QR decoder is
+          <a href="https://github.com/cozmo/jsQR" rel="noopener noreferrer nofollow">jsQR</a> by
+          the jsQR contributors, distributed under the
+          <a href="https://www.apache.org/licenses/LICENSE-2.0" rel="noopener noreferrer nofollow">Apache&nbsp;License&nbsp;2.0</a>.
+          The bundled typefaces (Fredoka, Inter, Titan&nbsp;One, JetBrains&nbsp;Mono) are served
+          by <a href="https://fontsource.org" rel="noopener noreferrer nofollow">Fontsource</a>
+          and are licensed under the SIL Open Font License. All other code, copy, design, and
+          artwork on this site is original.
         </p>
 
         <h2>Contact</h2>

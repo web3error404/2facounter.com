@@ -154,7 +154,7 @@ const features = [
   { title: 'Pega una captura, recibe una clave', body: 'Ctrl+V sobre la imagen del código QR, arrastra un archivo de imagen o escanea con la webcam. Tres formas de importar, cero formas de que tu clave se filtre.', v: 'cream' },
   { title: 'Todos los parámetros, detectados solos', body: 'Una clave a secas usa los valores estándar; un URI otpauth:// completo respeta cada parámetro que traiga — 6/7/8 dígitos, periodo de 15/30/60 s, SHA-1/256/512 e incluso HOTP por contador.', v: 'cream' },
   { title: 'Solo en memoria — nada se guarda', body: 'Tu clave no toca ningún almacenamiento persistente: ni localStorage, ni cookies, ni caché del dispositivo. La lista de claves recientes agiliza el cambio dentro de una visita, pero recargar o cerrar la pestaña borra todo — cada visita empieza en blanco.', v: 'cream' },
-  { title: 'Nada que instalar ni registrarse', body: 'Sin app de móvil, sin cuenta, sin cuotas de sincronización, sin rastreo. Si puedes abrir un navegador, puedes generar tu código de verificación en dos pasos.', v: 'cream' },
+  { title: 'Nada que instalar ni registrarse', body: 'Sin app de móvil, sin cuenta, sin cuotas de sincronización, sin rastreo publicitario. Si puedes abrir un navegador, puedes generar tu código de verificación en dos pasos.', v: 'cream' },
   { title: 'Sin conexión e instalable', body: 'Funciona con la pestaña aislada del mundo — literalmente. Y como PWA se instala en tu dock o pantalla de inicio como una app nativa.', v: 'dark' },
 ];
 
@@ -467,7 +467,7 @@ const services = [
           <p>
             Esta es una de las poquísimas herramientas 2FA sin nada que esconder, porque no hay
             nada que se pueda esconder. No hay servidores a los que enviar claves, ni cuentas que
-            crear, ni nivel premium, ni telemetría. Cada código se calcula localmente con la Web
+            crear, ni nivel premium, ni rastreo publicitario. Cada código se calcula localmente con la Web
             Crypto API; tu última clave y una breve lista de claves recientes viven solo en la
             memoria de tu navegador — al recargar o cerrar la página desaparecen, y “Borrar todo” las quita de un clic. Guarda
             la copia maestra de cada secreto en un gestor de contraseñas cifrado, guarda también

@@ -154,7 +154,7 @@ const features = [
   { title: 'Incolla uno screenshot, ottieni la chiave', body: 'Ctrl+V un’immagine del codice QR, trascina un file immagine o scansiona con la webcam. Tre modi per importare, zero modi perché la tua chiave possa trapelare.', v: 'cream' },
   { title: 'Tutti i parametri, rilevati automaticamente', body: 'Una chiave da sola usa le impostazioni predefinite; un URI otpauth:// completo rispetta ogni parametro che contiene — 6/7/8 cifre, periodi di 15/30/60 secondi, SHA-1/256/512, perfino l’HOTP a contatore.', v: 'cream' },
   { title: 'Solo in memoria — niente viene salvato', body: 'La tua chiave non tocca alcuno storage persistente: niente localStorage, niente cookie, niente cache del dispositivo. La lista delle chiavi recenti accelera il cambio di chiave durante una stessa visita, ma un refresh o la chiusura della scheda cancella tutto — ogni visita riparte da un campo vuoto.', v: 'cream' },
-  { title: 'Niente da installare, niente registrazioni', body: 'Nessuna app per telefono, nessun account, nessun costo di sincronizzazione, nessun tracciamento. Se sai aprire un browser, puoi generare un codice.', v: 'cream' },
+  { title: 'Niente da installare, niente registrazioni', body: 'Nessuna app per telefono, nessun account, nessun costo di sincronizzazione, nessun tracciamento pubblicitario. Se sai aprire un browser, puoi generare un codice.', v: 'cream' },
   { title: 'Offline e installabile', body: 'Funziona con la scheda chiusa al mondo — nel senso letterale della parola. E da PWA si installa nel dock o nella schermata Home come un’app nativa.', v: 'dark' },
 ];
 
@@ -459,7 +459,7 @@ const services = [
           <p>
             È uno dei pochissimi strumenti 2FA senza nulla da nascondere, perché non c’è nulla
             che possa venir nascosto. Non ci sono server a cui inviare le chiavi, account da
-            creare, tier premium né telemetria. Ogni codice è calcolato in locale con la Web
+            creare, tier premium né tracciamento pubblicitario. Ogni codice è calcolato in locale con la Web
             Crypto API; l’ultima chiave e una breve lista di chiavi recenti vivono solo nella
             memoria del tuo browser e si rimuovono con un clic su «Cancella tutto». Conserva la
             copia principale di ogni segreto in un password manager cifrato, salva anche i codici

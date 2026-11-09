@@ -21,6 +21,10 @@ type Account = {
    keys or a missing island, so the widget can never render blanks. */
 import { GENERATOR_EN, type GeneratorStrings } from '../i18n/generator';
 
+/* Bundled dependencies: `jsqr` (https://github.com/cozmo/jsQR) is
+   distributed under the Apache License 2.0; the about page carries the
+   user-facing credits. Fonts come from Fontsource under the SIL OFL. */
+
 function loadStrings(): GeneratorStrings {
   const el = document.getElementById('generator-i18n');
   if (!el?.textContent) return GENERATOR_EN;

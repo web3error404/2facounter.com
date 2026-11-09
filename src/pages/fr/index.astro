@@ -154,7 +154,7 @@ const features = [
   { title: 'Collez une capture d’écran, obtenez la clé', body: 'Ctrl+V sur une image du code QR, déposez un fichier image, ou scannez avec votre webcam. Trois façons d’importer, zéro façon pour votre clé de fuiter.', v: 'cream' },
   { title: 'Tous les paramètres, détectés automatiquement', body: 'Une clé seule utilise les valeurs par défaut standard ; un URI otpauth:// complet respecte chaque paramètre qu’il contient — 6/7/8 chiffres, période 15/30/60 s, SHA-1/256/512, jusqu’au HOTP à compteur.', v: 'cream' },
   { title: 'Uniquement en mémoire — rien n’est enregistré', body: 'Votre clé ne touche aucun stockage persistant : pas de localStorage, pas de cookies, pas de cache d’appareil. La liste des clés récentes accélère le changement de clé au sein d’une même visite, mais un rafraîchissement ou la fermeture de l’onglet efface tout — chaque visite commence à vide.', v: 'cream' },
-  { title: 'Rien à installer, rien à créer', body: 'Pas d’application mobile, pas de compte, pas de frais de synchronisation, pas de pisteurs. Si vous pouvez ouvrir un navigateur, vous pouvez générer un code.', v: 'cream' },
+  { title: 'Rien à installer, rien à créer', body: 'Pas d’application mobile, pas de compte, pas de frais de synchronisation, pas de pisteurs publicitaires. Si vous pouvez ouvrir un navigateur, vous pouvez générer un code.', v: 'cream' },
   { title: 'Hors ligne et installable', body: 'Fonctionne avec l’onglet coupé du monde — au sens propre. Et en tant que PWA, il s’installe dans votre dock ou votre écran d’accueil comme une application native.', v: 'dark' },
 ];
 
@@ -471,7 +471,7 @@ const services = [
           <p>
             C’est l’un des très rares outils 2FA qui n’a rien à cacher, parce qu’il n’y a rien qui
             puisse l’être. Aucun serveur pour recevoir les clés, aucun compte à créer, aucune offre
-            premium, aucune télémétrie. Chaque code est calculé localement avec la Web Crypto API ;
+            premium, aucun pistage publicitaire. Chaque code est calculé localement avec la Web Crypto API ;
             votre dernière clé et une courte liste de clés récentes ne vivent que dans la mémoire
             de la page ouverte, et disparaissent dès qu’elle est rafraîchie ou fermée. Gardez la copie
             maîtresse de chaque secret dans un gestionnaire de mots de passe chiffré, enregistrez

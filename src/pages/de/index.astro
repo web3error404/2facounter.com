@@ -154,7 +154,7 @@ const features = [
   { title: 'Screenshot einfügen, Schlüssel erhalten', body: 'QR-Code-Bild mit Strg+V einfügen, eine Bilddatei hineinziehen oder mit der Webcam scannen. Drei Wege zum Importieren, kein Weg, über den Ihr Schlüssel entweichen kann.', v: 'cream' },
   { title: 'Vollständige Parameterunterstützung, automatisch erkannt', body: 'Ein nackter Schlüssel nutzt die Standardwerte; eine vollständige otpauth://-URI berücksichtigt jeden übergebenen Parameter — 6/7/8 Ziffern, 15/30/60 s Periode, SHA-1/256/512, sogar zählerbasiertes HOTP.', v: 'cream' },
   { title: 'Nur im Speicher — nichts gespeichert', body: 'Ihr Schlüssel berührt keinen dauerhaften Speicher: kein localStorage, keine Cookies, kein Geräte-Cache. Die Liste der letzten Schlüssel erleichtert das Wechseln innerhalb eines Besuchs, aber ein Neuladen oder Schließen des Tabs löscht alles — jeder Besuch startet leer.', v: 'cream' },
-  { title: 'Nichts zu installieren, nichts zu registrieren', body: 'Keine Handy-App, kein Konto, keine Sync-Gebühren, kein Tracking. Wer einen Browser öffnen kann, kann einen Code erzeugen.', v: 'cream' },
+  { title: 'Nichts zu installieren, nichts zu registrieren', body: 'Keine Handy-App, kein Konto, keine Sync-Gebühren, kein Werbe-Tracking. Wer einen Browser öffnen kann, kann einen Code erzeugen.', v: 'cream' },
   { title: 'Offline & installierbar', body: 'Funktioniert, wenn die Verbindung zur Außenwelt getrennt ist — wortwörtlich. Und als PWA installiert es sich in Ihr Dock oder auf Ihren Startbildschirm wie eine native App.', v: 'dark' },
 ];
 
@@ -453,7 +453,7 @@ const services = [
           <p>
             Dies ist eines der ganz wenigen 2FA-Werkzeuge ohne Versteck, weil es nichts gibt, das sich verstecken
             ließe. Es gibt keine Server, an die Schlüssel gesendet werden könnten, keine zu erstellenden Konten,
-            keine Premium-Stufen, keine Telemetrie. Jeder Code wird lokal mit der Web Crypto API berechnet; Ihr
+            keine Premium-Stufen, kein Werbe-Tracking. Jeder Code wird lokal mit der Web Crypto API berechnet; Ihr
             letzter Schlüssel und eine kurze „Letzte Schlüssel“-Liste existieren nur im Arbeitsspeicher Ihres Browsers —
             ein Neuladen oder Schließen der Seite entfernt sie; „Alle löschen“ tut es auf Klick. Bewahren Sie die Hauptkopie jedes Geheimnisses
             in einem verschlüsselten Passwort-Manager auf, sichern Sie zusätzlich die Wiederherstellungscodes jedes
