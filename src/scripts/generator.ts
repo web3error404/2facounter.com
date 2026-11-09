@@ -813,8 +813,16 @@ function loadJsQR() {
 let stream: MediaStream | null = null;
 let camRaf = 0;
 let camReturnFocus: HTMLElement | null = null;
+/* Session token for camera opens. Each openCamera() call bumps it; if a
+   getUserMedia() handshake resolves after the user closed the dialog (or
+   after a newer open replaced this one), the stale session detects it and
+   stops the tracks immediately — the camera must never stay live with the
+   dialog gone. Without this guard a close-during-handshake leaves the
+   camera hardware (and its privacy light) on until page reload. */
+let camSession = 0;
 
 async function openCamera() {
+  const session = ++camSession;
   camReturnFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null;
   camModal.classList.remove('hidden');
   camModal.classList.add('flex');
@@ -827,9 +835,24 @@ async function openCamera() {
       audio: false,
       video: { facingMode: 'environment', width: { ideal: 1280 } },
     });
+    /* The user closed the dialog (or reopened the camera) while the
+       handshake was pending — this stream arrived orphaned. Stop it
+       right away instead of feeding a hidden video and leaving the
+       camera hardware on. */
+    if (session !== camSession || camModal.classList.contains('hidden')) {
+      stream.getTracks().forEach((t) => t.stop());
+      stream = null;
+      return;
+    }
     camVideo.srcObject = stream;
     await camVideo.play();
-    camLoop();
+    /* play() also awaits — re-check after it resolves. */
+    if (session !== camSession || camModal.classList.contains('hidden')) {
+      stream.getTracks().forEach((t) => t.stop());
+      stream = null;
+      return;
+    }
+    camLoop(session);
   } catch (err) {
     closeCamera();
     const denied = (err as Error)?.name === 'NotAllowedError';
@@ -841,6 +864,7 @@ async function openCamera() {
 }
 
 function closeCamera() {
+  camSession++; // invalidate any pending handshake / scan loop for this dialog
   camRaf && cancelAnimationFrame(camRaf);
   stream?.getTracks().forEach((t) => t.stop());
   stream = null;
@@ -852,9 +876,9 @@ function closeCamera() {
   camReturnFocus = null;
 }
 
-async function camLoop() {
+async function camLoop(session: number) {
   const jsQR = await loadJsQR();
-  if (!jsQR || !stream) return;
+  if (!jsQR || !stream || session !== camSession) return;
   const cv = document.createElement('canvas');
   const ctx = cv.getContext('2d', { willReadFrequently: true })!;
   /* Decode at ~10 fps, not per animation frame: jsQR on a 480 px frame
@@ -863,7 +887,7 @@ async function camLoop() {
   const DECODE_EVERY_MS = 100;
   let lastDecode = 0;
   const scan = () => {
-    if (!stream) return;
+    if (!stream || session !== camSession) return;
     const nowTs = performance.now();
     if (camVideo.readyState >= 2 && camVideo.videoWidth && nowTs - lastDecode >= DECODE_EVERY_MS) {
       lastDecode = nowTs;
