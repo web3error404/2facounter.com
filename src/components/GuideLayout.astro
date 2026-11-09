@@ -176,7 +176,7 @@ const jsonLd = [
               </span>
               <div class="min-w-0">
                 <h3 class="text-lg font-bold text-ink">{s.title}</h3>
-                <p class="mt-1.5 text-sm font-medium text-ink">{s.body}</p>
+                <p class="mt-1.5 text-sm font-medium [overflow-wrap:anywhere] text-ink">{s.body}</p>
               </div>
             </li>
           ))
@@ -193,7 +193,7 @@ const jsonLd = [
               {deepDive.blocks.map((b) => (
                 <div>
                   <h3 class="text-lg font-bold text-ink">{b.title}</h3>
-                  <p class="mt-1.5 text-sm font-medium leading-[1.7] text-ink">{b.body}</p>
+                  <p class="mt-1.5 text-sm font-medium leading-[1.7] [overflow-wrap:anywhere] text-ink">{b.body}</p>
                 </div>
               ))}
             </div>
