@@ -859,11 +859,28 @@ async function openCamera() {
     camLoop(session);
   } catch (err) {
     closeCamera();
-    const denied = (err as Error)?.name === 'NotAllowedError';
-    toast(
-      denied ? T.toastCamDenied : T.toastCamUnavailable,
-      false,
-    );
+    if ((err as Error)?.name !== 'NotAllowedError') {
+      toast(T.toastCamUnavailable, false);
+      return;
+    }
+    /* Android Chrome refuses to pop the permission dialog when another app
+       draws over the browser window (chat bubbles, screen dimmers, blue-
+       light filters): getUserMedia fails with NotAllowedError while the
+       camera permission is still in the 'prompt' state — the user never
+       answered anything. The browser-side "This site can't ask for your
+       permission" bubble is exactly this case. Sending these users into
+       site settings would be a dead end, so ask them to close the
+       app overlaying the screen instead. Desktop browsers and engines
+       without a Permissions-API 'camera' descriptor fall back to the
+       plain denied message. */
+    let camState: string | null = null;
+    try {
+      camState = (await navigator.permissions.query({ name: 'camera' as PermissionName })).state;
+    } catch {
+      /* no 'camera' descriptor support — fall through to denied text */
+    }
+    const mobile = matchMedia('(pointer: coarse)').matches;
+    toast(camState === 'prompt' && mobile ? T.toastCamOverlay : T.toastCamDenied, false);
   }
 }
 
