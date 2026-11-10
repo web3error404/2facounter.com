@@ -136,6 +136,25 @@ const allJsonLd = [orgJsonLd, ...jsonLd];
 // touching code. Unset variables fall back to '' and emit nothing.
 const googleVerification = import.meta.env.PUBLIC_GSC_TOKEN ?? '';
 const bingVerification = import.meta.env.PUBLIC_BING_TOKEN ?? '';
+
+// ── Google tag (GTM-WK4QDCS8) allowed hosts ───────────────────────────
+// The Google tag only loads when the page is served from a host in this
+// list, keeping test/mirror traffic out of real analytics. The canonical
+// apex is always tracked; additional hosts (e.g. a future staging domain)
+// go in PUBLIC_ANALYTICS_EXTRA_HOSTS in a local .env (never committed) or
+// the CI environment — comma-separated, exact hostnames, no slashes:
+//   PUBLIC_ANALYTICS_EXTRA_HOSTS="staging.2facounter.com,other.example"
+// Rebuild after changing; unset falls back to apex-only tracking.
+// JSON-serializable array, injected verbatim into the inline script below
+// via define:vars (exact-match includes() avoids substring matches like
+// "2facounter.com.evil.test").
+const analyticsHosts = [
+  '2facounter.com',
+  ...((import.meta.env.PUBLIC_ANALYTICS_EXTRA_HOSTS ?? '')
+    .split(',')
+    .map((h) => h.trim())
+    .filter(Boolean)),
+];
 ---
 
 <!doctype html>
@@ -143,18 +162,34 @@ const bingVerification = import.meta.env.PUBLIC_BING_TOKEN ?? '';
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    {/* Google tag (Google Analytics via GTM container GTM-WK4QDCS8) — rendered
-        verbatim from the GTM "manual install" snippet, is:inline so Astro's
-        bundler never rewrites it. Production-only so localhost previews and
-        browser tests don't count as traffic. */}
+    {/* Google tag (Google Analytics via GTM container GTM-WK4QDCS8) — the GTM
+        "manual install" snippet, is:inline so Astro's bundler never rewrites
+        it. The allowed-hosts array is frozen at build time (see analyticsHosts
+        in the frontmatter) and checked at runtime (same pattern as the
+        Cloudflare beacon below) so localhost previews, browser tests and any
+        accidental mirror host never count as traffic. www redirects to the
+        apex in worker.mjs; extra hosts come from PUBLIC_ANALYTICS_EXTRA_HOSTS. */}
     {!isDev && (
-      <script is:inline async src="https://www.googletagmanager.com/gtm.js?id=GTM-WK4QDCS8"></script>
-    )}
-    {!isDev && (
-      <script is:inline>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
+      <script is:inline define:vars={{ analyticsHosts }}>
+        if (analyticsHosts.includes(location.hostname)) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          var gtmTag = document.createElement('script');
+          gtmTag.async = true;
+          gtmTag.src = 'https://www.googletagmanager.com/gtm.js?id=GTM-WK4QDCS8';
+          document.head.appendChild(gtmTag);
+        } else {
+          // Any copy of this site served from a non-canonical host (a test or
+          // mirror domain) asks search engines not to index it. Google executes
+          // JS and honors JS-injected meta robots, and the canonical tags point
+          // at the apex regardless — belt and braces so a future staging host
+          // can never duplicate or outrank the real site in search.
+          var noindexMeta = document.createElement('meta');
+          noindexMeta.name = 'robots';
+          noindexMeta.content = 'noindex, nofollow';
+          document.head.appendChild(noindexMeta);
+        }
       </script>
     )}
     <SEO

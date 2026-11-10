@@ -7,6 +7,9 @@
   // Keep *.workers.dev reachable so existing links keep working; the script
   // redirects it to the canonical apex.
   "workers_dev": true,
+  // Explicitly disable ad-hoc version preview URLs (deploy previews) — only
+  // the production custom domains and the redirected workers.dev host serve.
+  "preview_urls": false,
   "compatibility_date": "2026-11-09",
   "assets": {
     "directory": "./dist",
