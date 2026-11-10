@@ -1,0 +1,59 @@
+---
+import GuideLayout from '../../components/GuideLayout.astro';
+
+const title = 'How to Set Up 2FA on Instagram (TOTP Authenticator)';
+
+const description =
+  'Enable TOTP two-factor authentication on Instagram without a mobile app. Get the setup key from Accounts Center and generate live, browser-based codes.';
+
+---
+
+<GuideLayout
+  serviceName="Instagram"
+  title={title}
+  description={description}
+  path="/guides/instagram/"
+  dateModified="2026-11-10"
+  lastReviewed="2026-11-10"
+  intro="Instagram supports standard TOTP through Accounts Center — the strongest of its three 2FA options (authenticator app, WhatsApp, SMS). Worth knowing: Instagram’s setup flow nudges you toward SMS or WhatsApp first, and both are tied to your phone number. An account takeover on Instagram often means losing a business channel, so pick the method that doesn’t die with your SIM."
+  minutes={4}
+  params={['6 digits', '30s period', 'SHA-1']}
+  ctaTitle="Instagram hands you recovery codes — that's the real account key"
+  ctaBody="Screenshot the recovery codes Instagram shows at the end of setup and store them in an encrypted password manager, not in your camera roll. They work when a lost phone, a logged-out session, or a bad TOTP enrollment would lock you out."
+  steps={[
+    {
+      title: 'Open Accounts Center',
+      body: 'In the Instagram app: profile → menu (☰) → “Settings and privacy” → “Accounts Center” → “Password and security” → “Two-factor authentication”. On desktop, accountscenter.instagram.com works the same way.',
+    },
+    {
+      title: 'Choose the account and method',
+      body: 'Select the Instagram account to protect, then choose “Authentication app” — not WhatsApp or SMS. This is the standard TOTP factor that works with any RFC 6238 generator.',
+    },
+    {
+      title: 'Reveal the secret',
+      body: 'Instagram shows a QR code. Tap “Enter key manually” to reveal the Base32 key, or screenshot the QR and paste the image into the page — the parser reads it locally.',
+    },
+    {
+      title: 'Generate, verify, save recovery codes',
+      body: 'Paste into 2facounter.com, copy the live code, and paste it back into Instagram to activate 2FA. Instagram then displays recovery codes — save them somewhere encrypted before you close the screen.',
+    },
+  ]}
+  faqs={[
+    {
+      q: 'Can I set up Instagram 2FA without the phone app?',
+      a: 'Yes. The Accounts Center web interface (accountscenter.instagram.com) exposes the same two-factor settings on desktop. The authenticator-app flow is identical: reveal the key, generate codes, confirm. A browser-based generator means the whole flow happens on one machine.',
+    },
+    {
+      q: 'Instagram offers WhatsApp 2FA — isn’t that good enough?',
+      a: 'It’s better than SMS but still phone-number-bound. WhatsApp 2FA breaks if you change numbers and falls to the same SIM-swap attack. The authenticator-app option is the only method whose security doesn’t depend on your carrier.',
+    },
+    {
+      q: 'What if I lose my phone and can’t get Instagram codes?',
+      a: 'Use one of the recovery codes Instagram displayed during setup. No recovery codes and no working method? Instagram’s account recovery (identity verification) is slow and not guaranteed — which is why saving the codes at setup is the step people regret skipping.',
+    },
+    {
+      q: 'Codes rejected right after setup — what broke?',
+      a: 'Clock drift almost always. TOTP codes depend on your device clock matching Instagram’s server within a tight window — if your system clock is even ~30 s off, every guess fails. Set your OS to sync time automatically, wait for the next 30-second step, and try once more.',
+    },
+  ]}
+/>

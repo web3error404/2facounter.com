@@ -1,0 +1,63 @@
+---
+import GuideLayout from '../../components/GuideLayout.astro';
+
+const title = 'How to Set Up 2FA on PayPal (TOTP Authenticator)';
+
+const description =
+  'Enable TOTP two-factor authentication on PayPal without a mobile app. Get the setup key from PayPal security settings and generate live, browser-based codes.';
+
+---
+
+<GuideLayout
+  serviceName="PayPal"
+  title={title}
+  description={description}
+  path="/guides/paypal/"
+  dateModified="2026-11-10"
+  lastReviewed="2026-11-10"
+  intro="PayPal supports standard TOTP as its authenticator-app option for 2-step verification — stronger than the default SMS codes, because a phone number can be hijacked by a SIM swap and money flows through PayPal. Worth knowing: PayPal keeps SMS as a fallback method unless you manage your methods, so check what's enrolled after setup."
+  minutes={4}
+  params={['6 digits', '30s period', 'SHA-1']}
+  ctaTitle="Your PayPal account is a payment rail — treat the backup like one"
+  ctaBody="PayPal's recovery flow can lean on the phone number on file, which is exactly the factor SIM-swap attackers target. Save PayPal's recovery codes in an encrypted password manager and review enrolled 2-step-verification methods once a quarter."
+  steps={[
+    {
+      title: 'Open PayPal security settings',
+      body: 'Sign in at paypal.com → click the gear icon (Settings) → “Security”. Find the “2-step verification” section. Business accounts may find it under Account Settings instead of Profile Settings.',
+    },
+    {
+      title: 'Start 2-step verification setup',
+      body: 'Click “Set Up” (or “Update”) next to 2-step verification. PayPal offers SMS and “Use an authenticator app” — choose the authenticator app option. It is the standard TOTP factor, independent of your phone number.',
+    },
+    {
+      title: 'Reveal the secret',
+      body: 'PayPal shows a QR code plus a Base32 “secret key” line for manual entry. Copy the key — or screenshot the QR and paste the image into the page, the parser reads it locally.',
+    },
+    {
+      title: 'Generate, verify, activate',
+      body: 'Paste into 2facounter.com, copy the live code, and paste it back into PayPal’s confirmation field. 2-step verification flips to active and PayPal starts asking for a code at sign-in.',
+    },
+    {
+      title: 'Audit your methods',
+      body: 'Back on the 2-step verification screen, check every enrolled method. If SMS is still listed as a second method, decide deliberately whether to keep it — it’s a weaker fallback than a saved recovery code. If PayPal offers recovery codes, download them now.',
+    },
+  ]}
+  faqs={[
+    {
+      q: 'Does PayPal require 2FA?',
+      a: 'Personal accounts can enable it voluntarily; PayPal requires 2-step verification for some business and seller accounts, especially those handling higher volumes. Either way, enabling it on a money-mover account is one of the highest-value two minutes in personal security.',
+    },
+    {
+      q: 'SMS codes vs authenticator app on PayPal — which should I pick?',
+      a: 'Authenticator app, always. SMS codes die with your SIM: a SIM-swap attacker who ports your phone number receives your codes. TOTP lives on the device (or in this browser) and never transmits anything.',
+    },
+    {
+      q: 'I lost my phone and can’t get PayPal codes — what now?',
+      a: 'If you saved recovery codes, use one at sign-in. If SMS was kept as a fallback, that still works. If neither exists, PayPal support verifies your identity through account details and restores access — which is slower and more painful than saving recovery codes today.',
+    },
+    {
+      q: 'Codes rejected right after setup — what broke?',
+      a: 'Clock drift almost always. TOTP codes depend on your device clock matching PayPal’s server within a tight window — if your system clock is even ~30 s off, every guess fails. Set your OS to sync time automatically, wait for the next 30-second step, and try once more.',
+    },
+  ]}
+/>
