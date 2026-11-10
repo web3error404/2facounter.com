@@ -4,6 +4,7 @@
 import Layout from '../layouts/Layout.astro';
 import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
+import ReviewByline from '../components/ReviewByline.astro';
 
 // hreflang alternates — translations now exist in all 10 locales
 // (+ x-default → English).
@@ -99,6 +100,8 @@ const jsonLd = [
         implementation of the math is running at the top of our{" "}
         <a href="/">home page generator</a>.
       </p>
+
+      <ReviewByline />
 
       <div class="rich-text mt-10">
         <h2>What you need before you start</h2>

@@ -1,0 +1,23 @@
+---
+// ── Editorial byline (E-E-A-T signal) ─────────────────────────────────
+// Rendered on every guide and content article: a visible "who stands
+// behind this content" line that links to the editorial methodology.
+// The default copy is English; locale pages can pass localized strings.
+export interface Props {
+  /** Byline text before the methodology link */
+  label?: string;
+  /** Methodology link target */
+  href?: string;
+  /** Methodology link label */
+  linkLabel?: string;
+}
+const {
+  label = 'Reviewed by the 2FA COUNTER security editorial team',
+  href = '/methodology/',
+  linkLabel = 'our editorial methodology',
+} = Astro.props;
+---
+
+<p class="mt-4 max-w-2xl font-mono text-[13px] font-medium text-muted">
+  {label} · <a href={href} class="link">{linkLabel}</a>
+</p>

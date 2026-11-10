@@ -3,6 +3,7 @@
 import Layout from '../../layouts/Layout.astro';
 import SiteHeader from '../../components/SiteHeader.astro';
 import SiteFooter from '../../components/SiteFooter.astro';
+import ReviewByline from '../../components/ReviewByline.astro';
 
 const title = '2FAとは？二段階認証とTOTPコードの仕組み — 2FA COUNTER';
 const description =
@@ -169,6 +170,8 @@ const alternates = [
           <li><a class="link" href="#faq">FAQ</a></li>
         </ul>
       </nav>
+
+      <ReviewByline label="監修：2FA COUNTER セキュリティ編集チーム" linkLabel="編集方針" />
 
       <div class="rich-text mt-12">
         <h2 id="problems">パスワードだけではなぜ失敗するのか</h2>

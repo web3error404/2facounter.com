@@ -2,6 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
+import ReviewByline from '../components/ReviewByline.astro';
 
 // hreflang alternates — translations now exist in all 10 locales
 // (+ x-default → English).
@@ -160,6 +161,8 @@ const jsonLd = [
           <li><a class="link" href="#faq">FAQ</a></li>
         </ul>
       </nav>
+
+      <ReviewByline />
 
       <div class="rich-text mt-12">
         <h2 id="problems">Why passwords alone fail</h2>
