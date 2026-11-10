@@ -5,7 +5,7 @@ import SiteFooter from '../../components/SiteFooter.astro';
 
 const title = '2FA Setup Guides — Enable 2FA on Any Service, No Phone App';
 const description =
-  'Step-by-step 2FA setup guides for Google, Microsoft, Discord, GitHub, AWS, Coinbase, Kraken, Steam and Binance — enable TOTP 2FA with a free browser generator.';
+  '2FA setup guides for Google, PayPal, Instagram, GitHub, Discord, Coinbase, Binance and more — enable TOTP two-factor authentication in your browser, no app.';
 
 const guides = [
   {
@@ -67,6 +67,18 @@ const guides = [
     service: 'Binance',
     blurb: '5 min · 6 digits · 30 s',
     text: 'Turn on TOTP 2FA for your Binance account — better withdrawal security without installing apps.',
+  },
+  {
+    href: '/guides/paypal/',
+    service: 'PayPal',
+    blurb: '4 min · 6 digits · 30 s',
+    text: 'Protect a money-moving account with authenticator-app 2FA — and audit the SMS fallback PayPal keeps enrolling.',
+  },
+  {
+    href: '/guides/instagram/',
+    service: 'Instagram',
+    blurb: '4 min · 6 digits · 30 s',
+    text: 'Enable TOTP 2FA via Accounts Center — the method that doesn’t die with your SIM card.',
   },
 ];
 ---
