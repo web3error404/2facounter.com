@@ -2,6 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
+import ReviewByline from '../components/ReviewByline.astro';
 
 const title = 'Authenticator Cloud Sync Compared: Google, Microsoft, Authy';
 const description =
@@ -90,6 +91,8 @@ const jsonLd = [
           <li><a class="link" href="#faq">FAQ</a></li>
         </ul>
       </nav>
+
+      <ReviewByline />
 
       <div class="rich-text mt-12">
         <h2 id="tradeoff">The sync trade-off, stated plainly</h2>

@@ -2,6 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
+import ReviewByline from './ReviewByline.astro';
 
 export interface Props {
   serviceName: string;
@@ -160,6 +161,7 @@ const jsonLd = [
           <a href="/methodology/" class="link">{reviewedLinkLabel}</a>
         </p>
       )}
+      <ReviewByline />
       <a href="/#generator" class="btn-primary mt-8">
         {generatorCtaText}
         <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14m0 0-6-6m6 6-6 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>

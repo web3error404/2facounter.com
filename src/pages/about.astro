@@ -2,6 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
+import ReviewByline from '../components/ReviewByline.astro';
 
 const title = 'About 2FA COUNTER — Free Browser-Based 2FA Authenticator Tool';
 const description =
@@ -31,6 +32,8 @@ const jsonLd = [
     <div class="mx-auto max-w-[720px] px-4 py-20 sm:px-6 lg:py-24">
       <p class="section-label">Company</p>
       <h1 class="mt-3 font-display text-4xl tracking-normal text-ink">About</h1>
+
+      <ReviewByline />
 
       <div class="rich-text mt-12 rounded-xl border-2 border-ink bg-cream p-6 sm:p-10" style="box-shadow: var(--shadow-card)">
         <h2>Why this exists</h2>
