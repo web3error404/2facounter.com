@@ -1,9 +1,10 @@
 ---
 // Fonts are bundled locally at build time — all first-party assets
-// (fonts, QR decoder) are served from this domain. The single third-party
-// request is the Cloudflare Web Analytics RUM beacon below (cookieless,
-// aggregate performance data only), self-managed so it is version-controlled
-// and never silently toggled at the edge.
+// (fonts, QR decoder) are served from this domain. Third-party requests are
+// the Google tag (GTM-WK4QDCS8, in <head> below) and the Cloudflare Web
+// Analytics RUM beacon below (cookieless, aggregate performance data only),
+// the latter self-managed so it is version-controlled and never silently
+// toggled at the edge.
 import '@fontsource-variable/fredoka';
 import '@fontsource-variable/inter';
 import '@fontsource/titan-one';
@@ -142,6 +143,20 @@ const bingVerification = import.meta.env.PUBLIC_BING_TOKEN ?? '';
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    {/* Google tag (Google Analytics via GTM container GTM-WK4QDCS8) — rendered
+        verbatim from the GTM "manual install" snippet, is:inline so Astro's
+        bundler never rewrites it. Production-only so localhost previews and
+        browser tests don't count as traffic. */}
+    {!isDev && (
+      <script is:inline async src="https://www.googletagmanager.com/gtm.js?id=GTM-WK4QDCS8"></script>
+    )}
+    {!isDev && (
+      <script is:inline>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+      </script>
+    )}
     <SEO
       title={title}
       description={description}
@@ -186,7 +201,7 @@ const bingVerification = import.meta.env.PUBLIC_BING_TOKEN ?? '';
       </script>
     )}
 
-    {/* Cloudflare Web Analytics RUM beacon — the site's ONLY third-party request.
+    {/* Cloudflare Web Analytics RUM beacon.
         Cookieless, no personal data, no browser storage (per Cloudflare's RUM
         privacy docs). Loaded deferred so it never blocks rendering; fails
         silently offline. Injected at runtime only on the production host so
