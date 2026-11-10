@@ -18,11 +18,11 @@ const faqs = [
   },
   {
     q: 'Do I need a phone number to use a browser generator?',
-    a: 'No. Authy requires an account and a phone number — which SMS-capable carriers create real attack surface (SIM-swap attackers historically targeted Authy accounts by exploiting the phone-number recovery path). A browser generator has no account, no phone number, and nothing to reset: you hold the Base32 secret as text, and that IS the authentication factor.',
+    a: 'No. Authy requires an account and a phone number — and a phone number is precisely the attack surface SIM-swap attackers have historically targeted, hitting Authy accounts via the phone-number recovery path. A browser generator has no account, no phone number, and nothing to reset: you hold the Base32 secret as text, and that IS the authentication factor.',
   },
   {
     q: 'How do I move my accounts away from Authy?',
-    a: 'Authy does not export secrets — a deliberate decision several years back. The practical ways: for each account, log into the service, disable 2FA, then re-enable it and scan the new setup key with the browser generator (configuring your password-manager vault as the master copy); or use the account\'s "change authenticator" option where offered, or reveal the setup key when first enrolling. Add the backups codes for each service during the process.',
+    a: 'Authy does not export secrets — a deliberate decision several years back. The practical ways: for each account, log into the service, disable 2FA, then re-enable it and scan the new setup key with the browser generator (configuring your password-manager vault as the master copy); or use the account\'s "change authenticator" option where offered, or reveal the setup key when first enrolling. Add the backup codes for each service during the process.',
   },
   {
     q: 'Does Authy multi-device sync still work?',
@@ -136,8 +136,9 @@ const jsonLd = [
           <li>
             <strong>Where secrets live.</strong> Authy: encrypted in Twilio's cloud, keyed to your
             account + phone number; Twilio holds the ability to re-provision your token list. Browser
-            generator: nowhere — keys arrive in your browser, compute, and persist only in your local
-            browser storage plus whichever vault you keep them in.
+            generator: nowhere — keys arrive in your browser, compute in page memory, and are
+            never written to any browser storage; the lasting copy lives only in whichever vault
+            you keep them in.
           </li>
           <li>
             <strong>Identity on the account.</strong> Authy enrollment requires a phone number — the

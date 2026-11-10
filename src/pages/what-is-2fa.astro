@@ -39,7 +39,7 @@ const faqs = [
   },
   {
     q: 'Why is 2FA so important?',
-    a: 'Because passwords keep failing. Billions of real passwords are already public from data breaches, and attackers log into other people\'s accounts with them (credential stuffing) around the clock. Microsoft reports that 2FA blocks over 99.9% of automated account-takeover attacks — it protects your email, banking, social media, gaming, and crypto accounts from exactly the threats that actually happen.',
+    a: 'Because passwords keep failing. Billions of real passwords are already public from data breaches, and attackers log into other people\'s accounts with them (credential stuffing) around the clock. Microsoft reports that 2FA blocks over 99.9% of account compromise attacks — it protects your email, banking, social media, gaming, and crypto accounts from exactly the threats that actually happen.',
   },
   {
     q: 'What is 2FA used for?',
@@ -55,15 +55,15 @@ const faqs = [
   },
   {
     q: 'How to get 2FA?',
-    a: 'You get 2FA from the account you want to protect: open its settings, find "Security" or "Login & security", and look for "Two-factor authentication" or "2-step verification". Choose the authenticator-app option, scan the QR code (or reveal the setup key), and enter the code shown in your authenticator to confirm. Our step-by-step walkthrough covers getting a code without a phone: /how-to-get-2fa-code/.',
+    a: 'You get 2FA from the account you want to protect: open its settings, find "Security" or "Login & security", and look for "Two-factor authentication" or "2-step verification". Choose the authenticator-app option, scan the QR code (or reveal the setup key), and enter the code shown in your authenticator to confirm. Our step-by-step walkthrough covers every way to get a code without a phone.',
   },
   {
     q: 'How to enable 2FA?',
-    a: 'Four steps: 1) Open the service\'s account or security settings and select "Two-factor authentication". 2) Pick "Use an authenticator app" (avoid SMS if you can). 3) Scan the QR code with your authenticator — or click "can\'t scan?" and save the setup key. 4) Enter the live code to finish, then download or print the backup/recovery codes it shows. We publish per-service setup guides for Google, GitHub, Discord, Binance and more at /guides/.',
+    a: 'Four steps: 1) Open the service\'s account or security settings and select "Two-factor authentication". 2) Pick "Use an authenticator app" (avoid SMS if you can). 3) Scan the QR code with your authenticator — or click "can\'t scan?" and save the setup key. 4) Enter the live code to finish, then download or print the backup/recovery codes it shows. We publish per-service setup guides for Google, GitHub, Discord, Binance and more in the guides section of this site.',
   },
   {
     q: 'How strong is 2FA?',
-    a: 'It depends on which second factor you use. SMS codes are the weakest —SIM-swap attacks can hijack a phone number and intercept them. TOTP authenticator codes (the 30-second kind) are computationally strong: an offline attacker cannot derive them, and live codes expire in seconds. Hardware security keys and passkeys are the strongest, because they are phishing-resistant and cryptographically bound to the real website.',
+    a: 'It depends on which second factor you use. SMS codes are the weakest — SIM-swap attacks can hijack a phone number and intercept them. TOTP authenticator codes (the 30-second kind) are computationally strong: an offline attacker cannot derive them, and live codes expire in seconds. Hardware security keys and passkeys are the strongest, because they are phishing-resistant and cryptographically bound to the real website.',
   },
   {
     q: 'Is 2FA 100% safe?',

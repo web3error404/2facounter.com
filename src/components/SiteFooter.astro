@@ -51,6 +51,9 @@ const defaultColumns = [
       { href: '/terms/', label: 'Terms of service' },
       { href: '/disclaimer/', label: 'Disclaimer' },
       { href: '/contact/', label: 'Report a security issue' },
+      // Special case: reopens the analytics-consent banner (only rendered on
+      // hosts where analytics is active — the script below unhides it).
+      { href: '#', label: 'Cookie settings', id: 'cookie-settings' },
     ],
   },
 ];
@@ -113,11 +116,15 @@ const hreflangOf = (href: string) => LANG_BY_HREF.get(href)?.hreflang ?? 'en';
                 {col.title}
               </h2>
               <ul class="mt-4 space-y-2">
-                {col.links.map(({ href, label }) => (
+                {col.links.map(({ href, label, id }) => (
                   <li>
                     <a
                       href={href}
-                      class="-mx-2 -my-1 inline-block rounded-sm px-2 py-3 text-sm text-cream/75 hover:text-primary hover:underline hover:decoration-2 hover:underline-offset-2"
+                      id={id}
+                      class:list={[
+                        '-mx-2 -my-1 inline-block rounded-sm px-2 py-3 text-sm text-cream/75 hover:text-primary hover:underline hover:decoration-2 hover:underline-offset-2',
+                        id && 'hidden',
+                      ]}
                     >
                       {label}
                     </a>
@@ -170,3 +177,19 @@ const hreflangOf = (href: string) => LANG_BY_HREF.get(href)?.hreflang ?? 'en';
     </div>
   </div>
 </footer>
+
+<script>
+  // "Cookie settings": visible only where the analytics consent script is
+  // active (production hosts) — it un-hides the link and reopens the banner.
+  const cookieSettings = document.getElementById('cookie-settings');
+  const consentApi = window as unknown as { __2facConsentSettings?: () => void };
+  if (cookieSettings) {
+    if (typeof consentApi.__2facConsentSettings === 'function') {
+      cookieSettings.hidden = false;
+    }
+    cookieSettings.addEventListener('click', (e) => {
+      e.preventDefault();
+      consentApi.__2facConsentSettings?.();
+    });
+  }
+</script>

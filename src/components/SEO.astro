@@ -11,7 +11,7 @@ interface Props {
   description: string;
   /** Site-absolute path starting with "/" for canonical + og:url */
   canonicalPath: string;
-  /** Social-share image path relative to the site root (defaults to /og.png) */
+  /** Social-share image path relative to the site root (defaults to /og.webp) */
   ogImage?: string;
   /** BCP 47 language of the page; also emits a self-referencing hreflang */
   lang?: string;
@@ -31,7 +31,7 @@ const {
   title,
   description,
   canonicalPath,
-  ogImage = '/og.png',
+  ogImage = '/og.webp',
   lang = 'en',
   alternates = [],
   noindex = false,
@@ -97,7 +97,9 @@ const allAlternates = alternates.some((a) => a.hreflang.toLowerCase() === selfLa
 <meta property="og:description" content={description} />
 <meta property="og:url" content={canonical} />
 <meta property="og:image" content={`${site}${ogImage}`} />
-<meta property="og:image:type" content="image/png" />
+{/* og:image:type must match the actual file format (WebP since the 2026-11
+    conversion; PNG-era pages and crawlers both handled by the mapper). */}
+<meta property="og:image:type" content={ogImage.endsWith('.webp') ? 'image/webp' : 'image/png'} />
 <meta property="og:image:width" content="2400" />
 <meta property="og:image:height" content="1260" />
 <!-- og:image:alt is localized by construction: every page passes its own

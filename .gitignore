@@ -28,3 +28,6 @@ snapshots/
 
 # agent workspace (skills, scratch scripts, scan output)
 .agents/
+
+# wrangler local dev state (KV/DO caches, wrangler dev session data)
+.wrangler/

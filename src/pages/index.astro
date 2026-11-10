@@ -11,39 +11,39 @@ const description =
 const faq = [
   {
     q: 'How to get 2FA?',
-    a: 'You get 2FA from the account you want to protect: open its settings, find "Security" or "Login & security", and look for "Two-factor authentication" or "2-step verification". Pick the authenticator-app option, scan the QR code — or click "can\'t scan?" to reveal the setup key (a Base32 string or an otpauth:// URI) — and paste it into the generator at the top of this page. Enter the live code to confirm the setup, then save the recovery codes the service shows you.',
+    a: 'The fastest route is the one this page was built for: in your account\'s security settings, choose the authenticator-app option and click "can\'t scan?" when the QR appears — that reveals the setup key. Paste the key into the generator at the top of this page and a working code appears immediately; enter it once to finish setup, then store the recovery codes the service offers. The full walkthrough, including phone-free routes, is in our how-to-get-2fa-code guide.',
   },
   {
     q: 'How to enable 2FA?',
-    a: 'Four steps, about two minutes: 1) Open the account or security settings and select "Two-factor authentication". 2) Choose "Use an authenticator app" (avoid SMS if a better option exists). 3) Scan the QR code with your authenticator — or reveal and save the setup key instead. 4) Enter the live code to finish, then download or print the backup codes. We publish per-service guides for Google, GitHub, Discord, Binance and more.',
+    a: 'Once per account, in its security settings: pick "Two-factor authentication", choose the authenticator-app method over SMS where you have the choice, and confirm with a live code from your authenticator. The exact menu path differs per service — which is why we publish step-by-step guides for Google, GitHub, Discord, Binance and others. This generator works with every one of them.',
   },
   {
     q: 'How does 2FA work?',
-    a: 'After your password, the service asks for a second proof of identity. With the standard TOTP method (RFC 6238), your authenticator calculates a 6-digit code from a shared secret plus the current time, and the server runs the identical calculation and compares the two. The code is derived every 30 seconds and is worthless after it expires — so a leaked password alone can no longer open your account.',
+    a: 'Short version: your password proves you know the account, and a time-limited code proves you hold its secret. This generator computes the standard TOTP code (RFC 6238) right in your browser — shared secret plus the current time, refreshed every 30 seconds — the same calculation a phone app would do. The full mechanism, step by step, is explained in our "What is 2FA?" guide.',
   },
   {
     q: 'What is 2FA used for?',
-    a: 'It protects any login somebody else wants: email and cloud suites (Google, Microsoft, Apple), banking and brokerage accounts, crypto exchanges (Binance, Coinbase, Kraken), developer platforms (GitHub, AWS), gaming (Steam, Discord, Twitch), and social media (X, Instagram). Companies use it for VPNs, email and admin consoles too. Anywhere a site offers an "authenticator app" option, that is the 2FA lane.',
+    a: 'Start with the logins you could least afford to lose: your email (it resets everything else), banking and brokerage, crypto exchanges, your code hosting, your gaming and social accounts — then work outward. Our per-service guides cover the most common ones: Google, GitHub, Discord, Binance and more.',
   },
   {
     q: 'Is 2FA 100% safe?',
-    a: 'No — no security control is, and honest guides say so. 2FA kills stolen-password attacks, but a fresh code typed into a fake site within its 30-second life still gets phished, malware already on your device can hijack the session itself, and SMS codes can fall to SIM-swap attacks. Even with those caveats, an account with 2FA is far harder to break into than one without it.',
+    a: 'No — and a tool that claimed otherwise would be lying to you. A code can still be phished if you type it into a fake site within its 30-second window, and malware already on your device is beyond any authenticator\'s reach. What this generator does remove is the interception risk: the code is computed on your device and never crosses any network.',
   },
   {
     q: 'Is 2FA compulsory?',
-    a: 'No government makes it compulsory, but spreading platforms do: GitHub has required it for code contributors since 2023, banks and crypto exchanges force it on, and employers routinely mandate it for work logins. Everywhere else it is optional but strongly recommended. Treat it as compulsory anyway for your most valuable account — your email — because whoever controls your inbox can reset everything else.',
+    a: 'Not by law — but increasingly by lockdown: GitHub requires it for code contributors, banks and crypto exchanges force it on, and many employers mandate it for work logins. Check the accounts that matter most to you, and treat your email as compulsory regardless: whoever controls your inbox can reset everything else.',
   },
   {
     q: 'Why is 2FA so important?',
-    a: 'Because passwords keep failing in exactly the same ways. Billions of real passwords are already public from breaches, and attackers replay them at every other site around the clock (credential stuffing). Microsoft reports that 2FA blocks over 99.9% of automated account-takeover attacks — it is the cheapest upgrade that protects your email, banking, gaming, and crypto against the threats that actually happen.',
+    a: 'Because it is the one upgrade that survives a password leak. Microsoft reports that 2FA blocks over 99.9% of account compromise attacks — and with the generator at the top of this page, enabling it costs about two minutes per account.',
   },
   {
     q: 'How strong is 2FA?',
-    a: 'It depends entirely on the second factor. SMS codes are the weakest, since SIM swaps let an attacker steal your phone number and receive them. TOTP authenticator codes — the 30-second kind — are computationally strong: nothing is transmitted, an offline attacker cannot derive them, and each expires in seconds. Hardware security keys and passkeys are strongest of all, because they are phishing-resistant and cryptographically bound to the real domain.',
+    a: 'It comes down to the second factor: SMS is the weakest (SIM swaps), TOTP codes — the kind this generator produces — are computationally strong and never transmitted, and hardware keys or passkeys are strongest of all. You are in the strong tier here; our TOTP vs passkeys comparison covers the strongest option.',
   },
   {
     q: 'Why does everything use 2FA now?',
-    a: 'Because the password-only era collapsed. Industrial breaches exposed billions of credentials, automated credential-stuffing made hijacking accounts nearly free, and platforms got tired of paying for the aftermath. Regulators piled on — NIST deprecated SMS authentication in US standards, and the EU\'s PSD2 requires strong customer authentication. After a few giants normalized 2FA, every other service followed.',
+    a: 'Password-only security collapsed at scale: mass breaches, cheap automated credential stuffing, and regulators stepping in — NIST restricts SMS-based authentication in US standards, and the EU\'s PSD2 mandates strong customer authentication. Once a few giants made 2FA normal, every other service followed. The upside for you: every major service now supports the app-based method this generator uses.',
   },
   {
     q: 'Do I need a phone to use this 2FA authenticator?',
@@ -465,7 +465,7 @@ const services = [
 
           <p>
             Ready when you are: the generator is at the top of the page. Paste a key and watch the live
-            code count down — free, private, offline-capable, forever.
+            code count down — free, private, offline-capable. No catch.
           </p>
         </div>
       </article>
