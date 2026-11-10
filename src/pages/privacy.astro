@@ -5,7 +5,7 @@ import SiteFooter from '../components/SiteFooter.astro';
 
 const title = 'Privacy Policy — 2FA COUNTER';
 const description =
-  '2FA COUNTER (2facounter.com) privacy policy: no accounts, no cookies, no ads. Your 2FA secret keys are processed exclusively in your browser.';
+  '2FA COUNTER (2facounter.com) privacy policy: no accounts, no ads. Your 2FA secret keys are processed exclusively in your browser; analytics are anonymous and separate from the tool.';
 
 const jsonLd = [
   {
@@ -31,7 +31,7 @@ const jsonLd = [
     <div class="mx-auto max-w-[720px] px-4 py-20 sm:px-6 lg:py-24">
       <p class="section-label">Legal</p>
       <h1 class="mt-3 font-display text-4xl tracking-normal text-ink">Privacy policy</h1>
-      <p class="mt-4 font-mono text-label font-bold text-ink">Effective · November 7, 2026</p>
+      <p class="mt-4 font-mono text-label font-bold text-ink">Effective · November 7, 2026 · Updated · November 10, 2026</p>
 
       <div class="rich-text mt-12 rounded-xl border-2 border-ink bg-cream p-6 sm:p-10" style="box-shadow: var(--shadow-card)">
         <blockquote>
@@ -42,50 +42,53 @@ const jsonLd = [
         <h2>What this site collects</h2>
         <p>
           <strong>Nothing that identifies you or your keys.</strong> There are no accounts, no
-          tracking cookies, no form submissions, and no ad tracking pixels. The one measurement
-          tool on the site is Cloudflare Web Analytics: a small, cookieless script that reports
-          anonymous, aggregate performance data (page views, load times, approximate country) and
-          stores nothing in your browser. It never receives anything you type — your keys and
-          codes are handled entirely in the tool, locally. The site is statically generated HTML
-          plus JavaScript that runs locally in your browser. The tool does not even write
-          your 2FA keys to browser storage — they live only in the open page’s memory, as
-          described below under <a href="#local-storage">Local storage</a>. Cookies are covered
-          under <a href="#cookies">Cookies</a>.
+          form submissions, and no ad tracking pixels. The site runs two measurement tools, both
+          strictly separate from the 2FA tool:
+        </p>
+        <ul>
+          <li>
+            <strong>Cloudflare Web Analytics</strong> — a small, cookieless script that reports
+            anonymous, aggregate performance data (page views, load times, approximate country)
+            and stores nothing in your browser.
+          </li>
+          <li>
+            <strong>Google Analytics</strong>, loaded through a Google Tag Manager container —
+            used for aggregate traffic measurement, and only after you accept the analytics
+            prompt on your first visit (see <a href="#cookies">Cookies</a>). Google Analytics
+            sets first-party cookies (the <code>_ga</code> family) in your browser and processes
+            standard device and browser data under{" "}
+            <a rel="noopener noreferrer nofollow" href="https://www.google.com/policies/privacy/partners/">Google’s
+            privacy terms</a>. You can opt out entirely with{" "}
+            <a rel="noopener noreferrer nofollow" href="https://tools.google.com/dlpage/gaoptout">Google’s
+            official opt-out add-on</a>.
+          </li>
+        </ul>
+        <p>
+          Neither tool receives anything you type — your keys and codes are handled entirely in
+          the tool, locally. The site is statically generated HTML plus JavaScript that runs
+          locally in your browser. The tool does not even write your 2FA keys to browser storage —
+          they live only in the open page’s memory, as described below under{" "}
+          <a href="#local-storage">Local storage</a>. Cookies are covered under{" "}
+          <a href="#cookies">Cookies</a>.
         </p>
 
         <h2 id="cookies">Cookies</h2>
         <p>
-          2facounter.com does not set any cookies, and the analytics beacon sets none either —
-          Cloudflare Web Analytics is cookieless by design. Your keys are never profiled or
-          recorded: the tool deliberately has no “remember my last
-          key” behavior — your keys exist only in the open page’s memory, never in
-          <code>localStorage</code> and never in cookies. More in the Local storage section
-          below.
+          2facounter.com does not set any cookies of its own. Google Analytics, loaded through
+          Google Tag Manager, sets first-party analytics cookies (the <code>_ga</code> family):
+          they store a random client identifier so repeat visits can be counted as one user, and
+          they contain nothing you type, paste, scan, or generate. On your first visit we ask
+          before enabling these analytics cookies — decline, and Google Analytics never loads at
+          all; accept, and you can change your mind later via the "Cookie settings" link in the
+          footer. Cloudflare Web Analytics is
+          cookieless by design and stores nothing in your browser. Blocking or deleting analytics
+          cookies does not affect the generator in any way. Your keys are never profiled or
+          recorded: the tool deliberately has no “remember my last key” behavior — your keys
+          exist only in the open page’s memory, never in <code>localStorage</code> and never in
+          cookies. More in the Local storage section below.
         </p>
 
         <h2 id="ads">Google advertising</h2>
-        <!-- ── ADSENSE LAUNCH CHECKLIST (update this page the day ad code ships) ──
-             1. Ads set cookies and make third-party requests; the statements in
-                "What this site collects", "Cookies", and "Third-party requests"
-                ("collects NOTHING", "one third-party request") become false
-                and would violate Google's Privacy disclosures / Dishonest
-                declarations policies if left untouched.
-             2. Replacements required:
-                • Body lead:            Nothing from this site itself. Google’s
-                                        ad partners, however, may use cookies…
-                • Cookies section:      add “Advertising cookies (Google
-                                        AdSense)…” paragraph
-                • Third-party requests: add “Ads served through Google may load
-                                        scripts from Google’s serving domains…”
-                • Keep current DoubleClick + adsettings/aboutads opt-out text
-                  (already here — that matches Google’s required disclosure).
-             3. EU/EEA/UK traffic: enable a Google-certified CMP (AdSense
-                “Privacy & messaging”) or serve non-personalized ads before
-                turning on personalized ads — required by the EU user consent
-                policy.
-             4. Matching site change: public/ads.txt holds the pub- ID
-                (comment-only placeholder exists today). -->
-
         <p>
           There are no ads on the site today, and the tool works without any. This policy
           discloses in advance how advertising would work if it is ever introduced (for example,
@@ -141,13 +144,15 @@ const jsonLd = [
 
         <h2>Third-party requests</h2>
         <p>
-          <strong>One, by design.</strong> Fonts (display, text, and mono) and the
+          <strong>Two, by design.</strong> Fonts (display, text, and mono) and the
           QR-decoding library are all bundled at build time and served from this domain itself.
-          The single exception is Cloudflare Web Analytics: a small, deferred script from
-          Cloudflare’s <code>static.cloudflareinsights.com</code> that reports anonymous,
-          aggregate performance data (page views, load times, approximate country). It is
-          cookieless, writes nothing to your browser, and is discarded by Cloudflare without
-          storing IP addresses. Everything else your browser talks to is this site only.
+          The only exceptions are the two measurement tools above: Cloudflare Web Analytics — a
+          small, deferred script from Cloudflare’s <code>static.cloudflareinsights.com</code> that
+          reports anonymous, aggregate performance data, is cookieless, writes nothing to your
+          browser, and is discarded by Cloudflare without storing IP addresses — and Google
+          Tag Manager / Google Analytics, loaded from <code>www.googletagmanager.com</code>, which
+          sets the first-party cookies described under <a href="#cookies">Cookies</a>. Everything
+          else your browser talks to is this site only.
         </p>
         <p>
           The 2FA tool itself remains fully local: nothing you type, paste, scan, or generate

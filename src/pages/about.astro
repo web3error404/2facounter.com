@@ -63,9 +63,10 @@ const jsonLd = [
           <li><strong>No accounts, ever.</strong> A login form on a security tool is an attack surface, not a feature.</li>
           <li>
             <strong>No ad tracking, no profiles.</strong> We don’t want to know how many keys
-            you have — that’s the point. The site’s one measurement tool is anonymous,
-            cookieless page-performance data (Cloudflare Web Analytics), and it never receives
-            anything you type.
+            you have — that’s the point. The site’s only measurement is anonymous aggregate
+            analytics (cookieless Cloudflare Web Analytics plus Google Analytics, which sets
+            standard <code>_ga</code> cookies — see the <a href="/privacy/">privacy policy</a>),
+            and neither tool ever receives anything you type.
           </li>
           <li><strong>Verifiability.</strong> The network tab is your receipt: keys never cross the wire.</li>
           <li><strong>Works offline.</strong> Installed as a PWA, it never needs us again after the first visit.</li>
@@ -82,12 +83,12 @@ const jsonLd = [
         <h2>Open-source and font credits</h2>
         <p>
           This site bundles third-party software under permissive licenses, and we are glad to
-          credit it here: the QR decoder is
+          credit it here: the QR decoder is{" "}
           <a href="https://github.com/cozmo/jsQR" rel="noopener noreferrer nofollow">jsQR</a> by
-          the jsQR contributors, distributed under the
+          the jsQR contributors, distributed under the{" "}
           <a href="https://www.apache.org/licenses/LICENSE-2.0" rel="noopener noreferrer nofollow">Apache&nbsp;License&nbsp;2.0</a>.
           The bundled typefaces (Fredoka, Inter, Titan&nbsp;One, JetBrains&nbsp;Mono) are served
-          by <a href="https://fontsource.org" rel="noopener noreferrer nofollow">Fontsource</a>
+          by <a href="https://fontsource.org" rel="noopener noreferrer nofollow">Fontsource</a>{" "}
           and are licensed under the SIL Open Font License. All other code, copy, design, and
           artwork on this site is original.
         </p>

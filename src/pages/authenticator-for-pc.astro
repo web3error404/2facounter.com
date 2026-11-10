@@ -18,7 +18,7 @@ const faqs = [
   },
   {
     q: 'Is a browser-based 2FA generator safe to use on my PC?',
-    a: 'It computes the same RFC 6238 HMAC-SHA-1 codes a phone app would — the math is identical, and it runs locally: this site receives no keys, no codes, and nothing you type — its only measurement is anonymous, cookieless page-performance data. The real safety factors are the same as with any authenticator: keep the Base32 secret in an encrypted password-manager vault rather than a text file, and only paste it into a site you know and trust. Verify the URL before pasting — a secret pasted into a lookalike site is compromised no matter which tool generated code.',
+    a: 'It computes the same RFC 6238 HMAC-SHA-1 codes a phone app would — the math is identical, and it runs locally: this site receives no keys, no codes, and nothing you type — its only measurement is anonymous aggregate analytics, separate from the tool (see the privacy policy). The real safety factors are the same as with any authenticator: keep the Base32 secret in an encrypted password-manager vault rather than a text file, and only paste it into a site you know and trust. Verify the URL before pasting — a secret pasted into a lookalike site is compromised no matter which tool generated it.',
   },
   {
     q: 'Is using 2FA on a company or work computer a good idea?',
@@ -135,7 +135,7 @@ const jsonLd = [
             your password manager, and the live code appears. Nothing is installed, no admin
             rights are needed, nothing is transmitted — the computation happens in your browser's
             Web Crypto. It works identically on Windows, macOS, Linux, ChromeOS, a borrowed
-            laptop, a library computer you would never install an app on. And with
+            laptop, a library computer you would never install an app on. And with{" "}
             <a href="/how-to-get-2fa-code/">setup saved in the vault</a>, it doubles as a recovery
             path if the phone dies.
           </li>
@@ -163,7 +163,7 @@ const jsonLd = [
         <p>
           A TOTP code is a time-based HMAC-SHA-1 code computed from two things a PC already has:
           the secret and the clock. There is no proprietary magic in a phone app — a browser can
-          run the exact same algorithm through
+          run the exact same algorithm through{" "}
           <a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Crypto_API">the Web Crypto API</a>.
           Our implementation:
         </p>
@@ -194,8 +194,8 @@ const jsonLd = [
           pocket is a sound anchor. The strongest setup uses both honestly —
           <strong>secrets in a vault, codes computed wherever you are working</strong>, and the
           phone as a backup device, not the single keeper of your identity. If you are migrating
-          from a specific app, start with the app-by-app
-          <a href="/totp-vs-google-authenticator/">Google Authenticator comparison</a> or the
+          from a specific app, start with the app-by-app{" "}
+          <a href="/totp-vs-google-authenticator/">Google Authenticator comparison</a> or the{" "}
           <a href="/totp-vs-authy/">Authy comparison</a>.
         </p>
       </div>
