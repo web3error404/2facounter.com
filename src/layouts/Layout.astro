@@ -15,6 +15,7 @@ import '@fontsource-variable/jetbrains-mono';
 // static SVG outlines now — see components/Wordmark.astro.)
 import fredokaLatinWoff2 from '@fontsource-variable/fredoka/files/fredoka-latin-wght-normal.woff2?url';
 import interLatinWoff2 from '@fontsource-variable/inter/files/inter-latin-wght-normal.woff2?url';
+import jetbrainsMonoWoff2 from '@fontsource-variable/jetbrains-mono/files/jetbrains-mono-latin-wght-normal.woff2?url';
 import '../styles/global.css';
 import DeliBackdrop from '../components/DeliBackdrop.astro';
 import SEO from '../components/SEO.astro';
@@ -371,13 +372,17 @@ const consent = consentCopy[lang.toLowerCase()] ?? consentCopy.en;
     <meta name="generator" content={Astro.generator} />
 
     <!-- Font preload: the above-the-fold latin variable subsets (Fredoka
-         headings, Inter body — the wordmark is static SVG, no Titan One
-         preload anymore). Hrefs are resolved from the fontsource packages
-         themselves (?url import) so they always match the @font-face
-         assets — no manual hash refresh ever. crossorigin is required even
-         same-origin. -->
+         headings, Inter body, JetBrains Mono labels/bylines — the wordmark
+         is static SVG, no Titan One preload). JetBrains Mono is preloaded
+         too: without it, fast-painting pages (small guides) could paint
+         with fallback fonts and reflow on swap (observed CLS 0.16 on
+         /guides/github/ at mobile). Hrefs are resolved from the fontsource
+         packages themselves (?url import) so they always match the
+         @font-face assets — no manual hash refresh ever. crossorigin is
+         required even same-origin. -->
     <link rel="preload" as="font" type="font/woff2" crossorigin fetchpriority="high" href={fredokaLatinWoff2} />
     <link rel="preload" as="font" type="font/woff2" crossorigin fetchpriority="high" href={interLatinWoff2} />
+    <link rel="preload" as="font" type="font/woff2" crossorigin fetchpriority="high" href={jetbrainsMonoWoff2} />
 
     {googleVerification && <meta name="google-site-verification" content={googleVerification} />}
     {bingVerification && <meta name="msvalidate.01" content={bingVerification} />}
