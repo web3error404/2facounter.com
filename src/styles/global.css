@@ -274,14 +274,14 @@ h4 {
   }
 
   .btn-ghost {
-    @apply inline-flex h-9 items-center justify-center gap-2 rounded-full px-3 text-sm font-semibold text-muted select-none;
+    @apply inline-flex h-9 items-center justify-center gap-2 rounded-full px-3 text-sm font-semibold text-ink/90 select-none;
   }
   .btn-ghost:hover {
     @apply bg-canvas-soft text-ink;
   }
 
   .btn-icon {
-    @apply inline-flex h-9 w-9 items-center justify-center rounded-full text-muted;
+    @apply inline-flex h-9 w-9 items-center justify-center rounded-full text-ink/90;
   }
   .btn-icon:hover {
     @apply bg-canvas-soft text-ink;
