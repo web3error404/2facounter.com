@@ -23,7 +23,7 @@ const description =
   steps={[
     {
       title: 'Open the IAM console',
-      body: 'Sign in as an admin at console.aws.amazon.com → IAM → Users → pick the user → “Security credentials” tab. For the root user: IAM console home shows an “Add MFA” card for root — the enrollment lives there, not in a user profile.',
+      body: 'Sign in as an admin at console.aws.amazon.com → IAM → Users → pick the user → “Security credentials” tab → “Assign MFA device”. For the root user: sign in with root credentials, then from the navigation bar choose your account name → “Security credentials” → in the MFA section, “Assign MFA device” (docs.aws.amazon.com/IAM/latest/UserGuide/enable-virt-mfa-for-root.html).',
     },
     {
       title: 'Assign an MFA device',
@@ -43,13 +43,13 @@ const description =
     },
     {
       title: 'Back up the key',
-      body: 'The key is re-derivable only if you saved it: keep it encrypted in your password manager, because IAM won’t show it again after activation (deactivate and re-assign to rotate).',
+      body: 'The key is re-derivable only if you saved it: AWS tells you to make a secure backup of the QR code or secret key, or enable multiple MFA devices — keep yours encrypted in your password manager. To rotate later, deactivate the device and assign a new one (docs.aws.amazon.com/IAM/latest/UserGuide/enable-virt-mfa-for-root.html).',
     },
   ]}
   faqs={[
     {
       q: 'What about the root account?',
-      a: 'Root MFA is configured from the IAM console’s root card or Account settings page. Recent AWS guidance strongly prefers passkeys for root — set one if you can, but a TOTP device remains supported and works identically with this generator.',
+      a: 'Root MFA is configured from the navigation bar → account name → “Security credentials” page (docs.aws.amazon.com/IAM/latest/UserGuide/enable-virt-mfa-for-root.html). Recent AWS guidance recommends phishing-resistant passkeys and security keys for root whenever possible — set one if you can, but a TOTP device remains supported and works identically with this generator.',
     },
     {
       q: 'Why does AWS require two codes in a row?',
