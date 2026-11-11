@@ -13,7 +13,7 @@ const description =
   path="/guides/google/"
   dateModified="2026-11-09"
   lastReviewed="2026-11-09"
-  intro="Google’s 2-Step Verification supports standard TOTP for everyone — but the setup key is hidden behind the QR code and Google nudges you toward its cloud-synced app. This guide gets you the plain Base32 key in under five minutes."
+  intro="Google’s 2-Step Verification supports standard TOTP for everyone — but the setup key is hidden behind the QR code and Google nudges you toward its cloud-synced app. This guide gets you the plain Base32 key in about six minutes."
   minutes={6}
   params={['6 digits', '30s period', 'SHA-1']}
   ctaTitle="A Google key is worth guarding like a master key"
@@ -42,11 +42,11 @@ const description =
     },
     {
       title: 'Choose “Authenticator app”',
-      body: 'Scroll to the available second-step options and add “Authenticator app”. Google shows a QR code — hold the page and the key below it.',
+      body: 'Scroll to the available second-step options and add “Authenticator app”. Google shows a QR code, with the setup key below it — you can use either in the next steps.',
     },
     {
       title: 'Reveal the setup key',
-      body: 'Click “Can’t scan it?” — a 32-character Base32 secret (e.g. JBSWY3DPEHPK3PXPJBSWY3DPEHPK3PXP) replaces the QR. Copy it. This is the same secret the Google Authenticator app would store, minus the cloud-sync upload.',
+      body: 'Click “Can’t scan it?” — a 32-character Base32 secret (e.g. JBSWY3DPEHPK3PXPJBSWY3DPEHPK3PXP) replaces the QR. Copy it. This is the same secret the Google Authenticator app would store, minus the cloud-sync upload. The example here is a published dummy key — never leave an account enrolled on it.',
     },
     {
       title: 'Generate codes locally',

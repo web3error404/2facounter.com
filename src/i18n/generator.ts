@@ -131,7 +131,7 @@ export const GENERATOR_EN: GeneratorStrings = {
   liveKey: 'Live key',
   keyMask: 'Key ····{tail}',
   loadKeyTitle: 'Load this key',
-  removeKeyAria: 'Remove {desc} from saved keys',
+  removeKeyAria: 'Remove {desc} from the recent-keys list',
   toastRecentsCleared: 'Session keys cleared ✓',
   toastCopied: 'Code copied to clipboard ✓',
   announceNewCode: 'New 2FA code {code}',
@@ -167,7 +167,7 @@ export const GENERATOR_I18N: Record<string, GeneratorStrings> = {
     recentHeading: 'Khóa gần đây',
     clearAll: 'Xóa hết',
     reallyClear: 'Xóa thật không?',
-    titleClear: 'Xóa mọi khóa đã lưu — nhấn lần nữa để xác nhận',
+    titleClear: 'Xóa mọi khóa trong phiên này — nhấn lần nữa để xác nhận',
     privacyLead: 'Riêng tư ngay từ thiết kế.',
     privacyBody:
       ' Mã được tạo ngay trong trình duyệt của bạn bằng Web Crypto. Khóa và mã chỉ tồn tại trong bộ nhớ tạm của trang — không ghi vào localStorage, cookie hay bất kỳ bộ nhớ lưu trữ nào, và biến mất khi bạn làm mới hoặc đóng trang.',
@@ -217,7 +217,7 @@ export const GENERATOR_I18N: Record<string, GeneratorStrings> = {
     recentHeading: '最近密钥',
     clearAll: '全部清除',
     reallyClear: '确定清除？',
-    titleClear: '移除所有已缓存的密钥 — 再次点击以确认',
+    titleClear: '清除本次会话中的所有密钥 — 再次点击以确认',
     privacyLead: '隐私优先的设计。',
     privacyBody:
       '验证码通过 Web Crypto 在你的浏览器中生成。密钥和验证码只存在于当前页面的内存中——不会写入浏览器存储（localStorage、Cookie 或任何其他存储），刷新或关闭页面后即全部消失。',
@@ -267,7 +267,7 @@ export const GENERATOR_I18N: Record<string, GeneratorStrings> = {
     recentHeading: '最近的金鑰',
     clearAll: '全部清除',
     reallyClear: '確定清除？',
-    titleClear: '移除所有快取的金鑰 — 再點一次以確認',
+    titleClear: '清除本次工作階段中的所有金鑰 — 再點一次以確認',
     privacyLead: '以隱私為本的設計。',
     privacyBody:
       '驗證碼透過 Web Crypto 在你的瀏覽器中產生。金鑰與驗證碼只存在於目前頁面的記憶體中——不會寫入瀏覽器儲存空間（localStorage、Cookie 或任何其他儲存），重新整理或關閉頁面後即全部消失。',
@@ -317,7 +317,7 @@ export const GENERATOR_I18N: Record<string, GeneratorStrings> = {
     recentHeading: 'Claves recientes',
     clearAll: 'Borrar todo',
     reallyClear: '¿Borrar de verdad?',
-    titleClear: 'Elimina todas las claves guardadas — pulsa otra vez para confirmar',
+    titleClear: 'Elimina todas las claves de esta sesión — pulsa otra vez para confirmar',
     privacyLead: 'Privado por diseño.',
     privacyBody:
       ' Los códigos se generan en tu navegador con Web Crypto. Tu clave y los códigos existen solo en la memoria de esta página — no se escribe nada en el almacenamiento del navegador (localStorage, cookies ni ningún otro almacén) y todo desaparece al recargar o cerrar la página.',
@@ -367,7 +367,7 @@ export const GENERATOR_I18N: Record<string, GeneratorStrings> = {
     recentHeading: '最近のキー',
     clearAll: 'すべて消去',
     reallyClear: '本当に消去しますか？',
-    titleClear: '保存済みのキーをすべて削除します — もう一度クリックで確認',
+    titleClear: 'このセッションのキーをすべて削除します — もう一度クリックで確認',
     privacyLead: 'プライバシー第一の設計。',
     privacyBody:
       'コードは Web Crypto によってお使いのブラウザー内で生成されます。キーとコードはこのページのメモリー上にだけ存在します — ブラウザーのストレージ（localStorage・Cookie・その他）には一切書き込まず、再読み込みやページを閉じるとすべて消えます。',
@@ -417,7 +417,7 @@ export const GENERATOR_I18N: Record<string, GeneratorStrings> = {
     recentHeading: 'Clés récentes',
     clearAll: 'Tout effacer',
     reallyClear: 'Effacer vraiment ?',
-    titleClear: 'Supprime toutes les clés mises en cache — cliquez à nouveau pour confirmer',
+    titleClear: 'Supprime toutes les clés de cette session — cliquez à nouveau pour confirmer',
     privacyLead: 'Confidentialité dès la conception.',
     privacyBody:
       ' Les codes sont générés dans votre navigateur avec Web Crypto. Votre clé et les codes n’existent que dans la mémoire de cette page — rien n’est écrit dans le stockage du navigateur (localStorage, cookies ou autre), et tout disparaît au rechargement ou à la fermeture de la page.',
@@ -467,7 +467,7 @@ export const GENERATOR_I18N: Record<string, GeneratorStrings> = {
     recentHeading: 'Letzte Schlüssel',
     clearAll: 'Alle löschen',
     reallyClear: 'Wirklich löschen?',
-    titleClear: 'Alle gespeicherten Schlüssel entfernen — zum Bestätigen erneut klicken',
+    titleClear: 'Alle Schlüssel dieser Sitzung entfernen — zum Bestätigen erneut klicken',
     privacyLead: 'Privat von Grund auf.',
     privacyBody:
       ' Codes werden in Ihrem Browser mit Web Crypto erzeugt. Ihr Schlüssel und die Codes existieren nur im Arbeitsspeicher dieser Seite — nichts wird in den Browser-Speicher geschrieben (localStorage, Cookies oder ein anderer Speicher), und beim Neuladen oder Schließen der Seite ist alles gelöscht.',
@@ -517,7 +517,7 @@ export const GENERATOR_I18N: Record<string, GeneratorStrings> = {
     recentHeading: 'Chaves recentes',
     clearAll: 'Limpar tudo',
     reallyClear: 'Limpar mesmo?',
-    titleClear: 'Remove todas as chaves armazenadas — clique novamente para confirmar',
+    titleClear: 'Remove todas as chaves desta sessão — clique novamente para confirmar',
     privacyLead: 'Privacidade por design.',
     privacyBody:
       ' Os códigos são gerados no seu navegador com a Web Crypto. Sua chave e os códigos existem apenas na memória desta página — nada é gravado no armazenamento do navegador (localStorage, cookies ou qualquer outro), e tudo desaparece ao recarregar ou fechar a página.',
@@ -567,7 +567,7 @@ export const GENERATOR_I18N: Record<string, GeneratorStrings> = {
     recentHeading: '최근 키',
     clearAll: '모두 지우기',
     reallyClear: '정말 지울까요?',
-    titleClear: '저장된 키를 모두 제거합니다 — 다시 클릭하면 확인',
+    titleClear: '이 세션의 키를 모두 제거합니다 — 다시 클릭하면 확인',
     privacyLead: '설계부터 프라이버시 중심.',
     privacyBody:
       ' 코드는 Web Crypto를 통해 여러분의 브라우저 안에서 생성됩니다. 키와 코드는 이 페이지의 메모리에만 존재합니다 — 브라우저 스토리지(localStorage, 쿠키 등)에 아무것도 기록하지 않으며, 새로 고침하거나 페이지를 닫으면 모두 사라집니다.',
@@ -617,7 +617,7 @@ export const GENERATOR_I18N: Record<string, GeneratorStrings> = {
     recentHeading: 'Chiavi recenti',
     clearAll: 'Cancella tutto',
     reallyClear: 'Cancellare davvero?',
-    titleClear: 'Rimuove tutte le chiavi salvate — clicca di nuovo per confermare',
+    titleClear: 'Rimuove tutte le chiavi di questa sessione — clicca di nuovo per confermare',
     privacyLead: 'La privacy, per progetto.',
     privacyBody:
       ' I codici vengono generati nel tuo browser con Web Crypto. La chiave e i codici esistono solo nella memoria di questa pagina — non viene scritto nulla nella memoria del browser (localStorage, cookie o altro), e tutto scompare ricaricando o chiudendo la pagina.',
@@ -666,7 +666,7 @@ export const GENERATOR_I18N: Record<string, GeneratorStrings> = {
   recentHeading: 'हाल की कीज़',
   clearAll: 'सब साफ़ करें',
   reallyClear: 'पक्का साफ़ करना है?',
-  titleClear: 'सभी कैश की कीज़ हटाएँ — पक्का करने के लिए दोबारा क्लिक करें',
+  titleClear: 'इस सत्र की सभी कीज़ हटाएँ — पक्का करने के लिए दोबारा क्लिक करें',
   privacyLead: 'डिज़ाइन से ही प्राइवेट।',
   privacyBody:
     ' कोड आपके ब्राउज़र में Web Crypto से बनते हैं। आपकी की और कोड केवल इस पेज की मेमोरी में रहते हैं — ब्राउज़र स्टोरेज (localStorage, कुकी या किसी अन्य स्टोरेज) में कुछ भी नहीं लिखा जाता, और पेज रीफ्रेश या बंद करने पर सब कुछ मिट जाता है।',
@@ -715,7 +715,7 @@ export const GENERATOR_I18N: Record<string, GeneratorStrings> = {
   recentHeading: 'المفاتيح الأخيرة',
   clearAll: 'حذف الكل',
   reallyClear: 'هل تريد الحذف فعلًا؟',
-  titleClear: 'يحذف جميع المفاتيح المحفوظة — اضغط مرة أخرى للتأكيد',
+  titleClear: 'يحذف جميع المفاتيح في هذه الجلسة — اضغط مرة أخرى للتأكيد',
   privacyLead: 'خصوصية بالتصميم.',
   privacyBody:
     ' تُولَّد الرموز داخل متصفحك عبر Web Crypto. يبقى مفتاحك والرموز في ذاكرة هذه الصفحة فقط — لا يُكتب شيء في تخزين المتصفح (localStorage أو الكوكيز أو أي تخزين آخر)، ويختفي كل شيء عند تحديث الصفحة أو إغلاقها.',
@@ -764,7 +764,7 @@ export const GENERATOR_I18N: Record<string, GeneratorStrings> = {
   recentHeading: 'সাম্প্রতিক কী',
   clearAll: 'সব মুছুন',
   reallyClear: 'সত্যিই মুছে ফেলবেন?',
-  titleClear: 'সেভ করা সব কী মুছে ফেলুন — নিশ্চিত করতে আবার ক্লিক করুন',
+  titleClear: 'এই সেশনের সব কী মুছে ফেলুন — নিশ্চিত করতে আবার ক্লিক করুন',
   privacyLead: 'ডিজাইনেই প্রাইভেট।',
   privacyBody:
     ' কোড তৈরি হয় আপনার ব্রাউজারেই, Web Crypto দিয়ে। আপনার কী ও কোড শুধু এই পেজের মেমরিতে থাকে — ব্রাউজার স্টোরেজে (localStorage, কুকি বা অন্য কোনো স্টোরেজে) কিছুই লেখা হয় না, আর রিফ্রেশ বা পেজ বন্ধ করলে সবই মুছে যায়।',
@@ -813,7 +813,7 @@ export const GENERATOR_I18N: Record<string, GeneratorStrings> = {
   recentHeading: 'Недавние ключи',
   clearAll: 'Очистить всё',
   reallyClear: 'Точно очистить?',
-  titleClear: 'Удалить все сохранённые ключи — нажмите ещё раз для подтверждения',
+  titleClear: 'Удалить все ключи этой сессии — нажмите ещё раз для подтверждения',
   privacyLead: 'Приватность по умолчанию.',
   privacyBody:
     ' Коды генерируются в вашем браузере с помощью Web Crypto. Ключ и коды существуют только в памяти этой страницы — ничего не записывается в хранилище браузера (localStorage, cookie или любое другое), и при обновлении или закрытии страницы всё исчезает.',

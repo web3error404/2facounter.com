@@ -189,7 +189,12 @@ const hreflangOf = (href: string) => LANG_BY_HREF.get(href)?.hreflang ?? 'en';
   const consentApi = window as unknown as { __2facConsentSettings?: () => void };
   if (cookieSettings) {
     if (typeof consentApi.__2facConsentSettings === 'function') {
+      // Un-hide both ways: the [hidden] attribute AND the baked-in Tailwind
+      // `hidden` class (display:none) — removing only the attribute used to
+      // leave the link permanently invisible, breaking the privacy policy's
+      // promised "Cookie settings" consent-revisit path.
       cookieSettings.hidden = false;
+      cookieSettings.classList.remove('hidden');
     }
     cookieSettings.addEventListener('click', (e) => {
       e.preventDefault();

@@ -43,10 +43,11 @@
   /* Darkened from #888888 (3.0:1 on cream, failing WCAG AA) — now ≈5.1:1 on
      cream / ≈6.0:1 on white; same warm-gray family as muted-soft and ink */
   --color-muted: #6d6152;
-  /* Darkened from #a3937f (≈2.5:1 on cream) — now ≈4.1:1 on cream /
-     ≈4.9:1 on white so the secret-key placeholder and de-emphasized
-     hints stay readable while remaining clearly secondary to ink */
-  --color-muted-soft: #7d6f5c;
+  /* Darkened twice: from #a3937f to #7d6f5c (≈4.1:1 on cream), then to
+     #61553f after a WCAG re-audit — the 12px recent-keys tail text sits on
+     surface-elevated (#dcd3c8), where #7d6f5c only reached ≈3.3:1. #61553f
+     gives ≈4.9:1 there and ≈6.2:1 on cream, still clearly secondary to ink */
+  --color-muted-soft: #61553f;
 
   /* ── Dividers (dashed perforations; solid rules inside tables) ── */
   --color-hairline: #dcd3c8; /* kiwi-warm-gray */

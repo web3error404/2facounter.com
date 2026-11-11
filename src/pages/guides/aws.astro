@@ -18,8 +18,8 @@ const description =
   intro="AWS calls authenticator apps “virtual MFA devices” — it’s the same RFC 6238 TOTP underneath. A browser-based generator is a favourite for CI boxes, consoles-on-VMs, and situations where your phone isn’t the right tool. Root and IAM users each carry their own enrollment."
   minutes={4}
   params={['6 digits', '30s period', 'SHA-1']}
-  ctaTitle="An MFA-less root account is your account-billing ceiling"
-  ctaBody="AWS root can close the account and every dollar in it. Security-hub style baselines all start with root MFA plus IAM least-privilege — this guide gets both machines in place; keep each enrollment's secret in a separate vault slot."
+  ctaTitle="An MFA-less root account is your costliest single point of failure"
+  ctaBody="AWS root can close the account and every dollar in it. Security baselines (including AWS Security Hub controls) all start with root MFA plus IAM least-privilege — this guide gets both machines in place; keep each enrollment's secret in a separate vault slot."
   steps={[
     {
       title: 'Open the IAM console',

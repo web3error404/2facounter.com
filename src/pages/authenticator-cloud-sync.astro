@@ -153,11 +153,12 @@ const jsonLd = [
         <p>
           Authy popularized multi-device TOTP: encrypted-at-rest backups in Twilio’s cloud,
           device-pairing approvals, and (historically) a desktop app. Two events shaped the
-          current picture and are worth knowing when you rely on it: in mid-2024, Twilio reported
-          that an unsecured endpoint let attackers identify certain Authy users’ phone numbers
+          current picture and are worth knowing when you rely on it: in March 2024, Twilio
+          ended support for the desktop apps (making Authy phone-first today), and a few
+          months later, in mid-2024, it reported that an unsecured endpoint let attackers
+          identify certain Authy users’ phone numbers
           (they used it for SIM-swap targeting; Authy’s own end-to-end design means secrets
-          weren’t extracted), and the same summer Twilio ended support for the desktop apps,
-          making it phone-first today. As of our last review, Authy remains encrypted-backup
+          weren’t extracted). As of our last review, Authy remains encrypted-backup
           cloud-first — convenient, with the same “trust the vendor’s account security” shape as
           above.
         </p>

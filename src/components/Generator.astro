@@ -189,7 +189,8 @@ const t = generatorStringsFor(locale || urlLocale || 'en');
         </button>
       </div>
 
-      <!-- Recent keys — cached locally, private to this browser -->
+      <!-- Recent keys — in-memory for this session only (never persistent
+           storage), private to this browser -->
       <!-- Sits directly beneath the Copy button, above the privacy note -->
       <div id="recent-keys-wrap" class="hidden">
         <div class="flex items-center justify-between">

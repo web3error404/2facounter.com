@@ -15,11 +15,11 @@ const faqs = [
   },
   {
     q: 'Is a browser TOTP generator as safe as Authy?',
-    a: 'Both run the identical RFC 6238 algorithm, so the raw code generation is equally secure. The difference is operational: Authy encrypts secrets in Twilio\'s cloud keyed to your account and phone number, while a local generator like this one never receives secrets at all — calculation happens in your browser via the Web Crypto API, and the master copies live in your own encrypted password-manager vault.',
+    a: 'Security-wise the codes themselves are equal — both sides compute the standard RFC 6238 HMAC. What differs is where your secrets live and who can reach them. Authy stores encrypted copies of every token in Twilio\'s cloud, tied to your account and phone number, so the vendor\'s account security becomes part of yours. This generator has no backend to breach: the only place a master copy of your secrets exists is your own password-manager vault, and the calculation runs in this page\'s memory.',
   },
   {
     q: 'Do I need a phone number to use a browser generator?',
-    a: 'No. Authy requires an account and a phone number — and a phone number is precisely the attack surface SIM-swap attackers have historically targeted, hitting Authy accounts via the phone-number recovery path. A browser generator has no account, no phone number, and nothing to reset: you hold the Base32 secret as text, and that IS the authentication factor.',
+    a: 'No. Authy requires an account and a phone number — and a phone number is precisely what SIM-swap attackers go after, and the identifier Twilio\'s 2024 API incident exposed for some Authy users. A browser generator has no account, no phone number, and nothing to reset: you hold the Base32 secret as text, and that secret is the authentication factor.',
   },
   {
     q: 'How do I move my accounts away from Authy?',
@@ -31,7 +31,7 @@ const faqs = [
   },
   {
     q: 'Does the browser generator work offline like Authy did on desktop?',
-    a: 'Yes — better. Install our page as a PWA (Add to Home Screen / Install) and codes compute entirely offline from your device clock plus the secret, like a native app. No network, no account session required: the coverage the retired Authy desktop app used to provide.',
+    a: 'Yes. Once this site is installed as an app (Add to Home Screen / Install), it caches its own interface and keeps generating codes with the network fully off — deriving them from your device clock and the secret you pasted, exactly like the desktop client Authy retired used to. No account session, no sync, no connectivity check.',
   },
 ];
 
@@ -82,8 +82,8 @@ const jsonLd = [
         Authy vs a browser 2FA generator: an honest comparison
       </h1>
       <p class="mt-5 max-w-2xl text-lg font-medium text-ink">
-        Authy did popularize cloud token backup. But it also retired its desktop app, keys secrets to a
-        phone number, and makes exporting impossible. Here is the fair picture — and when a
+        Authy did popularize cloud token backup. But it has also retired its desktop app, keys
+        your tokens to a phone number, and makes exporting impossible. Here is the fair picture — and when a
         zero-knowledge browser generator is simply the better tool for the job.
       </p>
 
@@ -156,7 +156,7 @@ const jsonLd = [
           </li>
           <li>
             <strong>Recovery paths.</strong> Authy: your account + passphrase + device. Generator:
-            your vault — the same encrypted place your passwords already live. One fewer independent
+            your vault — the same encrypted place your passwords already live. One less independent
             vendor holding a necessary credential.
           </li>
           <li>

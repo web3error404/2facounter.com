@@ -15,7 +15,7 @@ const description =
   path="/guides/paypal/"
   dateModified="2026-11-10"
   lastReviewed="2026-11-10"
-  intro="PayPal supports standard TOTP as its authenticator-app option for 2-step verification — stronger than the default SMS codes, because a phone number can be hijacked by a SIM swap and money flows through PayPal. Worth knowing: PayPal keeps SMS as a fallback method unless you manage your methods, so check what's enrolled after setup."
+  intro="PayPal supports standard TOTP as its authenticator-app option for 2-step verification — stronger than the default SMS codes, because a phone number can be hijacked by a SIM swap and money flows through PayPal. Worth doing: check which methods stay enrolled after setup, so no weaker fallback lingers without your say-so."
   minutes={4}
   params={['6 digits', '30s period', 'SHA-1']}
   ctaTitle="Your PayPal account is a payment rail — treat the backup like one"
@@ -45,7 +45,7 @@ const description =
   faqs={[
     {
       q: 'Does PayPal require 2FA?',
-      a: 'Personal accounts can enable it voluntarily; PayPal requires 2-step verification for some business and seller accounts, especially those handling higher volumes. Either way, enabling it on a money-mover account is one of the highest-value two minutes in personal security.',
+      a: 'Personal accounts can enable it voluntarily, and PayPal encourages 2-step verification on accounts that move money. Whatever your account type, enabling it on a money-mover account is one of the highest-value few minutes in personal security.',
     },
     {
       q: 'SMS codes vs authenticator app on PayPal — which should I pick?',
@@ -57,7 +57,7 @@ const description =
     },
     {
       q: 'Codes rejected right after setup — what broke?',
-      a: 'Clock drift almost always. TOTP codes depend on your device clock matching PayPal’s server within a tight window — if your system clock is even ~30 s off, every guess fails. Set your OS to sync time automatically, wait for the next 30-second step, and try once more.',
+      a: 'Most rejections are clock drift: PayPal’s server and your device disagree on what “now” is, and the code rolls over mid-verification. Sync your system clock automatically, then submit the freshly displayed code. If a wrong code ever gets through and you lock yourself out, PayPal’s recovery path exists — but a synced clock prevents that in the first place.',
     },
   ]}
 />

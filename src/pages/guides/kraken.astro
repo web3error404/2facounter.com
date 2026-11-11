@@ -15,7 +15,7 @@ const description =
   path="/guides/kraken/"
   dateModified="2026-11-07"
   lastReviewed="2026-11-07"
-  intro="Kraken has supported standard TOTP for years — a long-supported factor that stops account takeovers cold. Worth knowing: Kraken's highest-rated factor today is a passkey/security key, and the TOTP factor is scoped per “facet” (sign-in, trading, funding), so one enrollment is only the start."
+  intro="Kraken has supported standard TOTP for years, and it stops account takeovers cold. Worth knowing: Kraken's highest-rated factor today is a passkey/security key, and the TOTP factor is scoped per “facet” (sign-in, trading, funding), so one enrollment is only the start."
   minutes={3}
   params={['6 digits', '30s period', 'SHA-1']}
   ctaTitle="Kraken's strength is the second secret you haven't enrolled yet"
@@ -23,7 +23,7 @@ const description =
   steps={[
     {
       title: 'Open Kraken security settings',
-      body: 'Sign in at kraken.com → click your profile icon → “Security” → “Sign-in Two-Factor Authentication (2FA)”. Kraken lists separate facets like Sign-in, Trading, Funding, Master key (Trading/Funding/Master-key facets live under Advanced Settings).',
+      body: 'Sign in at kraken.com → click your profile icon → “Security” → “Sign-in Two-Factor Authentication (2FA)”. Kraken lists separate facets like Sign-in, Trading, Funding, Master key (the Trading, Funding and Master-key switches sit further down the same Security page).',
     },
     {
       title: 'Add the authenticator-app factor',
@@ -57,7 +57,7 @@ const description =
     },
     {
       q: 'Codes rejected right after setup — what broke?',
-      a: 'Clock drift almost always. Kraken validates codes within a window: if your system clock is even ~30 s off, every guess fails. Set your OS to sync time automatically, wait for the next step, and try once more.',
+      a: 'Nine times out of ten it is clock drift — Kraken, like every exchange, validates against strict time windows, and an unsynced clock drifts outside them quickly. Enable automatic time sync in your operating system and retry with the next code before assuming anything worse.',
     },
   ]}
 />

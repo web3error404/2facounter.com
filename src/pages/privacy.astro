@@ -81,7 +81,9 @@ const jsonLd = [
           before enabling these analytics cookies — decline, and Google Analytics never loads at
           all; accept, and you can change your mind later via the "Cookie settings" link in the
           footer. Cloudflare Web Analytics is
-          cookieless by design and stores nothing in your browser. Blocking or deleting analytics
+          cookieless by design and stores nothing in your browser; because it sets no cookies and
+          stores nothing, it is not gated behind the consent prompt — it runs whether or not you
+          answer the banner. Blocking or deleting analytics
           cookies does not affect the generator in any way. Your keys are never profiled or
           recorded: the tool deliberately has no “remember my last key” behavior — your keys
           exist only in the open page’s memory, never in <code>localStorage</code> and never in
@@ -129,12 +131,23 @@ const jsonLd = [
 
         <h2 id="local-storage">Local storage</h2>
         <p>
-          Nothing. The generator does not write your key, your codes, or your recent-keys list
-          to <code>localStorage</code>, <code>sessionStorage</code>, cookies, or IndexedDB —
-          they exist only in the open page’s memory, so refreshing or closing the page wipes
-          them all. Keys previously saved under <code>2fac.key.v2</code> and{" "}
+          The generator itself writes nothing. It does not write your key, your codes, or your
+          recent-keys list to <code>localStorage</code>, <code>sessionStorage</code>, cookies, or
+          IndexedDB — they exist only in the open page’s memory, so refreshing or closing the
+          page wipes them all. Keys previously saved under <code>2fac.key.v2</code> and{" "}
           <code>2fac.recent.v1</code> by older versions of the tool are erased from your
           browser’s storage the next time you visit.
+        </p>
+        <p>
+          Two site-level exceptions exist, and neither ever touches 2FA data. First, your
+          cookie-consent choice is remembered in <code>localStorage</code> under{" "}
+          <code>2fac.consent.v1</code> — a single word (<em>granted</em> or <em>denied</em>) that
+          spares you the banner on every visit; clearing it just makes the banner ask again.
+          Second, if you install the site as an app or visit it repeatedly, a service worker
+          caches copies of the site’s own pages and assets in your browser (browser
+          <em>cache storage</em>) so the tool keeps working offline. The cache contains only
+          files that are already publicly served — never anything you type, paste, or generate.
+          Emptying your browser’s site data removes both.
         </p>
         <p>
           There is no cloud sync and no export file: the tool intentionally has nothing to
