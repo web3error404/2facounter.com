@@ -23,7 +23,7 @@ const description =
   steps={[
     {
       title: 'Sign in and open Security',
-      body: 'At binance.com, click your profile icon → “Account” → “Security”. Find “Authenticator App” and click “Enable”.',
+      body: 'At binance.com, open your profile icon and go to “Security”. Find “Authenticator App” and click “Enable”.',
     },
     {
       title: 'Choose software (TOTP) over SMS',
@@ -31,7 +31,7 @@ const description =
     },
     {
       title: 'Get the key text, not only the QR',
-      body: 'The dialog shows a QR code. Below it, click “view the key string” (or similar wording) and Binance reveals a Base32 secret — typically 16 characters, with the alphabet it needs you to copy exactly.',
+      body: 'The dialog shows a QR code. Below it, click “view the key string” (or similar wording) and Binance reveals a Base32 secret — usually around 16 characters, though the length can vary. Copy it exactly.',
     },
     {
       title: 'Paste it into the generator',
@@ -43,7 +43,7 @@ const description =
     },
     {
       title: 'Turn on the anti-phishing code and withdrawal whitelist',
-      body: 'Back in Security → “Anti Phishing Code”: Binance then stamps every real email with a code of your choosing, so fake “account alert” mail becomes instantly recognizable. In the same settings, add the withdrawal addresses you actually use — whitelisted addresses pause newly added ones rather than letting a thief redirect.',
+      body: 'Back in Security → “Anti Phishing Code”: Binance then stamps every real email with a code of your choosing, so fake “account alert” mail becomes instantly recognizable. In the same settings, add the withdrawal addresses you actually use — new whitelist entries face a withdrawal pause before they become usable, which is what stops a thief from redirecting your funds on day one.',
     },
     {
       title: 'Save Binance’s recovery key offline',

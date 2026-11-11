@@ -53,11 +53,14 @@ self.addEventListener('fetch', (event) => {
   const url = new URL(req.url);
   if (url.origin !== location.origin) return;
 
-  /* Navigations: network-first with cached fallback (offline). */
+  /* Navigations: network-first with cached fallback (offline).
+     Only cache successful (200) responses — caching a 404/5xx HTML
+     body would poison the offline fallback with an error page. */
   if (req.mode === 'navigate') {
     event.respondWith(
       fetch(req)
         .then((res) => {
+          if (!res.ok) return res;
           const copy = res.clone();
           caches.open(PAGE_CACHE).then((cache) => cache.put(req, copy));
           return res;
@@ -78,6 +81,7 @@ self.addEventListener('fetch', (event) => {
         (cached) =>
           cached ||
           fetch(req).then((res) => {
+            if (!res.ok) return res;
             const copy = res.clone();
             caches.open(ASSET_CACHE).then((cache) => cache.put(req, copy));
             return res;

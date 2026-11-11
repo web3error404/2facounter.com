@@ -1,9 +1,9 @@
 ---
 import GuideLayout from '../../components/GuideLayout.astro';
 
-const title = 'How to Set Up 2FA on Steam (Steam Guard Alternative)';
+const title = 'How to Set Up 2FA on Steam (Steam Guard Explained)';
 const description =
-  'Add two-factor authentication to Steam in your browser. Generate your 5-character Steam codes from the secret key at 2facounter.com — no mobile app needed.';
+  'Set up Steam 2FA: how Steam Guard works, why its 5-character codes can’t be produced by any standards-based generator, and what actually works.';
 ---
 
 <GuideLayout
@@ -14,6 +14,7 @@ const description =
   dateModified="2026-11-09"
   intro="Steam Guard is the honest exception: Steam login codes use Valve’s own 5-character TOTP variant that no standards-based generator — including this one — reproduces. Here is what actually works for Steam and what does not, so you don’t rely on a backup that silently fails."
   minutes={5}
+  minutesSuffix="min · official app required"
   params={['5-char code', '30s period', 'Valve variant']}
   ctaTitle="For Steam, the honest answer is the official app"
   ctaBody="No standards-based tool — including this one — can produce genuine Steam Guard codes, and nothing on this page should pretend it can. Enroll Steam Guard once, keep your session clean, and save your recovery details with your Steam password in an encrypted vault."
@@ -29,35 +30,31 @@ const description =
         body: 'If the account had no Steam Guard at all, the Market and trading stay locked for 15 days after enrolling the app. If email Steam Guard was already active there are no new restrictions — but trades created during the first 7 days after adding the authenticator can still be held up to 15 days. Enroll well before you plan to trade, not an hour before a sale is due. Trade and market confirmations are also their own flow inside the official app — a separate channel from login codes that no third-party tool can stand in for.',
       },
       {
-        title: 'The QR scam every trader eventually meets',
-        body: 'The classic hijack: a “buyer” messages you a QR code and asks you to scan it to “verify”, “confirm a trade”, or “check an offer”. It’s actually the Steam login QR for your own account — scanning it signs the scammer in. The rule is simple: only scan setup QR codes from the Steam client you opened yourself. A genuine enrollment never arrives by chat, email, or inside a trade window.',
+        title: 'Where a standards-based generator still helps',
+        body: 'Web tools like 2facounter.com implement the standard RFC 6238 alphabet (6/7/8-digit codes). You can keep your passwords safe, compute standard-TOTP codes in a browser for every other service that offers an authenticator-app option, or verify what a Base32 secret produces — just never expect those codes to match Steam’s login strings. For Steam logins and trade confirmations, use Steam Guard itself.',
       },
     ],
   }}
   steps={[
     {
-      title: 'Open account security',
-      body: 'Enrollment happens in the Steam mobile app: open the app and go to the Steam Guard tab → “Add authenticator”. On the web or desktop client, “Account Details” → “Manage Steam Guard” is where backup codes and authenticator management live (the desktop client also carries these under Settings → Security).',
+      title: 'Open the Steam mobile app',
+      body: 'Enrollment happens in the official Steam mobile app — install it and sign in. On the web or desktop client, "Account Details" → "Manage Steam Guard" is where backup codes and authenticator management live (the desktop client also carries these under Settings → Security).',
     },
     {
-      title: 'Enroll the official Steam Guard app',
-      body: 'Steam login codes come from Valve’s TOTP variant (5 characters, its own alphabet on top of RFC 6238) — the official Steam mobile app is the only tool that produces them. Enroll the app there once; it also handles trade and market confirmations, which no third-party tool can.',
+      title: 'Add the authenticator',
+      body: 'Open the Steam Guard tab and choose "Add authenticator". Steam login codes come from Valve’s TOTP variant (5 characters, its own alphabet on top of RFC 6238) — the official Steam mobile app is the only tool that produces them. It also handles trade and market confirmations, which no third-party tool can.',
     },
     {
-      title: 'Know where a standard generator does help',
-      body: 'Web tools like 2facounter.com implement the standard RFC 6238 alphabet (6/7/8-digit codes). You can keep your passwords safe, compute standard-TOTP codes in a browser, or verify what a Base32 secret produces — but the codes are not valid Steam login codes.',
+      title: 'Confirm and save the recovery code',
+      body: 'Steam confirms the phone number on the account, then shows a one-time recovery code. Store it with your Steam password in an encrypted vault so a lost phone can be re-enrolled without guessing.',
     },
     {
-      title: 'Keep trade/market protections in mind',
+      title: 'Mind the trading restrictions',
       body: 'If your account previously had no Steam Guard enabled at all, market and trading are restricted for 15 days after enrolling. Even if email Steam Guard was already on, trades created during the first 7 days after adding the app can be held for up to 15 days. Enroll well before you plan to trade, and use the app’s confirmations freely afterwards.',
     },
     {
-      title: 'Write the recovery details down',
-      body: 'Store Steam’s recovery details with your Steam password in an encrypted vault so a lost phone can be re-enrolled without guessing.',
-    },
-    {
-      title: 'Bottom line for Steam',
-      body: 'For Steam logins and trade confirmations, use Steam Guard itself. Everything this site generates is standards-based TOTP — exactly the wrong alphabet for Valve’s variant, and we won’t pretend otherwise.',
+      title: 'Never scan a QR code sent to you',
+      body: 'The classic hijack: a "buyer" messages a QR code "to confirm a trade" — it is actually the Steam login QR for your own account. Only scan setup QR codes from the Steam client you opened yourself; a genuine enrollment never arrives by chat, email, or a trade window.',
     },
   ]}
   faqs={[

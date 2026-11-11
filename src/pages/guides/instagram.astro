@@ -53,7 +53,7 @@ const description =
     },
     {
       q: 'Codes rejected right after setup — what broke?',
-      a: 'Clock drift almost always. TOTP codes depend on your device clock matching Instagram’s server within a tight window — if your system clock is even ~30 s off, every guess fails. Set your OS to sync time automatically, wait for the next 30-second step, and try once more.',
+      a: 'Usually the device clock. Instagram compares the code it expects against your device’s time — drift of half a minute is enough for a rejection. Turn on automatic time sync in your OS settings and try the next code. Money rides on this account, so it is worth fixing the clock properly rather than racing the timer.',
     },
   ]}
 />

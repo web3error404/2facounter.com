@@ -23,7 +23,7 @@ const description =
     blocks: [
       {
         title: 'The phone-number gate',
-        body: 'Accounts without a verified phone number have historically found the two-factor menu hidden — even for the app-based option. Verify a number is registered on the account before you try to enroll. The number doesn’t become your 2FA (app codes are a separate factor); it just has to exist for the section to appear.',
+        body: 'Accounts without a verified phone number have historically found the two-factor menu hidden — even for the app-based option, though X can change this behavior at any time. Verify a number is registered on the account before you try to enroll. The number doesn’t become your 2FA (app codes are a separate factor); it just has to exist for the section to appear.',
       },
       {
         title: 'Why the SMS factor is the one to skip',
@@ -58,13 +58,13 @@ const description =
     },
     {
       title: 'Store backups',
-      body: 'Save the Base32 key (and that confirmation QR) encrypted in a password manager, and note X’s single-use backup code list if prompted.',
+      body: 'Save the Base32 key (and that confirmation QR) encrypted in a password manager, and note X’s single-use backup code if prompted — X issues exactly one, so losing it means relying on the key itself.',
     },
   ]}
   faqs={[
     {
       q: 'Why does X require a phone number for 2FA?',
-      a: 'Accounts without a verified phone number have historically not seen the 2FA section — even when they only want the app-based option. The browser authenticator replaces the need for an authenticator app, not the number requirement.',
+      a: 'Accounts without a verified phone number have historically not seen the 2FA section — even when they only want the app-based option (a behavior X can change at any time). The browser authenticator replaces the need for an authenticator app, not the number requirement.',
     },
     {
       q: 'Which of X’s three 2FA options is the safe one?',

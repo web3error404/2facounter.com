@@ -3,7 +3,8 @@
 A fast, free, private 2FA / authenticator app that runs entirely in the browser.
 Paste a secret key (or scan a QR code with the camera / upload a QR screenshot)
 and get a live TOTP/HOTP code — generated locally with the Web Crypto API.
-Keys are cached only in the device's local storage; there are no servers.
+Keys are kept in memory only (nothing is written to localStorage, cookies or
+any other persistent storage); there are no servers.
 
 ## Stack
 
