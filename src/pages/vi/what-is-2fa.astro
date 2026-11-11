@@ -35,7 +35,7 @@ const faqs = [
   },
   {
     q: 'Làm sao bật 2FA?',
-    a: 'Bốn bước: 1) Mở cài đặt tài khoản hoặc cài đặt bảo mật của dịch vụ và chọn “Xác thực hai yếu tố”. 2) Chọn “Dùng ứng dụng xác thực” (tránh SMS nếu có thể). 3) Quét mã QR bằng trình xác thực — hoặc bấm “không thể quét?” và lưu khóa thiết lập. 4) Nhập mã trực tiếp để hoàn tất, sau đó tải xuống hoặc in các mã sao lưu/khôi phục màn hình hiển thị. Chúng tôi có hướng dẫn riêng cho Google, GitHub, Discord, Binance và nhiều dịch vụ khác tại /guides/.',
+    a: 'Bốn bước: 1) Mở cài đặt tài khoản hoặc cài đặt bảo mật của dịch vụ và chọn “Xác thực hai yếu tố”. 2) Chọn “Dùng ứng dụng xác thực” (tránh SMS nếu có thể). 3) Quét mã QR bằng trình xác thực — hoặc bấm “không thể quét?” và lưu khóa thiết lập. 4) Nhập mã trực tiếp để hoàn tất, sau đó tải xuống hoặc in các mã sao lưu/khôi phục màn hình hiển thị. Chúng tôi có hướng dẫn riêng cho Google, GitHub, Discord, Binance và nhiều dịch vụ khác trong phần hướng dẫn của trang này.',
   },
   {
     q: '2FA mạnh cỡ nào?',
@@ -247,7 +247,7 @@ const alternates = [
         </p>
         <pre><code>otpauth://totp/GitHub:you%40example.com?secret=JBSWY3DPEHPK3PXP&amp;issuer=GitHub
 otpauth://totp/Binance:me?secret=JBSWY3DPEHPK3PXP&amp;digits=6&amp;period=30&amp;algorithm=SHA1
-otpauth://hotp/Steam:sda?secret=...&amp;counter=5   ← biến thể dựa trên bộ đếm (HOTP)</code></pre>
+otpauth://hotp/Example:you%40example.com?secret=...&amp;counter=5   ← biến thể dựa trên bộ đếm (HOTP)</code></pre>
         <p>
           Một trình tạo hiện đại tôn trọng mọi tham số: số chữ số, chu kỳ, thuật toán băm và bộ
           đếm HOTP — vì một dịch vụ yêu cầu SHA-256 sẽ vẫn từ chối mã tạo bằng mặc định SHA-1. Một

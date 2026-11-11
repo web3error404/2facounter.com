@@ -35,7 +35,7 @@ const faqs = [
   },
   {
     q: '如何开启 2FA？',
-    a: '四步：1) 打开服务的账户或安全设置，选择“双重验证”。2) 选择“使用身份验证器应用”（能避开短信就避开）。3) 用验证器扫描二维码——或者点“无法扫码？”并保存设置密钥。4) 输入当前验证码完成设置，然后下载或打印它显示的备用/恢复代码。我们在 /guides/ 发布了 Google、GitHub、Discord、Binance 等服务的分步指南。',
+    a: '四步：1) 打开服务的账户或安全设置，选择“双重验证”。2) 选择“使用身份验证器应用”（能避开短信就避开）。3) 用验证器扫描二维码——或者点“无法扫码？”并保存设置密钥。4) 输入当前验证码完成设置，然后下载或打印它显示的备用/恢复代码。我们在本站的“指南”栏目发布了 Google、GitHub、Discord、Binance 等服务的分步指南。',
   },
   {
     q: '2FA 有多强？',
@@ -240,7 +240,7 @@ const alternates = [
         </p>
         <pre><code>otpauth://totp/GitHub:you%40example.com?secret=JBSWY3DPEHPK3PXP&amp;issuer=GitHub
 otpauth://totp/Binance:me?secret=JBSWY3DPEHPK3PXP&amp;digits=6&amp;period=30&amp;algorithm=SHA1
-otpauth://hotp/Steam:sda?secret=...&amp;counter=5   ← 基于计数器的（HOTP）变体</code></pre>
+otpauth://hotp/Example:you%40example.com?secret=...&amp;counter=5   ← 基于计数器的（HOTP）变体</code></pre>
         <p>
           一个现代化的生成器会尊重每一个参数：位数、周期、哈希算法和 HOTP 计数器——因为一个
           指定 SHA-256 的服务依然会拒绝按默认 SHA-1 生成的验证码。一段裸 Base32 密钥的默认值

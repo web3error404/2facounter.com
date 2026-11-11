@@ -32,11 +32,11 @@ const faqs = [
   },
   {
     q: 'Comment obtenir la 2FA ?',
-    a: 'Vous activez la 2FA depuis le compte que vous voulez protéger : ouvrez ses paramètres, cherchez « Sécurité » ou « Connexion et sécurité », puis « Authentification à deux facteurs » ou « Vérification en deux étapes ». Choisissez l’option application d’authentification, scannez le code QR — ou affichez la clé de configuration — et saisissez le code affiché dans votre application pour valider. Notre guide pas à pas explique comment obtenir un code sans téléphone : /fr/how-to-get-2fa-code/.',
+    a: 'Vous activez la 2FA depuis le compte que vous voulez protéger : ouvrez ses paramètres, cherchez « Sécurité » ou « Connexion et sécurité », puis « Authentification à deux facteurs » ou « Vérification en deux étapes ». Choisissez l’option application d’authentification, scannez le code QR — ou affichez la clé de configuration — et saisissez le code affiché dans votre application pour valider. Notre guide pas à pas explique comment obtenir un code sans téléphone.',
   },
   {
     q: 'Comment activer la 2FA ?',
-    a: 'Quatre étapes : 1) Ouvrez les paramètres du compte ou de sécurité du service et sélectionnez « Authentification à deux facteurs ». 2) Choisissez « Utiliser une application d’authentification » (évitez le SMS si une meilleure option existe). 3) Scannez le code QR avec votre application — ou cliquez sur « scanner impossible ? » et enregistrez la clé de configuration. 4) Saisissez le code en direct pour terminer, puis téléchargez ou imprimez les codes de récupération qu’on vous montre. Nous publions des guides de configuration service par service pour Google, GitHub, Discord, Binance et bien d’autres sur /guides/.',
+    a: 'Quatre étapes : 1) Ouvrez les paramètres du compte ou de sécurité du service et sélectionnez « Authentification à deux facteurs ». 2) Choisissez « Utiliser une application d’authentification » (évitez le SMS si une meilleure option existe). 3) Scannez le code QR avec votre application — ou cliquez sur « scanner impossible ? » et enregistrez la clé de configuration. 4) Saisissez le code en direct pour terminer, puis téléchargez ou imprimez les codes de récupération qu’on vous montre. Nous publions des guides de configuration service par service pour Google, GitHub, Discord, Binance et bien d’autres dans la section Guides de ce site.',
   },
   {
     q: 'Quel est le niveau de protection réel de la 2FA ?',
@@ -260,7 +260,7 @@ const alternates = [
         </p>
         <pre><code>otpauth://totp/GitHub:you%40example.com?secret=JBSWY3DPEHPK3PXP&amp;issuer=GitHub
 otpauth://totp/Binance:me?secret=JBSWY3DPEHPK3PXP&amp;digits=6&amp;period=30&amp;algorithm=SHA1
-otpauth://hotp/Steam:sda?secret=...&amp;counter=5   ← variante à compteur (HOTP)</code></pre>
+otpauth://hotp/Example:you%40example.com?secret=...&amp;counter=5   ← variante à compteur (HOTP)</code></pre>
         <p>
           Un générateur moderne respecte chaque paramètre : nombre de chiffres, période,
           algorithme de hachage et compteur HOTP — car un service qui exige SHA-256 rejetera

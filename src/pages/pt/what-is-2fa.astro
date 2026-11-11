@@ -32,11 +32,11 @@ const faqs = [
   },
   {
     q: 'Como obter a 2FA?',
-    a: 'Você ativa a 2FA na conta que quer proteger: abra as configurações dela, procure “Segurança” ou “Login e segurança” e localize “Autenticação de dois fatores” ou “Verificação em duas etapas”. Escolha a opção de aplicativo autenticador, escaneie o QR Code (ou revele a chave de configuração) e digite o código exibido no seu autenticador para confirmar. O nosso passo a passo completo mostra como obter um código sem telefone: /pt/how-to-get-2fa-code/.',
+    a: 'Você ativa a 2FA na conta que quer proteger: abra as configurações dela, procure “Segurança” ou “Login e segurança” e localize “Autenticação de dois fatores” ou “Verificação em duas etapas”. Escolha a opção de aplicativo autenticador, escaneie o QR Code (ou revele a chave de configuração) e digite o código exibido no seu autenticador para confirmar. O nosso passo a passo completo mostra como obter um código sem telefone.',
   },
   {
     q: 'Como ativar a 2FA?',
-    a: 'Quatro passos: 1) Abra as configurações de conta ou de segurança do serviço e selecione “Autenticação de dois fatores”. 2) Escolha “Usar um aplicativo autenticador” (evite SMS quando puder). 3) Escaneie o QR Code com o seu autenticador — ou clique em “não consegue escanear?” e salve a chave de configuração. 4) Digite o código ao vivo para concluir e, em seguida, baixe ou imprima os códigos de backup/recuperação que o serviço exibir. Publicamos guias de configuração por serviço para Google, GitHub, Discord, Binance e outros em /guides/.',
+    a: 'Quatro passos: 1) Abra as configurações de conta ou de segurança do serviço e selecione “Autenticação de dois fatores”. 2) Escolha “Usar um aplicativo autenticador” (evite SMS quando puder). 3) Escaneie o QR Code com o seu autenticador — ou clique em “não consegue escanear?” e salve a chave de configuração. 4) Digite o código ao vivo para concluir e, em seguida, baixe ou imprima os códigos de backup/recuperação que o serviço exibir. Publicamos guias de configuração por serviço para Google, GitHub, Discord, Binance e outros na seção de guias deste site.',
   },
   {
     q: 'Quão forte é a 2FA?',
@@ -255,7 +255,7 @@ const jsonLd = [
         </p>
         <pre><code>otpauth://totp/GitHub:you%40example.com?secret=JBSWY3DPEHPK3PXP&amp;issuer=GitHub
 otpauth://totp/Binance:me?secret=JBSWY3DPEHPK3PXP&amp;digits=6&amp;period=30&amp;algorithm=SHA1
-otpauth://hotp/Steam:sda?secret=...&amp;counter=5   ← variante baseada em contador (HOTP)</code></pre>
+otpauth://hotp/Example:you%40example.com?secret=...&amp;counter=5   ← variante baseada em contador (HOTP)</code></pre>
         <p>
           Um gerador moderno respeita cada parâmetro: quantidade de dígitos, período, algoritmo de
           hash e contador do HOTP — porque um serviço que exige SHA-256 segue rejeitando um código

@@ -33,7 +33,7 @@ const faqs = [
   },
   {
     q: 'Come si ottiene la 2FA?',
-    a: 'La 2FA si ottiene dall’account che vuoi proteggere: apri le impostazioni, cerca la voce «Sicurezza» o «Accesso e sicurezza» e trova «Autenticazione a due fattori» o «Verifica in due passaggi». Scegli l’opzione per l’app di autenticazione, scansiona il codice QR — oppure fai comparire la chiave di configurazione — e inserisci il codice mostrato dall’autenticatore per confermare. La nostra guida passo passo spiega come ottenere un codice anche senza un telefono: /it/how-to-get-2fa-code/.',
+    a: 'La 2FA si ottiene dall’account che vuoi proteggere: apri le impostazioni, cerca la voce «Sicurezza» o «Accesso e sicurezza» e trova «Autenticazione a due fattori» o «Verifica in due passaggi». Scegli l’opzione per l’app di autenticazione, scansiona il codice QR — oppure fai comparire la chiave di configurazione — e inserisci il codice mostrato dall’autenticatore per confermare. La nostra guida passo passo spiega come ottenere un codice anche senza un telefono.',
   },
   {
     q: 'Come si attiva la verifica in due passaggi?',
@@ -259,7 +259,7 @@ const alternates = [
         </p>
         <pre><code>otpauth://totp/GitHub:you%40example.com?secret=JBSWY3DPEHPK3PXP&amp;issuer=GitHub
 otpauth://totp/Binance:me?secret=JBSWY3DPEHPK3PXP&amp;digits=6&amp;period=30&amp;algorithm=SHA1
-otpauth://hotp/Steam:sda?secret=...&amp;counter=5   ← counter-based (HOTP) variant</code></pre>
+otpauth://hotp/Example:you%40example.com?secret=...&amp;counter=5   ← counter-based (HOTP) variant</code></pre>
         <p>
           Un generatore moderno rispetta ogni parametro: numero di cifre, periodo, algoritmo di
           hash e contatore HOTP — perché un servizio che specifica SHA-256 rifiuterà comunque un
