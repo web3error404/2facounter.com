@@ -14,8 +14,9 @@
  * element reads as a physical object resting on the counter.
  * Fredoka signs headlines, nav and buttons (weights 400–700),
  * Inter carries body copy and sets numerals (prices, stats) at 900
- * — matching kiwi fonts — JetBrains Mono stamps labels and metadata,
- * and Titan One renders the brand wordmark.
+ * — matching kiwi fonts — and JetBrains Mono stamps labels and metadata.
+ * The "2FA COUNTER" wordmark is static Titan One glyph outlines baked into
+ * components/Wordmark.astro (no webfont fetch).
  * Dashed rules mimic tear-off perforations; solid hairlines survive
  * only inside the nutrition-style tables.
  */
@@ -78,7 +79,8 @@
   --font-sans: "Inter Variable", "Inter", system-ui, sans-serif;
   --font-mono: "JetBrains Mono Variable", "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   --font-numeric: "Inter Variable", "Inter", system-ui, sans-serif;
-  --font-brand: "Titan One", "Fredoka Variable", system-ui, sans-serif;
+  /* The "2FA COUNTER" brand wordmark is a static SVG (components/
+     Wordmark.astro) — it no longer maps to a webfont family. */
 
   /* ── Deli type scale ──────────────────────────────────────── */
   --text-hero-display: 3.25rem; /* profile name, major headlines */

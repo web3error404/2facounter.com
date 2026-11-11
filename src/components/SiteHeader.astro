@@ -1,5 +1,6 @@
 ---
 import ShieldLogo from './ShieldLogo.astro';
+import Wordmark from './Wordmark.astro';
 import { LANGUAGES, LANG_BY_HREF, languageOptions } from '../i18n/languages';
 
 const defaultLinks = [
@@ -52,12 +53,9 @@ const current = switcher.find((l) => l.current) ?? switcher[0];
   >
     <a href="/" class="flex items-center gap-2.5" aria-label="2FA COUNTER — home">
       <ShieldLogo class="h-9 w-9 shrink-0" />
-      <span
-        translate="no"
-        class="font-brand text-lg leading-none tracking-normal text-ink text-shadow-[2px_2px_0_0_rgb(244_235_225/0.65)]"
-      >
-        2FA COUNTER
-      </span>
+      <!-- Wordmark: static Titan One outlines (no webfont). Rendered height
+           matches the old text-lg (18px) glyph box: 35.04/48 × 18px ≈ 13px. -->
+      <Wordmark class="h-[13px] w-auto shrink-0 text-ink" />
     </a>
 
     <div class="hidden items-center gap-1.5 lg:flex">
