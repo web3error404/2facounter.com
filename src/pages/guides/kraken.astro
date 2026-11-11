@@ -13,21 +13,21 @@ const description =
   title={title}
   description={description}
   path="/guides/kraken/"
-  dateModified="2026-11-07"
-  lastReviewed="2026-11-07"
+  dateModified="2026-11-11"
+  lastReviewed="2026-11-11"
   intro="Kraken has supported standard TOTP for years, and it stops account takeovers cold. Worth knowing: Kraken's highest-rated factor today is a passkey/security key, and the TOTP factor is scoped per “facet” (sign-in, trading, funding), so one enrollment is only the start."
   minutes={3}
-  params={['6 digits', '30s period', 'SHA-1']}
+  params={['6-8 digits', '30s period', 'SHA-1']}
   ctaTitle="Kraken's strength is the second secret you haven't enrolled yet"
   ctaBody="Sign-in 2FA protects the door; the Master key protects the vault — withdrawals, exports, and API permissions run on their own secret in Kraken. Finish both enrollments and keep them as two independent recent-key slots here."
   steps={[
     {
       title: 'Open Kraken security settings',
-      body: 'Sign in at kraken.com → click your profile icon → “Security” → “Sign-in Two-Factor Authentication (2FA)”. Kraken lists separate facets like Sign-in, Trading, Funding, Master key (the Trading, Funding and Master-key switches sit further down the same Security page).',
+      body: 'Sign in at kraken.com and open your Security settings. You’ll see “Sign-in Two-Factor Authentication (2FA)” — the facet that stops account takeovers on the login page itself. Kraken scopes 2FA per action: Trading, Funding and the Master key are set up separately (on pro.kraken.com, it’s profile icon → Settings → Security → the 2FA table).',
     },
     {
       title: 'Add the authenticator-app factor',
-      body: 'Under the Sign-in 2FA section, click “Enable” next to “Authenticator app” — that’s the facet that stops account takeovers on the login page itself.',
+      body: 'Kraken recommends a passkey here if you have a hardware key or can use device biometrics. Prefer a portable TOTP code? Choose the authenticator-app option in the Sign-in 2FA section instead. Heads-up Kraken shares with everyone: enabling sign-in 2FA also activates Step-up 2FA — any later change to your 2FA settings must be confirmed with a code.',
     },
     {
       title: 'Reveal the secret',
@@ -53,7 +53,7 @@ const description =
     },
     {
       q: 'What is the Global Settings Lock?',
-      a: 'Kraken’s GSL (Global Settings Lock) freezes security-critical settings — 2FA changes, password resets, withdrawal addresses — until you explicitly unlock it. Set it up after today’s enrollment: even someone with your password and phone can’t then quietly rewire the account.',
+      a: 'Kraken’s GSL (Global Settings Lock) freezes security-critical settings — 2FA changes, password resets, withdrawal addresses — until you explicitly unlock it. Kraken’s own guidance: enable the Master key first, and only then the GSL. Even someone with your password and phone can’t quietly rewire a locked account.',
     },
     {
       q: 'Codes rejected right after setup — what broke?',
