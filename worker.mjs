@@ -25,6 +25,13 @@ const SECURITY_HEADERS = {
   'referrer-policy': 'strict-origin-when-cross-origin',
   'x-frame-options': 'DENY',
   'permissions-policy': 'camera=(self), geolocation=(), microphone=()',
+  'strict-transport-security': 'max-age=31536000',
+  /* Mirrors public/_headers. Inline scripts are first-party (consent gate,
+     SW registration, CF beacon inject); scripts additionally load from the
+     Google tag and Cloudflare Insights; GA/GTM and the CF RUM beacon are the
+     only connect/img third parties. Inline styles are Astro page styles. */
+  'content-security-policy':
+    "default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://static.cloudflareinsights.com; img-src 'self' data: https://*.google-analytics.com https://*.analytics.google.com https://googletagmanager.com; style-src 'self' 'unsafe-inline'; font-src 'self'; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com https://static.cloudflareinsights.com https://cloudflareinsights.com; frame-src https://www.googletagmanager.com; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'",
 };
 
 export default {

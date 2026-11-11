@@ -36,7 +36,7 @@ const faq = [
   },
   {
     q: 'Why is 2FA so important?',
-    a: 'Because it is the one upgrade that survives a password leak. Microsoft reports that 2FA blocks over 99.9% of account compromise attacks — and with the generator at the top of this page, enabling it costs about two minutes per account.',
+    a: 'Because it is the one upgrade that survives a password leak. Microsoft reports that 2FA blocks over 99.9% of account compromise attacks - and with the generator at the top of this page, enabling it costs about a minute per account.',
   },
   {
     q: 'How strong is 2FA?',
@@ -154,7 +154,7 @@ const features = [
   { title: 'Full parameter support, auto-detected', body: 'A bare key uses the standard defaults; a full otpauth:// URI honors every parameter it carries — 6/7/8 digits, 15/30/60 s period, SHA-1/256/512, even counter-based HOTP.', v: 'cream' },
   { title: 'In-memory only — nothing saved', body: 'Your key never touches any persistent storage: no localStorage, no cookies, no device cache. The Recent-keys list speeds up switching within a visit, but a refresh or tab close wipes everything — every visit starts blank.', v: 'cream' },
   { title: 'Nothing to install or sign up for', body: 'No phone app, no account, no sync fees, no ad tracking. If you can open a browser, you can generate a code.', v: 'cream' },
-  { title: 'Offline & installable', body: 'Works with the tab closed to the world — literally. And as a PWA it installs into your dock or home screen like a native app.', v: 'dark' },
+  { title: 'Offline & installable', body: 'Once the page is open, it works with no internet connection at all — the code math runs locally in your browser. And as a PWA it installs into your dock or home screen like a native app.', v: 'dark' },
 ];
 
 const services = [
@@ -372,6 +372,8 @@ const services = [
             ['Kraken', 'kraken'],
             ['Steam', 'steam'],
             ['Binance', 'binance'],
+            ['PayPal', 'paypal'],
+            ['Instagram', 'instagram'],
           ].map(([name, slug], i) => (
             <>
               {i > 0 && <span aria-hidden="true"> · </span>}

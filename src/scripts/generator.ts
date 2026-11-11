@@ -103,6 +103,10 @@ const camVideo = $<HTMLVideoElement>('cam-video');
 const toastEl = $('toast');
 const toastText = $('toast-text');
 
+/* HOTP: the counter only moves when a code is consumed, so an explicit
+   "next code" button advances it (memory-only, like everything else). */
+const hotpNextBtn = $('btn-hotp-next') || null;
+
 const recentWrap = $('recent-keys-wrap') || null;
 const recentList = $('recent-keys') || null;
 const recentClearBtn = $('btn-recent-clear') || null;
@@ -162,18 +166,41 @@ function init() {
     try {
       await navigator.clipboard.writeText(currentCode);
     } catch {
+      /* Clipboard API unavailable/blocked — execCommand fallback. It is not
+         reliable, so its return value must be honored: reporting "Copied"
+         on a silent failure is worse than an honest failure toast. */
       const ta = document.createElement('textarea');
       ta.value = currentCode;
+      ta.setAttribute('readonly', '');
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
       document.body.appendChild(ta);
       ta.select();
-      document.execCommand('copy');
+      let fallbackOk = false;
+      try {
+        fallbackOk = document.execCommand('copy');
+      } catch {
+        fallbackOk = false;
+      }
       ta.remove();
+      if (!fallbackOk) return toast(T.toastCopyFailed, false);
     }
     copyLabel.textContent = T.copied;
     /* Announce via the toast (role="status" + aria-live) — a label swap
        alone is invisible to screen readers. */
     toast(T.toastCopied, true);
     setTimeout(() => (copyLabel.textContent = T.copyCode), 2000);
+  });
+
+  /* HOTP: advance the counter by one. The server's counter advances every
+     time a code is accepted, so after consuming a code the user must move
+     to the next one — without this the same code renders forever. */
+  hotpNextBtn?.addEventListener('click', () => {
+    if (!account || account.type !== 'hotp') return;
+    account.counter += 1;
+    lastStep = null;
+    currentCode = '';
+    void renderCode(true);
   });
 
   // QR import: camera half opens the scanner, upload half opens the picker
@@ -258,6 +285,7 @@ function init() {
     e.preventDefault();
     const f = (e as DragEvent).dataTransfer?.files?.[0];
     if (f?.type.startsWith('image/')) await scanFile(f);
+    else if (f) toast(T.toastFileUnreadable, false);
   });
 
   if (window.matchMedia('(min-width: 1024px)').matches) keyInput.focus();
@@ -335,6 +363,9 @@ function setAccount(acc: Account) {
       buildBar(Math.min(acc.period, 30), acc.period);
     }
     badge.classList.remove('hidden');
+    /* The advance button only makes sense for counter-based HOTP keys —
+       TOTP rotates on its own. */
+    hotpNextBtn?.classList.toggle('hidden', acc.type !== 'hotp');
   }
 }
 
@@ -388,9 +419,11 @@ function renderRecents(): void {
     const open = document.createElement('button');
     open.type = 'button';
     open.title = T.loadKeyTitle;
-    open.className = 'flex min-w-0 flex-1 items-center justify-between gap-3 text-left';
+    /* text-start (not text-left) so the label mirrors correctly on RTL pages */
+    open.className = 'flex min-w-0 flex-1 items-center justify-between gap-3 text-start';
     const nameEl = document.createElement('span');
-    nameEl.className = 'truncate text-sm font-semibold text-body group-hover:text-ink';    nameEl.textContent = entry.label;
+    nameEl.className = 'truncate text-sm font-semibold text-body group-hover:text-ink';
+    nameEl.textContent = entry.label;
     const keyEl = document.createElement('span');
     keyEl.className = 'shrink-0 font-mono text-xs text-muted-soft';
     const s = secretOf(entry.key);
@@ -470,10 +503,16 @@ function resetDisplay() {
   buildBar(30);
   paintBar(0);
   badge.classList.add('hidden');
+  hotpNextBtn?.classList.add('hidden');
 }
 
 function toast(msg: string, ok = true) {
   toastText.textContent = msg;
+  /* Errors announce assertively (role="alert" + aria-live="assertive") so a
+     failed paste / camera / copy attempt is never swallowed by a later
+     polite message; successes stay polite. */
+  toastEl.setAttribute('role', ok ? 'status' : 'alert');
+  toastEl.setAttribute('aria-live', ok ? 'polite' : 'assertive');
   toastEl.classList.remove('hidden');
   toastEl.classList.toggle('text-danger', !ok);
   toastEl.classList.toggle('text-ink', ok);
@@ -559,7 +598,15 @@ function parseKeyInput(text: string): ParsedKey | null {
     const params = new URLSearchParams(m[3]);
     const secret = normalizeSecret(params.get('secret') || '');
     if (!secret) return null;
-    let label = decodeURIComponent(m[2] || '');
+    /* A malformed percent-escape in the label (e.g. "My%2Label") would throw
+       URIError inside the input handler and abort processing with a stale
+       code on screen and no feedback — fall back to the raw label instead. */
+    let label = m[2] || '';
+    try {
+      label = decodeURIComponent(label);
+    } catch {
+      /* keep the raw label — it is display text only */
+    }
     let issuer = params.get('issuer') || undefined;
     if (label.includes(':')) {
       const [maybeIssuer, ...rest] = label.split(':');
@@ -808,7 +855,13 @@ let jsQrPromise: Promise<JsQR | null> | null = null;
 function loadJsQR() {
   jsQrPromise ??= import('jsqr')
     .then((m) => (m.default as unknown as JsQR) ?? null)
-    .catch(() => null);
+    .catch(() => {
+      /* A transient chunk-load failure (offline, flaky network) must not
+         disable QR scanning for the whole session — null the memo so the
+         next scan attempt retries the import. */
+      jsQrPromise = null;
+      return null;
+    });
   return jsQrPromise;
 }
 

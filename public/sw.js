@@ -30,7 +30,13 @@ self.addEventListener('install', (event) => {
   event.waitUntil(
     caches
       .open(PAGE_CACHE)
-      .then((cache) => cache.addAll(CORE))
+      .then((cache) =>
+        /* cache.addAll() is all-or-nothing: one temporarily failing URL
+           (a 404 after a future restructure, a flaky network) would abort
+           the install and silently kill offline support for the whole
+           site. Per-URL cache.add() tolerates individual failures. */
+        Promise.allSettled(CORE.map((u) => cache.add(u))),
+      )
       .then(() => self.skipWaiting()),
   );
 });
