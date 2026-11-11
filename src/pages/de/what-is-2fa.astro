@@ -32,11 +32,11 @@ const faqs = [
   },
   {
     q: 'Wie erhalte ich 2FA?',
-    a: 'Sie erhalten 2FA über das Konto, das Sie schützen möchten: Öffnen Sie dessen Einstellungen, suchen Sie „Sicherheit“ oder „Login & Sicherheit“ und dort „Zwei-Faktor-Authentifizierung“ oder „Zwei-Schritt-Verifizierung“. Wählen Sie die Option „Authenticator-App“, scannen Sie den QR-Code (oder lassen Sie sich den Einrichtungsschlüssel anzeigen) und bestätigen Sie die Einrichtung mit dem Code, den Ihr Authenticator anzeigt. Unsere Schritt-für-Schritt-Anleitung zeigt, wie Sie einen Code ohne Handy erhalten: /de/how-to-get-2fa-code/.',
+    a: 'Sie erhalten 2FA über das Konto, das Sie schützen möchten: Öffnen Sie dessen Einstellungen, suchen Sie „Sicherheit“ oder „Login & Sicherheit“ und dort „Zwei-Faktor-Authentifizierung“ oder „Zwei-Schritt-Verifizierung“. Wählen Sie die Option „Authenticator-App“, scannen Sie den QR-Code (oder lassen Sie sich den Einrichtungsschlüssel anzeigen) und bestätigen Sie die Einrichtung mit dem Code, den Ihr Authenticator anzeigt. Unsere Schritt-für-Schritt-Anleitung zeigt, wie Sie einen Code ohne Handy erhalten.',
   },
   {
     q: 'Wie aktiviere ich die Zwei-Faktor-Authentifizierung?',
-    a: 'Vier Schritte: 1) Öffnen Sie die Konto- oder Sicherheitseinstellungen des Dienstes und wählen Sie „Zwei-Faktor-Authentifizierung“. 2) Wählen Sie „Authenticator-App verwenden“ (meiden Sie SMS, wenn es die Option gibt). 3) Scannen Sie den QR-Code mit Ihrem Authenticator — oder klicken Sie auf „Scannt nicht?“ und speichern Sie den Einrichtungsschlüssel. 4) Bestätigen Sie mit dem Live-Code und laden Sie anschließend die angezeigten Backup- bzw. Wiederherstellungscodes herunter oder drucken Sie sie aus. Für Google, GitHub, Discord, Binance und weitere Dienste veröffentlichen wir eigene Einrichtungsanleitungen unter /guides/.',
+    a: 'Vier Schritte: 1) Öffnen Sie die Konto- oder Sicherheitseinstellungen des Dienstes und wählen Sie „Zwei-Faktor-Authentifizierung“. 2) Wählen Sie „Authenticator-App verwenden“ (meiden Sie SMS, wenn es die Option gibt). 3) Scannen Sie den QR-Code mit Ihrem Authenticator — oder klicken Sie auf „Scannt nicht?“ und speichern Sie den Einrichtungsschlüssel. 4) Bestätigen Sie mit dem Live-Code und laden Sie anschließend die angezeigten Backup- bzw. Wiederherstellungscodes herunter oder drucken Sie sie aus. Für Google, GitHub, Discord, Binance und weitere Dienste veröffentlichen wir eigene Einrichtungsanleitungen im Bereich „Anleitungen“ dieser Website.',
   },
   {
     q: 'Wie stark ist 2FA?',
@@ -256,7 +256,7 @@ const alternates = [
         </p>
         <pre><code>otpauth://totp/GitHub:you%40example.com?secret=JBSWY3DPEHPK3PXP&amp;issuer=GitHub
 otpauth://totp/Binance:me?secret=JBSWY3DPEHPK3PXP&amp;digits=6&amp;period=30&amp;algorithm=SHA1
-otpauth://hotp/Steam:sda?secret=...&amp;counter=5   ← zählerbasierte Variante (HOTP)</code></pre>
+otpauth://hotp/Example:you%40example.com?secret=...&amp;counter=5   ← zählerbasierte Variante (HOTP)</code></pre>
         <p>
           Ein moderner Generator beachtet jeden Parameter: Ziffernanzahl, Periode, Hash-Algorithmus
           und HOTP-Zähler — denn ein Dienst, der SHA-256 verlangt, lehnt auch einen Standard-

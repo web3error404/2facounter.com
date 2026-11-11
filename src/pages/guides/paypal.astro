@@ -31,7 +31,7 @@ const description =
     },
     {
       title: 'Reveal the secret',
-      body: 'PayPal shows a QR code plus a Base32 “secret key” line for manual entry. Copy the key — or screenshot the QR and paste the image into the page, the parser reads it locally.',
+      body: 'PayPal shows a QR code with the Base32 “secret key” printed underneath for manual entry. Either works: copy the key text, or screenshot the QR and paste the image straight into the generator page — it is decoded on your device, never uploaded.',
     },
     {
       title: 'Generate, verify, activate',
@@ -56,7 +56,7 @@ const description =
       a: 'If you saved recovery codes, use one at sign-in. If SMS was kept as a fallback, that still works. If neither exists, PayPal support verifies your identity through account details and restores access — which is slower and more painful than saving recovery codes today.',
     },
     {
-      q: 'Codes rejected right after setup — what broke?',
+      q: 'PayPal rejects my code right after setup — why?',
       a: 'Most rejections are clock drift: PayPal’s server and your device disagree on what “now” is, and the code rolls over mid-verification. Sync your system clock automatically, then submit the freshly displayed code. If a wrong code ever gets through and you lock yourself out, PayPal’s recovery path exists — but a synced clock prevents that in the first place.',
     },
   ]}

@@ -36,7 +36,7 @@ const faqs = [
   },
   {
     q: '2FAを有効にするにはどうすればいいですか？',
-    a: '手順は4つです。1) サービスのアカウント設定またはセキュリティ設定を開き、「二段階認証」を選択する。2) 「認証アプリを使う」を選ぶ（可能なら SMS は避けましょう）。3) 認証アプリでQRコードを読み取るか、「スキャンできない場合」からセットアップキーを保存する。4) ライブコードを入力して完了したら、表示されるリカバリーコード（バックアップコード）をダウンロードまたは印刷します。Google、GitHub、Discord、Binance などのサービス別ガイドは /guides/ で公開しています。',
+    a: '手順は4つです。1) サービスのアカウント設定またはセキュリティ設定を開き、「二段階認証」を選択する。2) 「認証アプリを使う」を選ぶ（可能なら SMS は避けましょう）。3) 認証アプリでQRコードを読み取るか、「スキャンできない場合」からセットアップキーを保存する。4) ライブコードを入力して完了したら、表示されるリカバリーコード（バックアップコード）をダウンロードまたは印刷します。Google、GitHub、Discord、Binance などのサービス別ガイドは本サイトの「ガイド」セクションで公開しています。',
   },
   {
     q: '2FAの強度はどのくらいですか？',
@@ -246,7 +246,7 @@ const alternates = [
         </p>
         <pre><code>otpauth://totp/GitHub:you%40example.com?secret=JBSWY3DPEHPK3PXP&amp;issuer=GitHub
 otpauth://totp/Binance:me?secret=JBSWY3DPEHPK3PXP&amp;digits=6&amp;period=30&amp;algorithm=SHA1
-otpauth://hotp/Steam:sda?secret=...&amp;counter=5   ← カウンタ方式（HOTP）のバリアント</code></pre>
+otpauth://hotp/Example:you%40example.com?secret=...&amp;counter=5   ← カウンタ方式（HOTP）のバリアント</code></pre>
         <p>
           モダンなジェネレーターは、あらゆるパラメータを尊重します。桁数、周期、ハッシュアルゴリズム、HOTP カウンタ —
           SHA-256 を指定するサービスは、デフォルトの SHA-1 で作られたコードを依然として拒否するからです。Base32 の鍵だけを

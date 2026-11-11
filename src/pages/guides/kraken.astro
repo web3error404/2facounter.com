@@ -17,7 +17,7 @@ const description =
   lastReviewed="2026-11-11"
   intro="Kraken has supported standard TOTP for years, and it stops account takeovers cold. Worth knowing: Kraken's highest-rated factor today is a passkey/security key, and the TOTP factor is scoped per “facet” (sign-in, trading, funding), so one enrollment is only the start."
   minutes={3}
-  params={['6-8 digits', '30s period', 'SHA-1']}
+  params={['6 digits', '30s period', 'SHA-1']}
   ctaTitle="Kraken's strength is the second secret you haven't enrolled yet"
   ctaBody="Sign-in 2FA protects the door; the Master key protects the vault — withdrawals, exports, and API permissions run on their own secret in Kraken. Finish both enrollments and keep them as two independent recent-key slots here."
   steps={[
@@ -31,7 +31,7 @@ const description =
     },
     {
       title: 'Reveal the secret',
-      body: 'Kraken shows the QR plus a Base32 “secret key” line for manual entry. Copy the key (or screenshot the QR and paste it into the page — the parser reads it locally).',
+      body: 'Kraken shows the QR together with the Base32 “secret key” line for manual entry. Copy the key text, or screenshot the QR and paste the image onto the generator page — it is decoded in your browser, never sent anywhere.',
     },
     {
       title: 'Generate, verify, activate',

@@ -16,7 +16,7 @@ const faq = [
   },
   {
     q: 'How to enable 2FA?',
-    a: 'Once per account, in its security settings: pick "Two-factor authentication", choose the authenticator-app method over SMS where you have the choice, and confirm with a live code from your authenticator. The exact menu path differs per service — which is why we publish step-by-step guides for Google, GitHub, Discord, Binance and others. This generator works with every one of them.',
+    a: 'Once per account, in its security settings: pick "Two-factor authentication", choose the authenticator-app method over SMS where you have the choice, and confirm with a live code from your authenticator. The exact menu path differs per service — which is why we publish step-by-step guides for Google, GitHub, Discord, Binance and others. Every service we cover that way uses standard TOTP, the exact algorithm this generator implements — the one well-known exception is Steam\'s own variant, and the Steam guide explains that honestly.',
   },
   {
     q: 'How does 2FA work?',
@@ -44,7 +44,7 @@ const faq = [
   },
   {
     q: 'Why does everything use 2FA now?',
-    a: 'Password-only security collapsed at scale: mass breaches, cheap automated credential stuffing, and regulators stepping in — NIST restricts SMS-based authentication in US standards, and the EU\'s PSD2 mandates strong customer authentication. Once a few giants made 2FA normal, every other service followed. The upside for you: every major service now supports the app-based method this generator uses.',
+    a: 'Password-only security collapsed at scale: mass breaches, cheap automated credential stuffing, and regulators stepping in — NIST restricts SMS-based authentication in US standards, and the EU\'s PSD2 mandates strong customer authentication. Once a few giants made 2FA normal, every other service followed. The upside for you: nearly every major service now supports the app-based method this generator uses.',
   },
   {
     q: 'Do I need a phone to use this 2FA authenticator?',
@@ -158,7 +158,7 @@ const features = [
 ];
 
 const services = [
-  'Discord', 'GitHub', 'Steam', 'Binance', 'Google', 'X / Twitter',
+  'Discord', 'GitHub', 'Binance', 'Google', 'X / Twitter',
   'AWS', 'Coinbase', 'Kraken', 'Twitch', 'Microsoft', 'Proton Mail',
 ];
 ---
@@ -355,6 +355,11 @@ const services = [
           ))}
         </ul>
         <p class="mt-6 text-sm font-medium text-ink">
+          One honest exception: Steam Guard uses Valve's own 5-character variant, so no
+          standards-based generator — this one included — can produce Steam login codes.
+          The <a href="/guides/steam/" class="link">Steam guide</a> explains what actually works.
+        </p>
+        <p class="mt-3 text-sm font-medium text-ink">
           Setting up one of these? Read the step-by-step guide:{" "}
           {[
             ['Google', 'google'],
@@ -446,8 +451,10 @@ const services = [
           <p>
             Whatever you are protecting, standard TOTP is the shared language. Trading
             on Binance, Coinbase or Kraken, locking down AWS, Microsoft or Google accounts,
-            protecting Steam, Discord, X or your inbox — any service that offers “use an
-            authenticator app” speaks the same protocol, so one tool covers all of them. When
+            protecting Discord, X or your inbox — any service that offers “use an
+            authenticator app” speaks the same protocol, so one tool covers all of them.
+            (Steam is the famous exception: Steam Guard is Valve's own variant, and its
+            guide says so plainly.) When
             a site rejects your code, it is nearly always the device clock, not the tool: set
             your system time to sync automatically and the codes line up again. For the popular
             services we publish <a href="/guides/">step-by-step setup guides</a> that pair with

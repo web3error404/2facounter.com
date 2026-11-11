@@ -35,7 +35,7 @@ const faqs = [
   },
   {
     q: '如何開啟 2FA？',
-    a: '四步：1) 開啟服務的帳戶或安全性設定，選擇「兩步驟驗證」。2) 選擇「使用驗證器應用程式」（能避開簡訊就避開）。3) 用驗證器掃描 QR 碼——或者點「無法掃描？」並保存設定密鑰。4) 輸入目前的驗證碼完成設定，然後下載或列印它顯示的備用／恢復代碼。我們在 /guides/ 發布了 Google、GitHub、Discord、Binance 等服務的逐步指南。',
+    a: '四步：1) 開啟服務的帳戶或安全性設定，選擇「兩步驟驗證」。2) 選擇「使用驗證器應用程式」（能避開簡訊就避開）。3) 用驗證器掃描 QR 碼——或者點「無法掃描？」並保存設定密鑰。4) 輸入目前的驗證碼完成設定，然後下載或列印它顯示的備用／恢復代碼。我們在本站的「指南」專區發布了 Google、GitHub、Discord、Binance 等服務的逐步指南。',
   },
   {
     q: '2FA 有多強？',
@@ -240,7 +240,7 @@ const alternates = [
         </p>
         <pre><code>otpauth://totp/GitHub:you%40example.com?secret=JBSWY3DPEHPK3PXP&amp;issuer=GitHub
 otpauth://totp/Binance:me?secret=JBSWY3DPEHPK3PXP&amp;digits=6&amp;period=30&amp;algorithm=SHA1
-otpauth://hotp/Steam:sda?secret=...&amp;counter=5   ← 基於計數器的（HOTP）變體</code></pre>
+otpauth://hotp/Example:you%40example.com?secret=...&amp;counter=5   ← 基於計數器的（HOTP）變體</code></pre>
         <p>
           一個現代化的產生器會尊重每一個參數：位數、週期、雜湊演算法和 HOTP 計數器——因為一個
           指定 SHA-256 的服務依然會拒絕按預設 SHA-1 產生的驗證碼。一段裸 Base32 密鑰的預設值
