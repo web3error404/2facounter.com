@@ -23,7 +23,7 @@ const description =
   steps={[
     {
       title: 'Sign in and open Security',
-      body: 'At binance.com, open your profile icon and go to “Security”. Find “Authenticator App” and click “Enable”.',
+      body: 'At binance.com, hover over the profile icon, click “Account”, then open “Security”. Click “Manage” next to “Authenticator App”, then “Enable Authenticator App”.',
     },
     {
       title: 'Choose software (TOTP) over SMS',
@@ -31,7 +31,7 @@ const description =
     },
     {
       title: 'Get the key text, not only the QR',
-      body: 'The dialog shows a QR code. Below it, click “view the key string” (or similar wording) and Binance reveals a Base32 secret — usually around 16 characters, though the length can vary. Copy it exactly.',
+      body: 'The dialog shows a QR code and a setup key. The key is a Base32 secret — usually around 16 characters, though the length can vary. Copy it exactly.',
     },
     {
       title: 'Paste it into the generator',
@@ -39,7 +39,7 @@ const description =
     },
     {
       title: 'Confirm on Binance',
-      body: 'Copy the 6-digit code and submit it. Binance then asks for a password/verification — finish that, and withdrawals are now protected.',
+      body: 'Copy the 6-digit code and submit it — Binance confirms the authenticator is active. Note for later: changing or resetting the authenticator disables withdrawals and P2P for 24 hours, so keep the setup key backed up.',
     },
     {
       title: 'Turn on the anti-phishing code and withdrawal whitelist',
