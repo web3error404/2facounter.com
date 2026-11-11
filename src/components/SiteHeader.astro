@@ -1,7 +1,7 @@
 ---
 import ShieldLogo from './ShieldLogo.astro';
 import Wordmark from './Wordmark.astro';
-import { LANGUAGES, LANG_BY_HREF, languageOptions } from '../i18n/languages';
+import { LANG_BY_HREF, languageOptions } from '../i18n/languages';
 
 const defaultLinks = [
   { href: '/#how-it-works', label: 'How it works' },
@@ -26,7 +26,6 @@ const { links = defaultLinks, cta = 'Generate a code', locale = '', languages: l
 
 type SwitcherItem = { href: string; label: string; hreflang?: string; current?: boolean };
 
-const currentHref = LANGUAGES.find((lang) => lang.href.replace(/\//g, '') === locale)?.href ?? '/';
 // Current page path without the leading locale dir ('' for the homepage,
 // 'what-is-2fa/', …). languageOptions() rewrites the per-language hrefs to
 // this page's own translated URL when one is guaranteed to exist.
@@ -76,7 +75,6 @@ const current = switcher.find((l) => l.current) ?? switcher[0];
           id="lang-toggle"
           type="button"
           class="flex items-center gap-1.5 rounded-full border-2 border-transparent px-3 py-1.5 text-sm font-semibold text-ink hover:border-ink hover:bg-surface"
-          aria-haspopup="true"
           aria-expanded="false"
           aria-controls="lang-menu"
           aria-label={`Language — ${current.label}`}

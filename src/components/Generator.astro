@@ -148,7 +148,9 @@ const t = generatorStringsFor(locale || urlLocale || 'en');
           class="badge-stamp -rotate-2 items-center gap-2 px-3.5 py-1.5 text-base hidden md:text-lg lg:px-4 lg:py-2"
         >
           <span id="badge-dot" class="dot-blink h-2.5 w-2.5 rounded-full bg-ok md:h-3 md:w-3" aria-hidden="true"></span>
-          <span id="timer-seconds">26{t.seconds}</span>
+          <!-- Empty server-side: the first tick (within 250 ms) fills it, so no
+               wrong "26" ever flashes before the real countdown lands. -->
+          <span id="timer-seconds"></span>
         </div>
       </div>
 
@@ -178,6 +180,17 @@ const t = generatorStringsFor(locale || urlLocale || 'en');
            can still reach the chamber by navigation to read the current code. -->
       <p id="token-announce" class="sr-only" role="status" aria-live="polite"></p>
 
+      <!-- HOTP only: no countdown exists, so the counter advances only when a
+           code is consumed. This button renders the next counter value —
+           hidden by default, shown by generator.ts for hotp keys. -->
+      <button
+        type="button"
+        id="btn-hotp-next"
+        class="mx-auto hidden h-10 rounded-md border-2 border-cream/60 px-4 text-sm font-bold text-cream transition-colors hover:border-cream hover:text-cream"
+      >
+        {t.nextCode}
+      </button>
+
       <!-- Primary Action: Copy Code Button -->
       <div class="copy-action-wrapper">
         <button type="button" id="btn-copy-code" class="btn-primary h-16 w-full text-xl lg:h-[70px] lg:text-2xl">
@@ -206,7 +219,7 @@ const t = generatorStringsFor(locale || urlLocale || 'en');
             class="btn-ghost h-8 px-2 text-sm text-cream/70"
             title={t.titleClear}
           >
-            <span id="btn-recent-clear-label">{t.clearAll}</span>
+            <span id="btn-recent-clear-label" aria-live="polite">{t.clearAll}</span>
           </button>
         </div>
         <ul id="recent-keys" class="mt-2 flex max-h-52 flex-col gap-1.5 overflow-y-auto pr-1"></ul>
