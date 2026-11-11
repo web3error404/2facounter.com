@@ -30,8 +30,8 @@ const description =
         body: 'X restricts SMS 2FA to Premium subscribers (and even then, X notes availability may vary by country and carrier), and SMS is also the weakest factor in the stack: a SIM-swap attacker reads those codes without touching your device. The third option, security keys, is the phishing-resistant one if you already own a hardware key or passkey — but TOTP is the factor that adds a real, free second factor computed on your side and portable to any device with the key.',
       },
       {
-        title: 'The post-enrollment QR is your backup, not decoration',
-        body: 'When you finish verifying, X shows a confirmation screen that may include a one-time QR labelled “for other devices”. If yours shows it, screenshot it into your password-manager vault (or keep the Base32 key next to it) so you can restore the enrollment into a new phone app or browser later — without re-enrolling or contacting X support.',
+        title: 'The post-enrollment backup code is your lifeline, not decoration',
+        body: 'When you finish verifying, X shows a confirmation screen that may include a one-time backup code — X recommends storing a screenshot of it for future use. Save it into your password-manager vault (or keep the Base32 key next to it) so you can restore the enrollment into a new phone app or browser later — without re-enrolling or contacting X support.',
       },
       {
         title: 'Apps that need your X password stop working',
@@ -57,8 +57,8 @@ const description =
       body: 'Paste the key into 2facounter.com, copy the live 6-digit code, and enter it in X’s confirm dialog. X remembers the enrollment as “Authenticator app”.',
     },
     {
-      title: 'Screenshot the confirmation QR, too',
-      body: 'After verifying, X may display a one-time QR “for other devices”. If yours shows it, scan it back into the generator or screenshot it — it lets you restore the same key into any app later without re-enrollment.',
+      title: 'Screenshot the confirmation backup code, too',
+      body: 'After verifying, X may show a one-time backup code on the confirmation screen. If yours shows it, screenshot it or store it in your vault — it helps you regain access if you lose your phone, and with the Base32 key saved you can rebuild codes in any app later without re-enrollment.',
     },
     {
       title: 'Store backups',
