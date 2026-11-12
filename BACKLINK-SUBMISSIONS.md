@@ -5,7 +5,7 @@ Check off each item as submitted. All copy is copy-paste ready.
 
 - [x] AlternativeTo — ✅ submitted 2026-11-12 (in review queue; added 7 alternatives incl. Google Authenticator, Authy, 2FAS, Microsoft Authenticator, Aegis, Ente Auth, Proton Authenticator. Don't share the listing URL until approved. Profile: account "2FA COUNTER" with logo set)
 - [ ] Product Hunt (needs scheduling — see notes)
-- [ ] Hacker News (Show HN)
+- [ ] Hacker News (Show HN) — full kit ready in `SHOW-HN-POST.md` (title options, first comment, replies playbook, timing)
 - [x] GitHub awesome-lists — PR 1 of 3: ❌ awesome-privacy CLOSED 2026-11-12
       → https://github.com/lissy93/awesome-privacy/pull/896 (declined: closed-source requirement; also cited GTM, which was already removed — corrected for the record in the closing thread)
 - [ ] GitHub awesome-lists — PR 2 of 3: awesome-2fa repo (search GitHub for one)
