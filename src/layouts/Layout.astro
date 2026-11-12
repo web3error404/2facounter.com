@@ -1,10 +1,10 @@
 ---
 // Fonts are bundled locally at build time — all first-party assets
 // (fonts, QR decoder) are served from this domain. Third-party requests are
-// the Google tag (GTM-WK4QDCS8, in <head> below) and the Cloudflare Web
-// Analytics RUM beacon below (cookieless, aggregate performance data only),
-// the latter self-managed so it is version-controlled and never silently
-// toggled at the edge.
+// the Cloudflare Web Analytics RUM beacon below (cookieless, aggregate
+// performance data only), self-managed so it is version-controlled and never
+// silently toggled at the edge. Google Tag Manager / Google Analytics were
+// removed in 2026-11: a privacy-first tool should not carry a Google tracker.
 import '@fontsource-variable/fredoka';
 import '@fontsource-variable/inter';
 import '@fontsource-variable/jetbrains-mono';
@@ -138,18 +138,17 @@ const allJsonLd = [orgJsonLd, ...jsonLd];
 const googleVerification = import.meta.env.PUBLIC_GSC_TOKEN ?? '';
 const bingVerification = import.meta.env.PUBLIC_BING_TOKEN ?? '';
 
-// ── Google tag (GTM-WK4QDCS8) allowed hosts ───────────────────────────
-// The Google tag only loads when the page is served from a host in this
-// list, keeping test/mirror traffic out of real analytics. The canonical
-// apex is always tracked; additional hosts (e.g. a future staging domain)
-// go in PUBLIC_ANALYTICS_EXTRA_HOSTS in a local .env (never committed) or
-// the CI environment — comma-separated, exact hostnames, no slashes:
-//   PUBLIC_ANALYTICS_EXTRA_HOSTS="staging.2facounter.com,other.example"
-// Rebuild after changing; unset falls back to apex-only tracking.
+// ── Canonical hosts (mirror-host noindex guard) ───────────────────────
+// Pages served from a host in this list are the real site; any other host
+// (test/mirror domains) gets a JS-injected noindex meta below so it can
+// never duplicate or outrank the canonical apex in search. Additional
+// hosts (e.g. a future staging domain that should stay indexable — not
+// typical) would go in PUBLIC_ANALYTICS_EXTRA_HOSTS in a local .env
+// (never committed) — comma-separated, exact hostnames, no slashes.
 // JSON-serializable array, injected verbatim into the inline script below
 // via define:vars (exact-match includes() avoids substring matches like
 // "2facounter.com.evil.test").
-const analyticsHosts = [
+const canonicalHosts = [
   '2facounter.com',
   ...((import.meta.env.PUBLIC_ANALYTICS_EXTRA_HOSTS ?? '')
     .split(',')
@@ -157,103 +156,6 @@ const analyticsHosts = [
     .filter(Boolean)),
 ];
 
-// ── Cookie-consent banner copy (analytics consent, GDPR / ePrivacy) ────
-// GA/GTM loads ONLY after the visitor accepts; the banner strings are
-// localized for every released site language. Keep in sync with the
-// privacy policy's Cookies section.
-const consentCopy: Record<string, { text: string; accept: string; decline: string; policy: string }> = {
-  en: {
-    text: 'We use anonymous analytics cookies to understand traffic. Your keys never leave your browser — that part never changes.',
-    accept: 'Accept analytics',
-    decline: 'Decline',
-    policy: 'Privacy policy',
-  },
-  es: {
-    text: 'Usamos cookies de análisis anónimas para entender el tráfico. Tus claves nunca salen de tu navegador — eso nunca cambia.',
-    accept: 'Aceptar',
-    decline: 'Rechazar',
-    policy: 'Política de privacidad',
-  },
-  pt: {
-    text: 'Usamos cookies de análise anônimas para entender o tráfego. Suas chaves nunca saem do seu navegador — isso nunca muda.',
-    accept: 'Aceitar',
-    decline: 'Recusar',
-    policy: 'Política de privacidade',
-  },
-  fr: {
-    text: 'Nous utilisons des cookies de mesure d\u2019audience anonymes pour comprendre le trafic. Vos clés ne quittent jamais votre navigateur — cela ne changera jamais.',
-    accept: 'Accepter',
-    decline: 'Refuser',
-    policy: 'Confidentialité',
-  },
-  de: {
-    text: 'Wir verwenden anonyme Analyse-Cookies, um den Traffic zu verstehen. Ihre Schlüssel verlassen niemals Ihren Browser — das ändert sich nie.',
-    accept: 'Akzeptieren',
-    decline: 'Ablehnen',
-    policy: 'Datenschutz',
-  },
-  it: {
-    text: 'Usiamo cookie analitici anonimi per capire il traffico. Le tue chiavi non lasciano mai il browser — questo non cambia mai.',
-    accept: 'Accetta',
-    decline: 'Rifiuta',
-    policy: 'Privacy',
-  },
-  ja: {
-    text: 'アクセス解析のため、匿名の分析Cookieを使用します。シークレットキーがブラウザの外へ送られることは決してありません。',
-    accept: '同意する',
-    decline: '拒否',
-    policy: 'プライバシー',
-  },
-  ko: {
-    text: '익명 트래픽 분석을 위해 분석 쿠키를 사용합니다. 키는 절대 브라우저 밖으로 전송되지 않습니다.',
-    accept: '동의',
-    decline: '거부',
-    policy: '개인정보 처리방침',
-  },
-  'zh-cn': {
-    text: '我们使用匿名分析 Cookie 来了解流量。你的密钥绝不会离开你的浏览器——这一点永远不会改变。',
-    accept: '同意',
-    decline: '拒绝',
-    policy: '隐私政策',
-  },
-  'zh-tw': {
-    text: '我們使用匿名分析 Cookie 來了解流量。你的金鑰絕不會離開你的瀏覽器——這一點永遠不會改變。',
-    accept: '同意',
-    decline: '拒絕',
-    policy: '隱私權政策',
-  },
-  ru: {
-    text: 'Мы используем анонимные аналитические cookies, чтобы понимать трафик. Ваши ключи никогда не покидают браузер — это не изменится.',
-    accept: 'Принять',
-    decline: 'Отклонить',
-    policy: 'Конфиденциальность',
-  },
-  ar: {
-    text: 'نستخدم ملفات تعريف ارتباط تحليلية مجهولة لفهم حركة الزيارات. مفاتيحك لا تغادر متصفحك أبدًا — وهذا لن يتغير أبدًا.',
-    accept: 'قبول',
-    decline: 'رفض',
-    policy: 'الخصوصية',
-  },
-  hi: {
-    text: 'हम ट्रैफ़िक समझने के लिए गुमनाम एनालिटिक्स कुकीज़ का उपयोग करते हैं। आपकी चाबियाँ कभी ब्राउज़र नहीं छोड़तीं — यह कभी नहीं बदलेगा।',
-    accept: 'स्वीकार करें',
-    decline: 'अस्वीकार करें',
-    policy: 'गोपनीयता',
-  },
-  bn: {
-    text: 'আমরা ট্রাফিক বোঝার জন্য নাম-গোপন বিশ্লেষণ কুকি ব্যবহার করি। আপনার কী কখনো ব্রাউজার ছাড়ে না — এটি কখনো বদলাবে না।',
-    accept: 'গ্রহণ করুন',
-    decline: 'প্রত্যাখ্যান',
-    policy: 'গোপনীয়তা',
-  },
-  vi: {
-    text: 'Chúng tôi dùng cookie phân tích ẩn danh để hiểu lưu lượng truy cập. Khóa của bạn không bao giờ rời khỏi trình duyệt — điều đó không bao giờ thay đổi.',
-    accept: 'Chấp nhận',
-    decline: 'Từ chối',
-    policy: 'Quyền riêng tư',
-  },
-};
-const consent = consentCopy[lang.toLowerCase()] ?? consentCopy.en;
 ---
 
 <!doctype html>
@@ -261,87 +163,18 @@ const consent = consentCopy[lang.toLowerCase()] ?? consentCopy.en;
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    {/* Cookie consent + Google tag (Google Analytics via GTM container
-        GTM-WK4QDCS8). Consent Mode v2: analytics storage is DENIED by default
-        and the GTM script only loads after the visitor accepts the banner;
-        declining means Google never loads at all. The banner appears only on
-        allowed hosts (same allowlist as before); localhost/test hosts get no
-        banner, no analytics, and a JS-injected noindex instead. */}
+    {/* Mirror-host guard: any copy of this site served from a non-canonical
+        host (a test or mirror domain) asks search engines not to index it.
+        Google executes JS and honors JS-injected meta robots, and the
+        canonical tags point at the apex regardless — belt and braces so a
+        future staging host can never duplicate or outrank the real site.
+        (The old GTM consent banner was removed with Google Analytics in
+        2026-11 — the only remaining measurement tool, Cloudflare Web
+        Analytics, is cookieless and stores nothing, so no consent prompt
+        is needed. Revisit when/if advertising with cookies ships.) */}
     {!isDev && (
-      <script is:inline define:vars={{ analyticsHosts, consent }}>
-        window.dataLayer = window.dataLayer || [];
-        function gtag() { dataLayer.push(arguments); }
-
-        if (analyticsHosts.includes(location.hostname)) {
-          // Consent Mode v2 defaults — denied until the visitor chooses.
-          gtag('consent', 'default', {
-            analytics_storage: 'denied',
-            ad_storage: 'denied',
-            ad_user_data: 'denied',
-            ad_personalization: 'denied',
-          });
-
-          var CONSENT_KEY = '2fac.consent.v1';
-          var savedConsent = null;
-          try { savedConsent = localStorage.getItem(CONSENT_KEY); } catch (e) {}
-
-          function loadGtm() {
-            if (document.getElementById('gtm-script')) return;
-            var gtmTag = document.createElement('script');
-            gtmTag.id = 'gtm-script';
-            gtmTag.async = true;
-            gtmTag.src = 'https://www.googletagmanager.com/gtm.js?id=GTM-WK4QDCS8';
-            document.head.appendChild(gtmTag);
-          }
-          function grantAnalytics() {
-            gtag('consent', 'update', { analytics_storage: 'granted' });
-            loadGtm();
-          }
-          function showConsentBanner() {
-            if (document.getElementById('consent-banner')) return;
-            var bar = document.createElement('div');
-            bar.id = 'consent-banner';
-            bar.setAttribute('role', 'region');
-            bar.setAttribute('aria-label', 'Cookie consent');
-            bar.style.cssText = 'position:fixed;left:0;right:0;bottom:0;z-index:60;background:#2a1f1a;color:#f4ebe1;padding:14px 16px;font-size:14px;line-height:1.5;box-shadow:0 -2px 0 rgba(0,0,0,0.25)';
-            bar.innerHTML =
-              '<div style="max-width:1200px;margin:0 auto;display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between">'
-              + '<p style="margin:0;max-width:640px">' + consent.text
-              + ' <a href="/privacy/" style="color:#e87a35;text-decoration:underline">' + consent.policy + '</a></p>'
-              + '<div style="display:flex;gap:10px;flex-shrink:0">'
-              + '<button type="button" id="consent-accept" style="min-height:44px;padding:8px 18px;border-radius:999px;border:2px solid #e87a35;background:#e87a35;color:#2a1f1a;font-weight:700;cursor:pointer">' + consent.accept + '</button>'
-              + '<button type="button" id="consent-decline" style="min-height:44px;padding:8px 18px;border-radius:999px;border:2px solid #f4ebe1;background:transparent;color:#f4ebe1;font-weight:700;cursor:pointer">' + consent.decline + '</button>'
-              + '</div></div>';
-            document.body.appendChild(bar);
-            document.getElementById('consent-accept').addEventListener('click', function () {
-              try { localStorage.setItem(CONSENT_KEY, 'granted'); } catch (e) {}
-              grantAnalytics();
-              bar.remove();
-            });
-            document.getElementById('consent-decline').addEventListener('click', function () {
-              try { localStorage.setItem(CONSENT_KEY, 'denied'); } catch (e) {}
-              bar.remove();
-            });
-          }
-
-          if (savedConsent === 'granted') {
-            grantAnalytics();
-          } else if (savedConsent !== 'denied') {
-            if (document.readyState === 'loading') {
-              document.addEventListener('DOMContentLoaded', showConsentBanner);
-            } else {
-              showConsentBanner();
-            }
-          }
-
-          // Footer "Cookie settings" hook — lets visitors revisit the choice.
-          window.__2facConsentSettings = function () { showConsentBanner(); };
-        } else {
-          // Any copy of this site served from a non-canonical host (a test or
-          // mirror domain) asks search engines not to index it. Google executes
-          // JS and honors JS-injected meta robots, and the canonical tags point
-          // at the apex regardless — belt and braces so a future staging host
-          // can never duplicate or outrank the real site in search.
+      <script is:inline define:vars={{ canonicalHosts }}>
+        if (!canonicalHosts.includes(location.hostname)) {
           var noindexMeta = document.createElement('meta');
           noindexMeta.name = 'robots';
           noindexMeta.content = 'noindex, nofollow';

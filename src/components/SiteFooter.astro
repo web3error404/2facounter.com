@@ -52,9 +52,6 @@ const defaultColumns = [
       { href: '/terms/', label: 'Terms of service' },
       { href: '/disclaimer/', label: 'Disclaimer' },
       { href: '/contact/', label: 'Report a security issue' },
-      // Special case: reopens the analytics-consent banner (only rendered on
-      // hosts where analytics is active — the script below unhides it).
-      { href: '#', label: 'Cookie settings', id: 'cookie-settings' },
     ],
   },
 ];
@@ -181,24 +178,3 @@ const hreflangOf = (href: string) => LANG_BY_HREF.get(href)?.hreflang ?? 'en';
     </div>
   </div>
 </footer>
-
-<script>
-  // "Cookie settings": visible only where the analytics consent script is
-  // active (production hosts) — it un-hides the link and reopens the banner.
-  const cookieSettings = document.getElementById('cookie-settings');
-  const consentApi = window as unknown as { __2facConsentSettings?: () => void };
-  if (cookieSettings) {
-    if (typeof consentApi.__2facConsentSettings === 'function') {
-      // Un-hide both ways: the [hidden] attribute AND the baked-in Tailwind
-      // `hidden` class (display:none) — removing only the attribute used to
-      // leave the link permanently invisible, breaking the privacy policy's
-      // promised "Cookie settings" consent-revisit path.
-      cookieSettings.hidden = false;
-      cookieSettings.classList.remove('hidden');
-    }
-    cookieSettings.addEventListener('click', (e) => {
-      e.preventDefault();
-      consentApi.__2facConsentSettings?.();
-    });
-  }
-</script>

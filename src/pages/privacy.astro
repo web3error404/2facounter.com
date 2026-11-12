@@ -42,8 +42,8 @@ const jsonLd = [
         <h2>What this site collects</h2>
         <p>
           <strong>Nothing that identifies you or your keys.</strong> There are no accounts, no
-          form submissions, and no ad tracking pixels. The site runs two measurement tools, both
-          strictly separate from the 2FA tool:
+          form submissions, and no ad tracking pixels. The site runs exactly one measurement
+          tool, strictly separate from the 2FA tool:
         </p>
         <ul>
           <li>
@@ -51,20 +51,9 @@ const jsonLd = [
             anonymous, aggregate performance data (page views, load times, approximate country)
             and stores nothing in your browser.
           </li>
-          <li>
-            <strong>Google Analytics</strong>, loaded through a Google Tag Manager container —
-            used for aggregate traffic measurement, and only after you accept the analytics
-            prompt on your first visit (see <a href="#cookies">Cookies</a>). Google Analytics
-            sets first-party cookies (the <code>_ga</code> family) in your browser and processes
-            standard device and browser data under{" "}
-            <a rel="noopener noreferrer nofollow" href="https://www.google.com/policies/privacy/partners/">Google’s
-            privacy terms</a>. You can opt out entirely with{" "}
-            <a rel="noopener noreferrer nofollow" href="https://tools.google.com/dlpage/gaoptout">Google’s
-            official opt-out add-on</a>.
-          </li>
         </ul>
         <p>
-          Neither tool receives anything you type — your keys and codes are handled entirely in
+          It receives nothing you type — your keys and codes are handled entirely in
           the tool, locally. The site is statically generated HTML plus JavaScript that runs
           locally in your browser. The tool does not even write your 2FA keys to browser storage —
           they live only in the open page’s memory, as described below under{" "}
@@ -74,17 +63,14 @@ const jsonLd = [
 
         <h2 id="cookies">Cookies</h2>
         <p>
-          2facounter.com does not set any cookies of its own. Google Analytics, loaded through
-          Google Tag Manager, sets first-party analytics cookies (the <code>_ga</code> family):
-          they store a random client identifier so repeat visits can be counted as one user, and
-          they contain nothing you type, paste, scan, or generate. On your first visit we ask
-          before enabling these analytics cookies — decline, and Google Analytics never loads at
-          all; accept, and you can change your mind later via the "Cookie settings" link in the
-          footer. Cloudflare Web Analytics is
-          cookieless by design and stores nothing in your browser; because it sets no cookies and
-          stores nothing, it is not gated behind the consent prompt — it runs whether or not you
-          answer the banner. Blocking or deleting analytics
-          cookies does not affect the generator in any way. Your keys are never profiled or
+          2facounter.com sets no cookies at all. The site carries no advertising trackers and no
+          Google Analytics: the only measurement script, Cloudflare Web Analytics, is cookieless
+          by design and writes nothing to your browser — no cookies, no identifiers, no browser
+          storage of any kind — so there is nothing to accept or decline. There is no consent
+          banner for the same reason: nothing on this site stores data in your browser except the
+          offline app cache described under <a href="#local-storage">Local storage</a>, which
+          contains only publicly served files. Blocking or deleting cookies and site data does
+          not affect the generator in any way. Your keys are never profiled or
           recorded: the tool deliberately has no “remember my last key” behavior — your keys
           exist only in the open page’s memory, never in <code>localStorage</code> and never in
           cookies. More in the Local storage section below.
@@ -139,15 +125,12 @@ const jsonLd = [
           browser’s storage the next time you visit.
         </p>
         <p>
-          Two site-level exceptions exist, and neither ever touches 2FA data. First, your
-          cookie-consent choice is remembered in <code>localStorage</code> under{" "}
-          <code>2fac.consent.v1</code> — a single word (<em>granted</em> or <em>denied</em>) that
-          spares you the banner on every visit; clearing it just makes the banner ask again.
-          Second, if you install the site as an app or visit it repeatedly, a service worker
-          caches copies of the site’s own pages and assets in your browser (browser
-          <em>cache storage</em>) so the tool keeps working offline. The cache contains only
-          files that are already publicly served — never anything you type, paste, or generate.
-          Emptying your browser’s site data removes both.
+          One site-level exception exists, and it never touches 2FA data. If you install the
+          site as an app or visit it repeatedly, a service worker caches copies of the site’s
+          own pages and assets in your browser (browser <em>cache storage</em>) so the tool
+          keeps working offline. The cache contains only files that are already publicly
+          served — never anything you type, paste, or generate. Emptying your browser’s site
+          data removes it.
         </p>
         <p>
           There is no cloud sync and no export file: the tool intentionally has nothing to
@@ -157,15 +140,13 @@ const jsonLd = [
 
         <h2>Third-party requests</h2>
         <p>
-          <strong>Two, by design.</strong> Fonts (display, text, and mono) and the
+          <strong>One, by design.</strong> Fonts (display, text, and mono) and the
           QR-decoding library are all bundled at build time and served from this domain itself.
-          The only exceptions are the two measurement tools above: Cloudflare Web Analytics — a
-          small, deferred script from Cloudflare’s <code>static.cloudflareinsights.com</code> that
-          reports anonymous, aggregate performance data, is cookieless, writes nothing to your
-          browser, and is discarded by Cloudflare without storing IP addresses — and Google
-          Tag Manager / Google Analytics, loaded from <code>www.googletagmanager.com</code>, which
-          sets the first-party cookies described under <a href="#cookies">Cookies</a>. Everything
-          else your browser talks to is this site only.
+          The single exception is the measurement tool above: Cloudflare Web Analytics — a
+          small, deferred script from Cloudflare’s <code>static.cloudflareinsights.com</code>{" "}
+          that reports anonymous, aggregate performance data, is cookieless, writes nothing to
+          your browser, and is discarded by Cloudflare without storing IP addresses.
+          Everything else your browser talks to is this site only.
         </p>
         <p>
           The 2FA tool itself remains fully local: nothing you type, paste, scan, or generate
