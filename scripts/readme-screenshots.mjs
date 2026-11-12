@@ -19,7 +19,9 @@ const input = desktop.locator('#secret-key-input');
 await input.click();
 await input.fill(KEY);
 await desktop.waitForSelector('#token-value .digit');
-await desktop.waitForTimeout(400);
+// 1.5 s: digits animate muted-soft → accent-red over a 120ms transition;
+// capturing too early catches the taupe mid-transition color (seen once).
+await desktop.waitForTimeout(1500);
 await desktop.screenshot({ path: `${OUT}/desktop-tool.png` });
 await desktop.close();
 
