@@ -5,7 +5,7 @@ import SiteFooter from '../components/SiteFooter.astro';
 
 const title = 'Privacy Policy — 2FA COUNTER';
 const description =
-  'Privacy policy for 2FA COUNTER: no accounts, no ads. Your 2FA secret keys never leave your browser; analytics are anonymous and separate from the tool.';
+  'Privacy policy for 2FA COUNTER: no accounts, no ads, no analytics. Your 2FA secret keys never leave your browser — and neither does anything else.';
 
 const jsonLd = [
   {
@@ -31,7 +31,7 @@ const jsonLd = [
     <div class="mx-auto max-w-[720px] px-4 py-20 sm:px-6 lg:py-24">
       <p class="section-label">Legal</p>
       <h1 class="mt-3 font-display text-4xl tracking-normal text-ink">Privacy policy</h1>
-      <p class="mt-4 font-mono text-label font-bold text-ink">Effective · November 7, 2026 · Updated · November 10, 2026</p>
+      <p class="mt-4 font-mono text-label font-bold text-ink">Effective · November 7, 2026 · Updated · November 12, 2026</p>
 
       <div class="rich-text mt-12 rounded-xl border-2 border-ink bg-cream p-6 sm:p-10" style="box-shadow: var(--shadow-card)">
         <blockquote>
@@ -41,19 +41,12 @@ const jsonLd = [
 
         <h2>What this site collects</h2>
         <p>
-          <strong>Nothing that identifies you or your keys.</strong> There are no accounts, no
-          form submissions, and no ad tracking pixels. The site runs exactly one measurement
-          tool, strictly separate from the 2FA tool:
+          <strong>Nothing.</strong> There are no accounts, no form submissions, no analytics
+          scripts, and no ad tracking pixels. The site runs no measurement tools of any kind —
+          the 2FA tool is not instrumented, and the pages themselves carry no beacons.
         </p>
-        <ul>
-          <li>
-            <strong>Cloudflare Web Analytics</strong> — a small, cookieless script that reports
-            anonymous, aggregate performance data (page views, load times, approximate country)
-            and stores nothing in your browser.
-          </li>
-        </ul>
         <p>
-          It receives nothing you type — your keys and codes are handled entirely in
+          The site receives nothing you type — your keys and codes are handled entirely in
           the tool, locally. The site is statically generated HTML plus JavaScript that runs
           locally in your browser. The tool does not even write your 2FA keys to browser storage —
           they live only in the open page’s memory, as described below under{" "}
@@ -64,10 +57,9 @@ const jsonLd = [
         <h2 id="cookies">Cookies</h2>
         <p>
           2facounter.com sets no cookies at all. The site carries no advertising trackers and no
-          Google Analytics: the only measurement script, Cloudflare Web Analytics, is cookieless
-          by design and writes nothing to your browser — no cookies, no identifiers, no browser
-          storage of any kind — so there is nothing to accept or decline. There is no consent
-          banner for the same reason: nothing on this site stores data in your browser except the
+          analytics of any kind — no Google Analytics, no Cloudflare Web Analytics, nothing. There
+          is nothing to accept or decline and there is no consent banner for the same reason:
+          nothing on this site stores data in your browser except the
           offline app cache described under <a href="#local-storage">Local storage</a>, which
           contains only publicly served files. Blocking or deleting cookies and site data does
           not affect the generator in any way. Your keys are never profiled or
@@ -140,19 +132,15 @@ const jsonLd = [
 
         <h2>Third-party requests</h2>
         <p>
-          <strong>One, by design.</strong> Fonts (display, text, and mono) and the
-          QR-decoding library are all bundled at build time and served from this domain itself.
-          The single exception is the measurement tool above: Cloudflare Web Analytics — a
-          small, deferred script from Cloudflare’s <code>static.cloudflareinsights.com</code>{" "}
-          that reports anonymous, aggregate performance data, is cookieless, writes nothing to
-          your browser, and is discarded by Cloudflare without storing IP addresses.
-          Everything else your browser talks to is this site only.
+          <strong>Zero, by design.</strong> Fonts (display, text, and mono), the QR-decoding
+          library, images, and scripts are all bundled at build time and served from this domain
+          itself. No analytics beacons, no CDN-hosted libraries, no external requests of any
+          kind. Everything your browser talks to is this site only.
         </p>
         <p>
           The 2FA tool itself remains fully local: nothing you type, paste, scan, or generate
           ever leaves your device. Once the page is loaded (or the app is installed), the tool
-          keeps working with the internet disconnected entirely — the analytics beacon simply
-          has nothing to report while you are offline and goes quiet.
+          keeps working with the internet disconnected entirely.
         </p>
 
         <h2>Standard logs</h2>

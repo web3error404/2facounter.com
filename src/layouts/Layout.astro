@@ -1,10 +1,14 @@
 ---
 // Fonts are bundled locally at build time — all first-party assets
-// (fonts, QR decoder) are served from this domain. Third-party requests are
-// the Cloudflare Web Analytics RUM beacon below (cookieless, aggregate
-// performance data only), self-managed so it is version-controlled and never
-// silently toggled at the edge. Google Tag Manager / Google Analytics were
-// removed in 2026-11: a privacy-first tool should not carry a Google tracker.
+// (fonts, QR decoder) are served from this domain. The site makes ZERO
+// third-party requests: no analytics, no trackers, no CDN scripts.
+// Google Tag Manager / Google Analytics were removed in 2026-11: a
+// privacy-first tool should not carry a Google tracker. Cloudflare Web
+// Analytics was removed 2026-11-12 for the same reason — the tool measures
+// nothing, which is the claim we make publicly (see privacy.astro).
+// Traffic insight comes from Google Search Console instead. If measurement
+// or advertising is ever reintroduced, update privacy.astro, about.astro,
+// authenticator-for-pc.astro and the AdSense checklist the same day.
 import '@fontsource-variable/fredoka';
 import '@fontsource-variable/inter';
 import '@fontsource-variable/jetbrains-mono';
@@ -169,10 +173,9 @@ const canonicalHosts = [
         Google executes JS and honors JS-injected meta robots, and the
         canonical tags point at the apex regardless — belt and braces so a
         future staging host can never duplicate or outrank the real site.
-        (The old GTM consent banner was removed with Google Analytics in
-        2026-11 — the only remaining measurement tool, Cloudflare Web
-        Analytics, is cookieless and stores nothing, so no consent prompt
-        is needed. Revisit when/if advertising with cookies ships.) */}
+        (The old GTM consent banner went with Google Analytics in 2026-11;
+        the site now carries no measurement scripts at all, so no consent
+        prompt is needed. Revisit when/if advertising with cookies ships.) */}
     {!isDev && (
       <script is:inline define:vars={{ canonicalHosts }}>
         if (!canonicalHosts.includes(location.hostname)) {
@@ -232,22 +235,9 @@ const canonicalHosts = [
       </script>
     )}
 
-    {/* Cloudflare Web Analytics RUM beacon.
-        Cookieless, no personal data, no browser storage (per Cloudflare's RUM
-        privacy docs). Loaded deferred so it never blocks rendering; fails
-        silently offline. Injected at runtime only on the production host so
-        localhost previews and the browser test suites see zero beacon noise. */}
-    {!isDev && (
-      <script is:inline>
-        if (location.hostname === '2facounter.com') {
-          var cfBeacon = document.createElement('script');
-          cfBeacon.defer = true;
-          cfBeacon.src = 'https://static.cloudflareinsights.com/beacon.min.js';
-          cfBeacon.setAttribute('data-cf-beacon', '{"token": "f08eeadbd7224b8faf5ba9a985542562"}');
-          document.head.appendChild(cfBeacon);
-        }
-      </script>
-    )}
+    {/* Analytics: none, deliberately. The site makes zero third-party
+        requests — every asset (fonts, QR decoder, images) is bundled and
+        served from this domain. See the note at the top of this file. */}
   </head>
   <body class="flex min-h-full flex-col bg-canvas font-sans text-body">
     <a
