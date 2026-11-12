@@ -93,16 +93,17 @@ const reviewedAlternates = alternates?.filter(
 );
 
 // Site-wide Organization JSON-LD — injected on every page so Google can
-// associate all pages with a single publisher entity. SameAs stays empty
-// until real, verified profiles exist — an invented one is "dishonest
-// declarations" bait.
+// associate all pages with a single publisher entity. sameAs lists the
+// project's public GitHub repo (source released under AGPL-3.0 in
+// 2026-11); add other verified profiles only as they really exist — an
+// invented one is "dishonest declarations" bait.
 const orgJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
   name: '2FA COUNTER',
   url: 'https://2facounter.com',
   logo: 'https://2facounter.com/apple-touch-icon.png',
-  sameAs: [],
+  sameAs: ['https://github.com/web3error404/2facounter.com'],
   description:
     'Free, browser-based 2FA authenticator and TOTP code generator. Zero-knowledge, no accounts, no servers.',
   contactPoint: [

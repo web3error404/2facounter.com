@@ -134,9 +134,12 @@ ranking gets you indexed fast and noticed by other list curators.
 **How:** Go to each repo → open a PR adding one line to the appropriate section.
 Read each repo's CONTRIBUTING.md first — most require alphabetical order.
 
-### a) Lissy93/awesome-privacy — ❌ CLOSED (declined) 2026-11-12 (PR #896)
+### a) Lissy93/awesome-privacy — 🔒 CLOSED → repo now public, reconsideration requested (PR #896)
 
-> **Status:** closed by maintainer — declined
+> **Status:** closed 2026-11-12 (closed-source rule) → **repo made PUBLIC 2026-11-12
+> (AGPL-3.0)** → follow-up comment posted asking for reconsideration
+> (https://github.com/lissy93/awesome-privacy/pull/896#issuecomment-6817401644).
+> Author cannot reopen; a maintainer must. If declined again, drop it and move on.
 > If not merged after ~2 weeks, comment politely on the PR asking for review.
 > If the maintainers request changes, match the entry schema they point to.
 >
