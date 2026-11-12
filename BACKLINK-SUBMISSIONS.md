@@ -6,7 +6,10 @@ Check off each item as submitted. All copy is copy-paste ready.
 - [ ] AlternativeTo
 - [ ] Product Hunt (needs scheduling — see notes)
 - [ ] Hacker News (Show HN)
-- [ ] GitHub awesome-lists (3 PRs)
+- [x] GitHub awesome-lists — PR 1 of 3: ✅ awesome-privacy submitted 2026-11-12
+      → https://github.com/lissy93/awesome-privacy/pull/896 (awaiting maintainer review)
+- [ ] GitHub awesome-lists — PR 2 of 3: awesome-2fa repo (search GitHub for one)
+- [ ] GitHub awesome-lists — PR 3 of 3: awesome-security repo
 - [ ] SaaSHub
 - [ ] StackShare
 - [ ] Slant
@@ -131,11 +134,26 @@ ranking gets you indexed fast and noticed by other list curators.
 **How:** Go to each repo → open a PR adding one line to the appropriate section.
 Read each repo's CONTRIBUTING.md first — most require alphabetical order.
 
-### a) Lissy93/awesome-privacy → section "2-Factor Authentication"
-```markdown
-- [2FA Counter](https://2facounter.com) — Browser-based TOTP authenticator; secrets never leave your device `MIT-web` *(Web)*
-```
-*Check existing entry format in that section and match it exactly.*
+### a) Lissy93/awesome-privacy — ✅ DONE 2026-11-12 (PR #896, awaiting review)
+
+> **Status:** submitted via https://github.com/lissy93/awesome-privacy/pull/896
+> If not merged after ~2 weeks, comment politely on the PR asking for review.
+> If the maintainers request changes, match the entry schema they point to.
+>
+> **Note (2026-11):** the repo no longer uses README sections. Entries live in
+> `awesome-privacy.yml` under `categories → Essentials → sections → "2-Factor
+> Authentication" → services`. The submitted entry:
+>
+> ```yaml
+>       - name: 2FA Counter
+>         url: https://2facounter.com
+>         icon: https://2facounter.com/favicon-96x96.png
+>         followWith: Web
+>         description: |
+>           Free web-based TOTP authenticator. Paste your secret key and get a live
+>           2FA code in seconds — generated entirely in the browser, no install,
+>           no account, secrets never leave the device.
+> ```
 
 ### b) Search GitHub for `awesome-2fa` and `awesome-two-factor`
 ```markdown
@@ -232,7 +250,7 @@ for GitHub, Google, Discord, Binance, Steam, AWS and more. Free forever.
    | AlternativeTo | | |
    | Product Hunt | | |
    | Show HN | | |
-   | awesome-privacy PR | | |
+   | awesome-privacy PR | 2026-11-12 (PR #896) | ⏳ in review |
    | awesome-2fa PR | | |
    | awesome-security PR | | |
    | SaaSHub | | |
