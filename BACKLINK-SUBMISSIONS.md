@@ -3,7 +3,7 @@
 Working through this top-to-bottom = fastest backlinks for a new domain.
 Check off each item as submitted. All copy is copy-paste ready.
 
-- [ ] AlternativeTo
+- [x] AlternativeTo — ✅ submitted 2026-11-12 (in review queue; added 7 alternatives incl. Google Authenticator, Authy, 2FAS, Microsoft Authenticator, Aegis, Ente Auth, Proton Authenticator. Don't share the listing URL until approved. Profile: account "2FA COUNTER" with logo set)
 - [ ] Product Hunt (needs scheduling — see notes)
 - [ ] Hacker News (Show HN)
 - [x] GitHub awesome-lists — PR 1 of 3: ✅ awesome-privacy submitted 2026-11-12
@@ -247,7 +247,7 @@ for GitHub, Google, Discord, Binance, Steam, AWS and more. Free forever.
 
    | Directory | Submitted | Live? |
    |---|---|---|
-   | AlternativeTo | | |
+   | AlternativeTo | 2026-11-12 (app + 7 alternatives linked) | ⏳ in review queue |
    | Product Hunt | | |
    | Show HN | | |
    | awesome-privacy PR | 2026-11-12 (PR #896) | ⏳ in review |
