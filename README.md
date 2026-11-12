@@ -57,3 +57,12 @@ statement that must be updated the same day, plus the EU/EEA/UK consent
 management (CMP) requirement. Filling `public/ads.txt` with the real
 AdSense publisher ID (`google.com, pub-XXXXXXXXXXXXXXXX, DIRECT, f08c47fec0942fa0`)
 is required once the account is active — never publish an invented ID.
+
+## License
+
+The full source of 2FA Counter is released under the
+[GNU Affero General Public License v3.0](./LICENSE) (AGPL-3.0-or-later):
+anyone may run, study, modify, and redistribute it, and anyone who offers a
+modified version as a network service must release that version's source
+under the same terms. The 2FA tool itself is fully client-side — secret
+keys and generated codes never leave the browser.
