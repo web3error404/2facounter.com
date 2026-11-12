@@ -1,10 +1,25 @@
 # 2FA COUNTER — 2facounter.com
 
+[![License: AGPL v3](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)](./LICENSE)
+[![2FA Counter](https://img.shields.io/badge/try%20it-2facounter.com-E87A35)](https://2facounter.com)
+
 A fast, free, private 2FA / authenticator app that runs entirely in the browser.
 Paste a secret key (or scan a QR code with the camera / upload a QR screenshot)
 and get a live TOTP/HOTP code — generated locally with the Web Crypto API.
 Keys are kept in memory only (nothing is written to localStorage, cookies or
 any other persistent storage); there are no servers.
+
+<p>
+  <img src="docs/screenshots/desktop-tool.png" alt="2FA Counter running in a desktop browser: a Base32 secret pasted, a live 6-digit TOTP code generated with a countdown timer, keys-used-this-session list and a 'Private by design' note" width="720" />
+</p>
+<p>
+  <img src="docs/screenshots/mobile-tool.png" alt="2FA Counter on mobile: paste key, scan QR and upload buttons above the live TOTP code and timer" width="300" />
+</p>
+
+**Try it: [2facounter.com](https://2facounter.com) · [Privacy policy](https://2facounter.com/privacy/)** —
+zero third-party requests: no analytics, no trackers, no CDN scripts; every
+asset is served from the site's own domain, and the tool keeps working with
+the network disconnected.
 
 ## Stack
 
