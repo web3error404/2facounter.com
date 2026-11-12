@@ -32,7 +32,7 @@ const SECURITY_HEADERS = {
      third party. Inline styles are Astro page styles. Google tag (GTM/GA)
      hosts were removed in 2026-11 when the tracker was dropped. */
   'content-security-policy':
-    "default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; img-src 'self' data:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; connect-src 'self' https://static.cloudflareinsights.com https://cloudflareinsights.com; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'",
+    "default-src 'self'; script-src 'self' 'unsafe-inline'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'",
 };
 
 export default {
