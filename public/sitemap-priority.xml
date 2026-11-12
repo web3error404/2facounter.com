@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Priority sitemap: core canonical English pages only.
+     Purpose: submit separately in Search Console (Sitemaps report) and use the
+     report's sitemap filter to scope "Validate fix" / "Request indexing" to the
+     most important URLs, per the Page indexing report pro tip:
+     https://support.google.com/webmasters/answer/7440203
+     Not referenced from robots.txt — sitemap-index.xml stays the canonical feed
+     for discovery; this file is a GSC-validation aid only. -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <!-- Core product + explainer pages -->
+  <url><loc>https://2facounter.com/</loc></url>
+  <url><loc>https://2facounter.com/what-is-2fa/</loc></url>
+  <url><loc>https://2facounter.com/how-to-get-2fa-code/</loc></url>
+  <url><loc>https://2facounter.com/authenticator-for-pc/</loc></url>
+  <url><loc>https://2facounter.com/authenticator-cloud-sync/</loc></url>
+  <!-- Comparison articles -->
+  <url><loc>https://2facounter.com/totp-vs-google-authenticator/</loc></url>
+  <url><loc>https://2facounter.com/totp-vs-authy/</loc></url>
+  <url><loc>https://2facounter.com/totp-vs-passkeys/</loc></url>
+  <url><loc>https://2facounter.com/sim-swap-attacks/</loc></url>
+  <!-- Guides hub + all service guides -->
+  <url><loc>https://2facounter.com/guides/</loc></url>
+  <url><loc>https://2facounter.com/guides/google/</loc></url>
+  <url><loc>https://2facounter.com/guides/microsoft/</loc></url>
+  <url><loc>https://2facounter.com/guides/github/</loc></url>
+  <url><loc>https://2facounter.com/guides/discord/</loc></url>
+  <url><loc>https://2facounter.com/guides/instagram/</loc></url>
+  <url><loc>https://2facounter.com/guides/x/</loc></url>
+  <url><loc>https://2facounter.com/guides/steam/</loc></url>
+  <url><loc>https://2facounter.com/guides/paypal/</loc></url>
+  <url><loc>https://2facounter.com/guides/aws/</loc></url>
+  <url><loc>https://2facounter.com/guides/coinbase/</loc></url>
+  <url><loc>https://2facounter.com/guides/kraken/</loc></url>
+  <url><loc>https://2facounter.com/guides/binance/</loc></url>
+</urlset>
