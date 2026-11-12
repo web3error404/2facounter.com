@@ -14,19 +14,22 @@ no longer ships in production HTML). Work through this the day ad code ships.
      may use cookies…"
    - Cookies section: add an "Advertising cookies (Google AdSense)…" paragraph
    - Third-party requests: add "Ads served through Google may load scripts
-     from Google's serving domains…" (and update the "Two, by design" count)
+     from Google's serving domains…" (and update the "One, by design" count)
    - Keep the current DoubleClick + adssettings/aboutads opt-out text (already
      in the Google advertising section — that matches Google's required
      disclosure).
 
 3. **EU/EEA/UK consent:**
-   - **DONE for analytics (2026-11-10):** Consent Mode v2 is implemented —
-     analytics storage is denied by default, a localized consent banner gates
-     GTM/GA loading, and a footer "Cookie settings" link reopens the choice.
-   - **Still required before personalized ads ship:** enable a Google-certified
-     CMP (AdSense "Privacy & messaging") or serve non-personalized ads — the EU
-     user consent policy requires a certified CMP for advertising cookies. The
-     current banner covers analytics only; ad_storage stays denied.
+   - **Removed 2026-11-12:** the analytics consent banner was taken down
+     together with GTM/GA — the only remaining measurement tool (Cloudflare
+     Web Analytics) is cookieless and stores nothing, so no consent prompt is
+     needed for it.
+   - **Still required before personalized ads ship:** re-add a consent banner
+     and enable a Google-certified CMP (AdSense "Privacy & messaging") or
+     serve non-personalized ads — the EU user consent policy requires a
+     certified CMP for advertising cookies. A localized banner implementation
+     exists in git history (Layout.astro before the GTM removal commit) and
+     can be restored for ads.
 
 4. **ads.txt:** `public/ads.txt` is a comment-only placeholder. Fill in the
    real publisher ID line (`google.com, pub-XXXXXXXXXXXXXXXX, DIRECT,

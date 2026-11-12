@@ -26,12 +26,13 @@ const SECURITY_HEADERS = {
   'x-frame-options': 'DENY',
   'permissions-policy': 'camera=(self), geolocation=(), microphone=()',
   'strict-transport-security': 'max-age=31536000',
-  /* Mirrors public/_headers. Inline scripts are first-party (consent gate,
-     SW registration, CF beacon inject); scripts additionally load from the
-     Google tag and Cloudflare Insights; GA/GTM and the CF RUM beacon are the
-     only connect/img third parties. Inline styles are Astro page styles. */
+  /* Mirrors public/_headers. Inline scripts are first-party (mirror-host
+     noindex guard, SW registration, CF beacon inject); scripts additionally
+     load from Cloudflare Insights, whose RUM beacon is the only connect
+     third party. Inline styles are Astro page styles. Google tag (GTM/GA)
+     hosts were removed in 2026-11 when the tracker was dropped. */
   'content-security-policy':
-    "default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://static.cloudflareinsights.com; img-src 'self' data: https://*.google-analytics.com https://*.analytics.google.com https://googletagmanager.com; style-src 'self' 'unsafe-inline'; font-src 'self' data:; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com https://static.cloudflareinsights.com https://cloudflareinsights.com; frame-src https://www.googletagmanager.com; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'",
+    "default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; img-src 'self' data:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; connect-src 'self' https://static.cloudflareinsights.com https://cloudflareinsights.com; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'",
 };
 
 export default {
