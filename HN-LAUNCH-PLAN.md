@@ -66,6 +66,12 @@ got zero traction before noon, wait a full day rather than reposting.
 
 ## Filler work while waiting (optional, low effort)
 
+GSC status snapshot (2026-11-12): ~58 pages indexed, 41 "crawled – currently
+not indexed" (normal new-domain soft hold; resolves as links arrive — HN
+launch accelerates it), 1 harmless redirect page. Request Indexing already
+submitted for: /, /what-is-2fa/, /guides/github/, /how-to-get-2fa-code/.
+Next GSC check: weekly, not daily.
+
 - [ ] SaaSHub submission (BACKLINK-SUBMISSIONS.md §)
 - [ ] StackShare submission
 - [ ] Slant submission
