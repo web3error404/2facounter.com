@@ -5,7 +5,18 @@ import { LANGUAGES } from '../i18n/languages';
 
 const year = new Date().getFullYear();
 
-const defaultColumns = [
+interface FooterLink {
+  href: string;
+  label: string;
+  icon?: 'x';
+  id?: string;
+}
+interface FooterColumn {
+  title: string;
+  links: FooterLink[];
+}
+
+const defaultColumns: FooterColumn[] = [
   {
     title: 'Product',
     links: [
@@ -43,6 +54,7 @@ const defaultColumns = [
       { href: '/about/', label: 'About' },
       { href: '/methodology/', label: 'Editorial methodology' },
       { href: '/contact/', label: 'Contact' },
+      { href: 'https://x.com/2facounter', label: '2FA COUNTER on X', icon: 'x' },
       { href: 'https://github.com/web3error404/2facounter.com', label: 'Source code' },
     ],
   },
@@ -59,7 +71,7 @@ const defaultColumns = [
 
 interface Props {
   /** Nav columns — override with translated labels on localized pages */
-  columns?: Array<{ title: string; links: Array<{ href: string; label: string }> }>;
+  columns?: FooterColumn[];
   /** One-line description under the wordmark */
   tagline?: string;
   /** Title of the language-switcher column */
@@ -74,6 +86,19 @@ const {
   languagesTitle = 'Language',
   languages = LANGUAGES,
 } = Astro.props;
+
+// Localized pages pass their own translated columns. Auto-add the X profile
+// icon to the column that links /methodology/ (the Company column in every
+// language) when it doesn't already include an x.com link, so new languages
+// pick the link up without per-page edits.
+const columnsWithX = columns.map((col) => {
+  if (col.links.some((l) => l.href.startsWith('https://x.com/2facounter'))) return col;
+  const idx = col.links.findIndex((l) => l.href === '/methodology/');
+  if (idx === -1) return col;
+  const links = [...col.links];
+  links.splice(idx + 1, 0, { href: 'https://x.com/2facounter', label: '2FA COUNTER on X', icon: 'x' });
+  return { ...col, links };
+});
 
 // hreflang value matching each language-switcher URL (self-linking alternates)
 const LANG_BY_HREF = new Map(LANGUAGES.map((l) => [l.href, l]));
@@ -112,23 +137,34 @@ const hreflangOf = (href: string) => LANG_BY_HREF.get(href)?.hreflang ?? 'en';
 
       <nav class="grid grid-cols-2 gap-8 sm:grid-cols-4 lg:min-w-0 lg:flex-1 lg:grid-cols-5" aria-label="Footer">
         {
-          columns.map((col) => (
+          columnsWithX.map((col) => (
             <div>
               <h2 class="font-mono text-[13px] font-bold tracking-wide text-cream uppercase">
                 {col.title}
               </h2>
               <ul class="mt-4 space-y-2">
-                {col.links.map(({ href, label, id }) => (
+                {col.links.map(({ href, label, icon, id }) => (
                   <li>
                     <a
                       href={href}
                       id={id}
+                      aria-label={icon ? label : undefined}
                       class:list={[
-                        '-mx-2 -my-1 inline-block rounded-sm px-2 py-3 text-sm text-cream/75 hover:text-primary hover:underline hover:decoration-2 hover:underline-offset-2',
+                        icon
+                          ? // Icon-only links (e.g. the X logo): compact box, color-only hover
+                            '-my-1 inline-flex items-center rounded-sm p-1 text-cream/75 hover:text-primary'
+                          : '-mx-2 -my-1 inline-block rounded-sm px-2 py-3 text-sm text-cream/75 hover:text-primary hover:underline hover:decoration-2 hover:underline-offset-2',
                         id && 'hidden',
                       ]}
                     >
-                      {label}
+                      {icon === 'x' && (
+                        <svg class="h-5 w-5 shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                          <path
+                            d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"
+                          ></path>
+                        </svg>
+                      )}
+                      {!icon && label}
                     </a>
                   </li>
                 ))}

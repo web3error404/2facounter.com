@@ -155,7 +155,7 @@ const bingVerification = import.meta.env.PUBLIC_BING_TOKEN ?? '';
 // "2facounter.com.evil.test").
 const canonicalHosts = [
   '2facounter.com',
-  ...((import.meta.env.PUBLIC_ANALYTICS_EXTRA_HOSTS ?? '')
+  ...(String(import.meta.env.PUBLIC_ANALYTICS_EXTRA_HOSTS ?? '')
     .split(',')
     .map((h) => h.trim())
     .filter(Boolean)),

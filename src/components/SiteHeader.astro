@@ -69,6 +69,18 @@ const current = switcher.find((l) => l.current) ?? switcher[0];
         ))
       }
 
+      <a
+        href="https://x.com/2facounter"
+        aria-label="2FA COUNTER on X"
+        class="flex items-center rounded-full border-2 border-transparent p-2 text-ink hover:border-ink hover:bg-surface"
+      >
+        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path
+            d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"
+          ></path>
+        </svg>
+      </a>
+
       <!-- Language dropdown -->
       <div class="relative">
         <button
@@ -152,7 +164,20 @@ const current = switcher.find((l) => l.current) ?? switcher[0];
           </a>
         ))
       }
-      <a href="/#generator" class="btn-primary mt-2">{cta}</a>
+      <div class="mt-2 flex items-center gap-2">
+        <a href="/#generator" class="btn-primary flex-1">{cta}</a>
+        <a
+          href="https://x.com/2facounter"
+          aria-label="2FA COUNTER on X"
+          class="btn-icon w-11 shrink-0 self-stretch"
+        >
+          <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path
+              d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"
+            ></path>
+          </svg>
+        </a>
+      </div>
     </div>
 
     <nav aria-label="Language" class="mt-2 border-t-2 border-dashed border-ink/40 pt-2">
