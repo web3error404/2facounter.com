@@ -1,0 +1,58 @@
+=== SHOW HN — paste-ready (Tue Nov 17, 7:00-7:30 AM ET) ===
+
+Submit at: https://news.ycombinator.com/submit
+Type: (leave as default link submission)
+
+--- TITLE (paste into "title" field) ---
+
+Show HN: 2FA Counter – a TOTP/HOTP generator that runs entirely in the browser
+
+--- URL (paste into "url" field) ---
+
+https://2facounter.com
+
+--- TEXT (paste into "text" field) ---
+
+I built this because there are moments when you need a 2FA code and can't
+install anything: a borrowed laptop, a work machine without install rights,
+a device you don't want to log an account into.
+
+Paste the Base32 secret (or scan a QR code with the camera / drop a QR
+screenshot) and you get a live TOTP/HOTP code. Everything is generated
+locally with the Web Crypto API — RFC 6238/4226, HMAC-SHA-1/256/512.
+Keys exist only in the open page's memory: no localStorage, no cookies,
+no IndexedDB, no cloud sync. Refreshing wipes them.
+
+The honest part of the story: this site used to ship Google Tag Manager +
+Google Analytics. I submitted it to the awesome-privacy list and it was
+rejected — correctly — because a tracker on a privacy tool is exactly the
+kind of contradiction that list exists to catch. So this week I removed
+GTM/GA, then removed the remaining Cloudflare Web Analytics beacon too.
+The site now makes zero third-party requests: fonts, the QR decoder
+(jsQR), images and scripts are all bundled and served from the same
+domain. Open the network tab and watch it.
+
+Source (AGPL-3.0): https://github.com/web3error404/2facounter.com
+Privacy policy, for the record: https://2facounter.com/privacy/
+
+Things I'll admit up front, since they're the real questions:
+
+1. Does this replace Aegis/2FAS/Bitwarden on your phone? No. Use those.
+   This is for the edge cases above. The recovery codes are still the
+   airbag for any 2FA setup.
+
+2. Can't a malicious future version log keys? Nothing stops me except
+   the AGPL license and the fact that the tool demonstrably works offline
+   (disconnect after load — it keeps generating). The CSP in
+   worker.mjs/_headers pins scripts to 'self' so the same page that
+   generates codes can't ship your keys anywhere without a deploy that
+   changes both. Audit it; that's the point of the license.
+
+3. Browser memory vs. phone app security? An XSS on this site would be
+   game over, same as any web page. The mitigations are no server, no
+   inputs that hit the network, a locked-down CSP, and memory-only keys
+   that vanish on refresh. If that trust model doesn't work for you, that
+   is a completely reasonable conclusion.
+
+Happy to answer anything else. Flambé my threat model in the comments —
+that's half the reason I'm posting here.

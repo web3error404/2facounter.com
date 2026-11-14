@@ -19,15 +19,17 @@ Launch window: **Tue Nov 17 / Wed Nov 18 / Thu Nov 19, 7–9 AM Eastern**.
 
 ## Fri Nov 13 — create the account (~15 min)
 
-- [ ] Create HN account at news.ycombinator.com → login
+- [x] Create HN account at news.ycombinator.com → login
       Username = personal handle (web3error404 is fine). NOT "2facounter".
-- [ ] Verify email (needed to post links)
-- [ ] Read the front page 10 min — absorb the tone: dry, technical, no marketing
-- [ ] Comment once on any thread where you have genuine input
+- [x] Verify email (needed to post links)
+- [x] Read the front page 10 min — absorb the tone: dry, technical, no marketing
+- [x] Comment once on any thread where you have genuine input
+      (Sat Nov 14: reply re Zig-vs-C tooling, story 50483611)
 
 ## Sat Nov 14 / Sun Nov 15 / Mon Nov 16 — warm-up (~10 min/day)
 
-- [ ] 1 genuine comment per day (web dev, security, self-hosting threads)
+- [x] ~~Sat Nov 14~~ comment done (Zig/C tooling thread)
+- [ ] 1 genuine comment per day (web dev, security, self-hosting threads) — Sun 15, Mon 16
 - [ ] Zero mentions of 2facounter.com anywhere. No links at all.
 - [ ] Goal: non-zero comment history so launch day reads as a member, not a drive-by
 

@@ -10,10 +10,10 @@ Check off each item as submitted. All copy is copy-paste ready.
       → https://github.com/lissy93/awesome-privacy/pull/896 (declined: closed-source requirement; also cited GTM, which was already removed — corrected for the record in the closing thread)
 - [ ] GitHub awesome-lists — PR 2 of 3: awesome-2fa repo (search GitHub for one)
 - [ ] GitHub awesome-lists — PR 3 of 3: awesome-security repo
-- [ ] SaaSHub
-- [ ] StackShare
+- [x] SaaSHub — 2026-11-14 ✅ VERIFIED + ACTIVE: 8 competitors linked, 6/6 Q&A, features, description, screenshots, pricing=Free, OSS=AGPL repo. Pending listing approval (1wk–mo). DO NOT pay for "Priority+". Re-verify quarterly.
+- [x] StackShare — 2026-11-14 ✅ LIVE: stackshare.io/tool/2fa-counter, #98 in Authentication category, features listed, website linked. Optional follow-up: add pros/cons & alternatives votes later.
 - [ ] Slant
-- [ ] StartupBase
+- [ ] StartupBase — form filled 2026-11-14 (7 categories, 4 competitors), confirm Submit clicked
 
 ---
 
@@ -256,8 +256,8 @@ for GitHub, Google, Discord, Binance, Steam, AWS and more. Free forever.
    | awesome-privacy PR | 2026-11-12 (PR #896) | ❌ declined (closed-source rule) |
    | awesome-2fa PR | | |
    | awesome-security PR | | |
-   | SaaSHub | | |
-   | StackShare | | |
+   | SaaSHub | 2026-11-14 (7 alternatives linked) | ⏳ in review queue |
+   | StackShare | 2026-11-14 | ✅ live (#98 in Authentication) |
    | Slant | | |
    | StartupBase | | |
 
