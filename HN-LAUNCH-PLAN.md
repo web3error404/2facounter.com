@@ -68,6 +68,11 @@ got zero traction before noon, wait a full day rather than reposting.
 
 ## Filler work while waiting (optional, low effort)
 
+X (Twitter) cadence — started 2026-11-13, Mon/Wed/Fri only (no weekend
+posts). Posts so far: Fri Nov 13 (Post 1, clock sync). Next scheduled:
+Mon Nov 16 = Post 2 (recovery codes, `x-posts.md`).
+Rules: no links in posts (bio only), site URL in bio.
+
 GSC status snapshot (2026-11-12): ~58 pages indexed, 41 "crawled – currently
 not indexed" (normal new-domain soft hold; resolves as links arrive — HN
 launch accelerates it), 1 harmless redirect page. Request Indexing already
