@@ -5,7 +5,7 @@ import SiteFooter from '../components/SiteFooter.astro';
 import ReviewByline from '../components/ReviewByline.astro';
 import Generator from '../components/Generator.astro';
 
-const title = '2FA Code Generator – Free Online TOTP Authenticator';
+const title = '2FA Code Generator – Free Online TOTP & MFA Authenticator';
 const description =
   'Free online 2FA authenticator: paste your secret key and get a live 2FA auth code (TOTP) in seconds. No app, no sign-up, no phone needed.';
 
@@ -20,7 +20,7 @@ const faq = [
   },
   {
     q: 'How does 2FA work?',
-    a: 'Short version: your password proves you know the account, and a time-limited code proves you hold its secret. This generator computes the standard TOTP code (RFC 6238) right in your browser — shared secret plus the current time, refreshed every 30 seconds — the same calculation a phone app would do. The full mechanism, step by step, is explained in our "What is 2FA?" guide.',
+    a: 'Short version: your password proves you know the account, and a time-limited verification code (also called a token) proves you hold its secret — that second factor is why 2FA is also known as MFA, multi-factor authentication. This generator computes the standard TOTP code (RFC 6238) right in your browser — shared secret plus the current time, refreshed every 30 seconds — the same calculation a phone app would do. The full mechanism, step by step, is explained in our "What is 2FA?" guide.',
   },
   {
     q: 'What is 2FA used for?',

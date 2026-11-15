@@ -36,7 +36,7 @@ const description =
 const faqs = [
   {
     q: 'What is 2FA?',
-    a: '2FA (two-factor authentication) means proving who you are with two different kinds of evidence: something you know (your password) plus something you have (a code that changes every 30 seconds, a security key, or your phone). A password alone can leak or be guessed; the second factor makes a leaked password useless on its own.',
+    a: '2FA (two-factor authentication — also known as MFA, multi-factor authentication) means proving who you are with two different kinds of evidence: something you know (your password) plus something you have (a verification code that changes every 30 seconds, a security key, or your phone). A password alone can leak or be guessed; the second factor makes a leaked password useless on its own.',
   },
   {
     q: 'Why is 2FA so important?',
@@ -48,7 +48,7 @@ const faqs = [
   },
   {
     q: 'How does 2FA work?',
-    a: 'After you enter your password, the service asks for a second proof. With the most common method (TOTP), your authenticator derives a fresh 6-digit code from a shared secret plus the current time (the RFC 6238 standard) while the server runs the identical calculation and compares results. The code rotates every 30 seconds and can never be reused, so an attacker with only your password still can\'t get in.',
+    a: 'After you enter your password, the service asks for a second proof. With the most common method (TOTP), your authenticator derives a fresh 6-digit verification code — often called a token — from a shared secret plus the current time (the RFC 6238 standard) while the server runs the identical calculation and compares results. The token rotates every 30 seconds and can never be reused, so an attacker with only your password still can\'t get in.',
   },
   {
     q: 'How does a TOTP code get generated?',
