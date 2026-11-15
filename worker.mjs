@@ -11,6 +11,12 @@
 // The redirect carries no-store so zone-level caches don't hold on to it and
 // a future host decision only takes one deploy.
 //
+// Plain-HTTP requests are also permanently redirected to https:// (the same
+// 301 carries both fixes in one hop). This guarantees the site is only ever
+// served over TLS even if the zone's "Always Use HTTPS" toggle is off — the
+// Worker sees the raw http:// request because run_worker_first routes every
+// request through this script.
+//
 // Security headers are set here (not only in dist/_headers) because
 // run_worker_first routes every request through this script; applying them at
 // the edge guarantees nosniff / referrer-policy / frame-deny / permissions
@@ -38,7 +44,10 @@ const SECURITY_HEADERS = {
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
-    if (url.hostname !== APEX_HOST) {
+    const needsHttps = url.protocol === 'http:';
+    const needsApex = url.hostname !== APEX_HOST;
+    if (needsHttps || needsApex) {
+      url.protocol = 'https:';
       url.hostname = APEX_HOST;
       return new Response(null, {
         status: 301,
