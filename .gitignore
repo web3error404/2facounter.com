@@ -31,3 +31,6 @@ snapshots/
 
 # wrangler local dev state (KV/DO caches, wrangler dev session data)
 .wrangler/
+
+# private launch ops (Show HN playbook, backlink list, ad checklist)
+launch-private/
