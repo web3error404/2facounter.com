@@ -144,7 +144,9 @@ const jsonLd = [
         height: 512,
       },
     },
-    reviewedBy: {
+    // `reviewedBy` is not a Schema.org property; `contributor` is the closest
+    // valid CreativeWork signal for the editorial team.
+    contributor: {
       '@type': 'Organization',
       name: '2FA COUNTER security editorial team',
       url: `${SITE}/methodology/`,
