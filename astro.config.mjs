@@ -22,12 +22,28 @@ export default defineConfig({
   },
   integrations: [
     sitemap({
-      // Exclude the noindexed dev-only preview page. Locale dirs are included
-      // because they are released in Layout.astro (RELEASED_LOCALES). When a
-      // language is rolled back there, remove its dir from this list too —
-      // the two lists must stay in sync.
+      // The dev-only preview page is removed from the build entirely (see
+      // the dev-only-preview-route integration below), so this filter is
+      // belt and braces for any host that still serves a cached copy.
+      // Locale dirs are included because they are released in Layout.astro
+      // (RELEASED_LOCALES). When a language is rolled back there, remove its
+      // dir from this list too — the two lists must stay in sync.
       filter: (page) => !page.includes('/preview/'),
     }),
+    {
+      // /preview is a design-QA canvas (timer at 600×350), useful in `astro
+      // dev` but not something a public site should serve — audit check 3.6
+      // forbids test routes in production. This strips it from `astro build`
+      // while leaving it reachable in dev.
+      name: 'dev-only-preview-route',
+      hooks: {
+        'astro:build:setup': ({ pages }) => {
+          for (const key of [...pages.keys()]) {
+            if (key.replace(/\.html$/, '').startsWith('/preview')) pages.delete(key);
+          }
+        },
+      },
+    },
   ],
   vite: {
     plugins: [tailwindcss()],

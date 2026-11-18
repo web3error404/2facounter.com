@@ -16,8 +16,9 @@
   X-Frame-Options: DENY
   Permissions-Policy: camera=(self), geolocation=(), microphone=()
   Strict-Transport-Security: max-age=31536000
-  # Keep in sync with SECURITY_HEADERS in worker.mjs. 'unsafe-inline' scripts
-  # are all first-party (mirror-host noindex guard, SW registration, CF
-  # beacon); Cloudflare Insights is the site's only remote script/connect
-  # third party (GTM/GA hosts removed in 2026-11 with the tracker).
+  # Keep in sync with SECURITY_HEADERS in worker.mjs. The only scripts are
+  # first-party inline ones (mirror-host noindex guard, SW registration);
+  # every tracker (GTM/GA, Cloudflare Insights beacon) was removed in
+  # 2026-11 — the site ships zero third-party scripts and makes no
+  # third-party requests, matching the claims on /privacy/.
   Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'

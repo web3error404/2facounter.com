@@ -32,11 +32,12 @@ const SECURITY_HEADERS = {
   'x-frame-options': 'DENY',
   'permissions-policy': 'camera=(self), geolocation=(), microphone=()',
   'strict-transport-security': 'max-age=31536000',
-  /* Mirrors public/_headers. Inline scripts are first-party (mirror-host
-     noindex guard, SW registration, CF beacon inject); scripts additionally
-     load from Cloudflare Insights, whose RUM beacon is the only connect
-     third party. Inline styles are Astro page styles. Google tag (GTM/GA)
-     hosts were removed in 2026-11 when the tracker was dropped. */
+  /* Mirrors public/_headers. The only scripts are first-party inline ones
+     (the mirror-host noindex guard and the service-worker registration) and
+     the styles are Astro's own page styles. Every tracker (GTM/GA and the
+     Cloudflare Insights beacon) was removed in 2026-11: the site ships zero
+     third-party scripts and makes no third-party requests — script-src and
+     connect-src are 'self'-only, matching the claims on /privacy/. */
   'content-security-policy':
     "default-src 'self'; script-src 'self' 'unsafe-inline'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'",
 };
