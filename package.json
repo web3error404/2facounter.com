@@ -31,6 +31,6 @@
     "@astrojs/check": "^0.9.12",
     "playwright": "^1.65.0",
     "typescript": "^6.0.3",
-    "wrangler": "^4.159.0"
+    "wrangler": "^4.164.0"
   }
 }
