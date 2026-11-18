@@ -40,7 +40,7 @@ for (const { path, file } of pages) {
   }
   // imgs without alt
   const imgs = [...body.matchAll(/<img\b[^>]*?>/g)];
-  for (const [, tag] of imgs) {
+  for (const [tag] of imgs) {
     if (!/\salt=/.test(tag)) {
       console.log(`${path}: <img> without alt: ${tag.slice(0, 100)}`);
       issues++;

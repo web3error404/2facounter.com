@@ -141,7 +141,17 @@ for (const [url] of externalLinks) {
       headers: { 'user-agent': 'Mozilla/5.0 (site-audit)' },
       signal: AbortSignal.timeout(12000),
     });
-    if (r.status >= 400) problems.push(`EXTERNAL LINK BAD (HTTP ${r.status}): ${url}`);
+    if (r.status >= 400) {
+      // 403/429/999 from directories like saashub are bot protection (they
+      // block headless clients and datacenter IPs), not dead links — a real
+      // browser usually loads them. Report but don't fail the run; genuine
+      // 404/410/unreachable still fail.
+      if (r.status === 403 || r.status === 429 || r.status === 999) {
+        console.log(`EXTERNAL LINK BLOCKED BY BOT PROTECTION (HTTP ${r.status}, not counted): ${url}`);
+      } else {
+        problems.push(`EXTERNAL LINK BAD (HTTP ${r.status}): ${url}`);
+      }
+    }
   } catch (e) {
     problems.push(`EXTERNAL LINK UNREACHABLE: ${url} (${String(e.message).split('\n')[0]})`);
   }

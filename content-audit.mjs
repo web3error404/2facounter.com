@@ -23,7 +23,10 @@ const rows = pages.map((p) => {
     .replace(/&[a-z#0-9]+;/g, ' ')
     .replace(/\s+/g, ' ');
   const words = bodyText.trim().split(' ').filter(Boolean).length;
-  const noindex = /noindex/.test(html);
+  // Match the actual robots meta tag, not the word "noindex" anywhere in the
+  // file: the Layout injects a JS mirror-host guard whose source contains
+  // "noindex", which used to false-positive every page.
+  const noindex = /<meta name="robots" content="noindex/.test(html);
   const author = /byline|wrote this|reviewed by|edited by|our methodology| methodologies/i.test(bodyText) ? 'Y' : '-';
   const adcode = /adsbygoogle|googletag|ad-unit/i.test(html) ? 'ADCODE' : '-';
   const title = html.match(/<title>([^<]+)<\/title>/i)?.[1] ?? '-';
