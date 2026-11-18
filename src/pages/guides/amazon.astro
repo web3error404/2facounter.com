@@ -1,0 +1,83 @@
+---
+import GuideLayout from '../../components/GuideLayout.astro';
+
+const title = 'How to Set Up 2FA on Amazon (Authenticator App, No SMS)';
+const description =
+  'Turn on Amazon Two-Step Verification with an authenticator app instead of SMS. Reveal the setup key and generate live 6-digit TOTP codes in your browser.';
+---
+
+<GuideLayout
+  serviceName="Amazon"
+  title={title}
+  description={description}
+  path="/guides/amazon/"
+  datePublished="2026-11-18"
+  dateModified="2026-11-18"
+  lastReviewed="2026-11-18"
+  intro="Amazon calls it Two-Step Verification (2SV) and offers an authenticator-app option next to SMS and voice calls. The shopping account is separate from AWS — this guide covers the retail login, with a pointer to the IAM guide at the end."
+  minutes={4}
+  params={['6 digits', '30 s period', 'SHA-1']}
+  ctaTitle="Your order history is also your address book"
+  ctaBody="An Amazon account holds saved addresses, payment methods, and order history, and it can be used to impersonate you with customer service. Save the Base32 key and the backup codes before you finish setup."
+  deepDive={{
+    heading: "Amazon account details",
+    blocks: [
+      {
+        title: 'Amazon retail and AWS are separate accounts',
+        body: 'Two-Step Verification on amazon.com protects shopping, Prime, Kindle and the retail account. AWS uses its own IAM users and root account with a separate MFA setup — enabling one does not enable the other. If you are here for AWS, use the dedicated AWS IAM guide instead; the keys and consoles are unrelated.',
+      },
+      {
+        title: 'The authenticator option is easy to miss',
+        body: 'Amazon defaults many accounts to SMS or voice call, and the authenticator choice can sit behind “Add new app” or “More options”. Look for “Authenticator App” rather than “Phone number”. Once enrolled, you can remove the phone method if you prefer not to keep a SIM-swap lane open — but consider keeping a recovery phone number that is not your main SIM.',
+      },
+      {
+        title: 'TV devices and household sharing',
+        body: 'Fire TV, Kindle and other signed-in devices may keep their sessions, but some will ask for the code again after a security change. If a household member uses the account, make sure they can reach you for a code or have their own profile — and never share the Base32 key itself.',
+      },
+    ],
+  }}
+  steps={[
+    {
+      title: 'Open Login & security',
+      body: 'Sign in at amazon.com, hover over “Account & Lists” → “Account” → “Login & security”. The direct shortcut is amazon.com/a/security.',
+    },
+    {
+      title: 'Open Two-Step Verification settings',
+      body: 'Next to “Two-Step Verification (2SV)”, click “Edit” or “Manage”, then choose the authenticator-app option (“Authenticator App” / “Add new app”).',
+    },
+    {
+      title: 'Reveal the key',
+      body: 'Amazon shows a QR code. Use “Can’t scan the barcode?” or the manual-entry link to display the alphanumeric setup key. Copy it, or screenshot the QR and paste the image into the generator.',
+    },
+    {
+      title: 'Generate the first code',
+      body: 'Paste the key into 2facounter.com. A live 6-digit code appears and refreshes every 30 seconds; the calculation runs entirely in your browser.',
+    },
+    {
+      title: 'Confirm the code with Amazon',
+      body: 'Enter the current code in Amazon’s verification box and save. Amazon marks the authenticator as an active 2SV method.',
+    },
+    {
+      title: 'Save the backup route',
+      body: 'Store the Base32 key and any backup codes in your encrypted vault. If Amazon shows a “primary method” choice, keep the authenticator first and treat SMS as a fallback you control.',
+    },
+  ]}
+  faqs={[
+    {
+      q: 'Does Amazon use standard TOTP?',
+      a: 'Yes. Amazon’s authenticator-app option is standard 6-digit, 30-second TOTP with SHA-1, so the key works in any compatible authenticator — including this browser generator.',
+    },
+    {
+      q: 'Does this protect AWS too?',
+      a: 'No. AWS IAM is a separate system with its own MFA devices. Follow the AWS guide to assign a virtual MFA device to the root account and each IAM user; Amazon shopping 2SV does not carry over.',
+    },
+    {
+      q: 'Why does Amazon keep asking for a code on my TV?',
+      a: 'Some devices re-authenticate after a security change or when their session expires. Generate the code on your phone or laptop, enter it on the device, and the session should persist again. The key itself stays in your vault, not on the TV.',
+    },
+    {
+      q: 'Can Amazon customer service bypass 2FA for me?',
+      a: 'No. Support cannot read your TOTP code or disable 2SV on request — that would defeat the purpose. If you lose the key and the backup codes, account recovery is the only route, which is why saving both during setup matters.',
+    },
+  ]}
+/>

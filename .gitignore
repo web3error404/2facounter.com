@@ -34,3 +34,6 @@ snapshots/
 
 # private launch ops (Show HN playbook, backlink list, ad checklist)
 launch-private/
+
+# IndexNow submission state (local to the deploy machine)
+.indexnow-state.json

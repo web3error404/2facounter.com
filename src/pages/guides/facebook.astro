@@ -1,0 +1,83 @@
+---
+import GuideLayout from '../../components/GuideLayout.astro';
+
+const title = 'How to Set Up 2FA on Facebook (Authenticator App Guide)';
+const description =
+  'Enable two-factor authentication on Facebook with an authenticator app. Scan the QR code or use a setup key, then generate 6-digit TOTP codes in your browser.';
+---
+
+<GuideLayout
+  serviceName="Facebook"
+  title={title}
+  description={description}
+  path="/guides/facebook/"
+  datePublished="2026-11-18"
+  dateModified="2026-11-18"
+  lastReviewed="2026-11-18"
+  intro="Facebook’s security settings now live inside Meta Accounts Center, which also controls Instagram. The authenticator-app option is standard TOTP — but Meta pushes SMS first, and the enrollment screen may show only a QR code. If it does, the screenshot route below still gets you the secret without a manual key."
+  minutes={5}
+  params={['6 digits', '30 s period', 'SHA-1']}
+  ctaTitle="One key can unlock a lot of your life"
+  ctaBody="A Facebook account is often the recovery address for other services, and Meta accounts can hold payment details and linked Instagram profiles. Save the setup secret and the 10 recovery codes in your encrypted vault before you close the setup dialog."
+  deepDive={{
+    heading: "Facebook specifics worth knowing",
+    blocks: [
+      {
+        title: 'Accounts Center can cover Facebook and Instagram at once',
+        body: 'Meta groups both networks under one Accounts Center, so the 2FA screen asks which accounts the method should apply to. You can enroll both or keep them separate. If you enroll both, Meta generates a separate secret for each account — paste the right key for the right profile, and label them clearly in your password manager. A single authenticator entry per account is the least confusing setup.',
+      },
+      {
+        title: 'SMS is the default, not the requirement',
+        body: 'Facebook has historically nudged people toward text-message codes because they need no extra app. The authenticator-app option is stronger: the code is derived from a secret you hold, so a SIM swap does not hand an attacker your second factor. If a phone number is already attached for recovery, leave it there as a last resort but make the authenticator the method you actually use.',
+      },
+      {
+        title: 'Passkeys and TOTP solve different problems',
+        body: 'Meta supports passkeys on supported devices, and a passkey is phishing-resistant because it is bound to the real domain. A TOTP secret is weaker against a convincing fake login page, but it is portable: the same key works in any browser, on any machine, with no device migration. The strongest arrangement is a passkey on your daily phone plus TOTP as the independent backup lane.',
+      },
+    ],
+  }}
+  steps={[
+    {
+      title: 'Open Accounts Center',
+      body: 'On facebook.com, click your profile picture → “Settings & privacy” → “Settings” → “Accounts Center”. The direct shortcut is facebook.com/2fa. Choose “Password and security” → “Two-factor authentication”.',
+    },
+    {
+      title: 'Pick the accounts to protect',
+      body: 'Meta asks whether the method applies to your Facebook profile, your Instagram account, or both. Select the accounts you want covered, then continue.',
+    },
+    {
+      title: 'Choose “Authentication app”',
+      body: 'Select “Authentication app” rather than “Text message (SMS)”. Meta may still show a phone-number step first in some regions; complete it if required, then return to the authenticator option for the actual second factor.',
+    },
+    {
+      title: 'Get the secret from the QR screen',
+      body: 'Facebook shows a QR code. Scan it with an authenticator app, or select the option to view or copy the manual setup key and enter it into the app. To use the browser generator instead, screenshot the QR code and paste the image into the generator with Ctrl+V — the decoder extracts the secret locally.',
+    },
+    {
+      title: 'Generate and confirm the code',
+      body: 'Paste the key or decoded secret into 2facounter.com. The live 6-digit code refreshes every 30 seconds. Type it into Facebook’s confirmation box and submit.',
+    },
+    {
+      title: 'Save the recovery codes',
+      body: 'Once two-factor authentication is active, open “Additional methods” → “Recovery codes” in Accounts Center to view and save your 10 one-time recovery codes. Store them and the setup secret in your encrypted password manager.',
+    },
+  ]}
+  faqs={[
+    {
+      q: 'Does Facebook use standard TOTP?',
+      a: 'Yes. Facebook’s authenticator-app option produces standard 6-digit codes that change every 30 seconds, using SHA-1 — the same RFC 6238 format as Google Authenticator and this generator. Any TOTP-compatible app or tool can compute the code once you have the secret.',
+    },
+    {
+      q: 'Does enabling 2FA on Facebook also protect Instagram?',
+      a: 'Only if you select the Instagram account in Accounts Center during setup. The accounts share a settings surface, not a secret: each enrollment gets its own key. If you want both protected, enroll both and keep the two keys clearly labelled in your vault.',
+    },
+    {
+      q: 'I lost the phone with my Facebook authenticator. What now?',
+      a: 'Use a saved recovery code if you have one. If you stored the setup secret in your password manager, paste it into the generator on any device and continue as normal. Without either, Meta’s account-recovery flow is the remaining route — which is exactly why saving the secret and any recovery codes at setup time matters more than the app.',
+    },
+    {
+      q: 'Can I turn SMS off completely?',
+      a: 'Once an authenticator app is active you can usually remove the phone number as a second factor, though Meta may keep it for account recovery. Removing SMS closes the SIM-swap lane; keeping a recovery phone number is a separate decision from using SMS codes to sign in.',
+    },
+  ]}
+/>

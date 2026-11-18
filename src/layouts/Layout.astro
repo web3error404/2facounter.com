@@ -104,10 +104,20 @@ const reviewedAlternates = alternates?.filter(
 const orgJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
+  '@id': 'https://2facounter.com/#organization',
   name: '2FA COUNTER',
   url: 'https://2facounter.com',
-  logo: 'https://2facounter.com/apple-touch-icon.png',
-  sameAs: ['https://github.com/web3error404/2facounter.com'],
+  logo: {
+    '@type': 'ImageObject',
+    url: 'https://2facounter.com/web-app-manifest-512x512.png',
+    width: 512,
+    height: 512,
+  },
+  sameAs: [
+    'https://github.com/web3error404/2facounter.com',
+    'https://x.com/2facounter',
+    'https://www.producthunt.com/products/2fa-counter',
+  ],
   description:
     'Free, browser-based 2FA authenticator and TOTP code generator. Zero-knowledge, no accounts, no servers.',
   contactPoint: [
@@ -126,7 +136,21 @@ const orgJsonLd = {
   ],
 };
 
-const allJsonLd = [orgJsonLd, ...jsonLd];
+// Site-wide WebSite entity. It gives the language variants and the
+// Organization one stable graph (page → WebSite → publisher) and is the
+// object search engines associate with the site name.
+const websiteJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  '@id': 'https://2facounter.com/#website',
+  name: '2FA COUNTER',
+  alternateName: '2facounter.com',
+  url: 'https://2facounter.com/',
+  inLanguage: ['en', 'es', 'pt', 'zh-CN', 'hi', 'ar', 'fr', 'bn', 'ru', 'ja', 'de', 'ko', 'vi', 'it', 'zh-TW'],
+  publisher: { '@id': 'https://2facounter.com/#organization' },
+};
+
+const allSiteJsonLd = [orgJsonLd, websiteJsonLd, ...jsonLd];
 
 // ── Search-engine ownership verification ──────────────────────────────
 // 1. Add your site at https://search.google.com/search-console → choose
@@ -194,7 +218,7 @@ const canonicalHosts = [
       lang={lang}
       alternates={reviewedAlternates}
       noindex={noindex || unreviewedLocale}
-      jsonLd={allJsonLd}
+      jsonLd={allSiteJsonLd}
       datePublished={datePublished}
       dateModified={dateModified}
     />

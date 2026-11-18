@@ -78,6 +78,78 @@ const selfLang = lang.toLowerCase();
 const allAlternates = alternates.some((a) => a.hreflang.toLowerCase() === selfLang)
   ? alternates
   : [{ hreflang: lang, href: canonical }, ...alternates];
+
+// Editorial pages (articles, guides) carry Article/HowTo JSON-LD. Use that
+// to type the Open Graph object correctly and to surface the dates even when
+// a page only declared them inside its structured data.
+const editorialBlock = jsonLd.find((block) =>
+  ['Article', 'NewsArticle', 'BlogPosting', 'HowTo'].includes(
+    /** @type {any} */ (block)?.['@type'],
+  ),
+);
+const ogType = editorialBlock ? 'article' : 'website';
+const published = datePublished ?? /** @type {any} */ (editorialBlock)?.datePublished;
+const modified = dateModified ?? /** @type {any} */ (editorialBlock)?.dateModified;
+
+// og:locale:alternate tells social platforms which other translations exist.
+// Deduplicate and skip the self entry / x-default.
+const alternateLocales = [
+  ...new Set(
+    allAlternates
+      .map((a) => a.hreflang.toLowerCase())
+      .filter((code) => code !== 'x-default' && code !== selfLang)
+      .map((code) => ogLocale[code])
+      .filter(Boolean),
+  ),
+];
+
+// Homepages declare a WebApplication, service guides and how-tos declare
+// HowTo, and articles declare Article. Attach the shared author/publisher
+// entity graph (and any missing image/reviewer fields) here, so every content
+// type carries the same E-E-A-T signals without per-page duplication.
+const enrichedJsonLd = jsonLd.map((block) => {
+  const type = /** @type {any} */ (block)?.['@type'];
+  const shared = {
+    author: { '@type': 'Organization', name: '2FA COUNTER', url: site },
+    publisher: {
+      '@type': 'Organization',
+      name: '2FA COUNTER',
+      url: site,
+      logo: {
+        '@type': 'ImageObject',
+        url: `${site}/web-app-manifest-512x512.png`,
+        width: 512,
+        height: 512,
+      },
+    },
+    image: `${site}${ogImage}`,
+    mainEntityOfPage: { '@type': 'WebPage', '@id': canonical },
+    // Tie every content block into the site-wide WebSite entity (which is
+    // emitted globally) and declare the language, so the graph reads
+    // page → WebSite → publisher rather than leaving a detached node.
+    isPartOf: { '@type': 'WebSite', '@id': `${site}/#website` },
+    inLanguage: lang,
+  };
+
+  if (type === 'WebApplication') {
+    return { ...shared, screenshot: `${site}${ogImage}`, ...block };
+  }
+  if (type === 'Article') {
+    return {
+      ...shared,
+      reviewedBy: {
+        '@type': 'Organization',
+        name: '2FA COUNTER security editorial team',
+        url: `${site}/methodology/`,
+      },
+      ...block,
+    };
+  }
+  if (type === 'HowTo') {
+    return { ...shared, ...block };
+  }
+  return block;
+});
 ---
 
 <title>{title}</title>
@@ -90,8 +162,9 @@ const allAlternates = alternates.some((a) => a.hreflang.toLowerCase() === selfLa
 {!noindex && allAlternates.map((a) => <link rel="alternate" hreflang={a.hreflang} href={a.href} />)}
 
 <!-- Open Graph -->
-<meta property="og:type" content="website" />
+<meta property="og:type" content={ogType} />
 <meta property="og:locale" content={locale} />
+{alternateLocales.map((alt) => <meta property="og:locale:alternate" content={alt} />)}
 <meta property="og:site_name" content="2FA COUNTER" />
 <meta property="og:title" content={title} />
 <meta property="og:description" content={description} />
@@ -105,14 +178,17 @@ const allAlternates = alternates.some((a) => a.hreflang.toLowerCase() === selfLa
 <!-- og:image:alt is localized by construction: every page passes its own
      translated title, which is the most accurate description of each card. -->
 <meta property="og:image:alt" content={title} />
-{datePublished && <meta property="article:published_time" content={datePublished} />}
-{dateModified && <meta property="article:modified_time" content={dateModified} />}
+{published && <meta property="article:published_time" content={published} />}
+{modified && <meta property="article:modified_time" content={modified} />}
+{ogType === 'article' && <meta property="article:author" content="2FA COUNTER" />}
 
 <!-- Twitter -->
 <meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:site" content="@2facounter" />
+<meta name="twitter:creator" content="@2facounter" />
 <meta name="twitter:title" content={title} />
 <meta name="twitter:description" content={description} />
 <meta name="twitter:image" content={`${site}${ogImage}`} />
 <meta name="twitter:image:alt" content={title} />
 
-{jsonLd.map((graph) => <script type="application/ld+json" set:html={JSON.stringify(graph)} />)}
+{enrichedJsonLd.map((graph) => <script type="application/ld+json" set:html={JSON.stringify(graph)} />)}

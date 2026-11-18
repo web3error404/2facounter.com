@@ -1,0 +1,83 @@
+---
+import GuideLayout from '../../components/GuideLayout.astro';
+
+const title = 'How to Set Up 2FA on Dropbox (TOTP, No Phone App)';
+const description =
+  'Turn on Dropbox two-step verification with a browser-based authenticator: reveal the setup key and generate 6-digit codes without a phone.';
+---
+
+<GuideLayout
+  serviceName="Dropbox"
+  title={title}
+  description={description}
+  path="/guides/dropbox/"
+  datePublished="2026-11-18"
+  dateModified="2026-11-18"
+  lastReviewed="2026-11-18"
+  intro="Dropbox calls it two-step verification and supports both authenticator apps and security keys. The setup screen shows a QR code; the manual key is one click away. This guide uses standard TOTP so the code can be generated on any browser you trust."
+  minutes={4}
+  params={['6 digits', '30 s period', 'SHA-1']}
+  ctaTitle="Your file vault deserves a second lock"
+  ctaBody="Dropbox often holds contracts, scans, tax documents and shared team folders. Store the Base32 key in your password manager and keep the backup codes somewhere offline — losing the second factor should never mean losing the files."
+  deepDive={{
+    heading: "Dropbox details that change the setup",
+    blocks: [
+      {
+        title: 'Personal accounts and Dropbox Business behave differently',
+        body: 'On a team account, an admin can require two-step verification, enforce single sign-on, or restrict which methods are allowed. If “Use a mobile app” is missing or greyed out, that is a team policy, not a Dropbox bug. Ask your admin whether app-based 2FA is permitted before you start; on SSO-enforced teams, the identity provider usually supplies the second factor instead.',
+      },
+      {
+        title: 'Security keys are phishing-resistant but web-only',
+        body: 'Dropbox also supports U2F/WebAuthn security keys, which cannot be phished or copied out of the device. They are an add-on rather than a replacement: Dropbox requires app or SMS 2FA to be enabled first, and a security key only works when signing in to dropbox.com on Chrome or Firefox — not in the desktop or mobile apps. TOTP remains the portable fallback when the key is elsewhere.',
+      },
+      {
+        title: 'Enabling 2FA does not end existing sessions',
+        body: 'Turning on two-step verification protects the next sign-in; it does not automatically sign out devices that are already authenticated. Open Settings → Security and review the active sessions or devices list after setup. Revoke anything you do not recognise, and sign out old browsers you no longer use.',
+      },
+    ],
+  }}
+  steps={[
+    {
+      title: 'Open Dropbox security settings',
+      body: 'Sign in at dropbox.com, click your avatar or initials in the top-right corner → “Settings” → the “Security” tab.',
+    },
+    {
+      title: 'Start two-step verification',
+      body: 'Find “2-factor authentication” and toggle it on. Re-enter your password and submit. Dropbox then asks how you want to receive codes — choose “Use an authenticator app”.',
+    },
+    {
+      title: 'Reveal the manual key',
+      body: 'Dropbox offers a QR code or a secret key. Choose the secret-key option (“Add a new account in your authenticator app and enter the key”) to display the Base32 string, then copy it. If only the QR is shown, screenshot it and paste the image into the generator instead.',
+    },
+    {
+      title: 'Add the key to the generator',
+      body: 'Paste the key into 2facounter.com. A live 6-digit code appears and refreshes every 30 seconds. If you prefer, screenshot the QR code and paste the image onto the generator page instead.',
+    },
+    {
+      title: 'Confirm in Dropbox',
+      body: 'Enter the current code on Dropbox’s confirmation screen. Dropbox activates two-step verification and shows backup options — save the backup codes it offers before closing the dialog.',
+    },
+    {
+      title: 'Audit connected devices',
+      body: 'Still on the Security tab, review the active sessions or devices list and revoke anything unfamiliar. Store the Base32 key and backup codes in your password manager; the key is what lets you regenerate codes if the phone is gone.',
+    },
+  ]}
+  faqs={[
+    {
+      q: 'Does Dropbox support standard authenticator apps?',
+      a: 'Yes. Dropbox’s “Use an authenticator app” option is standard TOTP: 6 digits, 30-second period, SHA-1. Any compatible authenticator — including this browser generator — computes the same code from the same secret.',
+    },
+    {
+      q: 'Where do I find the Dropbox setup key?',
+      a: 'On the QR-code screen, use the manual-entry link below the code. If Dropbox only shows the QR, screenshot it and paste the image into the generator; the QR decoder runs locally in your browser.',
+    },
+    {
+      q: 'Will 2FA stop my shared links from working?',
+      a: 'No. Shared links and file sync keep working independently of how you sign in. Two-step verification only adds a code to the account sign-in flow; it does not change sharing permissions or revoke links.',
+    },
+    {
+      q: 'I am on a Dropbox Business team and cannot enable this. Why?',
+      a: 'Team admins can require SSO or restrict second-factor methods. When SSO is enforced, your company’s identity provider handles authentication and Dropbox may hide app-based 2FA. Contact your admin to confirm the allowed methods.',
+    },
+  ]}
+/>

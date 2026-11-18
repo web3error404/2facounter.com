@@ -4,6 +4,7 @@ import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 import ReviewByline from '../components/ReviewByline.astro';
 import Generator from '../components/Generator.astro';
+import { GUIDES } from '../data/guides';
 
 const title = '2FA Code Generator – Free Online TOTP & MFA Authenticator';
 const description =
@@ -158,8 +159,10 @@ const features = [
 ];
 
 const services = [
-  'Discord', 'GitHub', 'Binance', 'Google', 'X / Twitter',
-  'AWS', 'Coinbase', 'Kraken', 'Twitch', 'Microsoft', 'Proton Mail',
+  'Google', 'Microsoft', 'Amazon', 'Facebook', 'GitHub', 'Instagram',
+  'Discord', 'Dropbox', 'LinkedIn', 'PayPal', 'Binance', 'Coinbase',
+  'Kraken', 'AWS', 'X / Twitter', 'Twitch', 'Epic Games', 'Slack',
+  'Zoom', 'Proton Mail',
 ];
 ---
 
@@ -361,23 +364,10 @@ const services = [
         </p>
         <p class="mt-3 text-sm font-medium text-ink">
           Setting up one of these? Read the step-by-step guide:{" "}
-          {[
-            ['Google', 'google'],
-            ['Microsoft', 'microsoft'],
-            ['Discord', 'discord'],
-            ['GitHub', 'github'],
-            ['X', 'x'],
-            ['AWS', 'aws'],
-            ['Coinbase', 'coinbase'],
-            ['Kraken', 'kraken'],
-            ['Steam', 'steam'],
-            ['Binance', 'binance'],
-            ['PayPal', 'paypal'],
-            ['Instagram', 'instagram'],
-          ].map(([name, slug], i) => (
+          {GUIDES.map(({ service, path }, i) => (
             <>
               {i > 0 && <span aria-hidden="true"> · </span>}
-              <a href={`/guides/${slug}/`} class="link">{name}</a>
+              <a href={path} class="link">{service}</a>
             </>
           ))}
         </p>
@@ -472,7 +462,9 @@ const services = [
             browser storage — and everything is wiped by a refresh or a tab close. Keep the master
             copy of every secret in an
             encrypted password manager, save each service’s recovery codes as well, and treat any
-            urgent request for a fresh code as the red flag that it is.
+            urgent request for a fresh code as the red flag that it is. If you are unsure where
+            those codes live or what to do after losing a phone, the
+            <a href="/2fa-backup-codes/">backup codes and recovery guide</a> walks through it.
           </p>
 
           <p>

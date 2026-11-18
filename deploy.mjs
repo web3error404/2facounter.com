@@ -56,5 +56,16 @@ if (process.env.SKIP_DEPLOY === '1') {
 } else {
   console.log('▶ wrangler deploy');
   run('npx', ['wrangler', 'deploy']);
+  // IndexNow tells Bing/Yandex/Naver about changed URLs immediately. It is a
+  // best-effort acceleration on top of the sitemap, so a failure here must
+  // never roll back or fail an otherwise successful deploy.
+  console.log('▶ IndexNow');
+  const indexnow = spawnSync('node', ['scripts/indexnow.mjs'], {
+    stdio: 'inherit',
+    shell: process.platform === 'win32',
+  });
+  if (indexnow.status !== 0) {
+    console.warn('⚠️  IndexNow submission failed — the deploy itself is live and unaffected.');
+  }
   console.log('✓ tested and deployed');
 }

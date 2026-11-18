@@ -13,6 +13,7 @@
   <url><loc>https://2facounter.com/how-to-get-2fa-code/</loc></url>
   <url><loc>https://2facounter.com/authenticator-for-pc/</loc></url>
   <url><loc>https://2facounter.com/authenticator-cloud-sync/</loc></url>
+  <url><loc>https://2facounter.com/2fa-backup-codes/</loc></url>
   <!-- Comparison articles -->
   <url><loc>https://2facounter.com/totp-vs-google-authenticator/</loc></url>
   <url><loc>https://2facounter.com/totp-vs-authy/</loc></url>
@@ -22,9 +23,13 @@
   <url><loc>https://2facounter.com/guides/</loc></url>
   <url><loc>https://2facounter.com/guides/google/</loc></url>
   <url><loc>https://2facounter.com/guides/microsoft/</loc></url>
+  <url><loc>https://2facounter.com/guides/amazon/</loc></url>
+  <url><loc>https://2facounter.com/guides/facebook/</loc></url>
   <url><loc>https://2facounter.com/guides/github/</loc></url>
-  <url><loc>https://2facounter.com/guides/discord/</loc></url>
   <url><loc>https://2facounter.com/guides/instagram/</loc></url>
+  <url><loc>https://2facounter.com/guides/discord/</loc></url>
+  <url><loc>https://2facounter.com/guides/dropbox/</loc></url>
+  <url><loc>https://2facounter.com/guides/linkedin/</loc></url>
   <url><loc>https://2facounter.com/guides/x/</loc></url>
   <url><loc>https://2facounter.com/guides/steam/</loc></url>
   <url><loc>https://2facounter.com/guides/paypal/</loc></url>
@@ -32,4 +37,8 @@
   <url><loc>https://2facounter.com/guides/coinbase/</loc></url>
   <url><loc>https://2facounter.com/guides/kraken/</loc></url>
   <url><loc>https://2facounter.com/guides/binance/</loc></url>
+  <url><loc>https://2facounter.com/guides/twitch/</loc></url>
+  <url><loc>https://2facounter.com/guides/epic-games/</loc></url>
+  <url><loc>https://2facounter.com/guides/slack/</loc></url>
+  <url><loc>https://2facounter.com/guides/zoom/</loc></url>
 </urlset>

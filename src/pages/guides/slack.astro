@@ -1,0 +1,83 @@
+---
+import GuideLayout from '../../components/GuideLayout.astro';
+
+const title = 'How to Set Up 2FA on Slack (Authenticator App Guide)';
+const description =
+  'Add an authenticator app to Slack for two-factor authentication. Scan the QR code or enter the key by hand, then generate live TOTP codes in your browser.';
+---
+
+<GuideLayout
+  serviceName="Slack"
+  title={title}
+  description={description}
+  path="/guides/slack/"
+  datePublished="2026-11-18"
+  dateModified="2026-11-18"
+  lastReviewed="2026-11-18"
+  intro="Slack supports authenticator apps for personal accounts, but workspace owners can also require 2FA or route sign-in through SSO. This guide covers the personal TOTP setup and explains when your company’s identity provider is already handling the second factor."
+  minutes={4}
+  params={['6 digits', '30 s period', 'SHA-1']}
+  ctaTitle="Workspace access is company access"
+  ctaBody="A Slack session can expose private channels, files, and connected apps. Keep the setup secret in your password manager and save the recovery codes — losing the second factor should not mean asking an admin to rebuild your access."
+  deepDive={{
+    heading: "Slack-specific details",
+    blocks: [
+      {
+        title: 'SSO may replace Slack’s own 2FA',
+        body: 'If your workspace uses single sign-on, you authenticate through your company’s identity provider and Slack may not offer its own two-factor screen. That is expected: the second factor belongs to the identity provider. Do not disable SSO to add TOTP — it usually weakens the organization’s policy and can lock you out of the workspace.',
+      },
+      {
+        title: 'Workspace owners can require 2FA for everyone',
+        body: 'On paid plans, owners can require two-factor authentication for members, and owners and admins must use it themselves even when it is not mandatory. When that happens Slack prompts you at the next sign-in and may restrict access until you enroll. App-based TOTP satisfies the requirement; if your admin allows only an authentication app (SMS can be blocked), follow their policy.',
+      },
+      {
+        title: 'Signing in with Google or Apple changes the lane',
+        body: 'If you use “Sign in with Google” or “Sign in with Apple”, the second factor is handled by that provider, not by Slack. Enrolling a separate Slack authenticator is still possible in some configurations, but the simpler mental model is: protect the identity provider account, and let Slack trust it.',
+      },
+    ],
+  }}
+  steps={[
+    {
+      title: 'Open your Slack account settings',
+      body: 'In the desktop app or a browser, click your workspace name → “Settings & administration” → “Manage account”, or open my.slack.com/account/settings directly.',
+    },
+    {
+      title: 'Go to Security',
+      body: 'Select “Security” in the account settings sidebar and find “Two-factor authentication”. Click “Set up two-factor authentication”.',
+    },
+    {
+      title: 'Choose the authenticator app',
+      body: 'Pick “Use an authenticator app” rather than SMS. Slack’s help documents both scanning a QR code and entering the code by hand, so look for the manual-entry option if a setup key is not shown by default.',
+    },
+    {
+      title: 'Generate the code',
+      body: 'Paste the key into 2facounter.com and label it “Slack”, or screenshot the QR code and paste the image into the generator if no key is shown. A live 6-digit code appears and refreshes every 30 seconds.',
+    },
+    {
+      title: 'Confirm in Slack',
+      body: 'Enter the current code in Slack’s verification field. Slack marks two-factor authentication as active and displays backup codes — download or copy them before you close the page.',
+    },
+    {
+      title: 'Keep both recovery paths',
+      body: 'Store the backup codes offline and the setup secret in your encrypted password manager. If your workspace uses SSO, confirm with your admin which method you should keep as the fallback.',
+    },
+  ]}
+  faqs={[
+    {
+      q: 'Does Slack use standard TOTP?',
+      a: 'Yes. Slack’s authenticator-app option produces standard 6-digit, 30-second TOTP codes with SHA-1. The setup key works in any compatible authenticator, including this browser generator.',
+    },
+    {
+      q: 'Why can’t I see the two-factor option in Slack?',
+      a: 'Your workspace may enforce SSO, restrict authentication methods, or be on a plan where an owner manages 2FA centrally. Ask your workspace admin which methods are allowed; do not try to bypass an enforced SSO policy.',
+    },
+    {
+      q: 'Do I need 2FA for every workspace I join?',
+      a: 'Yes — Slack treats each workspace account separately. If you belong to several workspaces, enable two-factor authentication on each one (Slack’s own help says to set it up for each account). A workspace that enforces SSO still follows that policy at sign-in.',
+    },
+    {
+      q: 'What happens if I lose my authenticator and backup codes?',
+      a: 'A workspace owner or admin may be able to help you regain access, depending on plan and policy. Without admin help, account recovery is limited — so save both the Base32 key and the backup codes at setup time.',
+    },
+  ]}
+/>

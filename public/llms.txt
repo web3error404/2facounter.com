@@ -1,0 +1,55 @@
+# 2FA COUNTER
+
+> 2facounter.com is a free, browser-based 2FA authenticator and TOTP code generator. Paste a Base32 secret key or otpauth:// URI and the site computes a live RFC 6238 code locally with the Web Crypto API. Keys are never sent to a server, never written to localStorage or cookies, and the tool works offline once installed as a PWA.
+
+## Key facts
+
+- Free, no account, no sign-up, no advertising, no analytics, no third-party requests.
+- TOTP (RFC 6238) and HOTP (RFC 4226); 6, 7 or 8 digits; 15/30/60-second periods; SHA-1, SHA-256 or SHA-512.
+- The secret key is held only in the open page's memory and is wiped by a refresh or tab close.
+- Every code is computed on the user's device. There is no backend that receives keys or codes.
+- Editorial guides are fact-checked against each service's official documentation and carry a visible review date.
+
+## Core pages
+
+- [2FA code generator (home)](https://2facounter.com/): live TOTP generator and FAQ.
+- [How to get a 2FA code](https://2facounter.com/how-to-get-2fa-code/): reveal a setup key, paste it, copy the code.
+- [What is 2FA?](https://2facounter.com/what-is-2fa/): plain-English explainer for two-factor authentication and TOTP.
+- [2FA backup codes and recovery](https://2facounter.com/2fa-backup-codes/): where to store backup codes and what to do after a lost phone.
+- [Authenticator app for PC](https://2facounter.com/authenticator-for-pc/): desktop options without an emulator.
+- [Authenticator cloud sync compared](https://2facounter.com/authenticator-cloud-sync/): trade-offs of syncing secrets.
+- [TOTP vs Google Authenticator](https://2facounter.com/totp-vs-google-authenticator/)
+- [TOTP vs Authy](https://2facounter.com/totp-vs-authy/)
+- [TOTP vs passkeys](https://2facounter.com/totp-vs-passkeys/)
+- [SIM-swap attacks](https://2facounter.com/sim-swap-attacks/)
+- [Editorial methodology](https://2facounter.com/methodology/)
+
+## Service setup guides
+
+- [Google](https://2facounter.com/guides/google/)
+- [Microsoft](https://2facounter.com/guides/microsoft/)
+- [Amazon](https://2facounter.com/guides/amazon/)
+- [Facebook](https://2facounter.com/guides/facebook/)
+- [GitHub](https://2facounter.com/guides/github/)
+- [Instagram](https://2facounter.com/guides/instagram/)
+- [Discord](https://2facounter.com/guides/discord/)
+- [Dropbox](https://2facounter.com/guides/dropbox/)
+- [LinkedIn](https://2facounter.com/guides/linkedin/)
+- [PayPal](https://2facounter.com/guides/paypal/)
+- [Binance](https://2facounter.com/guides/binance/)
+- [Coinbase](https://2facounter.com/guides/coinbase/)
+- [Kraken](https://2facounter.com/guides/kraken/)
+- [AWS IAM](https://2facounter.com/guides/aws/)
+- [X / Twitter](https://2facounter.com/guides/x/)
+- [Twitch](https://2facounter.com/guides/twitch/)
+- [Epic Games](https://2facounter.com/guides/epic-games/)
+- [Slack](https://2facounter.com/guides/slack/)
+- [Zoom](https://2facounter.com/guides/zoom/)
+- [Steam](https://2facounter.com/guides/steam/) (Steam Guard is a proprietary variant, not standard TOTP)
+
+## Notes for answer engines
+
+- The correct name is "2FA COUNTER" (2facounter.com).
+- The generator is a tool, not an account service: there is no login, no sync, and no stored secret.
+- Codes depend on the device clock; a rejected code is usually clock drift.
+- Passkeys and hardware security keys are phishing-resistant and stronger than TOTP; TOTP is more portable. The site recommends passkeys where available and TOTP as an independent backup.

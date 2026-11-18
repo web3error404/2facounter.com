@@ -2,83 +2,35 @@
 import Layout from '../../layouts/Layout.astro';
 import SiteHeader from '../../components/SiteHeader.astro';
 import SiteFooter from '../../components/SiteFooter.astro';
+import ReviewByline from '../../components/ReviewByline.astro';
+import { GUIDES } from '../../data/guides';
 
 const title = '2FA Setup Guides — Enable 2FA on Any Service, No Phone App';
 const description =
-  '2FA setup guides for Google, PayPal, Instagram, GitHub, Discord, Coinbase, Binance and more — enable TOTP two-factor authentication in your browser, no app.';
+  '2FA setup guides for Google, Amazon, Facebook, Microsoft, GitHub, Discord, Instagram, Dropbox, Binance and more — enable TOTP in your browser, no app.';
 
-const guides = [
+const guides = GUIDES;
+
+const faqs = [
   {
-    href: '/guides/google/',
-    service: 'Google',
-    blurb: '6 min · 6 digits · 30 s',
-    text: 'Enable 2-Step Verification with a standard TOTP key — and skip Google Authenticator’s cloud-sync upload.',
+    q: 'How do I set up 2FA on an account?',
+    a: 'Open the service’s security settings, choose “two-factor authentication” (sometimes “2-step verification” or “MFA”), then pick the authenticator-app option rather than SMS. The service shows a QR code — many offer “can’t scan?” or “enter setup key manually” to reveal the Base32 secret, which you can paste into the generator and confirm with the live 6-digit code. If no manual key appears, screenshot the QR code and paste the image into the generator instead. Save any recovery codes the service offers; those, not the app, are what gets you back in if a device is lost.',
   },
   {
-    href: '/guides/microsoft/',
-    service: 'Microsoft',
-    blurb: '5 min · 6 digits · 30 s',
-    text: 'Protect Outlook, Windows and Xbox sign-ins with browser-generated codes, no Authenticator app install.',
+    q: 'Do I need to install an authenticator app?',
+    a: 'No. Standard TOTP — the format used by Google, Microsoft, GitHub, Discord, Binance and nearly every service covered here — only needs the shared secret and a correct clock. The generator at 2facounter.com computes the same RFC 6238 codes in your browser, so a laptop, tablet, or any device with a browser can stand in for the phone app.',
   },
   {
-    href: '/guides/discord/',
-    service: 'Discord',
-    blurb: '4 min · 6 digits · 30 s',
-    text: 'Protect your Discord account and server — enable 2FA and generate codes with or without the mobile app.',
+    q: 'Which services use standard TOTP?',
+    a: 'Most of the big ones: Google, Microsoft, Amazon, Facebook, GitHub, Discord, Instagram, Dropbox, LinkedIn, X, PayPal, Binance, Coinbase, Kraken and AWS all offer an authenticator-app option built on TOTP. Steam is the well-known exception — Steam Guard uses a proprietary variant, so its guide explains what works there instead of pretending a browser generator can produce Steam codes.',
   },
   {
-    href: '/guides/github/',
-    service: 'GitHub',
-    blurb: '6 min · 6 digits · 30 s',
-    text: 'Meet GitHub’s mandatory 2FA requirement using TOTP you can regenerate on any shared machine.',
+    q: 'The service only shows a QR code — how do I get the key?',
+    a: 'Look for a “can’t scan it?”, “enter setup key manually”, or “show secret key” link under the QR code — many services provide one, but not all. If the link is missing, screenshot the QR code and drop the image onto the generator (or scan it with your camera). Decoding happens on your device, and the resulting key stays in the input field only.',
   },
   {
-    href: '/guides/x/',
-    service: 'X / Twitter',
-    blurb: '5 min · 6 digits · 30 s',
-    text: 'Turn on app-based 2FA on X — safer than SMS, which is now Premium-only.',
-  },
-  {
-    href: '/guides/aws/',
-    service: 'AWS',
-    blurb: '4 min · 6 digits · 30 s',
-    text: 'Assign a virtual MFA device to IAM users or root and generate the two consecutive codes AWS demands.',
-  },
-  {
-    href: '/guides/coinbase/',
-    service: 'Coinbase',
-    blurb: '3 min · 6 digits · 30 s',
-    text: 'Lock a crypto exchange account behind TOTP — no phone dependency, no SMS SIM-swap exposure.',
-  },
-  {
-    href: '/guides/kraken/',
-    service: 'Kraken',
-    blurb: '3 min · 6 digits · 30 s',
-    text: 'Set up Kraken’s sign-in 2FA and its Master key in any browser.',
-  },
-  {
-    href: '/guides/steam/',
-    service: 'Steam',
-    blurb: '5 min · Steam variant',
-    text: 'Steam Guard explained — enroll the official app, trading restrictions, and why no browser generator can produce Steam codes.',
-  },
-  {
-    href: '/guides/binance/',
-    service: 'Binance',
-    blurb: '5 min · 6 digits · 30 s',
-    text: 'Turn on TOTP 2FA for your Binance account — better withdrawal security without installing apps.',
-  },
-  {
-    href: '/guides/paypal/',
-    service: 'PayPal',
-    blurb: '4 min · 6 digits · 30 s',
-    text: 'Protect a money-moving account with authenticator-app 2FA — and audit your enrolled methods afterwards.',
-  },
-  {
-    href: '/guides/instagram/',
-    service: 'Instagram',
-    blurb: '4 min · 6 digits · 30 s',
-    text: 'Enable TOTP 2FA via Accounts Center — the method that doesn’t die with your SIM card.',
+    q: 'Is it safe to paste my 2FA secret into a website?',
+    a: 'Only into a site that computes locally and makes no network requests with the key. This generator runs entirely in your browser with the Web Crypto API: there is no server, no account, and no analytics, so the secret never leaves the device. You can verify that claim by loading the page, disconnecting from the internet, and watching the codes keep updating.',
   },
 ];
 ---
@@ -96,7 +48,7 @@ const guides = [
         '@type': 'ListItem',
         position: i + 1,
         name: `${g.service} 2FA setup`,
-        url: `https://2facounter.com${g.href}`,
+        url: `https://2facounter.com${g.path}`,
       })),
     },
     {
@@ -107,7 +59,17 @@ const guides = [
         { '@type': 'ListItem', position: 2, name: 'Guides', item: 'https://2facounter.com/guides/' },
       ],
     },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: faqs.map(({ q, a }) => ({
+        '@type': 'Question',
+        name: q,
+        acceptedAnswer: { '@type': 'Answer', text: a },
+      })),
+    },
   ]}
+  dateModified="2026-11-18"
 >
   <SiteHeader />
   <main id="main">
@@ -126,6 +88,7 @@ const guides = [
         reproduced by any standards-based generator, and that guide tells you so.
         <a href="/methodology/" class="link">Read our editorial methodology</a>.
       </p>
+      <ReviewByline />
 
       <!-- Menu board: cream board, dark header bar, priced line items -->
       <div class="mt-12 overflow-hidden rounded-xl border-4 border-ink bg-cream" style="box-shadow: var(--shadow-card)">
@@ -136,7 +99,7 @@ const guides = [
           {
             guides.map((g) => (
               <li class="border-t-2 border-dashed border-hairline-strong first:border-t-0">
-                <a href={g.href} class="group flex items-start gap-4 px-6 py-5 sm:gap-8">
+                <a href={g.path} class="group flex items-start gap-4 px-6 py-5 sm:gap-8">
                   <div class="min-w-0 flex-1">
                     <h3 class="text-xl font-bold text-ink group-hover:text-accent-red">{g.service}</h3>
                     <p class="mt-1 text-sm font-medium text-ink">{g.text}</p>
@@ -151,6 +114,27 @@ const guides = [
           }
         </ul>
       </div>
+
+      <section aria-labelledby="guides-faq" class="mt-16">
+        <h2 id="guides-faq" class="font-display text-[28px] leading-[1.2] tracking-normal text-ink">
+          Setting up 2FA: common questions
+        </h2>
+        <div class="mt-6 divide-y-2 divide-dashed divide-hairline-strong">
+          {
+            faqs.map(({ q, a }) => (
+              <details class="group px-1 py-1">
+                <summary class="flex cursor-pointer list-none items-center justify-between gap-4 py-4 text-left font-bold text-ink select-none marker:hidden">
+                  {q}
+                  <svg class="h-4 w-4 shrink-0 text-ink transition-transform group-open:rotate-45" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"></path>
+                  </svg>
+                </summary>
+                <p class="pb-5 text-sm font-medium text-ink">{a}</p>
+              </details>
+            ))
+          }
+        </div>
+      </section>
 
       <div class="cta-banner on-dark mt-10">
         <h2 class="font-display text-2xl tracking-normal text-primary">All services, one generator</h2>

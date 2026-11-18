@@ -2,6 +2,7 @@
 import ShieldLogo from './ShieldLogo.astro';
 import Wordmark from './Wordmark.astro';
 import { LANGUAGES } from '../i18n/languages';
+import { FOOTER_GUIDES } from '../data/guides';
 
 const year = new Date().getFullYear();
 
@@ -31,6 +32,7 @@ const defaultColumns: FooterColumn[] = [
     title: 'Learn',
     links: [
       { href: '/totp-vs-passkeys/', label: 'TOTP vs passkeys' },
+      { href: '/2fa-backup-codes/', label: 'Backup codes & recovery' },
       { href: '/sim-swap-attacks/', label: 'SIM-swap attacks' },
       { href: '/authenticator-cloud-sync/', label: 'App cloud sync, compared' },
       { href: '/authenticator-for-pc/', label: 'Authenticator for PC' },
@@ -40,12 +42,10 @@ const defaultColumns: FooterColumn[] = [
     title: 'Guides',
     links: [
       { href: '/guides/', label: 'All guides' },
-      { href: '/guides/google/', label: 'Google 2FA' },
-      { href: '/guides/microsoft/', label: 'Microsoft 2FA' },
-      { href: '/guides/discord/', label: 'Discord 2FA' },
-      { href: '/guides/github/', label: 'GitHub 2FA' },
-      { href: '/guides/steam/', label: 'Steam 2FA' },
-      { href: '/guides/binance/', label: 'Binance 2FA' },
+      ...FOOTER_GUIDES.map(({ path, service }) => ({
+        href: path,
+        label: `${service} 2FA`,
+      })),
     ],
   },
   {

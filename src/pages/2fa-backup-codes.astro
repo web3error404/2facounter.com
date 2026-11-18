@@ -1,0 +1,283 @@
+---
+import Layout from '../layouts/Layout.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import ReviewByline from '../components/ReviewByline.astro';
+
+const title = '2FA Backup Codes & Lost Authenticator: Recovery Guide';
+const description =
+  'What 2FA backup codes are, where to store them, and exactly what to do if you lose your authenticator or phone — recovery steps without a support ticket.';
+
+const faqs = [
+  {
+    q: 'Are backup codes the same as the 6-digit authenticator codes?',
+    a: 'No. A 6-digit TOTP code is derived from your secret key and the current time, and changes every 30 seconds. A backup code is a separate, longer one-time code the service generated when you enrolled — it bypasses the authenticator entirely. That is why backup codes still work when the phone, the app, and the clock are all gone.',
+  },
+  {
+    q: 'Can a backup code be used more than once?',
+    a: 'Normally no. Most services issue a batch of eight to ten single-use codes and invalidate each one as it is used. When the batch runs low or is lost, you can usually regenerate a fresh set from the account’s security settings — but only while you can still sign in, so do it before you need it.',
+  },
+  {
+    q: 'What if I lost my phone and my backup codes?',
+    a: 'Your remaining options are the account provider’s recovery process and, for some services, a previously trusted device or recovery key. Expect identity verification and delays; for high-value accounts, recovery may not be possible at all. This is exactly the scenario the Base32 setup key in your password manager prevents — with it, any browser can compute the code again.',
+  },
+  {
+    q: 'Can I generate 2FA codes without the original phone?',
+    a: 'Yes, if you saved the Base32 setup key (or the full otpauth:// URI) that the service showed during enrollment. Paste it into the generator at 2facounter.com on any device and it computes the same RFC 6238 code the phone app would. The phone is only a container for the secret — the secret is the factor.',
+  },
+  {
+    q: 'Where do I find the setup key after 2FA is already enabled?',
+    a: 'Most services show the key only during enrollment and never again. If you still have access, the reliable route is to add a second authenticator or re-enroll: open the security settings, choose to change or re-add the authenticator app, and reveal the new setup key. Verify the new code works before removing the old factor.',
+  },
+  {
+    q: 'Is it safe to keep the secret key in a password manager?',
+    a: 'An encrypted password-manager vault is the standard place for it — it is the same trust boundary that already holds the account password and the backup codes. What you should avoid is plaintext notes, email drafts, cloud photo albums, and screenshots. If the vault is encrypted and you control the master password, storing the key there is safer than relying on one physical phone.',
+  },
+];
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: '2FA Backup Codes & Lost Authenticator: Recovery Guide',
+    description,
+    url: 'https://2facounter.com/2fa-backup-codes/',
+    datePublished: '2026-11-18',
+    dateModified: '2026-11-18',
+    author: { '@type': 'Organization', name: '2FA COUNTER', url: 'https://2facounter.com' },
+    publisher: {
+      '@type': 'Organization',
+      name: '2FA COUNTER',
+      url: 'https://2facounter.com',
+      logo: { '@type': 'ImageObject', url: 'https://2facounter.com/web-app-manifest-512x512.png' },
+    },
+    mainEntityOfPage: { '@type': 'WebPage', '@id': 'https://2facounter.com/2fa-backup-codes/' },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map(({ q, a }) => ({
+      '@type': 'Question',
+      name: q,
+      acceptedAnswer: { '@type': 'Answer', text: a },
+    })),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: '2FA COUNTER', item: 'https://2facounter.com/' },
+      { '@type': 'ListItem', position: 2, name: 'Backup codes & recovery', item: 'https://2facounter.com/2fa-backup-codes/' },
+    ],
+  },
+];
+---
+
+<Layout title={title} description={description} path="/2fa-backup-codes/" jsonLd={jsonLd}>
+  <SiteHeader />
+  <main id="main">
+    <article class="mx-auto max-w-[820px] px-4 py-16 sm:px-6 lg:py-24">
+      <p class="section-label">Learn</p>
+      <h1 class="mt-3 font-display text-4xl tracking-normal text-ink sm:text-5xl">
+        2FA backup codes and lost authenticators: the recovery guide
+      </h1>
+      <p class="mt-5 max-w-2xl text-lg font-medium text-ink">
+        A phone can be lost, sold, or left in a pocket that goes through the wash. The account
+        does not have to go with it. Two things prevent a lockout — the backup codes the service
+        gave you, and the setup key behind the QR code — and this guide covers both.
+      </p>
+
+      <nav aria-label="On this page" class="mt-10 rounded-xl border-2 border-ink bg-cream p-6" style="box-shadow: var(--shadow-card)">
+        <p class="font-mono text-[13px] font-bold tracking-wide text-ink uppercase">On this page</p>
+        <ul class="mt-3 space-y-2 text-sm font-medium text-ink">
+          <li><a class="link" href="#quick-answer">The 60-second answer</a></li>
+          <li><a class="link" href="#what-they-are">What backup codes actually are</a></li>
+          <li><a class="link" href="#find-them">Where to find them — before you need them</a></li>
+          <li><a class="link" href="#store-them">How to store them without creating a new risk</a></li>
+          <li><a class="link" href="#lost-device">Lost the phone or authenticator</a></li>
+          <li><a class="link" href="#new-phone">Moving 2FA to a new phone</a></li>
+          <li><a class="link" href="#mistakes">Mistakes that turn a scare into a lockout</a></li>
+          <li><a class="link" href="#faq">FAQ</a></li>
+        </ul>
+      </nav>
+
+      <ReviewByline />
+
+      <div class="rich-text mt-12">
+        <h2 id="quick-answer">The 60-second answer</h2>
+        <p>
+          If you still have access to the account, the fix is boring: open its security settings,
+          generate a fresh set of <strong>backup codes</strong>, and save the
+          <strong>Base32 setup key</strong> in your password manager. Together they survive a lost
+          phone, a broken app, and a wrong device clock.
+        </p>
+        <p>
+          If you have lost access, try the backup codes first, then any other device that is still
+          signed in, then the provider’s official account-recovery process. Do not pay a
+          “2FA recovery service” — no third party can compute your code without your secret, and
+          anyone claiming otherwise is after the account itself.
+        </p>
+
+        <h2 id="what-they-are">What backup codes actually are</h2>
+        <p>
+          When you enable two-factor authentication, most services hand you a one-time set of
+          recovery codes — usually eight to ten short strings, sometimes called
+          “backup codes”, “recovery codes”, or a “recovery key”. Each code works once, bypasses the
+          authenticator, and is stored by the service as a hash. They are the airbag: not for daily
+          logins, only for the day the normal second factor is unavailable.
+        </p>
+        <p>
+          They are not the same thing as the rotating 6-digit code. A TOTP code is
+          <em>computed</em> from your secret and the current time, so it can be regenerated forever
+          from the key. A backup code is <em>issued</em> once by the service and cannot be
+          recomputed. Keep both, because they fail in different ways.
+        </p>
+        <p>
+          Some providers layer a third path on top: a recovery key for the account itself, a
+          trusted-device list, or a fallback email. Those are account-recovery mechanisms, not
+          authenticator backups, and they usually involve a delay on purpose. Know which one you
+          have before an emergency, not during it.
+        </p>
+
+        <h2 id="find-them">Where to find them — before you need them</h2>
+        <p>
+          The codes are normally shown exactly once, immediately after you confirm 2FA. If you
+          clicked past that screen, you can usually regenerate a fresh batch while you are still
+          signed in: look in the account’s security settings for the two-factor section and a
+          “backup codes”, “recovery codes”, or “recovery options” entry.
+        </p>
+        <p>
+          Do this today for the accounts that would hurt most: your email first (it resets
+          everything else), then banking and crypto, then code hosting and work accounts. Our
+          <a href="/guides/">per-service setup guides</a> include the recovery-code step for each
+          service we cover, and <a href="/what-is-2fa/">the 2FA explainer</a> covers why the email
+          account comes first.
+        </p>
+
+        <h2 id="store-them">How to store them without creating a new risk</h2>
+        <ul>
+          <li>
+            <strong>Password manager, one entry per account.</strong> Put the backup codes and the
+            Base32 setup key in the same encrypted entry as the password, in custom fields. One
+            vault, one master password, no new system to remember.
+          </li>
+          <li>
+            <strong>One offline copy for the vault itself.</strong> A password manager you cannot
+            open is not a backup. Keep its recovery kit — or a printed copy of the most critical
+            codes — somewhere physically separate and secure.
+          </li>
+          <li>
+            <strong>Label them by service and date.</strong> “Ten codes, issued 18 Nov 2026” tells
+            future-you whether the batch is stale. Regenerate after using several codes.
+          </li>
+          <li>
+            <strong>Never store them only on the device that needs them.</strong> A screenshot in
+            the phone’s camera roll fails at exactly the moment the phone is gone — and often syncs
+            to a cloud account with weaker protection than your vault.
+          </li>
+        </ul>
+        <p>
+          The setup key deserves equal billing. With the Base32 key, any browser can recompute your
+          codes — paste it into <a href="/#generator">the generator</a> and you have a working
+          second factor without the original app. That is the difference between “my phone broke”
+          and “I lost the account”. The <a href="/how-to-get-2fa-code/">step-by-step code guide</a>
+          shows where the key hides behind the QR code.
+        </p>
+
+        <h2 id="lost-device">Lost the phone or authenticator</h2>
+        <ol class="list-decimal">
+          <li>
+            <strong>Look for a device that is still signed in.</strong> A desktop session, a tablet,
+            or a second phone may let you change security settings without a code at all.
+          </li>
+          <li>
+            <strong>Use a backup code.</strong> Enter it exactly as issued, including hyphens if
+            the service shows them. Each code works once.
+          </li>
+          <li>
+            <strong>Generate the code from your saved setup key.</strong> Paste the Base32 secret
+            or the full <code>otpauth://</code> URI into the generator on any browser. This is the
+            fastest path if you stored the key in your vault.
+          </li>
+          <li>
+            <strong>Start the provider’s official recovery.</strong> Follow the “lost your
+            authenticator?” link on the sign-in page. Expect identity checks and a waiting period;
+            that friction is the security working.
+          </li>
+          <li>
+            <strong>Once back in, rotate everything.</strong> Generate new backup codes, re-enroll
+            the authenticator, and revoke sessions and old devices you no longer control.
+          </li>
+        </ol>
+        <p>
+          If SMS is also enrolled as a fallback, it can get you back in — but treat it as a
+          convenience, not a plan. SMS is the factor most exposed to
+          <a href="/sim-swap-attacks/">SIM-swap attacks</a>, which is why we recommend TOTP as the
+          primary method.
+        </p>
+
+        <h2 id="new-phone">Moving 2FA to a new phone</h2>
+        <p>
+          Standard TOTP is portable by design: the secret is the account, the phone is only a
+          container. There are two safe routes, and both start with keeping the old device alive
+          until the new one is verified.
+        </p>
+        <ul>
+          <li>
+            <strong>Re-enroll from the setup key.</strong> In each service’s security settings,
+            add or change the authenticator, reveal the new setup key, and save it. Verify a code
+            from the new device before removing the old factor.
+          </li>
+          <li>
+            <strong>Use the app’s official export/transfer, if it has one.</strong> Some
+            authenticators support an encrypted export or a device-to-device transfer. Follow the
+            vendor’s flow and delete the export file afterwards; never pass secrets through chat,
+            email, or an unencrypted file.
+          </li>
+        </ul>
+        <p>
+          Do not disable 2FA “for a minute” and plan to re-enable it later. A forgotten re-enable
+          is how accounts end up password-only, and disabling protection during a migration is
+          when a leaked password does the most damage.
+        </p>
+
+        <h2 id="mistakes">Mistakes that turn a scare into a lockout</h2>
+        <ul>
+          <li><strong>Storing codes in the same place as the password they protect.</strong> A stolen vault should not hand over both factors. The encrypted vault is still the right home; just keep the device unlock separate from the vault master password.</li>
+          <li><strong>Using “free 2FA recovery” services.</strong> No legitimate service can produce your TOTP code without your secret. These are account-theft attempts with a support-desk costume.</li>
+          <li><strong>Sharing a live code with “support”.</strong> Real support never asks for a current 6-digit code. Anyone who does is phishing.</li>
+          <li><strong>Letting the backup-code batch run out.</strong> If several are used, regenerate. A batch with two codes left is not a backup.</li>
+          <li><strong>Trusting one device with everything.</strong> The point of a second factor is independence. Keep the master copy of the secret somewhere that is not the phone.</li>
+        </ul>
+      </div>
+
+      <h2 id="faq" class="mt-16 font-display text-[28px] leading-[1.2] tracking-normal text-ink">FAQ</h2>
+      <div class="mt-6 divide-y-2 divide-dashed divide-hairline-strong">
+        {
+          faqs.map(({ q, a }) => (
+            <details class="group px-1 py-1">
+              <summary class="flex cursor-pointer list-none items-center justify-between gap-4 py-4 text-left font-bold text-ink select-none marker:hidden">
+                {q}
+                <svg class="h-4 w-4 shrink-0 text-ink transition-transform group-open:rotate-45" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"></path>
+                </svg>
+              </summary>
+              <p class="pb-5 text-sm font-medium text-ink">{a}</p>
+            </details>
+          ))
+        }
+      </div>
+
+      <div class="cta-banner on-dark mt-12">
+        <h2 class="font-display text-2xl tracking-normal text-primary">Store the key, not just the app</h2>
+        <p class="mt-2 max-w-2xl font-medium text-cream/80">
+          A phone is hardware; the setup key is the account. Save the Base32 secret in your
+          password manager, and this browser generator can produce your codes from any device —
+          no install, no account, no server.
+        </p>
+        <a href="/#generator" class="btn-primary mt-5">Open the generator</a>
+      </div>
+    </article>
+  </main>
+  <SiteFooter />
+</Layout>

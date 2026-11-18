@@ -3,6 +3,7 @@ import Layout from '../layouts/Layout.astro';
 import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 import ReviewByline from './ReviewByline.astro';
+import { GUIDES } from '../data/guides';
 
 export interface Props {
   serviceName: string;
@@ -15,6 +16,8 @@ export interface Props {
   steps: { title: string; body: string }[];
   /** ISO 8601 "last fact-checked" date — emitted as dateModified in the head and HowTo JSON-LD */
   dateModified?: string;
+  /** ISO 8601 first-publication date — required by Google's Article rich result */
+  datePublished?: string;
   params?: string[];
   faqs: { q: string; a: string }[];
   /** Per-service CTA banner copy (each guide carries its own wording) */
@@ -49,6 +52,10 @@ export interface Props {
   ctaButton?: string;
   /** Intl.DateTimeFormat locale for the visible review date (defaults en-GB) */
   dateFormatLocale?: string;
+  /** Heading for the related-guides block (falls back to English) */
+  relatedHeading?: string;
+  /** Label of the "all guides" link under the related list */
+  relatedAllLabel?: string;
 }
 
 const {
@@ -60,6 +67,7 @@ const {
   minutes,
   steps,
   dateModified,
+  datePublished,
   params = ['6 digits', '30-second period', 'SHA-1'],
   faqs,
   ctaTitle = 'Losing access is the real risk',
@@ -79,6 +87,8 @@ const {
   faqHeading = 'FAQ',
   ctaButton,
   dateFormatLocale = 'en-GB',
+  relatedHeading = 'More 2FA setup guides',
+  relatedAllLabel = 'See all guides',
 } = Astro.props;
 
 // Visible "fact-checked" line: editors keep the last-reviewed date in frontmatter
@@ -95,7 +105,51 @@ const headingText = heading ?? `${serviceName} 2FA setup`;
 const generatorCtaText = generatorCta ?? `Open the generator for ${serviceName}`;
 const ctaButtonText = ctaButton ?? `Generate ${serviceName} 2FA codes now`;
 
+const SITE = 'https://2facounter.com';
+
+/* Every guide shows the next six in the shared demand-ordered catalog,
+   wrapping at the end. Rotating rather than always taking the first six
+   spreads internal links across the whole guide cluster, so newer services
+   pick up inbound links from established pages instead of only from the hub
+   — without turning the block into a 20-link boilerplate dump. */
+const currentGuideIndex = GUIDES.findIndex((guide) => guide.path === path);
+const guideRotation =
+  currentGuideIndex === -1
+    ? GUIDES
+    : [...GUIDES.slice(currentGuideIndex + 1), ...GUIDES.slice(0, currentGuideIndex)];
+const relatedGuides = guideRotation.filter((guide) => guide.path !== path).slice(0, 6);
+
 const jsonLd = [
+  {
+    // Guides are editorial content as well as instructions. Article adds the
+    // author/publisher/reviewer entity graph that HowTo alone does not carry —
+    // an E-E-A-T signal for every service guide.
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: title,
+    description,
+    image: [`${SITE}/og.webp`],
+    mainEntityOfPage: { '@type': 'WebPage', '@id': `${SITE}${path}` },
+    ...(datePublished ? { datePublished } : {}),
+    ...(dateModified ? { dateModified } : {}),
+    author: { '@type': 'Organization', name: '2FA COUNTER', url: SITE },
+    publisher: {
+      '@type': 'Organization',
+      name: '2FA COUNTER',
+      url: SITE,
+      logo: {
+        '@type': 'ImageObject',
+        url: `${SITE}/web-app-manifest-512x512.png`,
+        width: 512,
+        height: 512,
+      },
+    },
+    reviewedBy: {
+      '@type': 'Organization',
+      name: '2FA COUNTER security editorial team',
+      url: `${SITE}/methodology/`,
+    },
+  },
   {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
@@ -111,6 +165,7 @@ const jsonLd = [
     name: title,
     description,
     totalTime: `PT${minutes}M`,
+    image: `${SITE}/og.webp`,
     ...(dateModified ? { dateModified } : {}),
     tool: [{ '@type': 'HowToTool', name: '2FA COUNTER (2facounter.com)' }],
     step: steps.map((s, i) => ({
@@ -219,6 +274,27 @@ const jsonLd = [
           ))
         }
       </div>
+
+      <nav
+        aria-label={relatedHeading}
+        class="mt-16 border-t-2 border-dashed border-hairline-strong pt-8"
+      >
+        <h2 class="font-display text-[28px] leading-[1.2] tracking-normal text-ink">{relatedHeading}</h2>
+        <ul class="mt-4 grid gap-x-6 gap-y-1 sm:grid-cols-2">
+          {
+            relatedGuides.map((guide) => (
+              <li>
+                <a href={guide.path} class="link text-sm font-semibold">
+                  How to set up 2FA on {guide.service}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+        <a href={backHref} class="link mt-4 inline-flex min-h-6 items-center text-sm font-bold">
+          {relatedAllLabel} →
+        </a>
+      </nav>
 
       <div class="cta-banner on-dark mt-12">
         <h2 class="font-display text-lg tracking-normal text-primary">{ctaTitle}</h2>
