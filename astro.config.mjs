@@ -1,8 +1,10 @@
 // @ts-check
 import { execFileSync } from 'node:child_process';
 import { readdirSync, readFileSync } from 'node:fs';
+import { writeFile } from 'node:fs/promises';
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
+import { GUIDES } from './src/data/guides.ts';
 
 import tailwindcss from '@tailwindcss/vite';
 
@@ -116,6 +118,65 @@ export default defineConfig({
           for (const key of [...pages.keys()]) {
             if (key.replace(/\.html$/, '').startsWith('/preview')) pages.delete(key);
           }
+        },
+      },
+    },
+    {
+      // ── sitemap-priority.xml (generated, never hand-edited) ────────────
+      // A short sitemap of only the core English pages, submitted separately
+      // in Search Console so its report filter can scope "Validate fix" /
+      // "Request indexing" to the most important URLs:
+      // https://support.google.com/webmasters/answer/7440203
+      //
+      // It is generated at build time from the same sources the site uses
+      // (the page list below + src/data/guides.ts) and stamped with the same
+      // real editorial/git dates as sitemap-0.xml. This replaces the old
+      // hand-maintained public/sitemap-priority.xml, which silently drifted
+      // whenever a guide shipped (2026-11: it lagged the 9 pages added in
+      // e2fc435). Not referenced from robots.txt — sitemap-index.xml stays
+      // the canonical discovery feed.
+      name: 'priority-sitemap',
+      hooks: {
+        'astro:build:done': async ({ dir, logger }) => {
+          const SITE = 'https://2facounter.com';
+          const CORE = [
+            '/',
+            '/what-is-2fa/',
+            '/how-to-get-2fa-code/',
+            '/authenticator-for-pc/',
+            '/authenticator-cloud-sync/',
+            '/2fa-backup-codes/',
+          ];
+          const COMPARISONS = [
+            '/totp-vs-google-authenticator/',
+            '/totp-vs-authy/',
+            '/totp-vs-passkeys/',
+            '/sim-swap-attacks/',
+          ];
+          const paths = [...CORE, ...COMPARISONS, '/guides/', ...GUIDES.map((g) => g.path)];
+          const entries = paths.map((path) => {
+            const date = pageDates.get(path);
+            const lastmod = date ? `<lastmod>${date}T00:00:00.000Z</lastmod>` : '';
+            return `  <url><loc>${SITE}${path}</loc>${lastmod}</url>`;
+          });
+          const xml = [
+            '<?xml version="1.0" encoding="UTF-8"?>',
+            '<!-- Priority sitemap: core canonical English pages only. Generated at build',
+            '     time by the priority-sitemap integration in astro.config.mjs from the page',
+            '     list + src/data/guides.ts. Do not edit dist/ by hand.',
+            '     Purpose: submit separately in Search Console (Sitemaps report) and use the',
+            "     report's sitemap filter to scope \"Validate fix\" / \"Request indexing\" to the",
+            '     most important URLs, per the Page indexing report pro tip:',
+            '     https://support.google.com/webmasters/answer/7440203',
+            '     Not referenced from robots.txt — sitemap-index.xml stays the canonical feed',
+            '     for discovery; this file is a GSC-validation aid only. -->',
+            '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
+            ...entries,
+            '</urlset>',
+            '',
+          ].join('\n');
+          await writeFile(new URL('sitemap-priority.xml', dir), xml, 'utf8');
+          logger.info(`priority sitemap: ${paths.length} URLs`);
         },
       },
     },
