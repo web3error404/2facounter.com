@@ -167,6 +167,13 @@ const allSiteJsonLd = [orgJsonLd, websiteJsonLd, ...jsonLd];
 const googleVerification = import.meta.env.PUBLIC_GSC_TOKEN ?? '';
 const bingVerification = import.meta.env.PUBLIC_BING_TOKEN ?? '';
 
+// ── Directory listing verification ────────────────────────────────────
+// Shipfolio accepts any one of: a DNS TXT record, this meta tag on the
+// homepage, or a file under /.well-known/. The meta tag is the simplest
+// for a static build — it ships in every page's <head>, so the homepage
+// check passes after the next deploy. The token is public, not a secret.
+const shipfolioVerification = '727a34045b91f4a9f535f04bea9b6dd8';
+
 // ── Canonical hosts (mirror-host noindex guard) ───────────────────────
 // Pages served from a host in this list are the real site; any other host
 // (test/mirror domains) gets a JS-injected noindex meta below so it can
@@ -247,6 +254,7 @@ const canonicalHosts = [
 
     {googleVerification && <meta name="google-site-verification" content={googleVerification} />}
     {bingVerification && <meta name="msvalidate.01" content={bingVerification} />}
+    <meta name="shipfolio-verification" content={shipfolioVerification} />
 
     {!isDev && (
       <script is:inline>
