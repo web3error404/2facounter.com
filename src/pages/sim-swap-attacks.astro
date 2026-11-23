@@ -3,6 +3,30 @@ import Layout from '../layouts/Layout.astro';
 import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 import ReviewByline from '../components/ReviewByline.astro';
+import SourcesList from '../components/SourcesList.astro';
+
+const sources = [
+  {
+    label: 'FBI IC3 — Criminals Increasing SIM Swap Schemes to Steal Millions of Dollars from US Public (8 Feb 2022)',
+    href: 'https://www.ic3.gov/PSA/2022/PSA220208',
+    kind: 'independent' as const,
+  },
+  {
+    label: 'NIST SP 800-63B — Digital Identity Guidelines: Authentication and Lifecycle Management',
+    href: 'https://pages.nist.gov/800-63-4/sp800-63b.html',
+    kind: 'independent' as const,
+  },
+  {
+    label: 'CTIA — Protecting Against SIM Swap Fraud',
+    href: 'https://www.ctia.org/consumer-resources/protecting-against-sim-swap-fraud',
+    kind: 'independent' as const,
+  },
+  {
+    label: 'RFC 6238 — TOTP: Time-Based One-Time Password Algorithm',
+    href: 'https://www.rfc-editor.org/rfc/rfc6238',
+    kind: 'independent' as const,
+  },
+];
 
 const title = 'SIM-Swap Attacks: How Thieves Defeat SMS 2FA';
 const description =
@@ -10,8 +34,8 @@ const description =
 
 const faqs = [
   {
-    q: 'Can a SIM swap happen without the attacker contacting my carrier?',
-    a: 'Yes. The classic route is social engineering or bribery against the carrier (or a dealer acting in their name), but there are quieter paths too: eSIM portal abuse, weak port-out procedures, government/VoIP number-migration windows, insiders, and old-style SIM cloning on weak legacy-key network setups. None of these require you to receive anything on your phone — which is why you can be a perfectly careful user and still be hit.',
+    q: 'Can a SIM swap happen without me noticing anything first?',
+    a: 'Yes. The FBI IC3 advisory describes three documented routes into the carrier side: social engineering against staff, insiders (a carrier employee or dealer paid to make the switch), and phishing that steals staff credentials. All three happen between the attacker and the carrier; none require you to receive anything on your phone, so a careful user can still be hit, sometimes seeing nothing more than a dropped connection.',
   },
   {
     q: 'Is eSIM safer than a physical SIM?',
@@ -39,7 +63,7 @@ const jsonLd = [
     description,
     url: 'https://2facounter.com/sim-swap-attacks/',
     datePublished: '2026-11-09',
-    dateModified: '2026-11-09',
+    dateModified: '2026-11-23',
     author: { '@type': 'Organization', name: '2FA COUNTER', url: 'https://2facounter.com' },
     publisher: {
       '@type': 'Organization',
@@ -48,6 +72,7 @@ const jsonLd = [
       logo: { '@type': 'ImageObject', url: 'https://2facounter.com/web-app-manifest-512x512.png' },
     },
     mainEntityOfPage: { '@type': 'WebPage', '@id': 'https://2facounter.com/sim-swap-attacks/' },
+    citation: sources.map((s) => s.href),
   },
   {
     '@context': 'https://schema.org',
@@ -98,6 +123,12 @@ const jsonLd = [
       </nav>
 
       <ReviewByline />
+      <p class="mt-6 max-w-2xl font-mono text-[13px] text-ink/90">
+        Claims checked against the FBI's IC3 advisory, NIST SP 800-63B and the US wireless
+        industry's own consumer guidance · last reviewed 23 November 2026 ·{' '}
+        <a href="/methodology/" class="link">how we review</a>
+      </p>
+      <SourcesList sources={sources} />
 
       <div class="rich-text mt-12">
         <h2 id="what">What a SIM swap actually is</h2>
@@ -109,10 +140,11 @@ const jsonLd = [
           on the attacker’s hardware. You usually notice as a "No Service" banner, or not at all.
         </p>
         <p>
-          Public cases have taken down crypto fortunes, X co-founder Jack Dorsey in 2019, and
-          thousands of ordinary customers when dealer-agent insider rings were prosecuted.
-          Carrier “protection” products come and go; the one constant is that the control sits on
-          the carrier side with strangers, not with you.
+          Public cases have taken crypto fortunes: the FBI's IC3 unit logged 1,611 SIM-swap
+          complaints in 2021 with adjusted losses above $68 million, up from 320 complaints and
+          about $12 million across the previous three years combined. Carrier “protection” products
+          come and go; the one constant is that the control sits on the carrier side with
+          strangers, not with you.
         </p>
 
         <h2 id="playbook">The attack playbook, step by step</h2>
@@ -124,10 +156,11 @@ const jsonLd = [
             breaches, not from mind-reading.
           </li>
           <li>
-            <strong>Port request.</strong> One of three routes: a call to the carrier’s
-            (sometimes outsourced, sometimes bribed) support desk; a retail dealer activation;
-            or an online eSIM portal abuse. Weak carriers need almost nothing; strong ones need
-            only the failures of their weakest agent.
+            <strong>Port request.</strong> The IC3 names three routes: social engineering (an
+            attacker impersonating you to carrier staff), an insider on the payroll — a carrier
+            employee or dealer paid to move the number — or phishing that steals a carrier
+            employee's credentials. Weak carriers need almost nothing; strong ones need only the
+            failure of their weakest agent.
           </li>
           <li>
             <strong>Interception.</strong> Password resets start flying — email first, exchange
@@ -164,12 +197,11 @@ const jsonLd = [
           </li>
         </ul>
         <p>
-          That is why NIST’s US federal guidance has formally{" "}
-          <em>restricted SMS and phone-bound out-of-band factors</em>: SP 800-63B classifies SMS
-          out-of-band authentication as RESTRICTED, allowed only under safeguards that consumer
-          services rarely meet.
-          The exchanges that push hard for "authenticator app" over SMS aren’t being difficult;
-          they’re shipping the fix.
+          That is why NIST's US federal guidance treats phone-delivered codes as a{" "}
+          <em>restricted</em> authenticator. SP 800-63B lists exactly one at publication — PSTN
+          out-of-band — and says accepting it requires the relying party to assess and mitigate
+          the risk, not to tick a box. The exchanges that push hard for "authenticator app" over
+          SMS aren't being difficult; they're shipping the fix.
         </p>
 
         <h2 id="carrier">What carriers can genuinely do</h2>
@@ -179,13 +211,15 @@ const jsonLd = [
         </p>
         <ul>
           <li>
-            <strong>Port-out PIN / number lock.</strong> Every major US carrier now offers some
-            form: an extra PIN, a freeze on porting, in-app identity gates. Set the one your
-            carrier offers today.
+            <strong>Account PIN / number lock.</strong> CTIA's consumer guidance is to put a PIN on
+            the wireless account that is required for account access, and to make it something an
+            attacker can't look up. Ask your carrier what it offers today: an extra PIN, a freeze
+            on porting, in-app identity gates. Set the one you have.
           </li>
           <li>
-            <strong>Demand the PIN be used in-store too</strong> — dealer activations frequently
-            bypassed phone-based checks in the cases that made headlines.
+            <strong>Demand that PIN be used in-store too</strong> — the insider cases in the IC3
+            advisory involved carrier and dealer staff making the switch themselves, which is
+            exactly the path a phone-only check doesn't cover.
           </li>
           <li>
             <strong>Watch your SMS/email for carrier messages</strong> about number changes;

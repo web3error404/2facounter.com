@@ -3,6 +3,40 @@ import Layout from '../layouts/Layout.astro';
 import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 import ReviewByline from '../components/ReviewByline.astro';
+import SourcesList from '../components/SourcesList.astro';
+
+const sources = [
+  {
+    label: 'RFC 6238 — TOTP: Time-Based One-Time Password Algorithm',
+    href: 'https://www.rfc-editor.org/rfc/rfc6238',
+    kind: 'independent' as const,
+  },
+  {
+    label: 'RFC 4226 — HOTP: An HMAC-Based One-Time Password Algorithm',
+    href: 'https://www.rfc-editor.org/rfc/rfc4226',
+    kind: 'independent' as const,
+  },
+  {
+    label: 'RFC 4648 — The Base16, Base32, and Base64 Data Encodings',
+    href: 'https://www.rfc-editor.org/rfc/rfc4648',
+    kind: 'independent' as const,
+  },
+  {
+    label: 'NIST SP 800-63B — Digital Identity Guidelines: Authentication and Lifecycle Management',
+    href: 'https://pages.nist.gov/800-63-4/sp800-63b.html',
+    kind: 'independent' as const,
+  },
+  {
+    label: 'GitHub Docs — About mandatory two-factor authentication',
+    href: 'https://docs.github.com/en/authentication/securing-your-account-with-two-factor-authentication-2fa/about-mandatory-two-factor-authentication',
+    kind: 'official' as const,
+  },
+  {
+    label: 'Microsoft Entra Blog — Your Pa$$word doesn’t matter (MFA reduces compromise risk by more than 99.9%)',
+    href: 'https://techcommunity.microsoft.com/blog/microsoft-entra-blog/your-paword-doesnt-matter/731984',
+    kind: 'official' as const,
+  },
+];
 
 // hreflang alternates — translations now exist in all 14 locales
 // (+ x-default → English).
@@ -104,7 +138,7 @@ const jsonLd = [
     description,
     url: 'https://2facounter.com/what-is-2fa/',
     datePublished: '2026-11-07',
-    dateModified: '2026-11-09',
+    dateModified: '2026-11-23',
     author: { '@type': 'Organization', name: '2FA COUNTER', url: 'https://2facounter.com' },
     publisher: {
       '@type': 'Organization',
@@ -113,6 +147,7 @@ const jsonLd = [
       logo: { '@type': 'ImageObject', url: 'https://2facounter.com/web-app-manifest-512x512.png' },
     },
     mainEntityOfPage: { '@type': 'WebPage', '@id': 'https://2facounter.com/what-is-2fa/' },
+    citation: sources.map((s) => s.href),
   },
   {
     '@context': 'https://schema.org',
@@ -163,6 +198,12 @@ const jsonLd = [
       </nav>
 
       <ReviewByline />
+      <p class="mt-6 max-w-2xl font-mono text-[13px] text-ink/90">
+        Claims checked against the TOTP and HOTP RFCs, NIST SP 800-63B and GitHub's own 2FA
+        documentation · last reviewed 23 November 2026 ·{' '}
+        <a href="/methodology/" class="link">how we review</a>
+      </p>
+      <SourcesList sources={sources} />
 
       <div class="rich-text mt-12">
         <h2 id="problems">Why passwords alone fail</h2>
@@ -175,9 +216,9 @@ const jsonLd = [
           to get into your account.
         </p>
         <p>
-          Most major services now either offer or require 2FA: GitHub has enforced it since
-          2023, crypto exchanges (Binance, Coinbase, Kraken) strongly encourage it at signup,
-          and Microsoft, Google and Apple have rolled it into account security as the default.
+          Most major services now either offer or require 2FA: GitHub has required it of every user
+          who contributes code since March 2023, and an authenticator app is the second-factor
+          option on nearly every account that holds money or code.
         </p>
 
         <h2 id="factors">The three factors</h2>
@@ -239,8 +280,8 @@ const jsonLd = [
         <h2 id="base32">The secret and the QR code</h2>
         <p>
           The Base32 string is not some intermediate format — it's the raw bytes of the secret
-          encoded in a phone-friendly alphabet (A–Z plus 2–7, deliberately excluding 0/1 which
-          are easily confused, and safe on any keyboard). When a platform offers "can't scan?", the resulting string contains the
+          encoded in a phone-friendly alphabet (RFC 4648's A–Z plus 2–7, which also happens to
+          avoid the characters people misread). When a platform offers "can't scan?", the resulting string contains the
           <em>same private material</em> the QR encodes. You can store either form; the
           semantics are identical:
         </p>
@@ -256,7 +297,7 @@ otpauth://hotp/Example:you%40example.com?secret=...&amp;counter=5   ← counter-
 
         <h2 id="sms">TOTP vs. SMS vs. hardware keys</h2>
         <ul>
-          <li><strong>SMS codes</strong> travel across the telecom network. SIM-swap attacks let an adversary hijack your phone number and receive every code — and delivery can simply fail. NIST's US standards formally restrict phone-delivered codes (SP 800-63B classifies SMS out-of-band authentication as "RESTRICTED"), and the EU's PSD2 rules push services toward authenticator-app factors.</li>
+          <li><strong>SMS codes</strong> travel across the telecom network. SIM-swap attacks let an adversary hijack your phone number and receive every code — and delivery can simply fail. NIST's US federal guidance lists exactly one "restricted" authenticator — the PSTN, meaning codes delivered by call or text — and says accepting it requires the relying party to assess and mitigate the risk rather than treat it as equivalent to an app.</li>
           <li><strong>TOTP</strong> never transmits anything — the code is computed locally and expires in 30 seconds. Free, standards-based, and supported everywhere. Weaker link: it can be phished within its validity window.</li>
           <li><strong>Security keys and passkeys</strong> (WebAuthn/FIDO2) are cryptographically bound to the <em>exact</em> domain, so fake lookalike pages fail automatically. Strongest option; less widely supported and costs a key.</li>
         </ul>

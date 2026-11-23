@@ -5,6 +5,25 @@ import Layout from '../layouts/Layout.astro';
 import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 import ReviewByline from '../components/ReviewByline.astro';
+import SourcesList from '../components/SourcesList.astro';
+
+const sources = [
+  {
+    label: 'RFC 6238 — TOTP: Time-Based One-Time Password Algorithm',
+    href: 'https://www.rfc-editor.org/rfc/rfc6238',
+    kind: 'independent' as const,
+  },
+  {
+    label: 'Google Account Help — Get verification codes with Google Authenticator',
+    href: 'https://support.google.com/accounts/answer/1066447?hl=en',
+    kind: 'official' as const,
+  },
+  {
+    label: 'Google Account Help — Sign in with backup codes',
+    href: 'https://support.google.com/accounts/answer/1187538?hl=en',
+    kind: 'official' as const,
+  },
+];
 
 // hreflang alternates — translations now exist in all 10 locales
 // (+ x-default → English).
@@ -73,6 +92,8 @@ const jsonLd = [
       { '@type': 'HowToStep', position: 2, name: 'Paste the key into the generator', text: 'Paste the Base32 string or otpauth:// URI into the generator on the 2FA COUNTER homepage. Everything is computed locally in the browser.' },
       { '@type': 'HowToStep', position: 3, name: 'Copy the live code and confirm', text: 'Type the 6-digit code into the service’s verification prompt within its 30-second window to confirm the setup — then use the same flow for every future sign-in.' },
     ],
+    dateModified: '2026-11-23',
+    citation: sources.map((s) => s.href),
   },
   {
     '@context': 'https://schema.org',
@@ -102,6 +123,12 @@ const jsonLd = [
       </p>
 
       <ReviewByline />
+      <p class="mt-6 max-w-2xl font-mono text-[13px] text-ink/90">
+        Claims checked against RFC 6238 and Google's own Authenticator and backup-code
+        documentation · last reviewed 23 November 2026 ·{' '}
+        <a href="/methodology/" class="link">how we review</a>
+      </p>
+      <SourcesList sources={sources} />
 
       <div class="rich-text mt-10">
         <h2>What you need before you start</h2>
@@ -156,10 +183,11 @@ const jsonLd = [
 
         <h2>Step 3: Copy the live code and finish sign-in</h2>
         <p>
-          Type the current code into the verification prompt before it rotates. Each code is
-          valid for one 30-second window (shorter or longer for services with custom periods), so
-          if the badge hits the last few seconds, wait for the next code rather than rushing a
-          stale one. From now on, every sign-in with this service repeats the same loop: open
+          Type the current code into the verification prompt before it rotates. Each code belongs
+          to one 30-second window (shorter or longer for services with custom periods); servers
+          normally accept the step either side of their own clock to absorb small drift, but not
+          much more — so if the badge hits the last few seconds, wait for the next code rather than
+          rushing a stale one. From now on, every sign-in with this service repeats the same loop: open
           the generator → paste the key → copy the code → paste it in. The key is held{" "}
           <a href="/privacy/">only in the open page’s memory — never in browser storage</a> — so
           keep it in your password manager and paste it back when you need it.
@@ -179,7 +207,7 @@ const jsonLd = [
 
         <h2>Troubleshooting: what to do when it doesn’t work</h2>
         <p>
-          <strong>The code is rejected.</strong> In practice this is nearly always clock drift on
+          <strong>The code is rejected.</strong> In practice this is most commonly clock drift on
           the device running the generator. TOTP compares your code against a code derived from
           the <em>service’s</em> clock; if your system time is off by even half a minute, the two
           diverge. Set your operating system to sync time automatically (Windows: “Sync now” in

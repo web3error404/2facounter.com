@@ -3,6 +3,30 @@ import Layout from '../layouts/Layout.astro';
 import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 import ReviewByline from '../components/ReviewByline.astro';
+import SourcesList from '../components/SourcesList.astro';
+
+const sources = [
+  {
+    label: 'Google Account Help — Get verification codes with Google Authenticator',
+    href: 'https://support.google.com/accounts/answer/1066447?hl=en',
+    kind: 'official' as const,
+  },
+  {
+    label: 'Microsoft — Get the Microsoft Authenticator app (Android and iOS)',
+    href: 'https://www.microsoft.com/en-us/security/mobile-authenticator-app',
+    kind: 'official' as const,
+  },
+  {
+    label: 'Bitwarden — Pricing plans (integrated authenticator is a Premium feature)',
+    href: 'https://bitwarden.com/pricing/',
+    kind: 'official' as const,
+  },
+  {
+    label: 'RFC 6238 — TOTP: Time-Based One-Time Password Algorithm',
+    href: 'https://www.rfc-editor.org/rfc/rfc6238',
+    kind: 'independent' as const,
+  },
+];
 
 const title = 'Authenticator App for PC — 2FA Codes on Any Desktop (Free)';
 const description =
@@ -15,7 +39,7 @@ const faqs = [
   },
   {
     q: 'Is Microsoft Authenticator available for PC?',
-    a: 'Not for Windows, as of November 2026. Microsoft Authenticator ships on iOS and Android; on desktop the company expects codes only when signing into Microsoft accounts through Windows Hello or a browser prompt. For standard TOTP codes from a service like AWS IAM, GitHub, or Coinbase — tokens not tied to a Microsoft account — you need a separate authenticator, which is where a browser generator fits.',
+    a: 'Not for Windows, as of November 2026. Microsoft Authenticator ships for iOS and Android; Microsoft\'s download page offers no desktop build. On a PC you sign in to a Microsoft account with your password plus an approval or code on the phone, or a passwordless method — not with a desktop authenticator. For standard TOTP codes from a service like AWS IAM, GitHub, or Coinbase — tokens not tied to a Microsoft account — you need a separate authenticator, which is where a browser generator fits.',
   },
   {
     q: 'Is a browser-based 2FA generator safe to use on my PC?',
@@ -23,7 +47,7 @@ const faqs = [
   },
   {
     q: 'Is using 2FA on a company or work computer a good idea?',
-    a: 'The browser generator is actually one of the better fits: nothing to install, no admin rights required, no data leaves the machine. The caveat is not technical — it is policy. On some managed endpoints the employer can image or inspect the device, which undermines any secret stored in browser storage. If your account matters (personal Gmail, Coinbase, GitHub), generating codes at work is fine; but keep the master secret in your own vault, so the job never holds your factor.',
+    a: 'The browser generator is actually one of the better fits: nothing to install, no admin rights required, no data leaves the machine. The caveat is not technical — it is policy. On a managed endpoint the employer can image or inspect the device, and can log keystrokes or screen contents, so anything you paste into a page on that machine is observable while it is open. If your account matters (personal Gmail, Coinbase, GitHub), generating codes at work is fine; but keep the master secret in your own vault, so the job never holds your factor.',
   },
   {
     q: 'Does the browser generator work offline like a phone app?',
@@ -43,7 +67,7 @@ const jsonLd = [
     description,
     url: 'https://2facounter.com/authenticator-for-pc/',
     datePublished: '2026-11-10',
-    dateModified: '2026-11-10',
+    dateModified: '2026-11-23',
     author: { '@type': 'Organization', name: '2FA COUNTER', url: 'https://2facounter.com' },
     publisher: {
       '@type': 'Organization',
@@ -52,6 +76,7 @@ const jsonLd = [
       logo: { '@type': 'ImageObject', url: 'https://2facounter.com/web-app-manifest-512x512.png' },
     },
     mainEntityOfPage: { '@type': 'WebPage', '@id': 'https://2facounter.com/authenticator-for-pc/' },
+    citation: sources.map((s) => s.href),
   },
   {
     '@context': 'https://schema.org',
@@ -101,6 +126,12 @@ const jsonLd = [
       </nav>
 
       <ReviewByline />
+      <p class="mt-6 max-w-2xl font-mono text-[13px] text-ink/90">
+        Claims checked against Google's and Microsoft's own app documentation, Bitwarden's plan
+        detail and RFC 6238 · last reviewed 23 November 2026 ·{' '}
+        <a href="/methodology/" class="link">how we review</a>
+      </p>
+      <SourcesList sources={sources} />
 
       <div class="rich-text mt-12">
         <h2 id="quick-answer">The 60-second answer</h2>
@@ -115,9 +146,9 @@ const jsonLd = [
 
         <h2 id="why">Why your authenticator is trapped on the phone</h2>
         <p>
-          The phone app pattern dates to 2010, when the first authenticators coincided with the
-          smartphone boom. The industry never fully revisited the assumption: a <em>phone is the
-          second factor</em>. But for most daily work the phone is not where sign-ins happen —
+          The phone-app pattern is older than the smartphone on your desk, and it was never
+          really designed around desktop work: a <em>phone is the second factor</em>. But for most
+          daily work the phone is not where sign-ins happen —
           it is a second monitor and a sister device sitting face-down on the desk. Every
           app-based sign-in at work then costs the same tax: pick it up, unlock it, find
           the app, transcribe six digits before the timer flips.

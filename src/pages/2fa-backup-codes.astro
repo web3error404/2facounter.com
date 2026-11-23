@@ -3,6 +3,25 @@ import Layout from '../layouts/Layout.astro';
 import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 import ReviewByline from '../components/ReviewByline.astro';
+import SourcesList from '../components/SourcesList.astro';
+
+const sources = [
+  {
+    label: 'Google Account Help — Sign in with backup codes',
+    href: 'https://support.google.com/accounts/answer/1187538?hl=en',
+    kind: 'official' as const,
+  },
+  {
+    label: 'GitHub Docs — Configuring two-factor authentication recovery methods',
+    href: 'https://docs.github.com/en/authentication/securing-your-account-with-two-factor-authentication-2fa/configuring-two-factor-authentication-recovery-methods',
+    kind: 'official' as const,
+  },
+  {
+    label: 'RFC 6238 — TOTP: Time-Based One-Time Password Algorithm',
+    href: 'https://www.rfc-editor.org/rfc/rfc6238',
+    kind: 'independent' as const,
+  },
+];
 
 const title = '2FA Backup Codes & Lost Authenticator: Recovery Guide';
 const description =
@@ -15,7 +34,7 @@ const faqs = [
   },
   {
     q: 'Can a backup code be used more than once?',
-    a: 'Normally no. Most services issue a batch of eight to ten single-use codes and invalidate each one as it is used. When the batch runs low or is lost, you can usually regenerate a fresh set from the account’s security settings — but only while you can still sign in, so do it before you need it.',
+    a: 'Normally no. Services issue single-use codes and invalidate each one as it is used — Google gives you 10 and replaces the whole set when you regenerate. When the batch runs low or is lost, you can usually create a fresh set from the account’s security settings — but only while you can still sign in, so do it before you need it.',
   },
   {
     q: 'What if I lost my phone and my backup codes?',
@@ -43,7 +62,7 @@ const jsonLd = [
     description,
     url: 'https://2facounter.com/2fa-backup-codes/',
     datePublished: '2026-11-18',
-    dateModified: '2026-11-18',
+    dateModified: '2026-11-23',
     author: { '@type': 'Organization', name: '2FA COUNTER', url: 'https://2facounter.com' },
     publisher: {
       '@type': 'Organization',
@@ -52,6 +71,7 @@ const jsonLd = [
       logo: { '@type': 'ImageObject', url: 'https://2facounter.com/web-app-manifest-512x512.png' },
     },
     mainEntityOfPage: { '@type': 'WebPage', '@id': 'https://2facounter.com/2fa-backup-codes/' },
+    citation: sources.map((s) => s.href),
   },
   {
     '@context': 'https://schema.org',
@@ -102,6 +122,12 @@ const jsonLd = [
       </nav>
 
       <ReviewByline />
+      <p class="mt-6 max-w-2xl font-mono text-[13px] text-ink/90">
+        Claims checked against Google's and GitHub's own recovery-code documentation, plus RFC
+        6238 for the TOTP contrast · last reviewed 23 November 2026 ·{' '}
+        <a href="/methodology/" class="link">how we review</a>
+      </p>
+      <SourcesList sources={sources} />
 
       <div class="rich-text mt-12">
         <h2 id="quick-answer">The 60-second answer</h2>
@@ -121,10 +147,11 @@ const jsonLd = [
         <h2 id="what-they-are">What backup codes actually are</h2>
         <p>
           When you enable two-factor authentication, most services hand you a one-time set of
-          recovery codes — usually eight to ten short strings, sometimes called
-          “backup codes”, “recovery codes”, or a “recovery key”. Each code works once, bypasses the
-          authenticator, and is stored by the service as a hash. They are the airbag: not for daily
-          logins, only for the day the normal second factor is unavailable.
+          recovery codes — sometimes called “backup codes”, “recovery codes”, or a “recovery key”.
+          Each code works once, bypasses the authenticator, and stops working the moment it is
+          used. Counts vary: Google issues 10, GitHub hands you a recovery-codes file, so read the
+          screen rather than assuming a number. They are the
+          airbag: not for daily logins, only for the day the normal second factor is unavailable.
         </p>
         <p>
           They are not the same thing as the rotating 6-digit code. A TOTP code is

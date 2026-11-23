@@ -3,6 +3,30 @@ import Layout from '../layouts/Layout.astro';
 import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 import ReviewByline from '../components/ReviewByline.astro';
+import SourcesList from '../components/SourcesList.astro';
+
+const sources = [
+  {
+    label: 'Google Account Help — Get verification codes with Google Authenticator',
+    href: 'https://support.google.com/accounts/answer/1066447?hl=en',
+    kind: 'official' as const,
+  },
+  {
+    label: 'Google Security Blog — Google Authenticator now supports Google Account synchronization (Apr 2023)',
+    href: 'https://security.googleblog.com/2023/04/google-authenticator-now-supports.html',
+    kind: 'official' as const,
+  },
+  {
+    label: 'Google Account Help — Sign in with backup codes',
+    href: 'https://support.google.com/accounts/answer/1187538?hl=en',
+    kind: 'official' as const,
+  },
+  {
+    label: 'RFC 6238 — TOTP: Time-Based One-Time Password Algorithm',
+    href: 'https://www.rfc-editor.org/rfc/rfc6238',
+    kind: 'independent' as const,
+  },
+];
 
 const title = 'Google Authenticator vs a Browser 2FA Generator: Compared';
 const description =
@@ -11,7 +35,7 @@ const description =
 const faqs = [
   {
     q: 'Is a browser-based TOTP generator as safe as Google Authenticator?',
-    a: 'Both compute the identical RFC 6238 algorithm, so the math carries the same security either way. The difference is operational, not cryptographic: Google Authenticator cloud-syncs your secrets to Google\'s servers, while a local generator like this one never sees your keys at all — the calculation runs in your own browser with the Web Crypto API. If you use a browser generator, treat your Base32 secrets as master copies kept in an encrypted password-manager vault, exactly as secure as any other critical credential.',
+    a: 'Both compute the identical RFC 6238 algorithm, so the math carries the same security either way. The difference is operational, not cryptographic: Google Authenticator can sync your secrets to your Google Account, while a local generator like this one never sees your keys at all — the calculation runs in your own browser with the Web Crypto API. If you use a browser generator, treat your Base32 secrets as master copies kept in an encrypted password-manager vault, exactly as secure as any other critical credential.',
   },
   {
     q: 'When would I still need Google Authenticator?',
@@ -19,7 +43,7 @@ const faqs = [
   },
   {
     q: 'Can I migrate my Google Authenticator accounts to a browser generator?',
-    a: 'Yes. From Google Authenticator\'s menu, use "Transfer accounts" → "Export accounts" to show a QR code for the accounts you want to move. Copy the otpauth:// setup key for each account (scan the export QR with a QR reader to reveal the URI), then paste each secret into the browser generator. Keep the export QR only briefly and securely — it literally contains every secret it lists.',
+    a: 'Yes. In Google Authenticator, use Menu → Transfer codes → Export codes to show a QR code for the accounts you want to move. Copy the otpauth:// setup key for each account (scan the export QR with a QR reader to reveal the URI), then paste each secret into the browser generator. Keep the export QR only briefly and securely — it literally contains every secret it lists.',
   },
   {
     q: 'Does Google Authenticator work offline?',
@@ -43,7 +67,7 @@ const jsonLd = [
     description,
     url: 'https://2facounter.com/totp-vs-google-authenticator/',
     datePublished: '2026-11-09',
-    dateModified: '2026-11-09',
+    dateModified: '2026-11-23',
     author: { '@type': 'Organization', name: '2FA COUNTER', url: 'https://2facounter.com' },
     publisher: {
       '@type': 'Organization',
@@ -52,6 +76,7 @@ const jsonLd = [
       logo: { '@type': 'ImageObject', url: 'https://2facounter.com/web-app-manifest-512x512.png' },
     },
     mainEntityOfPage: { '@type': 'WebPage', '@id': 'https://2facounter.com/totp-vs-google-authenticator/' },
+    citation: sources.map((s) => s.href),
   },
   {
     '@context': 'https://schema.org',
@@ -99,6 +124,12 @@ const jsonLd = [
       </nav>
 
       <ReviewByline />
+      <p class="mt-6 max-w-2xl font-mono text-[13px] text-ink/90">
+        Claims checked against Google's own Authenticator and backup-code documentation, its 2023
+        sync announcement, and RFC 6238 · last reviewed 23 November 2026 ·{' '}
+        <a href="/methodology/" class="link">how we review</a>
+      </p>
+      <SourcesList sources={sources} />
 
       <div class="rich-text mt-12">
         <h2 id="quick-answer">The 60-second answer</h2>
@@ -137,8 +168,9 @@ const jsonLd = [
           </li>
           <li>
             <strong>What happens to your secrets.</strong> Google Authenticator (since 2023, optional)
-            uploads your secrets to your Google account cloud — encrypted in transit and at rest, but
-            not end-to-end encrypted, meaning Google could technically read them. A browser generator
+            can upload your secrets to your Google account cloud — Google says they are encrypted in
+            transit and at rest, and its documentation does not describe the backup as end-to-end
+            encrypted, which means the account itself is the blast radius. A browser generator
             supports that model only if you paste the secret into cloud-synced browser storage — ours
             never touches browser storage at all: keys live in the open page’s memory only, with your
             vault as the master copy.
@@ -175,8 +207,8 @@ const jsonLd = [
           Migration is one-time per account and takes about a minute each:
         </p>
         <ol class="list-decimal">
-          <li>In Google Authenticator, tap <strong>the three-dot menu → Transfer accounts → Export accounts</strong>.</li>
-          <li>Select the accounts to move; the app displays a QR code containing their <code class="font-mono">otpauth://</code> setup URIs.</li>
+          <li>In Google Authenticator, tap <strong>Menu → Transfer codes → Export codes</strong>.</li>
+          <li>Select the accounts to move; the app displays a QR code containing their <code class="font-mono">otpauth://</code> setup URIs. If you pick more than one account, it may produce more than one QR code.</li>
           <li>Decode the QR (any QR reader will show the URI as text) and copy each secret.</li>
           <li>Paste each secret — or the full URI — into <a href="/#generator">the generator on our homepage</a>; the live codes line up immediately.</li>
           <li>Keep the Google Authenticator side until you have confirmed two full rotations, then archive the export QR securely or shred it.</li>
