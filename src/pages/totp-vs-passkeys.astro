@@ -3,15 +3,44 @@ import Layout from '../layouts/Layout.astro';
 import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 import ReviewByline from '../components/ReviewByline.astro';
+import SourcesList from '../components/SourcesList.astro';
 
 const title = 'TOTP vs Passkeys: Which 2FA Should You Choose?';
 const description =
   'TOTP, passkeys and SMS compared honestly: phishing resistance, device lock-in, recovery and offline use — which 2FA factor belongs on which account.';
 
+const sources = [
+  {
+    label: 'W3C — Web Authentication: An API for accessing Public Key Credentials, Level 3',
+    href: 'https://www.w3.org/TR/webauthn-3/',
+    kind: 'independent' as const,
+  },
+  {
+    label: 'NIST SP 800-63B — Digital Identity Guidelines: Authentication and Authenticator Management',
+    href: 'https://pages.nist.gov/800-63-4/sp800-63b.html',
+    kind: 'independent' as const,
+  },
+  {
+    label: 'CISA — More than a Password: phishing-resistant MFA',
+    href: 'https://www.cisa.gov/MFA',
+    kind: 'independent' as const,
+  },
+  {
+    label: 'RFC 6238 — TOTP: Time-Based One-Time Password Algorithm',
+    href: 'https://www.rfc-editor.org/rfc/rfc6238',
+    kind: 'independent' as const,
+  },
+  {
+    label: 'Apple Platform Security — iCloud Keychain security overview',
+    href: 'https://support.apple.com/guide/security/icloud-keychain-security-overview-sec1c89c6f3b/web',
+    kind: 'official' as const,
+  },
+];
+
 const faqs = [
   {
     q: 'Are passkeys a replacement for 2FA?',
-    a: 'They can be. A synced passkey replaces both factors in one step: unlocking your device (something you have/are) plus the origin-bound key (something only that account on that platform holds). That is why passkeys are often described as a single step that combines both factors. The caveat: it hinges on the unlock — a 6-digit PIN on a shared machine is a weaker gate than a hardware key’s touch confirmation.',
+    a: 'Often, yes — but the factor count depends on the unlock. A passkey is a possession factor; when the device also requires a PIN or biometric before releasing it, the unlock supplies a second factor, which is why a passkey can stand in for both in one step. NIST’s requirements for synced keys assume exactly that: access to the sync fabric must be protected by AAL2-equivalent MFA. The caveat is the gate itself — a short PIN on a shared machine is a weaker unlock than a hardware key’s touch confirmation.',
   },
   {
     q: 'Can I use TOTP and a passkey on the same account?',
@@ -19,7 +48,7 @@ const faqs = [
   },
   {
     q: 'Do passkeys work offline?',
-    a: 'Platform passkeys work offline for sign-ins to websites only in limited cases: mobile OS passkeys are available without a network, but password-manager-backed passkeys may need a sync round-trip. Hardware keys need nothing from the network, ever. A TOTP generator like ours also produces codes fully offline — it’s one of TOTP’s underrated strengths.',
+    a: 'It depends where the key lives. A hardware key needs nothing from the network. A passkey held on the device you are using works offline; one that exists only in a sync service may need a round-trip before a device that has never held it can use it. A TOTP generator like ours also produces codes fully offline — one of TOTP’s underrated strengths.',
   },
   {
     q: 'What happens if I lose the device my passkey lives on?',
@@ -39,7 +68,7 @@ const jsonLd = [
     description,
     url: 'https://2facounter.com/totp-vs-passkeys/',
     datePublished: '2026-11-09',
-    dateModified: '2026-11-09',
+    dateModified: '2026-11-23',
     author: { '@type': 'Organization', name: '2FA COUNTER', url: 'https://2facounter.com' },
     publisher: {
       '@type': 'Organization',
@@ -48,6 +77,7 @@ const jsonLd = [
       logo: { '@type': 'ImageObject', url: 'https://2facounter.com/web-app-manifest-512x512.png' },
     },
     mainEntityOfPage: { '@type': 'WebPage', '@id': 'https://2facounter.com/totp-vs-passkeys/' },
+    citation: sources.map((s) => s.href),
   },
   {
     '@context': 'https://schema.org',
@@ -96,21 +126,29 @@ const jsonLd = [
         </ul>
       </nav>
 
+      <p class="mt-6 max-w-2xl font-mono text-[13px] text-ink/90">
+        Claims checked against the W3C WebAuthn specification, NIST SP 800-63B and CISA's
+        phishing-resistant MFA guidance · last reviewed 23 November 2026 ·{' '}
+        <a href="/methodology/" class="link">how we review</a>
+      </p>
       <ReviewByline />
+      <SourcesList sources={sources} />
 
       <div class="rich-text mt-12">
         <h2 id="quick-answer">The 60-second answer</h2>
         <p>
-          <strong>Passkeys (or hardware security keys) are the stronger factor</strong> — they are
-          cryptographically bound to the real website, so a fake lookalike page simply can’t
-          collect them, and no shared secret sits on the service’s servers. <strong>TOTP is the
-          most portable factor</strong> — one Base32 secret generates correct codes in any
-          authenticator app, any browser, any device, offline, on shared machines, on hardware
-          your passkeys will never reach. SMS is neither — see our{" "}
-          <a href="/sim-swap-attacks/">SIM-swap article</a> for why it belongs last.
+          <strong>Passkeys (or hardware security keys) are the stronger factor</strong> — the
+          credential is scoped to the real site’s domain, so a lookalike page cannot use it, and
+          the service stores only a public key. <strong>TOTP is the most portable factor</strong> —
+          one Base32 secret generates correct codes in any authenticator app, any browser, any
+          device, offline, on shared machines, on hardware your passkeys will never reach. SMS is
+          neither; see our <a href="/sim-swap-attacks/">SIM-swap article</a> for why it belongs
+          last.
         </p>
         <p>
           The honest ranking for <em>security</em> is: hardware key ≥ passkey &gt; TOTP ≫ SMS.
+          The ranking is ours, not a standard’s: hardware keys edge out synced passkeys because
+          NIST’s highest assurance level, AAL3, does not permit syncable authenticators at all.
           The honest ranking for <em>portability</em> inverts it: TOTP &gt; synced passkeys &gt;
           hardware keys ≫ SMS. Most people need both halves, which is why the right long-term
           answer is mixing, not replacing (see <a href="#both">the setup that beats choosing</a>).
@@ -126,8 +164,10 @@ const jsonLd = [
         </p>
         <p>
           <strong>Passkeys</strong> (WebAuthn/FIDO2) are asymmetric. At registration the service
-          receives only your <em>public</em> key; the private half stays on your device (or in
-          your platform’s end-to-end-encrypted passkey sync). At sign-in the site sends a
+          receives only your <em>public</em> key; the private half stays on your device, in your
+          platform’s sync service, or in your password manager’s vault. Apple documents its
+          keychain sync as end-to-end encrypted, and NIST requires any such sync fabric to store
+          keys encrypted and gate access with AAL2-equivalent MFA. At sign-in the site sends a
           challenge that only the private key can answer — and the browser refuses to release a
           signature unless the domain matches the one the key was created for. That origin
           binding is what makes them phishing-resistant by construction.
@@ -145,8 +185,9 @@ const jsonLd = [
           <li>
             <strong>Phishing resistance.</strong> Passkeys and hardware keys win outright: a
             phishing domain gets no key, ever. TOTP can be phished — a live code typed into a
-            fake page inside its 30-second window is still one working login. SMS loses hardest:
-            codes are collected wholesale by whatever network path the attacker impersonates.
+            fake page inside its 30-second window is still one working login. SMS is the weakest:
+            the code travels over a channel the carrier controls, and a SIM swap or interception
+            can hand it to an attacker.
           </li>
           <li>
             <strong>Portability.</strong> TOTP wins: one Base32 string reproduces identical

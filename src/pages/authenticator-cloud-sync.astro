@@ -3,27 +3,71 @@ import Layout from '../layouts/Layout.astro';
 import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 import ReviewByline from '../components/ReviewByline.astro';
+import SourcesList from '../components/SourcesList.astro';
 
 const title = 'Cloud-Based 2FA: Authenticator Cloud Sync Compared';
 const description =
   'Cloud-based 2FA: what cloud backup in Google, Microsoft and Authy authenticators means for your secrets — where copies live and what keeps keys yours.';
 
+const sources = [
+  {
+    label: 'Google Account Help — Get verification codes with Google Authenticator',
+    href: 'https://support.google.com/accounts/answer/1066447?hl=en',
+    kind: 'official' as const,
+  },
+  {
+    label: 'Microsoft Support — Back up one-time password codes in Microsoft Authenticator',
+    href: 'https://support.microsoft.com/en-us/authenticator/back-up-your-accounts-in-microsoft-authenticator',
+    kind: 'official' as const,
+  },
+  {
+    label: 'Twilio Blog — How Authy 2FA Backups Work',
+    href: 'https://www.twilio.com/en-us/blog/how-the-authy-two-factor-backups-work',
+    kind: 'official' as const,
+  },
+  {
+    label: 'Twilio Blog — Authy multi-device best practices',
+    href: 'https://www.twilio.com/en-us/blog/developers/best-practices/multi-device',
+    kind: 'official' as const,
+  },
+  {
+    label: 'Twilio Changelog — Security Alert: Update to the Authy Android and iOS App (1 Jul 2024)',
+    href: 'https://www.twilio.com/en-us/changelog/Security_Alert_Authy_App_Android_iOS',
+    kind: 'official' as const,
+  },
+  {
+    label: 'BleepingComputer — Hackers abused API to verify millions of Authy MFA phone numbers (3 Jul 2024)',
+    href: 'https://www.bleepingcomputer.com/news/security/hackers-abused-api-to-verify-millions-of-authy-mfa-phone-numbers/',
+    kind: 'independent' as const,
+  },
+  {
+    label: 'BleepingComputer — Twilio kills off Authy for desktop, forcibly logs out all users (1 Aug 2024)',
+    href: 'https://www.bleepingcomputer.com/news/security/twilio-kills-off-authy-for-desktop-forcibly-logs-out-all-users/',
+    kind: 'independent' as const,
+  },
+  {
+    label: 'Bitwarden — Security Whitepaper (client-side encryption)',
+    href: 'https://bitwarden.com/help/bitwarden-security-white-paper/',
+    kind: 'official' as const,
+  },
+];
+
 const faqs = [
   {
     q: 'Is Google Authenticator’s backup end-to-end encrypted?',
-    a: 'No — and Google says so plainly in its own documentation. Cloud backup in Authenticator has historically been encrypted in transit and at rest on Google’s servers without being end-to-end encrypted, meaning that protecting that copy is Google’s job, while the copy of your Google account itself (its own 2FA and any attacker who breaches it) carries the blast. Treat the cloud copy as a convenience tier, not a right you can rotate.',
+    a: 'Google does not describe it as end-to-end encrypted. Its support page says the codes are encrypted in transit and at rest, and the backup lives in your Google Account — so the account is the blast radius. Treat the cloud copy as a convenience tier, not a right you can rotate.',
   },
   {
     q: 'Is it safe to use an app with cloud sync at all?',
-    a: 'It’s a trade-off, not a trap. Cloud sync hugely reduces the most common 2FA catastrophe — losing the only device — and for most people most of the time, it beats having no 2FA because the phone drowned in a lake. The honest move is matching the security tier to the account tier: cloud-synced apps everywhere it’s convenient, but keep the secrets of your highest-value accounts in your own encrypted vault, where cloud sync means your password manager’s E2E design rather than an app vendor’s.',
+    a: 'It’s a trade-off, not a trap. Cloud sync hugely reduces the most common 2FA catastrophe — losing the only device — and for most people most of the time, it beats having no 2FA because the phone drowned in a lake. The honest move is matching the security tier to the account tier: cloud-synced apps everywhere it’s convenient, but keep the secrets of your highest-value accounts in your own encrypted vault, where “sync” means your password manager’s documented design rather than an app vendor’s.',
   },
   {
     q: 'Can I move keys out of one authenticator app into another?',
-    a: 'Almost always, yes. Re-enroll per service: open each account’s 2FA settings, remove the old authenticator method, and add a new one — services issue a fresh setup key in the flow. You don’t need the old secret to migrate; you need live access to each account, which is exactly why you should do migrations calmly, with recovery codes saved, rather than mid-emergency.',
+    a: 'Re-enroll per service: open each account’s 2FA settings, remove the old authenticator method, and add a new one — services issue a fresh setup key in the flow. But you usually need the old factor to remove it, so migrate while the old device still works, not after it is lost. Save recovery codes before you start, and do the swap in one sitting rather than mid-emergency.',
   },
   {
     q: 'What’s the most private way to run TOTP codes today?',
-    a: 'Keep the secret (the Base32 key) in an encrypted password-manager vault and generate codes live in a browser — a local tool like this site does it with zero network. Your "sync" then becomes the password manager’s own end-to-end design, the secrets are yours to export in plain text, and nothing app-specific can silently upload them somewhere you haven’t thought through.',
+    a: 'Keep the secret (the Base32 key) in an encrypted password-manager vault and generate codes live in a browser — a local tool like this site does it with zero network. Your "sync" then becomes the password manager’s documented encryption design, the secrets are yours to export in plain text, and nothing app-specific can silently upload them somewhere you haven’t thought through.',
   },
 ];
 
@@ -35,7 +79,7 @@ const jsonLd = [
     description,
     url: 'https://2facounter.com/authenticator-cloud-sync/',
     datePublished: '2026-11-09',
-    dateModified: '2026-11-09',
+    dateModified: '2026-11-23',
     author: { '@type': 'Organization', name: '2FA COUNTER', url: 'https://2facounter.com' },
     publisher: {
       '@type': 'Organization',
@@ -44,6 +88,7 @@ const jsonLd = [
       logo: { '@type': 'ImageObject', url: 'https://2facounter.com/web-app-manifest-512x512.png' },
     },
     mainEntityOfPage: { '@type': 'WebPage', '@id': 'https://2facounter.com/authenticator-cloud-sync/' },
+    citation: sources.map((s) => s.href),
   },
   {
     '@context': 'https://schema.org',
@@ -92,7 +137,13 @@ const jsonLd = [
         </ul>
       </nav>
 
+      <p class="mt-6 max-w-2xl font-mono text-[13px] text-ink/90">
+        Claims checked against Google’s, Microsoft’s and Twilio’s own backup documentation, plus
+        reporting on the 2024 Authy incidents · last reviewed 23 November 2026 ·{' '}
+        <a href="/methodology/" class="link">how we review</a>
+      </p>
       <ReviewByline />
+      <SourcesList sources={sources} />
 
       <div class="rich-text mt-12">
         <h2 id="tradeoff">The sync trade-off, stated plainly</h2>
@@ -110,15 +161,17 @@ const jsonLd = [
           </li>
           <li>
             <strong>Vendor cloud sync</strong> (Authy, modern Google/Microsoft apps): an
-            encrypted-at-rest copy sits in the vendor’s cloud, bound to an account the vendor
+            encrypted copy sits in the vendor’s cloud, reachable through an account the vendor
             controls. You gain instant multi-device recovery; you accept that the vendor’s
             account security (and their breach history) now applies to all your secrets at once.
           </li>
           <li>
-            <strong>Password-manager vault + live generation</strong>: secrets ride the vault’s
-            end-to-end encryption; an authenticator surface anywhere can mint codes offline.
-            Strongest ownership story — with the fixed cost that “I lost the vault I control”
-            is exactly as bad as designed, which is why vault recovery discipline matters.
+            <strong>Password-manager vault + live generation</strong>: the vault encrypts items
+            client-side before sync — Bitwarden, for example, says keys are generated and
+            encryption is done locally — and an authenticator surface anywhere can mint codes
+            offline. Strongest ownership story, with the fixed cost that “I lost the vault I
+            control” is exactly as bad as designed, so vault recovery discipline matters. Check
+            your own vendor’s model; not every password manager documents the same design.
           </li>
         </ul>
         <p>
@@ -128,39 +181,52 @@ const jsonLd = [
 
         <h2 id="google">Google Authenticator</h2>
         <p>
-          Google’s classic was proudly offline. In 2023 it gained optional cloud backup: enable
-          it, and your secrets upload to your Google account, so sign-ins produce codes on any
-          signed-in device. Google’s documentation has described the transfer as encrypted in
-          transit and at rest but <em>not end-to-end encrypted</em> — in practical terms, a
-          compromise of your Google account can expose the backup, and Google itself sits on
-          that trust chain. If you use it: guard your Google account hard (passkey first — see{" "}
-          <a href="/totp-vs-passkeys/">TOTP vs passkeys</a>), check the “Export accounts” /
-          export-QR path that exists on-device, and treat backup-on as a deliberate choice per
-          account value.
+          Google’s classic was offline by default. In 2023 it gained optional cloud backup:
+          enable it and your codes are stored in your Google Account, so a signed-in device can
+          produce them. Google’s support page says the codes are encrypted in transit and at
+          rest; it does not describe the backup as end-to-end encrypted, so a compromise of your
+          Google Account can expose the copy. If you use it: guard the Google account hard
+          (passkey first — see <a href="/totp-vs-passkeys/">TOTP vs passkeys</a>), use the
+          on-device <em>Transfer codes → Export codes</em> path when moving phones, and treat
+          backup-on as a deliberate choice per account value.
         </p>
 
         <h2 id="microsoft">Microsoft Authenticator</h2>
         <p>
-          Microsoft Authenticator’s story is cloud-forward from the start: personal-account
-          backups go into your Microsoft account (bound to that account's own
-          2FA), and Microsoft also pushes the app as a sign-in factor with
-          number-matching push approvals. That per-approval model is genuinely good against
-          blind phishing, but the backup copies of your TOTP secrets ride on the Microsoft
-          account; the same theme as Google, with Microsoft in the trust chain.
+          Microsoft Authenticator’s backup is narrower than the marketing implies. Microsoft’s
+          support page says it backs up 30-second one-time-password codes for eligible personal
+          and third-party accounts, but <strong>work or school account credentials are not
+          backed up</strong> — only the account name is saved, and you register the account again
+          after restoring. A backup can only be restored on the same device type, and it lives in
+          the Microsoft personal account you chose, so that account’s security is the gate.
+          Microsoft also says that from January 2027 Android backups move to Google One backup —
+          a reminder that the vendor holding the copy can change the arrangement.
         </p>
 
         <h2 id="authy">Authy</h2>
         <p>
-          Authy popularized multi-device TOTP: encrypted-at-rest backups in Twilio’s cloud,
-          device-pairing approvals, and (historically) a desktop app. Two events shaped the
-          current picture and are worth knowing when you rely on it: in March 2024, Twilio
-          ended support for the desktop apps (making Authy phone-first today), and a few
-          months later, in mid-2024, it reported that an unsecured endpoint let attackers
-          identify certain Authy users’ phone numbers
-          (they used it for SIM-swap targeting; Authy’s own end-to-end design means secrets
-          weren’t extracted). As of our last review, Authy remains encrypted-backup
-          cloud-first — convenient, with the same “trust the vendor’s account security” shape as
-          above.
+          Authy popularised multi-device TOTP, and its backup model is worth stating precisely.
+          Backups are opt-in: if you leave them off, Twilio says accounts stay on the phone. If
+          you turn them on, the account is encrypted on the device with a backups password before
+          upload, and Twilio says that password is not stored in its cloud — lose it and the
+          backup is unreadable. That is a real security property, and it means the copy Twilio
+          holds is ciphertext.
+        </p>
+        <p>
+          Two events matter more than the brochure. Twilio announced in January 2024 that the
+          desktop apps would reach end of life on 19 March 2024; the apps kept running with a
+          warning until <strong>1 August 2024</strong>, when Twilio logged desktop users out and
+          blocked sign-in — the date the client actually died. Then, in July 2024, Twilio
+          disclosed that an unauthenticated endpoint let attackers check which phone numbers had
+          Authy accounts. Reporting at the time said a leaked file contained about 33.4 million
+          rows. Twilio says Authy accounts were not compromised and that it saw no evidence its
+          systems were breached, but warned the numbers could feed phishing and smishing. The
+          exposed data was the phone-number list, not the encrypted backups.
+        </p>
+        <p>
+          As of our last review, Authy remains a phone-only, encrypted-backup service:
+          convenient, with the same “trust the vendor’s account security” shape as above — plus a
+          desktop client that has not come back.
         </p>
 
         <h2 id="choosing">How to choose — threat model first</h2>
@@ -170,7 +236,7 @@ const jsonLd = [
         <ul>
           <li>
             <strong>“I lose the phone and can’t log in for a week.”</strong> Cloud sync wins;
-            any of the big three will have you back in minutes. Use it widely.
+            any of the big three can have you back on a new phone in minutes. Use it widely.
           </li>
           <li>
             <strong>“Someone monetizes my email + every synced copy at once.”</strong> Vendor
