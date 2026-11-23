@@ -16,6 +16,8 @@ const description =
   dateModified="2026-11-23"
   datePublished="2026-11-23"
   lastReviewed="2026-11-23"
+  reviewedPrefix="UI wording and navigation"
+  reviewedClaim="subject to verification against the current TikTok app"
   intro="TikTok pushes SMS as the easy option, and an SMS code is the exact factor SIM-swap fraud is built to intercept. This is the app's own path to the authenticator method: where the manual key hides behind the QR code, how to get a working code onto the screen, and what to save before you close the settings screen."
   minutes={4}
   params={['6 digits', '30s period', 'SHA-1']}
@@ -63,8 +65,8 @@ const description =
         body: 'A password leak is an annoyance; a TikTok account with an audience is inventory. That is why takeover attempts on social accounts tend to be patient and social — a fake login page, a “verification” DM, a support impersonator. None of those need to break encryption. They need you to type a code into the wrong place, so check the address bar and never relay a code to someone who asks for it, including someone claiming to be TikTok staff.',
       },
       {
-        title: 'Labels drift; the location does not',
-        body: 'TikTok reworks its settings screens between app versions and regions, so exact wording comes and goes. The path named in this guide — Settings and privacy → Security → 2-step verification → authenticator — has been stable, and the manual key has stayed available underneath the QR code. If your build words a button differently, the control described is still the one to look for.',
+        title: 'What is verified here, and what is not',
+        body: 'The TOTP mechanics are standards, not opinions: TikTok’s authenticator method issues a Base32 key that any RFC 6238 implementation turns into the same 6-digit code, and that is what this page depends on. The navigation path in the steps — Settings and privacy → Security → 2-step verification → authenticator — mirrors TikTok’s own help-centre topic. The exact button and link wording does not: TikTok reworks its settings screens between app versions and regions, and the labels quoted here accommodate that variation rather than certify a single build. If your screen words a control differently, the control described is still the one to look for.',
       },
     ],
   }}
