@@ -14,6 +14,15 @@ const description =
   datePublished="2026-11-18"
   dateModified="2026-11-18"
   lastReviewed="2026-11-18"
+  reviewedPrefix="UI wording and navigation"
+  reviewedClaim="unverified — Amazon’s help centre blocks automated access and renders its articles client-side"
+  sources={[
+    {
+      label: 'RFC 6238 — TOTP: Time-Based One-Time Password Algorithm',
+      href: 'https://www.rfc-editor.org/rfc/rfc6238',
+      kind: 'independent',
+    },
+  ]}
   intro="Amazon calls it Two-Step Verification (2SV) and offers an authenticator-app option next to SMS and voice calls. The shopping account is separate from AWS — this guide covers the retail login, with a pointer to the IAM guide at the end."
   minutes={4}
   params={['6 digits', '30 s period', 'SHA-1']}
@@ -28,7 +37,11 @@ const description =
       },
       {
         title: 'The authenticator option is easy to miss',
-        body: 'Amazon defaults many accounts to SMS or voice call, and the authenticator choice can sit behind “Add new app” or “More options”. Look for “Authenticator App” rather than “Phone number”. Once enrolled, you can remove the phone method if you prefer not to keep a SIM-swap lane open — but consider keeping a recovery phone number that is not your main SIM.',
+        body: 'Amazon may steer accounts toward SMS or voice call, and the authenticator choice can sit behind “Add new app” or “More options”. Look for “Authenticator App” rather than “Phone number”. Once enrolled, you can remove the phone method if you prefer not to keep a SIM-swap lane open — but consider keeping a recovery phone number that is not your main SIM.',
+      },
+      {
+        title: 'What is verified here, and what is not',
+        body: 'The TOTP mechanics are standards, not opinions: Amazon’s authenticator option issues a Base32 key that any RFC 6238 implementation turns into the same 6-digit code, and that is what this page depends on. The screen labels — “Authenticator App”, “Add new app”, “Can’t scan the barcode?” — could not be checked against Amazon’s own help centre, which blocks automated access and renders article bodies client-side. They are written to describe the control rather than to quote one build. If your screen words it differently, the control described is still the one to look for.',
       },
       {
         title: 'TV devices and household sharing',

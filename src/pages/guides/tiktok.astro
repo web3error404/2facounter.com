@@ -18,6 +18,18 @@ const description =
   lastReviewed="2026-11-23"
   reviewedPrefix="UI wording and navigation"
   reviewedClaim="subject to verification against the current TikTok app"
+  sources={[
+    {
+      label: 'TikTok Help Centre — 2-step verification',
+      href: 'https://support.tiktok.com/en/account-and-privacy/account-privacy-settings/2-step-verification',
+      kind: 'official',
+    },
+    {
+      label: 'RFC 6238 — TOTP: Time-Based One-Time Password Algorithm',
+      href: 'https://www.rfc-editor.org/rfc/rfc6238',
+      kind: 'independent',
+    },
+  ]}
   intro="TikTok pushes SMS as the easy option, and an SMS code is the exact factor SIM-swap fraud is built to intercept. This is the app's own path to the authenticator method: where the manual key hides behind the QR code, how to get a working code onto the screen, and what to save before you close the settings screen."
   minutes={4}
   params={['6 digits', '30s period', 'SHA-1']}

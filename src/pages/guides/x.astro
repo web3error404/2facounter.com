@@ -14,6 +14,18 @@ const description =
   dateModified="2026-11-11"
   datePublished="2026-11-09"
   lastReviewed="2026-11-11"
+  sources={[
+    {
+      label: 'X Help Centre — How to use two-factor authentication',
+      href: 'https://help.x.com/en/managing-your-account/two-factor-authentication',
+      kind: 'official',
+    },
+    {
+      label: 'RFC 6238 — TOTP: Time-Based One-Time Password Algorithm',
+      href: 'https://www.rfc-editor.org/rfc/rfc6238',
+      kind: 'independent',
+    },
+  ]}
   intro="X (formerly Twitter) offers three 2FA factors — SMS (Premium-only since 2023), authenticator app (TOTP), and security keys — and the app-based one is the free, portable option for every account. A browser authenticator works perfectly — you just have to catch the setup key behind the QR."
   minutes={5}
   params={['6 digits', '30s period', 'SHA-1']}
@@ -23,8 +35,8 @@ const description =
     heading: "X-specific traps that trip people up",
     blocks: [
       {
-        title: 'The phone-number gate',
-        body: 'Accounts without a verified phone number have historically found the two-factor menu hidden — even for the app-based option, though X can change this behavior at any time. Verify a number is registered on the account before you try to enroll. The number doesn’t become your 2FA (app codes are a separate factor); it just has to exist for the section to appear.',
+        title: 'Email is the gate, not your phone number',
+        body: 'X’s current enrolment requires a confirmed email address — its help centre states that enrolment “will also make sure you have a confirmed email address associated with your account”, and the documented authentication-app flow contains no phone step at all. The phone-number prompt appears in the text-message flow, not the app one. Older Twitter-era guides describe a hard phone gate because enrolment did once require a number; if your account has never confirmed an email, X will stop you at that point instead.',
       },
       {
         title: 'Why the SMS factor is the one to skip',
@@ -59,7 +71,7 @@ const description =
     },
     {
       title: 'Screenshot the confirmation backup code, too',
-      body: 'After verifying, X may show a one-time backup code on the confirmation screen. If yours shows it, screenshot it or store it in your vault — it helps you regain access if you lose your phone, and with the Base32 key saved you can rebuild codes in any app later without re-enrollment.',
+      body: 'After verifying, watch the confirmation screen. X documents a one-time backup code there for the text-message method, and some app enrolments show one too; its absence for the app method is not an error. If yours does appear, store it in your vault before tapping “Got it” — it regains access if you lose the phone.',
     },
     {
       title: 'Store backups',
@@ -68,8 +80,8 @@ const description =
   ]}
   faqs={[
     {
-      q: 'Why does X require a phone number for 2FA?',
-      a: 'Accounts without a verified phone number have historically not seen the 2FA section — even when they only want the app-based option (a behavior X can change at any time). The browser authenticator replaces the need for an authenticator app, not the number requirement.',
+      q: 'Does X require a phone number to turn on 2FA?',
+      a: 'Not for the authentication-app method. X’s help centre documents a confirmed email address as the enrolment requirement and describes no phone-number step in the app flow; the number prompt belongs to the text-message method. Older guides describe a phone gate because Twitter-era enrolment required one. If your account has never had a confirmed email, X asks you to add and verify one before you can finish enrolling.',
     },
     {
       q: 'Which of X’s three 2FA options is the safe one?',

@@ -14,6 +14,18 @@ const description =
   datePublished="2026-11-18"
   dateModified="2026-11-18"
   lastReviewed="2026-11-18"
+  sources={[
+    {
+      label: 'Facebook Help Centre — How two-factor authentication works on Facebook',
+      href: 'https://www.facebook.com/help/148233965247823',
+      kind: 'official',
+    },
+    {
+      label: 'RFC 6238 — TOTP: Time-Based One-Time Password Algorithm',
+      href: 'https://www.rfc-editor.org/rfc/rfc6238',
+      kind: 'independent',
+    },
+  ]}
   intro="Facebook’s security settings now live inside Meta Accounts Center, which also controls Instagram. The authenticator-app option is standard TOTP — but Meta pushes SMS first, and the enrollment screen may show only a QR code. If it does, the screenshot route below still gets you the secret without a manual key."
   minutes={5}
   params={['6 digits', '30 s period', 'SHA-1']}
@@ -24,11 +36,11 @@ const description =
     blocks: [
       {
         title: 'Accounts Center can cover Facebook and Instagram at once',
-        body: 'Meta groups both networks under one Accounts Center, so the 2FA screen asks which accounts the method should apply to. You can enroll both or keep them separate. If you enroll both, Meta generates a separate secret for each account — paste the right key for the right profile, and label them clearly in your password manager. A single authenticator entry per account is the least confusing setup.',
+        body: 'Meta groups both networks under one Accounts Center, so the 2FA screen asks which accounts the method should apply to. You can enroll both or keep them separate, and Meta enrols each account individually — so each ends up with its own secret. Paste the right key for the right profile, and label them clearly in your password manager. A single authenticator entry per account is the least confusing setup.',
       },
       {
-        title: 'SMS is the default, not the requirement',
-        body: 'Facebook has historically nudged people toward text-message codes because they need no extra app. The authenticator-app option is stronger: the code is derived from a secret you hold, so a SIM swap does not hand an attacker your second factor. If a phone number is already attached for recovery, leave it there as a last resort but make the authenticator the method you actually use.',
+        title: 'SMS is offered, not required',
+        body: 'Facebook lists three methods — security key, third-party authentication app, and text message — and does not rank them. Text-message codes are the ones people tend to pick because they need no extra app, which is exactly why they are the weakest option in the set: the code is derived from a secret you hold only if you choose the app route, so a SIM swap does not hand an attacker your second factor. If a phone number is already attached for recovery, leave it there as a last resort but make the authenticator the method you actually use.',
       },
       {
         title: 'Passkeys and TOTP solve different problems',
@@ -39,7 +51,7 @@ const description =
   steps={[
     {
       title: 'Open Accounts Center',
-      body: 'On facebook.com, click your profile picture → “Settings & privacy” → “Settings” → “Accounts Center”. The direct shortcut is facebook.com/2fa. Choose “Password and security” → “Two-factor authentication”.',
+      body: 'On facebook.com, click your profile picture → “Settings and privacy” → “Settings” → “Accounts Center” → “Password and security” → “Two-factor authentication”, then select the account to update.',
     },
     {
       title: 'Pick the accounts to protect',
@@ -59,7 +71,7 @@ const description =
     },
     {
       title: 'Save the recovery codes',
-      body: 'Once two-factor authentication is active, open “Additional methods” → “Recovery codes” in Accounts Center to view and save your 10 one-time recovery codes. Store them and the setup secret in your encrypted password manager.',
+      body: 'Once two-factor authentication is active, the same Two-factor authentication screen in Accounts Center carries the recovery option — Meta calls them “recovery login codes” and issues 10 of them. Save all ten in your encrypted vault alongside the setup secret.',
     },
   ]}
   faqs={[

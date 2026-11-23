@@ -14,6 +14,18 @@ const description =
   dateModified="2026-11-09"
   datePublished="2026-11-09"
   lastReviewed="2026-11-09"
+  sources={[
+    {
+      label: 'GitHub Docs — Configuring two-factor authentication',
+      href: 'https://docs.github.com/en/authentication/securing-your-account-with-two-factor-authentication-2fa/configuring-two-factor-authentication',
+      kind: 'official',
+    },
+    {
+      label: 'RFC 6238 — TOTP: Time-Based One-Time Password Algorithm',
+      href: 'https://www.rfc-editor.org/rfc/rfc6238',
+      kind: 'independent',
+    },
+  ]}
   intro="GitHub has required 2FA for anyone who contributes code since March 2023, and also supports passkeys — but many devs still want a portable TOTP option for CI machines, VMs, and terminals. Here you go."
   minutes={6}
   params={['6 digits', '30s period', 'SHA-1']}

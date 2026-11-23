@@ -16,6 +16,18 @@ const description =
   lastReviewed="2026-11-09"
   reviewedPrefix="UI wording and navigation"
   reviewedClaim="partially verified — Valve’s help-centre bodies are client-rendered; the code format is corroborated independently"
+  sources={[
+    {
+      label: 'Steam Support — Steam Guard Mobile Authenticator',
+      href: 'https://help.steampowered.com/en/faqs/view/7EFD-3CAE-64D3-1C31',
+      kind: 'official',
+    },
+    {
+      label: 'ValvePython/steam — guard.py (alphabet and code generation)',
+      href: 'https://github.com/ValvePython/steam/blob/master/steam/guard.py',
+      kind: 'independent',
+    },
+  ]}
   intro="Steam Guard is the honest exception: Steam login codes use Valve’s own 5-character TOTP variant that no standards-based generator — including this one — reproduces. Here is what actually works for Steam and what does not, so you don’t rely on a backup that silently fails."
   minutes={5}
   minutesSuffix="min · official app required"

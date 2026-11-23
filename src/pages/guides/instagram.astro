@@ -16,7 +16,19 @@ const description =
   dateModified="2026-11-10"
   datePublished="2026-11-10"
   lastReviewed="2026-11-10"
-  intro="Instagram supports standard TOTP through Accounts Center — the strongest of its three 2FA options (authenticator app, WhatsApp, SMS). Worth knowing: Instagram’s setup flow nudges you toward SMS or WhatsApp first, and both are tied to your phone number. An account takeover on Instagram often means losing a business channel, so pick the method that doesn’t die with your SIM."
+  sources={[
+    {
+      label: 'Instagram Help Centre — Secure your account with two-factor authentication',
+      href: 'https://help.instagram.com/566810106808145',
+      kind: 'official',
+    },
+    {
+      label: 'RFC 6238 — TOTP: Time-Based One-Time Password Algorithm',
+      href: 'https://www.rfc-editor.org/rfc/rfc6238',
+      kind: 'independent',
+    },
+  ]}
+  intro="Instagram supports standard TOTP through Accounts Center, and its help centre recommends the authenticator app over its other two methods — text message and WhatsApp, both of which are tied to your phone number. One catch worth knowing before you start: enrolment has to happen in the Android or iPhone app. An account takeover on Instagram often means losing a business channel, so pick the method that doesn’t die with your SIM."
   minutes={4}
   params={['6 digits', '30s period', 'SHA-1']}
   ctaTitle="Instagram hands you recovery codes — that's the real account key"
@@ -24,7 +36,7 @@ const description =
   steps={[
     {
       title: 'Open Accounts Center',
-      body: 'In the Instagram app: profile → menu (☰) → “Settings and privacy” → “Accounts Center” → “Password and security” → “Two-factor authentication”. On desktop, accountscenter.instagram.com works the same way.',
+      body: 'In the Instagram app: profile → “More” (☰) → “Settings” → “See more in Accounts Center” → “Password and security” → “Two-factor authentication”, then select the account. Instagram’s help centre states that the authenticator method can only be turned on from the Android or iPhone app — the web Accounts Center lets you review the setting, not finish this enrolment.',
     },
     {
       title: 'Choose the account and method',
@@ -32,7 +44,7 @@ const description =
     },
     {
       title: 'Reveal the secret',
-      body: 'Instagram shows a QR code. Tap “Enter key manually” to reveal the Base32 key and copy it — or skip the typing entirely by screenshotting the QR and pasting the image onto the generator page, where it is decoded locally.',
+      body: 'Instagram shows a QR code. Screenshot it and paste the image onto the generator page, where it is decoded locally — that route needs no manual key and no typing. If your build also offers a manual key (“Enter key manually”, “Can’t scan?”), copying it is equivalent: it is the same Base32 secret.',
     },
     {
       title: 'Generate, verify, save recovery codes',
@@ -42,11 +54,11 @@ const description =
   faqs={[
     {
       q: 'Can I set up Instagram 2FA without the phone app?',
-      a: 'Yes. The Accounts Center web interface (accountscenter.instagram.com) exposes the same two-factor settings on desktop. The authenticator-app flow is identical: reveal the key, generate codes, confirm. A browser-based generator means the whole flow happens on one machine.',
+      a: 'You can generate the codes without one, but not enrol without one. Instagram’s help centre says the authentication-app method can only be turned on using the Instagram app for Android or iPhone, and the web Accounts Center does not document a path around that. Enrol once in the app, then paste the secret into any browser — the codes are standard TOTP and work anywhere. A guide that promises a desktop-only enrolment is describing a flow Instagram does not document.',
     },
     {
       q: 'Instagram offers WhatsApp 2FA — isn’t that good enough?',
-      a: 'It’s better than SMS but still phone-number-bound. WhatsApp 2FA breaks if you change numbers and falls to the same SIM-swap attack. The authenticator-app option is the only method whose security doesn’t depend on your carrier.',
+      a: 'It’s better than SMS but still phone-number-bound, and Instagram only offers it after the text-message method is already on — so choosing WhatsApp means keeping an SMS lane open. The authenticator app is the only one of the three whose security does not depend on your carrier or your number.',
     },
     {
       q: 'What if I lose my phone and can’t get Instagram codes?',
@@ -54,7 +66,7 @@ const description =
     },
     {
       q: 'Instagram says my code is wrong — what now?',
-      a: 'Usually the device clock. Instagram compares the code it expects against your device’s time - drift of half a minute is enough for a rejection. Turn on automatic time sync in your OS settings and try the next code. Your audience and account history ride on this account, so it is worth fixing the clock properly rather than racing the timer.',
+      a: 'Usually the device clock. Instagram compares the code it expects against your device’s time — drift of half a minute is enough for a rejection. Turn on automatic time sync in your OS settings and try the next code. Your audience and account history ride on this account, so it is worth fixing the clock properly rather than racing the timer.',
     },
   ]}
 />
