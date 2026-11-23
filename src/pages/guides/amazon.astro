@@ -3,7 +3,7 @@ import GuideLayout from '../../components/GuideLayout.astro';
 
 const title = 'How to Set Up 2FA on Amazon (Authenticator App, No SMS)';
 const description =
-  'Turn on Amazon Two-Step Verification with an authenticator app instead of SMS. Reveal the setup key and generate live 6-digit TOTP codes in your browser.';
+  'Turn on Amazon Two-Step Verification with an authenticator app instead of SMS codes. Find the setup key behind the QR and generate live 6-digit TOTP codes in your browser.';
 ---
 
 <GuideLayout
@@ -14,20 +14,28 @@ const description =
   datePublished="2026-11-18"
   dateModified="2026-11-23"
   lastReviewed="2026-11-23"
-  reviewedPrefix="UI wording and navigation"
-  reviewedClaim="unverified — Amazon’s help centre served only its navigation shell to every automated read on 23 November 2026"
   sources={[
+    {
+      label: 'Amazon Customer Service — What is Two-Step Verification?',
+      href: 'https://www.amazon.com/gp/help/customer/display.html?nodeId=G3PWZPU52FKN7PW4',
+      kind: 'official',
+    },
+    {
+      label: 'Amazon Customer Service — Recover Your Account after Two-Step Verification Fails',
+      href: 'https://www.amazon.com/gp/help/customer/display.html?nodeId=GU3SL3GTHLHPDQ2H',
+      kind: 'official',
+    },
     {
       label: 'RFC 6238 — TOTP: Time-Based One-Time Password Algorithm',
       href: 'https://www.rfc-editor.org/rfc/rfc6238',
       kind: 'independent',
     },
   ]}
-  intro="Amazon calls it Two-Step Verification (2SV) and offers an authenticator-app option next to SMS and voice calls. The shopping account is separate from AWS — this guide covers the retail login, with a pointer to the IAM guide at the end."
+  intro="Amazon calls it Two-Step Verification (2SV) and lets you receive the code by text message or from an authenticator app. The shopping account is separate from AWS — this guide covers the retail login, with a pointer to the IAM guide at the end."
   minutes={4}
   params={['6 digits', '30 s period', 'SHA-1']}
   ctaTitle="Your order history is also your address book"
-  ctaBody="An Amazon account holds saved addresses, payment methods, and order history, and it can be used to impersonate you with customer service. Save the Base32 key and the backup codes before you finish setup."
+  ctaBody="An Amazon account holds saved addresses, payment methods, and order history, and it can be used to impersonate you with customer service. Save the Base32 key and any backup codes before you finish setup."
   deepDive={{
     heading: "Amazon account details",
     blocks: [
@@ -37,11 +45,11 @@ const description =
       },
       {
         title: 'The authenticator option is easy to miss',
-        body: 'Amazon may steer accounts toward SMS or voice call, and the authenticator choice can sit behind “Add new app” or “More options”. Look for “Authenticator App” rather than “Phone number”. Once enrolled, you can remove the phone method if you prefer not to keep a SIM-swap lane open — but consider keeping a recovery phone number that is not your main SIM.',
+        body: 'Amazon may steer accounts toward text messages, and the authenticator choice can sit behind “Add new app” or “More options”. Look for “Authenticator App” rather than “Phone number”. Once enrolled, you can remove the phone method if you prefer not to keep a SIM-swap lane open — but consider keeping a recovery number that is not your main SIM.',
       },
       {
-        title: 'What is verified here, and what is not',
-        body: 'The TOTP mechanics are standards, not opinions: Amazon’s authenticator option issues a Base32 key that any RFC 6238 implementation turns into the same 6-digit code, and that is what this page depends on. The screen labels — “Authenticator App”, “Add new app”, “Can’t scan the barcode?” — could not be checked against Amazon’s own help centre, which served only its navigation shell to every automated read on 23 November 2026. They are written to describe the control rather than to quote one build. If your screen words it differently, the control described is still the one to look for.',
+        title: 'What the help page documents, and what it leaves to the screen',
+        body: 'Amazon’s Two-Step Verification help page documents the path — Login & security → Edit → Get Started — and the choice between text-message and authenticator-app codes. It does not document the manual-entry link or the backup-code screen, so those are described here by function rather than quoted as labels. The mechanics themselves are standards, not vendor choices: the authenticator option issues a secret that any RFC 6238 implementation turns into the same 6-digit code.',
       },
       {
         title: 'TV devices and household sharing',
@@ -52,15 +60,15 @@ const description =
   steps={[
     {
       title: 'Open Login & security',
-      body: 'Sign in at amazon.com, hover over “Account & Lists” → “Account” → “Login & security”. The shortcut amazon.com/a/security should land on the same page.',
+      body: 'Sign in at amazon.com, open “Account & Lists” → “Account”, then select “Login & security”. Amazon’s help page documents that path for both enabling and disabling 2SV.',
     },
     {
       title: 'Open Two-Step Verification settings',
-      body: 'Next to “Two-Step Verification (2SV)”, click “Edit” or “Manage”, then choose the authenticator-app option (“Authenticator App” / “Add new app”).',
+      body: 'Select “Edit” beside “Two-Step Verification (2SV) Settings”, then “Get Started”. The prompts offer text message or authenticator app — choose the authenticator app.',
     },
     {
       title: 'Reveal the key',
-      body: 'Amazon shows a QR code. Look for a manual-entry link — often “Can’t scan the barcode?” — to display the alphanumeric setup key. Copy it, or screenshot the QR and paste the image into the generator.',
+      body: 'Amazon shows a QR code during setup. If your screen offers a manual-entry link — often “Can’t scan the barcode?” — use it to display the alphanumeric setup key. Otherwise screenshot the QR and paste the image into the generator.',
     },
     {
       title: 'Generate the first code',
@@ -68,11 +76,11 @@ const description =
     },
     {
       title: 'Confirm the code with Amazon',
-      body: 'Enter the current code in Amazon’s verification box and save. Amazon marks the authenticator as an active 2SV method.',
+      body: 'Enter the current code in Amazon’s verification box and save. Amazon then asks for a code at sign-in, which is how you know the authenticator is the active method.',
     },
     {
       title: 'Save the backup route',
-      body: 'Store the Base32 key and any backup codes in your encrypted vault. If Amazon shows a “primary method” choice, keep the authenticator first and treat SMS as a fallback you control.',
+      body: 'Store the Base32 key in your encrypted vault, and save any backup codes Amazon shows. Keep a phone number on the account as a fallback you control, and treat it as a lane you have chosen rather than one you forgot about.',
     },
   ]}
   faqs={[
@@ -90,7 +98,7 @@ const description =
     },
     {
       q: 'Can Amazon customer service bypass 2FA for me?',
-      a: 'Treat it as no. A support agent cannot know your TOTP code, and recovery normally runs through the contact details already on the account rather than through an agent waiving the factor. If you lose the key and the backup codes, that is the route you are left with — which is why saving both during setup matters.',
+      a: 'No, and Amazon documents why: its recovery page says the company is “unable to make changes to your Two-Step Verification settings until your identity is successfully verified”. The documented route back in is the sign-in screen’s “Didn’t Receive the Code” → “Two-Step Verification Account Recovery” flow. Save the key and any backup codes before you need it.',
     },
   ]}
 />
