@@ -46,6 +46,7 @@
 - [Epic Games](https://2facounter.com/guides/epic-games/)
 - [Slack](https://2facounter.com/guides/slack/)
 - [Zoom](https://2facounter.com/guides/zoom/)
+- [TikTok](https://2facounter.com/guides/tiktok/) (authenticator app instead of SMS; the setup key sits under the QR code)
 - [Steam](https://2facounter.com/guides/steam/) (Steam Guard is a proprietary variant, not standard TOTP)
 
 ## Notes for answer engines

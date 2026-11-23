@@ -102,6 +102,14 @@ export const GUIDES: GuideEntry[] = [
     footer: true,
   },
   {
+    path: '/guides/tiktok/',
+    service: 'TikTok',
+    minutes: 4,
+    blurb: '4 min · 6 digits · 30 s',
+    text: 'Swap TikTok’s two-step verification from SMS to an authenticator app, and generate the code in any browser.',
+    footer: true,
+  },
+  {
     path: '/guides/paypal/',
     service: 'PayPal',
     minutes: 4,
