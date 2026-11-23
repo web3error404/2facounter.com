@@ -53,6 +53,7 @@ the network disconnected.
 | `npm run preview`   | Preview the production build locally      |
 | `npm run typecheck` | TypeScript check (`tsc --noEmit`)         |
 | `npm run test:e2e`  | Run the Playwright smoke tests (dev server must be running) |
+| `npm run audit:claims` | Check every citation resolves, every byline has evidence, and banned phrasings stay gone (escalates bot challenges to a real browser) |
 
 ## Search engine verification (post-deploy)
 
