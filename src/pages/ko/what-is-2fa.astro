@@ -3,6 +3,7 @@
 import Layout from '../../layouts/Layout.astro';
 import SiteHeader from '../../components/SiteHeader.astro';
 import SiteFooter from '../../components/SiteFooter.astro';
+import SourcesList from '../../components/SourcesList.astro';
 
 const title = '2FA란 무엇인가? 2단계 인증과 TOTP 코드의 작동 원리 — 2FA COUNTER';
 const description =
@@ -15,7 +16,7 @@ const faqs = [
   },
   {
     q: '2FA는 왜 그렇게 중요한가요?',
-    a: '비밀번호가 계속 무너지고 있기 때문입니다. 수십억 개의 실제 비밀번호가 데이터 유출로 이미 공개돼 있고, 공격자들은 그것들로 하루 종일 다른 사람의 계정에 들어가고자 합니다(크리덴셜 스터핑). Microsoft에 따르면 2FA는 자동화된 계정 탈취 공격의 99.9% 이상을 막아 줍니다. 이메일, 은행, 소셜 미디어, 게임, 암호화폐 계정을 실제로 일어나는 위협에서 지키는 정확히 그 도구입니다.',
+    a: '비밀번호가 계속 무너지고 있기 때문입니다. 수십억 개의 실제 비밀번호가 데이터 유출로 이미 공개돼 있고, 공격자들은 그것들로 하루 종일 다른 사람의 계정에 들어가고자 합니다(크리덴셜 스터핑). Microsoft에 따르면 MFA를 쓰는 계정이 침해될 가능성은 99.9% 이상 낮습니다. 이메일, 은행, 소셜 미디어, 게임, 암호화폐 계정을 실제로 일어나는 위협에서 지키는 정확히 그 도구입니다.',
   },
   {
     q: '2FA는 어디에 쓰이나요?',
@@ -71,6 +72,39 @@ const faqs = [
   },
 ];
 
+const sources = [
+  {
+    label: 'RFC 6238 — TOTP: Time-Based One-Time Password Algorithm',
+    href: 'https://www.rfc-editor.org/rfc/rfc6238',
+    kind: 'independent' as const,
+  },
+  {
+    label: 'RFC 4226 — HOTP: An HMAC-Based One-Time Password Algorithm',
+    href: 'https://www.rfc-editor.org/rfc/rfc4226',
+    kind: 'independent' as const,
+  },
+  {
+    label: 'RFC 4648 — The Base16, Base32, and Base64 Data Encodings',
+    href: 'https://www.rfc-editor.org/rfc/rfc4648',
+    kind: 'independent' as const,
+  },
+  {
+    label: 'NIST SP 800-63B — Digital Identity Guidelines: Authentication and Lifecycle Management',
+    href: 'https://pages.nist.gov/800-63-4/sp800-63b.html',
+    kind: 'independent' as const,
+  },
+  {
+    label: 'GitHub Docs — About mandatory two-factor authentication',
+    href: 'https://docs.github.com/en/authentication/securing-your-account-with-two-factor-authentication-2fa/about-mandatory-two-factor-authentication',
+    kind: 'official' as const,
+  },
+  {
+    label: 'Microsoft Entra Blog — Your Pa$$word doesn’t matter (MFA reduces compromise risk by more than 99.9%)',
+    href: 'https://techcommunity.microsoft.com/blog/microsoft-entra-blog/your-paword-doesnt-matter/731984',
+    kind: 'official' as const,
+  },
+];
+
 const jsonLd = [
   {
     '@context': 'https://schema.org',
@@ -79,7 +113,8 @@ const jsonLd = [
     description,
     url: 'https://2facounter.com/ko/what-is-2fa/',
     datePublished: '2026-11-07',
-    dateModified: '2026-11-09',
+    dateModified: '2026-11-23',
+    citation: sources.map((s) => s.href),
     author: { '@type': 'Organization', name: '2FA COUNTER', url: 'https://2facounter.com' },
     publisher: {
       '@type': 'Organization',
@@ -170,6 +205,16 @@ const alternates = [
           <li><a class="link" href="#faq">FAQ</a></li>
         </ul>
       </nav>
+
+      <p class="mt-6 max-w-2xl font-mono text-[13px] text-ink/90">
+        이 페이지는 번역본입니다. 아래 출처는 영어 원문을 확인하는 데 사용한 문서이며, 모두 영어로 되어 있습니다. · <a href="/methodology/" class="link">검증 방법</a>
+      </p>
+      <SourcesList
+        sources={sources}
+        heading="출처"
+        officialLabel="공식"
+        independentLabel="독립"
+      />
 
       <div class="rich-text mt-12">
         <h2 id="problems">비밀번호만으로는 부족한 이유</h2>

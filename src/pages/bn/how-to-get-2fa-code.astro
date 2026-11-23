@@ -4,6 +4,7 @@
 import Layout from '../../layouts/Layout.astro';
 import SiteHeader from '../../components/SiteHeader.astro';
 import SiteFooter from '../../components/SiteFooter.astro';
+import SourcesList from '../../components/SourcesList.astro';
 
 const title = '2FA কোড কীভাবে পাব: ধাপে ধাপে গাইড (TOTP)';
 const description =
@@ -28,6 +29,24 @@ const faq = [
   },
 ];
 
+const sources = [
+  {
+    label: 'RFC 6238 — TOTP: Time-Based One-Time Password Algorithm',
+    href: 'https://www.rfc-editor.org/rfc/rfc6238',
+    kind: 'independent' as const,
+  },
+  {
+    label: 'Google Account Help — Get verification codes with Google Authenticator',
+    href: 'https://support.google.com/accounts/answer/1066447?hl=en',
+    kind: 'official' as const,
+  },
+  {
+    label: 'Google Account Help — Sign in with backup codes',
+    href: 'https://support.google.com/accounts/answer/1187538?hl=en',
+    kind: 'official' as const,
+  },
+];
+
 const jsonLd = [
   {
     '@context': 'https://schema.org',
@@ -42,6 +61,8 @@ const jsonLd = [
     '@type': 'HowTo',
     name: 'অনলাইন TOTP জেনারেটর দিয়ে 2FA কোড কীভাবে পাব',
     totalTime: 'PT3M',
+    dateModified: '2026-11-23',
+    citation: sources.map((s) => s.href),
     step: [
       { '@type': 'HowToStep', position: 1, name: '2FA চালু করে সেটআপ কী দেখান', text: 'সার্ভিসের সিকিউরিটি সেটিংস খুলুন, অথেন্টিকেটর অ্যাপের অপশন বেছে নিন, আর QR কোড স্ক্যান করা না গেলে সেটআপ কী দেখান।' },
       { '@type': 'HowToStep', position: 2, name: 'কী জেনারেটরে পেস্ট করুন', text: 'Base32 স্ট্রিং বা otpauth:// URI 2FA COUNTER-এর হোমপেজের জেনারেটরে পেস্ট করুন। সব হিসাব হয় ব্রাউজারেই, লোকালি।' },
@@ -108,6 +129,16 @@ const alternates = [
         চেয়েছে সেখানে লিখে দিন। মোবাইল দরকার নেই — গণিতের রেফারেন্স ইমপ্লিমেন্টেশন চলছে{" "}
         <a href="/bn/">হোমপেজের</a> ওপরেই।
       </p>
+
+      <p class="mt-6 max-w-2xl font-mono text-[13px] text-ink/90">
+        এই পৃষ্ঠাটি একটি অনুবাদ। নিচের সূত্রগুলো সেই নথি, যেগুলো দিয়ে ইংরেজি মূল লেখাটি যাচাই করা হয়েছে; সবগুলো ইংরেজিতে। · <a href="/methodology/" class="link">আমরা কীভাবে যাচাই করি</a>
+      </p>
+      <SourcesList
+        sources={sources}
+        heading="সূত্র"
+        officialLabel="অফিসিয়াল"
+        independentLabel="স্বতন্ত্র"
+      />
 
       <div class="rich-text mt-10">
         <h2>শুরুর আগে যা যা দরকার</h2>

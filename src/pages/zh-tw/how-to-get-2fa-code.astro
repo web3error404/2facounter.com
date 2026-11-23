@@ -4,6 +4,7 @@
 import Layout from '../../layouts/Layout.astro';
 import SiteHeader from '../../components/SiteHeader.astro';
 import SiteFooter from '../../components/SiteFooter.astro';
+import SourcesList from '../../components/SourcesList.astro';
 
 const title = '如何取得 2FA 驗證碼：逐步指南（TOTP）';
 const description =
@@ -28,6 +29,24 @@ const faq = [
   },
 ];
 
+const sources = [
+  {
+    label: 'RFC 6238 — TOTP: Time-Based One-Time Password Algorithm',
+    href: 'https://www.rfc-editor.org/rfc/rfc6238',
+    kind: 'independent' as const,
+  },
+  {
+    label: 'Google Account Help — Get verification codes with Google Authenticator',
+    href: 'https://support.google.com/accounts/answer/1066447?hl=en',
+    kind: 'official' as const,
+  },
+  {
+    label: 'Google Account Help — Sign in with backup codes',
+    href: 'https://support.google.com/accounts/answer/1187538?hl=en',
+    kind: 'official' as const,
+  },
+];
+
 const jsonLd = [
   {
     '@context': 'https://schema.org',
@@ -42,6 +61,8 @@ const jsonLd = [
     '@type': 'HowTo',
     name: '用線上 TOTP 產生器取得 2FA 驗證碼',
     totalTime: 'PT3M',
+    dateModified: '2026-11-23',
+    citation: sources.map((s) => s.href),
     step: [
       { '@type': 'HowToStep', position: 1, name: '開啟 2FA 並顯示設定密鑰', text: '開啟服務的安全性設定，選擇驗證器應用程式選項，並在無法掃描 QR 碼時顯示設定密鑰。' },
       { '@type': 'HowToStep', position: 2, name: '把密鑰貼進產生器', text: '把 Base32 字串或 otpauth:// URI 貼到 2FA COUNTER 首頁的產生器裡。所有計算都在瀏覽器本地完成。' },
@@ -104,6 +125,16 @@ const alternates = [
         畫面。不需要手機——這套數學的標準參考實作正執行在<a href="/zh-tw/">首頁產生器</a>的
         最上方。
       </p>
+
+      <p class="mt-6 max-w-2xl font-mono text-[13px] text-ink/90">
+        本頁是譯文。以下來源是核實英文原文所依據的文件，均為英文。 · <a href="/methodology/" class="link">我們如何核實</a>
+      </p>
+      <SourcesList
+        sources={sources}
+        heading="來源"
+        officialLabel="官方"
+        independentLabel="獨立"
+      />
 
       <div class="rich-text mt-10">
         <h2>開始之前需要什麼</h2>

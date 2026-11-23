@@ -4,6 +4,7 @@
 import Layout from '../../layouts/Layout.astro';
 import SiteHeader from '../../components/SiteHeader.astro';
 import SiteFooter from '../../components/SiteFooter.astro';
+import SourcesList from '../../components/SourcesList.astro';
 
 const title = '2FA क्या है? टू-फ़ैक्टर ऑथेंटिकेशन और TOTP कोड की पूरी समझ';
 const description =
@@ -16,7 +17,7 @@ const faqs = [
   },
   {
     q: '2FA इतना ज़रूरी क्यों है?',
-    a: 'क्योंकि पासवर्ड हर बार एक ही तरह फेल होते हैं। लीक से अरबों असली पासवर्ड पहले से सार्वजनिक हैं, और हमलावर उन्हें दिन-रात दूसरों के अकाउंट्स में घुसने के लिए बार-बार इस्तेमाल करते हैं (क्रेडेंशियल स्टफ़िंग)। Microsoft के मुताबिक़ 2FA 99.9% से ज़्यादा ऑटोमेटेड अकाउंट-टेकओवर हमलों को रोकता है — आपके ईमेल, बैंक, सोशल मीडिया, गेम्स और क्रिप्टो को ठीक उन्हीं असली ख़तरों से बचाता है जो सच में घटित होते हैं।',
+    a: 'क्योंकि पासवर्ड हर बार एक ही तरह फेल होते हैं। लीक से अरबों असली पासवर्ड पहले से सार्वजनिक हैं, और हमलावर उन्हें दिन-रात दूसरों के अकाउंट्स में घुसने के लिए बार-बार इस्तेमाल करते हैं (क्रेडेंशियल स्टफ़िंग)। Microsoft के मुताबिक़, MFA वाले अकाउंट के हैक होने की संभावना 99.9% से ज़्यादा कम होती है — आपके ईमेल, बैंक, सोशल मीडिया, गेम्स और क्रिप्टो को ठीक उन्हीं असली ख़तरों से बचाता है जो सच में घटित होते हैं।',
   },
   {
     q: '2FA किस काम आता है?',
@@ -72,6 +73,39 @@ const faqs = [
   },
 ];
 
+const sources = [
+  {
+    label: 'RFC 6238 — TOTP: Time-Based One-Time Password Algorithm',
+    href: 'https://www.rfc-editor.org/rfc/rfc6238',
+    kind: 'independent' as const,
+  },
+  {
+    label: 'RFC 4226 — HOTP: An HMAC-Based One-Time Password Algorithm',
+    href: 'https://www.rfc-editor.org/rfc/rfc4226',
+    kind: 'independent' as const,
+  },
+  {
+    label: 'RFC 4648 — The Base16, Base32, and Base64 Data Encodings',
+    href: 'https://www.rfc-editor.org/rfc/rfc4648',
+    kind: 'independent' as const,
+  },
+  {
+    label: 'NIST SP 800-63B — Digital Identity Guidelines: Authentication and Lifecycle Management',
+    href: 'https://pages.nist.gov/800-63-4/sp800-63b.html',
+    kind: 'independent' as const,
+  },
+  {
+    label: 'GitHub Docs — About mandatory two-factor authentication',
+    href: 'https://docs.github.com/en/authentication/securing-your-account-with-two-factor-authentication-2fa/about-mandatory-two-factor-authentication',
+    kind: 'official' as const,
+  },
+  {
+    label: 'Microsoft Entra Blog — Your Pa$$word doesn’t matter (MFA reduces compromise risk by more than 99.9%)',
+    href: 'https://techcommunity.microsoft.com/blog/microsoft-entra-blog/your-paword-doesnt-matter/731984',
+    kind: 'official' as const,
+  },
+];
+
 const jsonLd = [
   {
     '@context': 'https://schema.org',
@@ -80,7 +114,8 @@ const jsonLd = [
     description,
     url: 'https://2facounter.com/hi/what-is-2fa/',
     datePublished: '2026-11-07',
-    dateModified: '2026-11-09',
+    dateModified: '2026-11-23',
+    citation: sources.map((s) => s.href),
     author: { '@type': 'Organization', name: '2FA COUNTER', url: 'https://2facounter.com' },
     publisher: {
       '@type': 'Organization',
@@ -171,6 +206,16 @@ const alternates = [
           <li><a class="link" href="#faq">सामान्य सवाल</a></li>
         </ul>
       </nav>
+
+      <p class="mt-6 max-w-2xl font-mono text-[13px] text-ink/90">
+        यह पेज एक अनुवाद है। नीचे दिए स्रोत वे दस्तावेज़ हैं जिनसे अंग्रेज़ी मूल पाठ जाँचा गया; वे सब अंग्रेज़ी में हैं। · <a href="/methodology/" class="link">हम कैसे जाँचते हैं</a>
+      </p>
+      <SourcesList
+        sources={sources}
+        heading="स्रोत"
+        officialLabel="आधिकारिक"
+        independentLabel="स्वतंत्र"
+      />
 
       <div class="rich-text mt-12">
         <h2 id="problems">अकेले पासवर्ड क्यों काफ़ी नहीं</h2>

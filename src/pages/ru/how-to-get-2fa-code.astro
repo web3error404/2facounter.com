@@ -4,6 +4,7 @@
 import Layout from '../../layouts/Layout.astro';
 import SiteHeader from '../../components/SiteHeader.astro';
 import SiteFooter from '../../components/SiteFooter.astro';
+import SourcesList from '../../components/SourcesList.astro';
 
 const title = 'Как получить код 2FA: пошаговое руководство (TOTP)';
 const description =
@@ -28,6 +29,24 @@ const faq = [
   },
 ];
 
+const sources = [
+  {
+    label: 'RFC 6238 — TOTP: Time-Based One-Time Password Algorithm',
+    href: 'https://www.rfc-editor.org/rfc/rfc6238',
+    kind: 'independent' as const,
+  },
+  {
+    label: 'Google Account Help — Get verification codes with Google Authenticator',
+    href: 'https://support.google.com/accounts/answer/1066447?hl=en',
+    kind: 'official' as const,
+  },
+  {
+    label: 'Google Account Help — Sign in with backup codes',
+    href: 'https://support.google.com/accounts/answer/1187538?hl=en',
+    kind: 'official' as const,
+  },
+];
+
 const jsonLd = [
   {
     '@context': 'https://schema.org',
@@ -42,6 +61,8 @@ const jsonLd = [
     '@type': 'HowTo',
     name: 'Как получить код 2FA с помощью онлайн-генератора TOTP',
     totalTime: 'PT3M',
+    dateModified: '2026-11-23',
+    citation: sources.map((s) => s.href),
     step: [
       { '@type': 'HowToStep', position: 1, name: 'Включите 2FA и покажите ключ настройки', text: 'Откройте настройки безопасности сервиса, выберите вариант с приложением-аутентификатором и покажите ключ настройки, если не можете отсканировать QR-код.' },
       { '@type': 'HowToStep', position: 2, name: 'Вставьте ключ в генератор', text: 'Вставьте строку Base32 или URI otpauth:// в генератор на главной странице 2FA COUNTER. Всё вычисляется локально в браузере.' },
@@ -109,6 +130,16 @@ const alternates = [
         работающая реализация этой математики уже находится вверху{" "}
         <a href="/ru/">главной страницы</a>.
       </p>
+
+      <p class="mt-6 max-w-2xl font-mono text-[13px] text-ink/90">
+        Эта страница — перевод. Источники ниже — документы, по которым проверялся английский оригинал; они на английском языке. · <a href="/methodology/" class="link">как мы проверяем</a>
+      </p>
+      <SourcesList
+        sources={sources}
+        heading="Источники"
+        officialLabel="официальный"
+        independentLabel="независимый"
+      />
 
       <div class="rich-text mt-10">
         <h2>Что нужно перед началом</h2>

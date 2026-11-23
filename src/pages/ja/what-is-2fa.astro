@@ -3,6 +3,7 @@
 import Layout from '../../layouts/Layout.astro';
 import SiteHeader from '../../components/SiteHeader.astro';
 import SiteFooter from '../../components/SiteFooter.astro';
+import SourcesList from '../../components/SourcesList.astro';
 import ReviewByline from '../../components/ReviewByline.astro';
 
 const title = '2FAとは？二段階認証とTOTPコードの仕組み — 2FA COUNTER';
@@ -16,7 +17,7 @@ const faqs = [
   },
   {
     q: '2FAがこれほど重要なのはなぜですか？',
-    a: 'パスワードが、絶えず同じ経路で破られてきたからです。数十億件の実在するパスワードが情報流出事件で公開済みであり、攻撃者はそれを使って昼夜を問わず他人のアカウントへのログインを試みます（クレデンシャルスタッフィング）。Microsoft の報告によれば、2FAは自動化されたアカウント乗っ取り攻撃の99.9%以上を防ぎます。現実に起こる脅威から、メール・銀行・SNS・ゲーム・暗号資産のアカウントを守れるのです。',
+    a: 'パスワードが、絶えず同じ経路で破られてきたからです。数十億件の実在するパスワードが情報流出事件で公開済みであり、攻撃者はそれを使って昼夜を問わず他人のアカウントへのログインを試みます（クレデンシャルスタッフィング）。Microsoft の報告によれば、MFA を使うアカウントが侵害される可能性は 99.9% 以上低くなります。現実に起こる脅威から、メール・銀行・SNS・ゲーム・暗号資産のアカウントを守れるのです。',
   },
   {
     q: '2FAは何に使われていますか？',
@@ -72,6 +73,39 @@ const faqs = [
   },
 ];
 
+const sources = [
+  {
+    label: 'RFC 6238 — TOTP: Time-Based One-Time Password Algorithm',
+    href: 'https://www.rfc-editor.org/rfc/rfc6238',
+    kind: 'independent' as const,
+  },
+  {
+    label: 'RFC 4226 — HOTP: An HMAC-Based One-Time Password Algorithm',
+    href: 'https://www.rfc-editor.org/rfc/rfc4226',
+    kind: 'independent' as const,
+  },
+  {
+    label: 'RFC 4648 — The Base16, Base32, and Base64 Data Encodings',
+    href: 'https://www.rfc-editor.org/rfc/rfc4648',
+    kind: 'independent' as const,
+  },
+  {
+    label: 'NIST SP 800-63B — Digital Identity Guidelines: Authentication and Lifecycle Management',
+    href: 'https://pages.nist.gov/800-63-4/sp800-63b.html',
+    kind: 'independent' as const,
+  },
+  {
+    label: 'GitHub Docs — About mandatory two-factor authentication',
+    href: 'https://docs.github.com/en/authentication/securing-your-account-with-two-factor-authentication-2fa/about-mandatory-two-factor-authentication',
+    kind: 'official' as const,
+  },
+  {
+    label: 'Microsoft Entra Blog — Your Pa$$word doesn’t matter (MFA reduces compromise risk by more than 99.9%)',
+    href: 'https://techcommunity.microsoft.com/blog/microsoft-entra-blog/your-paword-doesnt-matter/731984',
+    kind: 'official' as const,
+  },
+];
+
 const jsonLd = [
   {
     '@context': 'https://schema.org',
@@ -80,7 +114,8 @@ const jsonLd = [
     description,
     url: 'https://2facounter.com/ja/what-is-2fa/',
     datePublished: '2026-11-07',
-    dateModified: '2026-11-09',
+    dateModified: '2026-11-23',
+    citation: sources.map((s) => s.href),
     author: { '@type': 'Organization', name: '2FA COUNTER', url: 'https://2facounter.com' },
     publisher: {
       '@type': 'Organization',
@@ -172,6 +207,16 @@ const alternates = [
       </nav>
 
       <ReviewByline label="監修：2FA COUNTER セキュリティ編集チーム" linkLabel="編集方針" />
+
+      <p class="mt-6 max-w-2xl font-mono text-[13px] text-ink/90">
+        このページは翻訳です。以下の出典は、英語の原文を確認するために使った文書で、いずれも英語です。 · <a href="/methodology/" class="link">検証方法</a>
+      </p>
+      <SourcesList
+        sources={sources}
+        heading="出典"
+        officialLabel="公式"
+        independentLabel="独立"
+      />
 
       <div class="rich-text mt-12">
         <h2 id="problems">パスワードだけではなぜ失敗するのか</h2>

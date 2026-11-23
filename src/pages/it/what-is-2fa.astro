@@ -5,6 +5,7 @@
 import Layout from '../../layouts/Layout.astro';
 import SiteHeader from '../../components/SiteHeader.astro';
 import SiteFooter from '../../components/SiteFooter.astro';
+import SourcesList from '../../components/SourcesList.astro';
 
 const title = 'Che cos’è la 2FA? Autenticazione a due fattori e TOTP';
 const description =
@@ -17,7 +18,7 @@ const faqs = [
   },
   {
     q: 'Perché la 2FA è così importante?',
-    a: 'Perché le password continuano a fallire sempre allo stesso modo. Miliardi di password reali sono già pubbliche a causa dei data breach, e gli aggressori le ripropongono sugli account di altre persone, giorno e notte (credential stuffing). Microsoft segnala che la 2FA blocca oltre il 99,9% degli attacchi automatizzati di takeover degli account: protegge la tua email, la banca, i social, il gaming e le criptovalute dalle minacce che succedono davvero.',
+    a: 'Perché le password continuano a fallire sempre allo stesso modo. Miliardi di password reali sono già pubbliche a causa dei data breach, e gli aggressori le ripropongono sugli account di altre persone, giorno e notte (credential stuffing). Microsoft segnala che un account con MFA ha oltre il 99,9% in meno di probabilità di essere compromesso: protegge la tua email, la banca, i social, il gaming e le criptovalute dalle minacce che succedono davvero.',
   },
   {
     q: 'A cosa serve la 2FA?',
@@ -73,6 +74,39 @@ const faqs = [
   },
 ];
 
+const sources = [
+  {
+    label: 'RFC 6238 — TOTP: Time-Based One-Time Password Algorithm',
+    href: 'https://www.rfc-editor.org/rfc/rfc6238',
+    kind: 'independent' as const,
+  },
+  {
+    label: 'RFC 4226 — HOTP: An HMAC-Based One-Time Password Algorithm',
+    href: 'https://www.rfc-editor.org/rfc/rfc4226',
+    kind: 'independent' as const,
+  },
+  {
+    label: 'RFC 4648 — The Base16, Base32, and Base64 Data Encodings',
+    href: 'https://www.rfc-editor.org/rfc/rfc4648',
+    kind: 'independent' as const,
+  },
+  {
+    label: 'NIST SP 800-63B — Digital Identity Guidelines: Authentication and Lifecycle Management',
+    href: 'https://pages.nist.gov/800-63-4/sp800-63b.html',
+    kind: 'independent' as const,
+  },
+  {
+    label: 'GitHub Docs — About mandatory two-factor authentication',
+    href: 'https://docs.github.com/en/authentication/securing-your-account-with-two-factor-authentication-2fa/about-mandatory-two-factor-authentication',
+    kind: 'official' as const,
+  },
+  {
+    label: 'Microsoft Entra Blog — Your Pa$$word doesn’t matter (MFA reduces compromise risk by more than 99.9%)',
+    href: 'https://techcommunity.microsoft.com/blog/microsoft-entra-blog/your-paword-doesnt-matter/731984',
+    kind: 'official' as const,
+  },
+];
+
 const jsonLd = [
   {
     '@context': 'https://schema.org',
@@ -81,7 +115,8 @@ const jsonLd = [
     description,
     url: 'https://2facounter.com/it/what-is-2fa/',
     datePublished: '2026-11-07',
-    dateModified: '2026-11-09',
+    dateModified: '2026-11-23',
+    citation: sources.map((s) => s.href),
     author: { '@type': 'Organization', name: '2FA COUNTER', url: 'https://2facounter.com' },
     publisher: {
       '@type': 'Organization',
@@ -172,6 +207,16 @@ const alternates = [
           <li><a class="link" href="#faq">FAQ</a></li>
         </ul>
       </nav>
+
+      <p class="mt-6 max-w-2xl font-mono text-[13px] text-ink/90">
+        Questa pagina è una traduzione. Le fonti qui sotto sono i documenti su cui è stato verificato il testo originale inglese; sono in inglese. · <a href="/methodology/" class="link">come verifichiamo</a>
+      </p>
+      <SourcesList
+        sources={sources}
+        heading="Fonti"
+        officialLabel="ufficiale"
+        independentLabel="indipendente"
+      />
 
       <div class="rich-text mt-12">
         <h2 id="problems">Perché le password da sole non bastano</h2>

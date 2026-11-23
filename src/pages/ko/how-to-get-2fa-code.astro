@@ -3,6 +3,7 @@
 import Layout from '../../layouts/Layout.astro';
 import SiteHeader from '../../components/SiteHeader.astro';
 import SiteFooter from '../../components/SiteFooter.astro';
+import SourcesList from '../../components/SourcesList.astro';
 
 const title = '2FA 인증번호 받는 법: 단계별 가이드 (TOTP)';
 const description =
@@ -27,6 +28,24 @@ const faq = [
   },
 ];
 
+const sources = [
+  {
+    label: 'RFC 6238 — TOTP: Time-Based One-Time Password Algorithm',
+    href: 'https://www.rfc-editor.org/rfc/rfc6238',
+    kind: 'independent' as const,
+  },
+  {
+    label: 'Google Account Help — Get verification codes with Google Authenticator',
+    href: 'https://support.google.com/accounts/answer/1066447?hl=en',
+    kind: 'official' as const,
+  },
+  {
+    label: 'Google Account Help — Sign in with backup codes',
+    href: 'https://support.google.com/accounts/answer/1187538?hl=en',
+    kind: 'official' as const,
+  },
+];
+
 const jsonLd = [
   {
     '@context': 'https://schema.org',
@@ -41,6 +60,8 @@ const jsonLd = [
     '@type': 'HowTo',
     name: '온라인 TOTP 생성기로 2FA 인증번호 받는 법',
     totalTime: 'PT3M',
+    dateModified: '2026-11-23',
+    citation: sources.map((s) => s.href),
     step: [
       { '@type': 'HowToStep', position: 1, name: '2FA를 켜고 설정 키 꺼내기', text: '서비스의 보안 설정을 열어 인증 앱 옵션을 고르고, QR 코드를 스캔할 수 없을 때는 설정 키를 꺼냅니다.' },
       { '@type': 'HowToStep', position: 2, name: '키를 생성기에 붙여넣기', text: 'Base32 문자열이나 otpauth:// URI를 2FA COUNTER 홈페이지의 생성기에 붙여넣습니다. 모든 계산은 브라우저 안에서 로컬로 이루어집니다.' },
@@ -107,6 +128,16 @@ const alternates = [
         화면에 입력하면 끝입니다. 휴대폰은 필요 없습니다 — 그 계산의 표준 구현이 바로{" "}
         <a href="/ko/">홈페이지의 생성기</a>에서 돌아가고 있습니다.
       </p>
+
+      <p class="mt-6 max-w-2xl font-mono text-[13px] text-ink/90">
+        이 페이지는 번역본입니다. 아래 출처는 영어 원문을 확인하는 데 사용한 문서이며, 모두 영어로 되어 있습니다. · <a href="/methodology/" class="link">검증 방법</a>
+      </p>
+      <SourcesList
+        sources={sources}
+        heading="출처"
+        officialLabel="공식"
+        independentLabel="독립"
+      />
 
       <div class="rich-text mt-10">
         <h2>시작하기 전에 준비할 것</h2>

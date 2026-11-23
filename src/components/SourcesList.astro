@@ -14,12 +14,22 @@ export interface Props {
   sources: { label: string; href: string; kind?: 'official' | 'independent' }[];
   /** Heading text; override for localized pages */
   heading?: string;
+  /** Tag labels; override for localized pages */
+  officialLabel?: string;
+  independentLabel?: string;
   /** Anchor id. Keep the default on guide-style pages so audits stay stable. */
   id?: string;
   class?: string;
 }
 
-const { sources, heading = 'Sources', id = 'guide-sources', class: className = 'mt-5 max-w-2xl' } = Astro.props;
+const {
+  sources,
+  heading = 'Sources',
+  officialLabel = 'official',
+  independentLabel = 'independent',
+  id = 'guide-sources',
+  class: className = 'mt-5 max-w-2xl',
+} = Astro.props;
 ---
 
 {
@@ -35,7 +45,7 @@ const { sources, heading = 'Sources', id = 'guide-sources', class: className = '
               {s.label}
             </a>{' '}
             <span class="font-mono text-[10px] font-semibold tracking-tight text-ink/60 uppercase">
-              {s.kind === 'independent' ? 'independent' : 'official'}
+              {s.kind === 'independent' ? independentLabel : officialLabel}
             </span>
           </li>
         ))}

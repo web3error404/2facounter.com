@@ -4,6 +4,7 @@
 import Layout from '../../layouts/Layout.astro';
 import SiteHeader from '../../components/SiteHeader.astro';
 import SiteFooter from '../../components/SiteFooter.astro';
+import SourcesList from '../../components/SourcesList.astro';
 
 const title = 'كيف تحصل على رمز 2FA: دليل خطوة بخطوة (TOTP)';
 const description =
@@ -28,6 +29,24 @@ const faq = [
   },
 ];
 
+const sources = [
+  {
+    label: 'RFC 6238 — TOTP: Time-Based One-Time Password Algorithm',
+    href: 'https://www.rfc-editor.org/rfc/rfc6238',
+    kind: 'independent' as const,
+  },
+  {
+    label: 'Google Account Help — Get verification codes with Google Authenticator',
+    href: 'https://support.google.com/accounts/answer/1066447?hl=en',
+    kind: 'official' as const,
+  },
+  {
+    label: 'Google Account Help — Sign in with backup codes',
+    href: 'https://support.google.com/accounts/answer/1187538?hl=en',
+    kind: 'official' as const,
+  },
+];
+
 const jsonLd = [
   {
     '@context': 'https://schema.org',
@@ -42,6 +61,8 @@ const jsonLd = [
     '@type': 'HowTo',
     name: 'كيف تحصل على رمز 2FA بمولّد TOTP عبر الإنترنت',
     totalTime: 'PT3M',
+    dateModified: '2026-11-23',
+    citation: sources.map((s) => s.href),
     step: [
       { '@type': 'HowToStep', position: 1, name: 'فعّل المصادقة الثنائية واعرض مفتاح الإعداد', text: 'افتح إعدادات الأمان في الخدمة، واختر خيار تطبيق المصادقة، واعرض مفتاح الإعداد حين تعجز عن مسح رمز QR.' },
       { '@type': 'HowToStep', position: 2, name: 'الصق المفتاح في المولّد', text: 'الصق سلسلة Base32 أو رابط otpauth:// في المولّد في الصفحة الرئيسية لـ 2FA COUNTER. يُجرى الحساب كله محليًا في المتصفح.' },
@@ -109,6 +130,16 @@ const alternates = [
         فالتنفيذ المرجعي للرياضيات يعمل بالفعل في الجزء العلوي من{" "}
         <a href="/ar/">الصفحة الرئيسية</a>.
       </p>
+
+      <p class="mt-6 max-w-2xl font-mono text-[13px] text-ink/90">
+        هذه الصفحة ترجمة. المصادر أدناه هي الوثائق التي تحققنا بها من النص الإنجليزي الأصلي، وكلها بالإنجليزية. · <a href="/methodology/" class="link">كيف نراجع</a>
+      </p>
+      <SourcesList
+        sources={sources}
+        heading="المصادر"
+        officialLabel="رسمي"
+        independentLabel="مستقل"
+      />
 
       <div class="rich-text mt-10">
         <h2>ما تحتاجه قبل البدء</h2>

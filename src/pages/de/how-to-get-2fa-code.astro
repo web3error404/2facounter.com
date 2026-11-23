@@ -4,6 +4,7 @@
 import Layout from '../../layouts/Layout.astro';
 import SiteHeader from '../../components/SiteHeader.astro';
 import SiteFooter from '../../components/SiteFooter.astro';
+import SourcesList from '../../components/SourcesList.astro';
 
 const title = '2FA-Code erhalten: Schritt-für-Schritt-Anleitung (TOTP)';
 const description =
@@ -28,6 +29,24 @@ const faq = [
   },
 ];
 
+const sources = [
+  {
+    label: 'RFC 6238 — TOTP: Time-Based One-Time Password Algorithm',
+    href: 'https://www.rfc-editor.org/rfc/rfc6238',
+    kind: 'independent' as const,
+  },
+  {
+    label: 'Google Account Help — Get verification codes with Google Authenticator',
+    href: 'https://support.google.com/accounts/answer/1066447?hl=en',
+    kind: 'official' as const,
+  },
+  {
+    label: 'Google Account Help — Sign in with backup codes',
+    href: 'https://support.google.com/accounts/answer/1187538?hl=en',
+    kind: 'official' as const,
+  },
+];
+
 const jsonLd = [
   {
     '@context': 'https://schema.org',
@@ -42,6 +61,8 @@ const jsonLd = [
     '@type': 'HowTo',
     name: 'So erhalten Sie einen 2FA-Code mit einem Online-TOTP-Generator',
     totalTime: 'PT3M',
+    dateModified: '2026-11-23',
+    citation: sources.map((s) => s.href),
     step: [
       { '@type': 'HowToStep', position: 1, name: '2FA aktivieren und den Einrichtungsschlüssel anzeigen', text: 'Öffnen Sie die Sicherheitseinstellungen des Dienstes, wählen Sie die Option „Authenticator-App“ und lassen Sie sich den Einrichtungsschlüssel anzeigen, wenn Sie den QR-Code nicht scannen können.' },
       { '@type': 'HowToStep', position: 2, name: 'Den Schlüssel in den Generator eingeben', text: 'Fügen Sie die Base32-Zeichenkette oder die otpauth://-URI in den Generator auf der 2FA-COUNTER-Startseite ein. Alles wird lokal im Browser berechnet.' },
@@ -108,6 +129,16 @@ const alternates = [
         Kein Handy nötig — die Referenzimplementierung der Mathematik läuft oben auf dem{" "}
         <a href="/de/">Startseiten-Generator</a>.
       </p>
+
+      <p class="mt-6 max-w-2xl font-mono text-[13px] text-ink/90">
+        Diese Seite ist eine Übersetzung. Die Quellen unten sind die Dokumente, gegen die der englische Originaltext geprüft wurde; sie sind auf Englisch. · <a href="/methodology/" class="link">wie wir prüfen</a>
+      </p>
+      <SourcesList
+        sources={sources}
+        heading="Quellen"
+        officialLabel="offiziell"
+        independentLabel="unabhängig"
+      />
 
       <div class="rich-text mt-10">
         <h2>Was Sie vor dem Start brauchen</h2>

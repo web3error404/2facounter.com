@@ -4,6 +4,7 @@
 import Layout from '../../layouts/Layout.astro';
 import SiteHeader from '../../components/SiteHeader.astro';
 import SiteFooter from '../../components/SiteFooter.astro';
+import SourcesList from '../../components/SourcesList.astro';
 
 const title = 'Comment obtenir un code 2FA : guide pas à pas (générateur TOTP)';
 const description =
@@ -28,6 +29,24 @@ const faq = [
   },
 ];
 
+const sources = [
+  {
+    label: 'RFC 6238 — TOTP: Time-Based One-Time Password Algorithm',
+    href: 'https://www.rfc-editor.org/rfc/rfc6238',
+    kind: 'independent' as const,
+  },
+  {
+    label: 'Google Account Help — Get verification codes with Google Authenticator',
+    href: 'https://support.google.com/accounts/answer/1066447?hl=en',
+    kind: 'official' as const,
+  },
+  {
+    label: 'Google Account Help — Sign in with backup codes',
+    href: 'https://support.google.com/accounts/answer/1187538?hl=en',
+    kind: 'official' as const,
+  },
+];
+
 const jsonLd = [
   {
     '@context': 'https://schema.org',
@@ -42,6 +61,8 @@ const jsonLd = [
     '@type': 'HowTo',
     name: 'Comment obtenir un code 2FA avec un générateur TOTP en ligne',
     totalTime: 'PT3M',
+    dateModified: '2026-11-23',
+    citation: sources.map((s) => s.href),
     step: [
       { '@type': 'HowToStep', position: 1, name: 'Activez la 2FA et affichez la clé de configuration', text: 'Ouvrez les paramètres de sécurité du service, choisissez l’option application d’authentification et affichez la clé de configuration quand vous ne pouvez pas scanner le code QR.' },
       { '@type': 'HowToStep', position: 2, name: 'Collez la clé dans le générateur', text: 'Collez la chaîne Base32 ou l’URI otpauth:// dans le générateur de la page d’accueil de 2FA COUNTER. Tout est calculé localement dans le navigateur.' },
@@ -108,6 +129,16 @@ const alternates = [
         l’implémentation de référence du calcul tourne en haut de notre{" "}
         <a href="/fr/">générateur sur la page d’accueil</a>.
       </p>
+
+      <p class="mt-6 max-w-2xl font-mono text-[13px] text-ink/90">
+        Cette page est une traduction. Les sources ci-dessous sont les documents contre lesquels le texte original anglais a été vérifié ; ils sont en anglais. · <a href="/methodology/" class="link">notre méthode</a>
+      </p>
+      <SourcesList
+        sources={sources}
+        heading="Sources"
+        officialLabel="officiel"
+        independentLabel="indépendant"
+      />
 
       <div class="rich-text mt-10">
         <h2>Ce dont vous avez besoin avant de commencer</h2>

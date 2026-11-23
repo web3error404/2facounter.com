@@ -3,6 +3,7 @@
 import Layout from '../../layouts/Layout.astro';
 import SiteHeader from '../../components/SiteHeader.astro';
 import SiteFooter from '../../components/SiteFooter.astro';
+import SourcesList from '../../components/SourcesList.astro';
 
 const title = '2FA là gì? Giải thích mã TOTP — 2FA COUNTER';
 const description =
@@ -15,7 +16,7 @@ const faqs = [
   },
   {
     q: 'Vì sao 2FA quan trọng đến vậy?',
-    a: 'Vì mật khẩu cứ thất bại đều đặn. Hàng tỷ mật khẩu thật đã bị công khai qua các vụ rò rỉ dữ liệu, và kẻ tấn công dùng chúng để đăng nhập tài khoản của người khác (credential stuffing) suốt ngày đêm. Theo Microsoft, 2FA chặn trên 99,9% các cuộc tấn công tự động nhằm chiếm đoạt tài khoản — nó bảo vệ email, ngân hàng, mạng xã hội, game và tài khoản tiền điện tử của bạn trước đúng những mối đe dọa có thật ngoài kia.',
+    a: 'Vì mật khẩu cứ thất bại đều đặn. Hàng tỷ mật khẩu thật đã bị công khai qua các vụ rò rỉ dữ liệu, và kẻ tấn công dùng chúng để đăng nhập tài khoản của người khác (credential stuffing) suốt ngày đêm. Theo Microsoft, tài khoản dùng MFA có nguy cơ bị xâm phạm thấp hơn 99,9% — nó bảo vệ email, ngân hàng, mạng xã hội, game và tài khoản tiền điện tử của bạn trước đúng những mối đe dọa có thật ngoài kia.',
   },
   {
     q: '2FA dùng để làm gì?',
@@ -71,6 +72,39 @@ const faqs = [
   },
 ];
 
+const sources = [
+  {
+    label: 'RFC 6238 — TOTP: Time-Based One-Time Password Algorithm',
+    href: 'https://www.rfc-editor.org/rfc/rfc6238',
+    kind: 'independent' as const,
+  },
+  {
+    label: 'RFC 4226 — HOTP: An HMAC-Based One-Time Password Algorithm',
+    href: 'https://www.rfc-editor.org/rfc/rfc4226',
+    kind: 'independent' as const,
+  },
+  {
+    label: 'RFC 4648 — The Base16, Base32, and Base64 Data Encodings',
+    href: 'https://www.rfc-editor.org/rfc/rfc4648',
+    kind: 'independent' as const,
+  },
+  {
+    label: 'NIST SP 800-63B — Digital Identity Guidelines: Authentication and Lifecycle Management',
+    href: 'https://pages.nist.gov/800-63-4/sp800-63b.html',
+    kind: 'independent' as const,
+  },
+  {
+    label: 'GitHub Docs — About mandatory two-factor authentication',
+    href: 'https://docs.github.com/en/authentication/securing-your-account-with-two-factor-authentication-2fa/about-mandatory-two-factor-authentication',
+    kind: 'official' as const,
+  },
+  {
+    label: 'Microsoft Entra Blog — Your Pa$$word doesn’t matter (MFA reduces compromise risk by more than 99.9%)',
+    href: 'https://techcommunity.microsoft.com/blog/microsoft-entra-blog/your-paword-doesnt-matter/731984',
+    kind: 'official' as const,
+  },
+];
+
 const jsonLd = [
   {
     '@context': 'https://schema.org',
@@ -79,7 +113,8 @@ const jsonLd = [
     description,
     url: 'https://2facounter.com/vi/what-is-2fa/',
     datePublished: '2026-11-07',
-    dateModified: '2026-11-09',
+    dateModified: '2026-11-23',
+    citation: sources.map((s) => s.href),
     author: { '@type': 'Organization', name: '2FA COUNTER', url: 'https://2facounter.com' },
     publisher: {
       '@type': 'Organization',
@@ -167,6 +202,16 @@ const alternates = [
           <li><a class="link" href="#faq">Hỏi đáp</a></li>
         </ul>
       </nav>
+
+      <p class="mt-6 max-w-2xl font-mono text-[13px] text-ink/90">
+        Trang này là bản dịch. Các nguồn dưới đây là những tài liệu dùng để kiểm chứng bản gốc tiếng Anh; chúng đều bằng tiếng Anh. · <a href="/methodology/" class="link">cách chúng tôi rà soát</a>
+      </p>
+      <SourcesList
+        sources={sources}
+        heading="Nguồn"
+        officialLabel="chính thức"
+        independentLabel="độc lập"
+      />
 
       <div class="rich-text mt-12">
         <h2 id="problems">Vì sao chỉ có mật khẩu là không đủ</h2>

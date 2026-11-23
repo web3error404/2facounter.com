@@ -4,6 +4,7 @@
 import Layout from '../../layouts/Layout.astro';
 import SiteHeader from '../../components/SiteHeader.astro';
 import SiteFooter from '../../components/SiteFooter.astro';
+import SourcesList from '../../components/SourcesList.astro';
 
 const title = '2FA कोड कैसे मिलता है: स्टेप-बाय-स्टेप गाइड (TOTP)';
 const description =
@@ -28,6 +29,24 @@ const faq = [
   },
 ];
 
+const sources = [
+  {
+    label: 'RFC 6238 — TOTP: Time-Based One-Time Password Algorithm',
+    href: 'https://www.rfc-editor.org/rfc/rfc6238',
+    kind: 'independent' as const,
+  },
+  {
+    label: 'Google Account Help — Get verification codes with Google Authenticator',
+    href: 'https://support.google.com/accounts/answer/1066447?hl=en',
+    kind: 'official' as const,
+  },
+  {
+    label: 'Google Account Help — Sign in with backup codes',
+    href: 'https://support.google.com/accounts/answer/1187538?hl=en',
+    kind: 'official' as const,
+  },
+];
+
 const jsonLd = [
   {
     '@context': 'https://schema.org',
@@ -42,6 +61,8 @@ const jsonLd = [
     '@type': 'HowTo',
     name: 'ऑनलाइन TOTP जेनरेटर से 2FA कोड कैसे मिलता है',
     totalTime: 'PT3M',
+    dateModified: '2026-11-23',
+    citation: sources.map((s) => s.href),
     step: [
       { '@type': 'HowToStep', position: 1, name: '2FA चालू करें और सेटअप की दिखाएँ', text: 'सर्विस की सिक्योरिटी सेटिंग्स खोलें, ऑथेंटिकेशन ऐप का विकल्प चुनें, और QR स्कैन न हो तो सेटअप की दिखाएँ।' },
       { '@type': 'HowToStep', position: 2, name: 'की जेनरेटर में पेस्ट करें', text: 'Base32 स्ट्रिंग या otpauth:// URI 2FA COUNTER के होमपेज जेनरेटर में पेस्ट करें। सब कुछ ब्राउज़र में ही लोकल बनता है।' },
@@ -108,6 +129,16 @@ const alternates = [
         उस स्क्रीन पर डालें जिसने उसे माँगा। मोबाइल ज़रूरी नहीं — गणित का रेफ़रेंस इंप्लीमेंटेशन{" "}
         <a href="/hi/">होमपेज</a> के ऊपर चालू ही चल रहा है।
       </p>
+
+      <p class="mt-6 max-w-2xl font-mono text-[13px] text-ink/90">
+        यह पेज एक अनुवाद है। नीचे दिए स्रोत वे दस्तावेज़ हैं जिनसे अंग्रेज़ी मूल पाठ जाँचा गया; वे सब अंग्रेज़ी में हैं। · <a href="/methodology/" class="link">हम कैसे जाँचते हैं</a>
+      </p>
+      <SourcesList
+        sources={sources}
+        heading="स्रोत"
+        officialLabel="आधिकारिक"
+        independentLabel="स्वतंत्र"
+      />
 
       <div class="rich-text mt-10">
         <h2>शुरू करने से पहले क्या चाहिए</h2>

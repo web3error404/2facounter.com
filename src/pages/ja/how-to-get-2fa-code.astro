@@ -5,6 +5,7 @@
 import Layout from '../../layouts/Layout.astro';
 import SiteHeader from '../../components/SiteHeader.astro';
 import SiteFooter from '../../components/SiteFooter.astro';
+import SourcesList from '../../components/SourcesList.astro';
 import ReviewByline from '../../components/ReviewByline.astro';
 
 const title = '2FAコードの取得方法：ステップバイステップガイド（TOTP）';
@@ -30,6 +31,24 @@ const faq = [
   },
 ];
 
+const sources = [
+  {
+    label: 'RFC 6238 — TOTP: Time-Based One-Time Password Algorithm',
+    href: 'https://www.rfc-editor.org/rfc/rfc6238',
+    kind: 'independent' as const,
+  },
+  {
+    label: 'Google Account Help — Get verification codes with Google Authenticator',
+    href: 'https://support.google.com/accounts/answer/1066447?hl=en',
+    kind: 'official' as const,
+  },
+  {
+    label: 'Google Account Help — Sign in with backup codes',
+    href: 'https://support.google.com/accounts/answer/1187538?hl=en',
+    kind: 'official' as const,
+  },
+];
+
 const jsonLd = [
   {
     '@context': 'https://schema.org',
@@ -44,6 +63,8 @@ const jsonLd = [
     '@type': 'HowTo',
     name: 'オンライン TOTP ジェネレーターで2FAコードを取得する方法',
     totalTime: 'PT3M',
+    dateModified: '2026-11-23',
+    citation: sources.map((s) => s.href),
     step: [
       { '@type': 'HowToStep', position: 1, name: '2FAをオンにしてセットアップキーを表示させる', text: 'サービスのセキュリティ設定を開き、認証アプリの選択肢を選んで、QRコードが読み取れないときに備えてセットアップキーを表示させます。' },
       { '@type': 'HowToStep', position: 2, name: '鍵をジェネレーターに貼り付ける', text: 'Base32 文字列または otpauth:// URI を、2FA COUNTER ホームページのジェネレーターに貼り付けます。すべての計算はブラウザ内でローカルに行われます。' },
@@ -111,6 +132,16 @@ const alternates = [
       </p>
 
       <ReviewByline label="監修：2FA COUNTER セキュリティ編集チーム" linkLabel="編集方針" />
+
+      <p class="mt-6 max-w-2xl font-mono text-[13px] text-ink/90">
+        このページは翻訳です。以下の出典は、英語の原文を確認するために使った文書で、いずれも英語です。 · <a href="/methodology/" class="link">検証方法</a>
+      </p>
+      <SourcesList
+        sources={sources}
+        heading="出典"
+        officialLabel="公式"
+        independentLabel="独立"
+      />
 
       <div class="rich-text mt-10">
         <h2>始める前に揃えるもの</h2>

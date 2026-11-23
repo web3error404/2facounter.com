@@ -4,6 +4,7 @@
 import Layout from '../../layouts/Layout.astro';
 import SiteHeader from '../../components/SiteHeader.astro';
 import SiteFooter from '../../components/SiteFooter.astro';
+import SourcesList from '../../components/SourcesList.astro';
 
 const title = 'Cómo obtener un código 2FA: guía paso a paso (TOTP)';
 const description =
@@ -28,6 +29,24 @@ const faq = [
   },
 ];
 
+const sources = [
+  {
+    label: 'RFC 6238 — TOTP: Time-Based One-Time Password Algorithm',
+    href: 'https://www.rfc-editor.org/rfc/rfc6238',
+    kind: 'independent' as const,
+  },
+  {
+    label: 'Google Account Help — Get verification codes with Google Authenticator',
+    href: 'https://support.google.com/accounts/answer/1066447?hl=en',
+    kind: 'official' as const,
+  },
+  {
+    label: 'Google Account Help — Sign in with backup codes',
+    href: 'https://support.google.com/accounts/answer/1187538?hl=en',
+    kind: 'official' as const,
+  },
+];
+
 const jsonLd = [
   {
     '@context': 'https://schema.org',
@@ -42,6 +61,8 @@ const jsonLd = [
     '@type': 'HowTo',
     name: 'Cómo obtener un código 2FA con un generador TOTP online',
     totalTime: 'PT3M',
+    dateModified: '2026-11-23',
+    citation: sources.map((s) => s.href),
     step: [
       { '@type': 'HowToStep', position: 1, name: 'Activa la 2FA y muestra la clave de configuración', text: 'Abre los ajustes de seguridad del servicio, elige la opción de aplicación de autenticación y muestra la clave de configuración cuando no puedas escanear el código QR.' },
       { '@type': 'HowToStep', position: 2, name: 'Pega la clave en el generador', text: 'Pega la cadena Base32 o el URI otpauth:// en el generador de la página principal de 2FA COUNTER. Todo se calcula localmente en el navegador.' },
@@ -109,6 +130,16 @@ const alternates = [
         implementación de referencia de la matemática está en marcha en la parte superior de{" "}
         <a href="/es/">la página principal</a>.
       </p>
+
+      <p class="mt-6 max-w-2xl font-mono text-[13px] text-ink/90">
+        Esta página es una traducción. Las fuentes siguientes son los documentos con los que se comprobó el texto original en inglés; están en inglés. · <a href="/methodology/" class="link">cómo revisamos</a>
+      </p>
+      <SourcesList
+        sources={sources}
+        heading="Fuentes"
+        officialLabel="oficial"
+        independentLabel="independiente"
+      />
 
       <div class="rich-text mt-10">
         <h2>Lo que necesitas antes de empezar</h2>

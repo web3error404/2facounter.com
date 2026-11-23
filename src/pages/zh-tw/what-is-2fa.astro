@@ -3,6 +3,7 @@
 import Layout from '../../layouts/Layout.astro';
 import SiteHeader from '../../components/SiteHeader.astro';
 import SiteFooter from '../../components/SiteFooter.astro';
+import SourcesList from '../../components/SourcesList.astro';
 
 const title = '什麼是 2FA？TOTP 驗證碼詳解 — 2FA COUNTER';
 const description =
@@ -15,7 +16,7 @@ const faqs = [
   },
   {
     q: '2FA 為什麼如此重要？',
-    a: '因為密碼不斷被攻破。數十億組真實密碼已隨資料外洩事件公開，攻擊者日夜不停地用它們登入別人的帳戶（撞庫攻擊）。據微軟報告，2FA 能擋下超過 99.9% 的自動化帳戶接管攻擊——它保護的正是你的電子郵件、網銀、社群媒體、遊戲和加密資產帳戶中最真實發生的那類威脅。',
+    a: '因為密碼不斷被攻破。數十億組真實密碼已隨資料外洩事件公開，攻擊者日夜不停地用它們登入別人的帳戶（撞庫攻擊）。據微軟報告，啟用 MFA 的帳戶被入侵的可能性低 99.9% 以上 ——它保護的正是你的電子郵件、網銀、社群媒體、遊戲和加密資產帳戶中最真實發生的那類威脅。',
   },
   {
     q: '2FA 用在哪些地方？',
@@ -71,6 +72,39 @@ const faqs = [
   },
 ];
 
+const sources = [
+  {
+    label: 'RFC 6238 — TOTP: Time-Based One-Time Password Algorithm',
+    href: 'https://www.rfc-editor.org/rfc/rfc6238',
+    kind: 'independent' as const,
+  },
+  {
+    label: 'RFC 4226 — HOTP: An HMAC-Based One-Time Password Algorithm',
+    href: 'https://www.rfc-editor.org/rfc/rfc4226',
+    kind: 'independent' as const,
+  },
+  {
+    label: 'RFC 4648 — The Base16, Base32, and Base64 Data Encodings',
+    href: 'https://www.rfc-editor.org/rfc/rfc4648',
+    kind: 'independent' as const,
+  },
+  {
+    label: 'NIST SP 800-63B — Digital Identity Guidelines: Authentication and Lifecycle Management',
+    href: 'https://pages.nist.gov/800-63-4/sp800-63b.html',
+    kind: 'independent' as const,
+  },
+  {
+    label: 'GitHub Docs — About mandatory two-factor authentication',
+    href: 'https://docs.github.com/en/authentication/securing-your-account-with-two-factor-authentication-2fa/about-mandatory-two-factor-authentication',
+    kind: 'official' as const,
+  },
+  {
+    label: 'Microsoft Entra Blog — Your Pa$$word doesn’t matter (MFA reduces compromise risk by more than 99.9%)',
+    href: 'https://techcommunity.microsoft.com/blog/microsoft-entra-blog/your-paword-doesnt-matter/731984',
+    kind: 'official' as const,
+  },
+];
+
 const jsonLd = [
   {
     '@context': 'https://schema.org',
@@ -79,7 +113,8 @@ const jsonLd = [
     description,
     url: 'https://2facounter.com/zh-tw/what-is-2fa/',
     datePublished: '2026-11-07',
-    dateModified: '2026-11-09',
+    dateModified: '2026-11-23',
+    citation: sources.map((s) => s.href),
     author: { '@type': 'Organization', name: '2FA COUNTER', url: 'https://2facounter.com' },
     publisher: {
       '@type': 'Organization',
@@ -166,6 +201,16 @@ const alternates = [
           <li><a class="link" href="#faq">常見問題</a></li>
         </ul>
       </nav>
+
+      <p class="mt-6 max-w-2xl font-mono text-[13px] text-ink/90">
+        本頁是譯文。以下來源是核實英文原文所依據的文件，均為英文。 · <a href="/methodology/" class="link">我們如何核實</a>
+      </p>
+      <SourcesList
+        sources={sources}
+        heading="來源"
+        officialLabel="官方"
+        independentLabel="獨立"
+      />
 
       <div class="rich-text mt-12">
         <h2 id="problems">為什麼只用密碼不行</h2>
