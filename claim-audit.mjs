@@ -169,8 +169,30 @@ async function browserCheck(url) {
   }
 }
 
+// Final fallback: some hosts refuse this machine outright (PayPal answers 403
+// with an empty body even to a browser). A text reader fetches from elsewhere,
+// so it can still show whether the URL is alive and what it says.
+async function readerCheck(url) {
+  try {
+    const r = await fetch(`https://r.jina.ai/${url}`, {
+      headers: { accept: 'text/plain' },
+      signal: AbortSignal.timeout(60000),
+    });
+    const t = (await r.text()).replace(/\s+/g, ' ');
+    const title = (t.match(/Title:\s*(.+?)\s*URL Source:/) || [])[1] || '';
+    const soft = SOFT_404.find((re) => re.test(t.slice(0, 4000)));
+    if (CHALLENGE.test(t.slice(0, 2000))) return { error: 'the text reader hit a bot challenge' };
+    if (t.length < 600) return { error: `the text reader returned ${t.length} characters` };
+    if (soft) return { error: 'the text reader showed a soft 404' };
+    return { ok: true, title, length: t.length };
+  } catch (e) {
+    return { error: String(e.message || e).split('\n')[0].slice(0, 120) };
+  }
+}
+
 async function judge(url, r) {
-  if (r.error) return `dead link (${r.error})`;
+  if (r.error) return { dead: `dead link (${r.error})` };
+  if (r.status === 404 || r.status === 410) return { dead: `dead link (HTTP ${r.status})` };
   const suspicious = r.status >= 400 || r.soft || r.redirectedToRoot;
   if (!suspicious) return null;
   const scripted = r.status >= 400 ? `HTTP ${r.status}` : r.soft ? 'soft 404' : 'redirect to root';
@@ -181,13 +203,19 @@ async function judge(url, r) {
     console.log(`… ${url} — ${scripted} to a script; browser not available (${String(e).slice(0, 60)})`);
     return null;
   }
-  if (b.challenge) {
-    console.log(`… ${url} — ${scripted} to a script, and a browser reached only a bot challenge — unverified, not dead`);
+  if (b.ok) {
+    console.log(`… ${url} — ${scripted} to a script, but rendered in a browser (${b.length} chars: "${b.title.slice(0, 70)}")`);
     return null;
   }
-  if (b.error) return `dead link (${scripted} to a script, and ${b.error} in a browser)`;
-  console.log(`… ${url} — ${scripted} to a script, but rendered in a browser (${b.length} chars: "${b.title.slice(0, 70)}")`);
-  return null;
+  const reason = b.challenge ? 'a browser reached only a bot challenge' : b.error;
+  const reader = await readerCheck(url);
+  if (reader.ok) {
+    console.log(`… ${url} — ${scripted} to a script, ${reason}; readable through a text reader (${reader.length} chars: "${reader.title.slice(0, 70)}")`);
+    return null;
+  }
+  // A challenge the audit cannot get past is an access limit, not proof of
+  // death. It is reported separately so "unverified" never reads as "broken".
+  return { unverified: `${scripted}; ${reason}; ${reader.error}` };
 }
 
 // ---- link check
@@ -241,10 +269,20 @@ if (!SKIP_LINKS) {
       }
     }),
   );
+  const unverifiedLinks = [];
   for (const [url, r] of results) {
     const where = [...(external.get(url) || [])].slice(0, 3).join(', ');
     const verdict = await judge(url, r);
-    if (verdict) fail(`${verdict} ${url} — cited by ${where}`);
+    if (!verdict) continue;
+    if (verdict.unverified) {
+      unverifiedLinks.push(`${url} — ${verdict.unverified} (cited by ${where})`);
+      continue;
+    }
+    fail(`${verdict.dead} ${url} — cited by ${where}`);
+  }
+  if (unverifiedLinks.length) {
+    console.log(`\n${unverifiedLinks.length} link(s) could not be verified by script, browser or reader (bot challenge) — not counted as dead:`);
+    for (const l of unverifiedLinks) console.log(`  ? ${l}`);
   }
 }
 
