@@ -3,10 +3,34 @@ import Layout from '../layouts/Layout.astro';
 import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 import ReviewByline from '../components/ReviewByline.astro';
+import SourcesList from '../components/SourcesList.astro';
 
 const title = 'About 2FA COUNTER — Free Browser-Based 2FA Authenticator Tool';
 const description =
   'Why 2FA COUNTER exists: a phone-free, zero-knowledge 2FA authenticator that runs in your browser. No accounts, no servers, no trackers — just live TOTP codes.';
+
+const sources = [
+  {
+    label: 'Source repository — the generator, worker and headers this page describes',
+    href: 'https://github.com/web3error404/2facounter.com',
+    kind: 'official' as const,
+  },
+  {
+    label: 'RFC 6238 — TOTP: Time-Based One-Time Password Algorithm',
+    href: 'https://www.rfc-editor.org/rfc/rfc6238',
+    kind: 'independent' as const,
+  },
+  {
+    label: 'jsQR — QR decoder bundled under Apache-2.0',
+    href: 'https://github.com/cozmo/jsQR',
+    kind: 'independent' as const,
+  },
+  {
+    label: 'SIL Open Font License 1.1 — the licence on the bundled typefaces',
+    href: 'https://openfontlicense.org',
+    kind: 'independent' as const,
+  },
+];
 
 const jsonLd = [
   {
@@ -15,6 +39,8 @@ const jsonLd = [
     name: title,
     description,
     url: 'https://2facounter.com/about/',
+    dateModified: '2026-11-23',
+    citation: sources.map((s) => s.href),
     breadcrumb: {
       '@type': 'BreadcrumbList',
       itemListElement: [
@@ -33,7 +59,13 @@ const jsonLd = [
       <p class="section-label">Company</p>
       <h1 class="mt-3 font-display text-4xl tracking-normal text-ink">About</h1>
 
+      <p class="mt-6 max-w-2xl font-mono text-[13px] text-ink/90">
+        The product claims on this page are checkable against the public source and the live
+        response headers · last reviewed 23 November 2026 ·{' '}
+        <a href="/methodology/" class="link">how we review</a>
+      </p>
       <ReviewByline />
+      <SourcesList sources={sources} />
 
       <div class="rich-text mt-12 rounded-xl border-2 border-ink bg-cream p-6 sm:p-10" style="box-shadow: var(--shadow-card)">
         <h2>Why this exists</h2>

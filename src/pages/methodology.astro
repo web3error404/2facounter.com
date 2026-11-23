@@ -52,9 +52,10 @@ const jsonLd = [
           Each per-service guide names the documentation it was checked against in a{' '}
           <strong>Sources</strong> list under the review line. Two kinds of link appear there:{' '}
           <strong>official</strong> — the service's own security, sign-in or settings pages — and{' '}
-          <strong>independent</strong> — a standards document such as RFC 6238, or a reference
-          implementation used to corroborate a technical detail. An independent source is never
-          presented as vendor documentation.
+          <strong>independent</strong> — a standards document such as{' '}
+          <a href="https://www.rfc-editor.org/rfc/rfc6238" rel="noopener">RFC 6238</a>, or a
+          reference implementation used to corroborate a technical detail. An independent source is
+          never presented as vendor documentation.
         </p>
         <p>
           Not every vendor document can be read. Some help centres render their article bodies in
@@ -85,6 +86,12 @@ const jsonLd = [
           third-party blogs into steps, and where a service's flow changes between regions or
           account types (Google Workspace policies, Microsoft Entra ID, AWS's IAM console,
           PayPal's business accounts), the guide says so instead of papering over the difference.
+        </p>
+        <p>
+          This page carries no Sources block of its own, and that is deliberate: it makes no
+          external factual claims, only statements about how we work. A Sources list here would
+          imply evidence we never gathered. Where a page has no source to show, it shows none
+          rather than padding the block.
         </p>
 
         <h2>What we deliberately do not claim</h2>

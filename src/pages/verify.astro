@@ -2,10 +2,35 @@
 import Layout from '../layouts/Layout.astro';
 import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
+import ReviewByline from '../components/ReviewByline.astro';
+import SourcesList from '../components/SourcesList.astro';
 
 const title = 'Verify Your Key Never Leaves the Browser — 2FA COUNTER';
 const description =
-  'Five tests you can run in two minutes to confirm 2FACounter keeps your 2FA secret on your device: network tab, offline mode, source code, headers, installed app.';
+  'Five tests you can run in about ten minutes to confirm 2FACounter keeps your 2FA secret on your device: network tab, offline mode, source code, headers, installed app.';
+
+const sources = [
+  {
+    label: 'Source repository — src/scripts/generator.ts (AGPL-3.0-or-later)',
+    href: 'https://github.com/web3error404/2facounter.com/blob/master/src/scripts/generator.ts',
+    kind: 'official' as const,
+  },
+  {
+    label: 'RFC 6238 — TOTP: Time-Based One-Time Password Algorithm',
+    href: 'https://www.rfc-editor.org/rfc/rfc6238',
+    kind: 'independent' as const,
+  },
+  {
+    label: 'W3C — Web Cryptography API',
+    href: 'https://www.w3.org/TR/WebCryptoAPI/',
+    kind: 'independent' as const,
+  },
+  {
+    label: 'MDN — Content-Security-Policy: connect-src',
+    href: 'https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Content-Security-Policy/connect-src',
+    kind: 'independent' as const,
+  },
+];
 
 const faq = [
   {
@@ -34,6 +59,8 @@ const jsonLd = [
     description,
     url: 'https://2facounter.com/verify/',
     isPartOf: { '@type': 'WebSite', name: '2FA COUNTER', url: 'https://2facounter.com/' },
+    dateModified: '2026-11-23',
+    citation: sources.map((s) => s.href),
     about: {
       '@type': 'WebApplication',
       name: '2FA COUNTER',
@@ -70,11 +97,18 @@ const jsonLd = [
         Don't take our word for it
       </h1>
 
+      <p class="mt-6 max-w-2xl font-mono text-[13px] text-ink/90">
+        Every test below was run against the live site and the public source · last reviewed 23
+        November 2026 · <a href="/methodology/" class="link">how we review</a>
+      </p>
+      <ReviewByline />
+      <SourcesList sources={sources} />
+
       <div class="rich-text mt-12">
         <p>
           Every browser-based 2FA tool says the same sentence: <em>your key never leaves this
           device.</em> The sentence costs nothing to write. Rarely is anything offered to check it.
-          This page is the check — five tests, about two minutes each, no special tools beyond the
+          This page is the check — five tests, two minutes each, no special tools beyond the
           developer panel already built into your browser.
         </p>
         <p>
