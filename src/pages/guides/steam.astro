@@ -13,6 +13,9 @@ const description =
   path="/guides/steam/"
   dateModified="2026-11-09"
   datePublished="2026-11-09"
+  lastReviewed="2026-11-09"
+  reviewedPrefix="UI wording and navigation"
+  reviewedClaim="partially verified — Valve’s help-centre bodies are client-rendered; the code format is corroborated independently"
   intro="Steam Guard is the honest exception: Steam login codes use Valve’s own 5-character TOTP variant that no standards-based generator — including this one — reproduces. Here is what actually works for Steam and what does not, so you don’t rely on a backup that silently fails."
   minutes={5}
   minutesSuffix="min · official app required"
@@ -24,7 +27,7 @@ const description =
     blocks: [
       {
         title: 'A different encoding on top of the same math',
-        body: 'Steam login codes are 5 characters (letters A–Z plus digits 2–9) instead of 6 digits, because Valve runs its own alphabet and character mapping over the RFC 6238 HMAC output. A standards-based generator literally cannot produce that string — which is exactly why this guide points you at Steam Guard itself instead of pretending a pasted secret will yield valid login codes. Beware of any tool that claims otherwise; it isn’t telling the truth.',
+        body: 'Steam login codes are 5 characters instead of 6 digits, because Valve maps the RFC 6238 HMAC output onto its own 26-character set — digits 2–9 plus the consonants, with no vowels and no 0 or 1. A standard TOTP generator cannot produce that string from the same secret, which is why this guide points you at Steam Guard itself instead of pretending a pasted secret yields valid login codes. Steam-aware third-party tools do exist and can generate the login codes if you import the secret — but they cannot handle trade and market confirmations, which stay inside Valve’s app.',
       },
       {
         title: 'The trading restrictions on fresh enrollments',
@@ -43,7 +46,7 @@ const description =
     },
     {
       title: 'Add the authenticator',
-      body: 'Open the Steam Guard tab and choose "Add authenticator". Steam login codes come from Valve’s TOTP variant (5 characters, its own alphabet on top of RFC 6238) — the official Steam mobile app is the only tool that produces them. It also handles trade and market confirmations, which no third-party tool can.',
+      body: 'Open the Steam Guard tab and choose "Add authenticator". Steam login codes come from Valve’s TOTP variant (5 characters from its own 26-character set, on top of RFC 6238) — the official app is the only one that also handles trade and market confirmations, which no third-party tool can.',
     },
     {
       title: 'Confirm and save the recovery code',
@@ -65,7 +68,7 @@ const description =
     },
     {
       q: 'Why are Steam codes 5 characters instead of 6 digits?',
-      a: 'Steam runs its own alphabet (A–Z + 2–9) on top of TOTP. This generator implements the standard RFC 6238 alphabet, so its output will not match Steam’s login strings — and no tool that claims otherwise is telling the truth. Use the Steam Guard app for logins.',
+      a: 'Steam maps the RFC 6238 output onto its own 26-character set (digits 2–9 plus consonants, no vowels) and prints 5 characters instead of 6 digits. This generator implements the standard alphabet, so its output will not match Steam’s login strings. Use the official app for logins and confirmations.',
     },
     {
       q: 'I shouldn’t ever use a QR code someone sent me in chat, right?',
