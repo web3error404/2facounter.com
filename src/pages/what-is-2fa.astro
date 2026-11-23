@@ -27,6 +27,11 @@ const sources = [
     kind: 'independent' as const,
   },
   {
+    label: 'Directive (EU) 2015/2366 (PSD2) — Article 97, strong customer authentication',
+    href: 'https://eur-lex.europa.eu/eli/dir/2015/2366/oj',
+    kind: 'independent' as const,
+  },
+  {
     label: 'GitHub Docs — About mandatory two-factor authentication',
     href: 'https://docs.github.com/en/authentication/securing-your-account-with-two-factor-authentication-2fa/about-mandatory-two-factor-authentication',
     kind: 'official' as const,
@@ -110,7 +115,7 @@ const faqs = [
   },
   {
     q: 'Why does everything use 2FA now?',
-    a: 'Because the password-only era failed. Mass breaches exposed billions of credentials, credential-stuffing attacks got automated and cheap, and platforms now carry the cost of hijacked accounts. Regulators pushed too: NIST\'s US standards formally restrict SMS-based authentication (SP 800-63B classifies SMS out-of-band codes as "RESTRICTED"), and the EU\'s PSD2 rules require strong customer authentication. Once a few giants made 2FA normal, every other service followed.',
+    a: 'Because the password-only era failed. Mass breaches exposed billions of credentials, credential-stuffing attacks got automated and cheap, and platforms now carry the cost of hijacked accounts. Regulators pushed too: NIST\'s US standards formally restrict SMS-based authentication (SP 800-63B classifies SMS out-of-band codes as "RESTRICTED"), and the EU\'s PSD2 rules require strong customer authentication for electronic payments. Once a few giants made 2FA normal, every other service followed.',
   },
   {
     q: 'What is the difference between TOTP, HOTP, and OTP?',
@@ -199,8 +204,8 @@ const jsonLd = [
 
       <ReviewByline />
       <p class="mt-6 max-w-2xl font-mono text-[13px] text-ink/90">
-        Claims checked against the TOTP and HOTP RFCs, NIST SP 800-63B and GitHub's own 2FA
-        documentation · last reviewed 23 November 2026 ·{' '}
+        Claims checked against the TOTP and HOTP RFCs, NIST SP 800-63B, the EU's PSD2
+        directive and GitHub's own 2FA documentation · last reviewed 23 November 2026 ·{' '}
         <a href="/methodology/" class="link">how we review</a>
       </p>
       <SourcesList sources={sources} />

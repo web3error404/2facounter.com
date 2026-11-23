@@ -53,7 +53,7 @@ const faqs = [
   },
   {
     q: 'Pourquoi tout le monde utilise-t-il désormais la 2FA ?',
-    a: 'Parce que l’ère du mot de passe seul s’est effondrée. Des fuites massives ont exposé des milliards d’identifiants, les attaques par credential stuffing sont devenues automatisées et bon marché, et les plateformes en avaient assez de payer les conséquences des comptes détournés. Les régulateurs ont suivi : le NIST a déconseillé l’authentification par SMS dans ses normes américaines, et les règles PSD2 de l’UE exigent une authentification forte du client. Une fois que quelques géants ont banalisé la 2FA, tous les autres services ont emboîté le pas.',
+    a: 'Parce que l’ère du mot de passe seul s’est effondrée. Des fuites massives ont exposé des milliards d’identifiants, les attaques par credential stuffing sont devenues automatisées et bon marché, et les plateformes en avaient assez de payer les conséquences des comptes détournés. Les régulateurs ont suivi : le NIST SP 800-63B classe le SMS comme « restreint », et les règles PSD2 de l’UE exigent une authentification forte du client pour les paiements électroniques. Une fois que quelques géants ont banalisé la 2FA, tous les autres services ont emboîté le pas.',
   },
   {
     q: 'Quelle est la différence entre TOTP, HOTP et OTP ?',
@@ -61,7 +61,7 @@ const faqs = [
   },
   {
     q: 'Pourquoi le TOTP est-il préférable à la 2FA par SMS ?',
-    a: 'Les codes SMS circulent sur le réseau téléphonique, où ils peuvent être interceptés ou volés à la faveur d’un SIM swap — et la livraison des SMS peut tout simplement échouer. Les codes TOTP sont calculés sur votre appareil, jamais transmis, et expirent en quelques secondes. Plusieurs autorités en sécurité, dont le NIST, ont déconseillé le SMS pour l’authentification.',
+    a: 'Les codes SMS circulent sur le réseau téléphonique, où ils peuvent être interceptés ou volés à la faveur d’un SIM swap — et la livraison des SMS peut tout simplement échouer. Les codes TOTP sont calculés sur votre appareil, jamais transmis, et expirent en quelques secondes. Le NIST SP 800-63B classe le SMS comme « restreint », et non comme équivalent à une application d’authentification.',
   },
   {
     q: 'Un site de hameçonnage peut-il voler les codes TOTP ?',
@@ -92,6 +92,11 @@ const sources = [
   {
     label: 'NIST SP 800-63B — Digital Identity Guidelines: Authentication and Lifecycle Management',
     href: 'https://pages.nist.gov/800-63-4/sp800-63b.html',
+    kind: 'independent' as const,
+  },
+  {
+    label: 'Directive (EU) 2015/2366 (PSD2) — Article 97, strong customer authentication',
+    href: 'https://eur-lex.europa.eu/eli/dir/2015/2366/oj',
     kind: 'independent' as const,
   },
   {
@@ -315,7 +320,7 @@ otpauth://hotp/Example:you%40example.com?secret=...&amp;counter=5   ← variante
 
         <h2 id="sms">TOTP, SMS ou clés matérielles ?</h2>
         <ul>
-          <li><strong>Les codes SMS</strong> transitent par le réseau télécom. Une attaque par SIM swap permet à un adversaire de détourner votre numéro et de recevoir tous les codes. Le SMS est déconseillé pour l’authentification dans les normes américaines (NIST SP 800-63B).</li>
+          <li><strong>Les codes SMS</strong> transitent par le réseau télécom. Une attaque par SIM swap permet à un adversaire de détourner votre numéro et de recevoir tous les codes. Le NIST SP 800-63B ne range le SMS que dans une catégorie : « restreint » (restricted) — acceptable seulement si le service évalue et atténue le risque.</li>
           <li><strong>Le TOTP</strong> ne transmet rien — le code est calculé localement et expire au bout de 30 secondes. Gratuit, fondé sur les standards, et accepté partout. Son maillon faible : il peut être hameçonné pendant sa fenêtre de validité.</li>
           <li><strong>Les clés de sécurité et les passkeys</strong> (WebAuthn/FIDO2) sont liées cryptographiquement au domaine <em>exact</em>, si bien que les fausses pages imitations échouent automatiquement. L’option la plus solide ; moins répandue et coûte une clé.</li>
         </ul>

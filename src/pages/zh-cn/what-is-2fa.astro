@@ -52,7 +52,7 @@ const faqs = [
   },
   {
     q: '为什么现在到处都要 2FA？',
-    a: '因为只用密码的时代彻底失败了。大规模泄露把数十亿凭据晒在明处，撞库攻击被自动化到几乎零成本，平台也开始为被劫持的账户买单。监管同样在推：美国国家标准 NIST 已将短信认证降级为不推荐，欧盟 PSD2 规则要求强客户认证。几家巨头把 2FA 变成常态后，其余服务跟进是自然潮流。',
+    a: '因为只用密码的时代彻底失败了。大规模泄露把数十亿凭据晒在明处，撞库攻击被自动化到几乎零成本，平台也开始为被劫持的账户买单。监管同样在推：NIST SP 800-63B 把短信列为「受限」，欧盟 PSD2 则要求电子支付使用强客户认证。几家巨头把 2FA 变成常态后，其余服务跟进是自然潮流。',
   },
   {
     q: 'TOTP、HOTP 和 OTP 有什么区别？',
@@ -60,7 +60,7 @@ const faqs = [
   },
   {
     q: '为什么 TOTP 比短信 2FA 好？',
-    a: '短信验证码经过电话网络传输，可能被拦截或通过 SIM 卡劫持窃取——而且短信本身就可能送不到。TOTP 验证码在你的设备上计算，从不外发，几秒内过期。包括 NIST 在内的安全机构已不再推荐把短信用于认证。',
+    a: '短信验证码经过电话网络传输，可能被拦截或通过 SIM 卡劫持窃取——而且短信本身就可能送不到。TOTP 验证码在你的设备上计算，从不外发，几秒内过期。NIST SP 800-63B 把短信列为「受限」，并不视同认证器应用。',
   },
   {
     q: 'TOTP 验证码会被钓鱼网站偷走吗？',
@@ -91,6 +91,11 @@ const sources = [
   {
     label: 'NIST SP 800-63B — Digital Identity Guidelines: Authentication and Lifecycle Management',
     href: 'https://pages.nist.gov/800-63-4/sp800-63b.html',
+    kind: 'independent' as const,
+  },
+  {
+    label: 'Directive (EU) 2015/2366 (PSD2) — Article 97, strong customer authentication',
+    href: 'https://eur-lex.europa.eu/eli/dir/2015/2366/oj',
     kind: 'independent' as const,
   },
   {
@@ -279,7 +284,7 @@ const alternates = [
         <h2 id="base32">密钥与二维码</h2>
         <p>
           Base32 字符串并不是什么中间格式——它就是密钥的原始字节，用一套对手机友好的字母表
-          （A–Z 加 2–7，刻意排除容易混淆的 0/1，在任何键盘上都安全）编码而成。当平台给出
+          （A–Z 加 2–7，同時避開容易混淆的 0/1，在任何键盘上都安全）编码而成。当平台给出
           “无法扫码？”选项时，显示的字符串里装着二维码所编码的<em>同一份私密材料</em>。
           两种形式存哪个都行；语义完全相同：
         </p>
@@ -294,7 +299,7 @@ otpauth://hotp/Example:you%40example.com?secret=...&amp;counter=5   ← 基于�
 
         <h2 id="sms">TOTP vs. 短信 vs. 硬件密钥</h2>
         <ul>
-          <li><strong>短信验证码</strong>横穿电信网络。SIM 卡劫持攻击能让对手夺走你的号码、收走每一条验证码。美国标准（NIST SP 800-63B）已经不再推荐用短信做认证。</li>
+          <li><strong>短信验证码</strong>横穿电信网络。SIM 卡劫持攻击能让对手夺走你的号码、收走每一条验证码。NIST SP 800-63B 对短信只给一个等级：「受限」（restricted），只有在服务方评估并缓解风险后才可接受。</li>
           <li><strong>TOTP</strong> 不发送任何东西——验证码在本地计算，30 秒即作废。免费、有标准背书、到处都支持。薄弱环节：在有效期窗口内可能被钓走。</li>
           <li><strong>安全密钥与通行密钥</strong>（WebAuthn/FIDO2）与<em>精确的</em>域名加密绑定，仿冒的相似网站自动失效。最强选项；支持范围较小，且要花钱买密钥。</li>
         </ul>

@@ -52,7 +52,7 @@ const faqs = [
   },
   {
     q: '為什麼現在到處都要 2FA？',
-    a: '因為只用密碼的年代徹底失敗了。大規模外洩把數十億組憑證攤在明處，撞庫攻擊被自動化到幾乎零成本，平台也開始為被劫持的帳戶買單。監管同樣在推：美國標準 NIST 已將簡訊驗證列為不建議，歐盟 PSD2 規則要求強客戶認證。幾家龍頭把 2FA 變成常態後，其他服務跟進是自然潮流。',
+    a: '因為只用密碼的年代徹底失敗了。大規模外洩把數十億組憑證攤在明處，撞庫攻擊被自動化到幾乎零成本，平台也開始為被劫持的帳戶買單。監管同樣在推：NIST SP 800-63B 把簡訊列為「受限」，歐盟 PSD2 則要求電子支付使用強客戶認證。幾家龍頭把 2FA 變成常態後，其他服務跟進是自然潮流。',
   },
   {
     q: 'TOTP、HOTP 和 OTP 有什麼差別？',
@@ -60,7 +60,7 @@ const faqs = [
   },
   {
     q: '為什麼 TOTP 比簡訊 2FA 好？',
-    a: '簡訊驗證碼經過電信網路傳送，可能被攔截或透過 SIM 卡劫持竊取——而且簡訊本身就可能送不達。TOTP 驗證碼在你的裝置上計算，從不外傳，幾秒內過期。包括 NIST 在內的安全機構已不再建議以簡訊作為驗證方式。',
+    a: '簡訊驗證碼經過電信網路傳送，可能被攔截或透過 SIM 卡劫持竊取——而且簡訊本身就可能送不達。TOTP 驗證碼在你的裝置上計算，從不外傳，幾秒內過期。NIST SP 800-63B 把簡訊列為「受限」，並不視同驗證器應用程式。',
   },
   {
     q: 'TOTP 驗證碼會被釣魚網站偷走嗎？',
@@ -91,6 +91,11 @@ const sources = [
   {
     label: 'NIST SP 800-63B — Digital Identity Guidelines: Authentication and Lifecycle Management',
     href: 'https://pages.nist.gov/800-63-4/sp800-63b.html',
+    kind: 'independent' as const,
+  },
+  {
+    label: 'Directive (EU) 2015/2366 (PSD2) — Article 97, strong customer authentication',
+    href: 'https://eur-lex.europa.eu/eli/dir/2015/2366/oj',
     kind: 'independent' as const,
   },
   {
@@ -279,7 +284,7 @@ const alternates = [
         <h2 id="base32">密鑰與 QR 碼</h2>
         <p>
           Base32 字串並不是什麼中間格式——它就是密鑰的原始位元組，用一套對手機友善的字母表
-          （A–Z 加 2–7，刻意排除容易混淆的 0/1，在任何鍵盤上都安全）編碼而成。當平台給出
+          （A–Z 加 2–7，同時避開容易混淆的 0/1，在任何鍵盤上都安全）編碼而成。當平台給出
           「無法掃描？」的選項時，顯示的字串裝著 QR 碼所編碼的<em>同一份私密資料</em>。
           存哪種形式都行；語義完全相同：
         </p>
@@ -294,7 +299,7 @@ otpauth://hotp/Example:you%40example.com?secret=...&amp;counter=5   ← 基於�
 
         <h2 id="sms">TOTP vs. 簡訊 vs. 硬體金鑰</h2>
         <ul>
-          <li><strong>簡訊驗證碼</strong>橫越電信網路。SIM 卡劫持攻擊能讓對手奪走你的門號、收走每一組驗證碼。美國標準（NIST SP 800-63B）已不再建議以簡訊做驗證。</li>
+          <li><strong>簡訊驗證碼</strong>橫越電信網路。SIM 卡劫持攻擊能讓對手奪走你的門號、收走每一組驗證碼。NIST SP 800-63B 對簡訊只給一個等級：「受限」（restricted），只有在服務方評估並緩解風險後才可接受。</li>
           <li><strong>TOTP</strong> 不傳送任何東西——驗證碼在本地計算，30 秒即作廢。免費、有標準背書、處處支援。薄弱環節：在效期窗口內可能被釣走。</li>
           <li><strong>安全金鑰與通行金鑰</strong>（WebAuthn/FIDO2）與<em>精確的</em>網域加密綁定，仿冒的相似網站自動失效。最強選項；支援範圍較小，且要花錢買金鑰。</li>
         </ul>

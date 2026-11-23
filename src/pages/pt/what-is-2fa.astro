@@ -53,7 +53,7 @@ const faqs = [
   },
   {
     q: 'Por que tudo usa 2FA agora?',
-    a: 'Porque a era da senha pura falhou. Vazamentos em massa expuseram bilhões de credenciais, os ataques de credential stuffing se tornaram automatizados e baratos, e as plataformas passaram a arcar com o custo das contas sequestradas. Os reguladores também entraram em cena: o NIST descartou a autenticação por SMS nas normas dos EUA, e as regras PSD2 da UE exigem autenticação forte do cliente. Depois que alguns gigantes normalizaram a 2FA, todos os demais serviços seguiram o exemplo.',
+    a: 'Porque a era da senha pura falhou. Vazamentos em massa expuseram bilhões de credenciais, os ataques de credential stuffing se tornaram automatizados e baratos, e as plataformas passaram a arcar com o custo das contas sequestradas. Os reguladores também entraram em cena: a NIST SP 800-63B classifica o SMS como «restrito», e as regras PSD2 da UE exigem autenticação forte do cliente nos pagamentos eletrónicos. Depois que alguns gigantes normalizaram a 2FA, todos os demais serviços seguiram o exemplo.',
   },
   {
     q: 'Qual é a diferença entre TOTP, HOTP e OTP?',
@@ -61,7 +61,7 @@ const faqs = [
   },
   {
     q: 'Por que o TOTP é melhor que a 2FA por SMS?',
-    a: 'Os códigos por SMS trafegam pela rede telefônica, onde podem ser interceptados ou furtados por ataques de troca de SIM — e a entrega de SMS simplesmente pode falhar. Os códigos TOTP são calculados no seu dispositivo, nunca transmitidos e expiram em segundos. Órgãos de segurança, incluindo o NIST, descartaram o SMS para autenticação.',
+    a: 'Os códigos por SMS trafegam pela rede telefônica, onde podem ser interceptados ou furtados por ataques de troca de SIM — e a entrega de SMS simplesmente pode falhar. Os códigos TOTP são calculados no seu dispositivo, nunca transmitidos e expiram em segundos. A NIST SP 800-63B classifica o SMS como «restrito», não como equivalente a um app autenticador.',
   },
   {
     q: 'Um site de phishing pode roubar códigos TOTP?',
@@ -115,6 +115,11 @@ const sources = [
   {
     label: 'NIST SP 800-63B — Digital Identity Guidelines: Authentication and Lifecycle Management',
     href: 'https://pages.nist.gov/800-63-4/sp800-63b.html',
+    kind: 'independent' as const,
+  },
+  {
+    label: 'Directive (EU) 2015/2366 (PSD2) — Article 97, strong customer authentication',
+    href: 'https://eur-lex.europa.eu/eli/dir/2015/2366/oj',
     kind: 'independent' as const,
   },
   {
@@ -292,7 +297,7 @@ const jsonLd = [
         <h2 id="base32">O segredo e o QR Code</h2>
         <p>
           A string Base32 não é um formato intermediário qualquer — são os bytes puros do segredo
-          codificados em um alfabeto amigável para telefones (A–Z mais 2–7, excluindo de propósito
+          codificados em um alfabeto amigável para telefones (A–Z mais 2–7, excluindo também
           0/1, que se confundem facilmente, e seguro em qualquer teclado). Quando uma plataforma
           oferece “não consegue escanear?”, a string resultante contém o <em>mesmo material
           privado</em> que o QR codifica. Você pode guardar qualquer uma das formas; a semântica é
@@ -310,7 +315,7 @@ otpauth://hotp/Example:you%40example.com?secret=...&amp;counter=5   ← variante
 
         <h2 id="sms">TOTP vs. SMS vs. chaves físicas</h2>
         <ul>
-          <li><strong>Códigos por SMS</strong> viajam pela rede de telecomunicações. Ataques de troca de SIM permitem a um adversário sequestrar o seu número de telefone e receber todos os códigos. O SMS está descartado para autenticação pelas normas dos EUA (NIST SP 800-63B).</li>
+          <li><strong>Códigos por SMS</strong> viajam pela rede de telecomunicações. Ataques de troca de SIM permitem a um adversário sequestrar o seu número de telefone e receber todos os códigos. A NIST SP 800-63B só tem uma categoria para o SMS: «restrito» (restricted), aceitável apenas se o serviço avaliar e mitigar o risco.</li>
           <li><strong>TOTP</strong> nunca transmite nada — o código é calculado localmente e expira em 30 segundos. Gratuito, baseado em normas e aceito em toda parte. Elo mais fraco: pode ser furtado por phishing dentro da sua janela de validade.</li>
           <li><strong>Chaves físicas e passkeys</strong> (WebAuthn/FIDO2) são vinculadas criptograficamente ao domínio <em>exato</em>, então páginas falsas parecidas falham automaticamente. A opção mais forte; tem suporte menos difundido e custa uma chave.</li>
         </ul>

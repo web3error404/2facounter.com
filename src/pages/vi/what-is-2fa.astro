@@ -52,7 +52,7 @@ const faqs = [
   },
   {
     q: 'Vì sao giờ đâu cũng dùng 2FA?',
-    a: 'Vì thời kỳ chỉ có mật khẩu đã thất bại. Các vụ rò rỉ hàng loạt công khai hàng tỷ thông tin đăng nhập, các tấn công credential stuffing được tự động hóa và trở nên rẻ mạt, và giờ chính các nền tảng phải gánh chi phí của tài khoản bị chiếm đoạt. Các cơ quan quản lý cũng thúc ép: NIST đã loại SMS khỏi chuẩn xác thực của Mỹ, và luật PSD2 của EU yêu cầu xác thực khách hàng mạnh. Khi vài gã khổng lồ biến 2FA thành chuyện bình thường, mọi dịch vụ khác nối gót là tự nhiên.',
+    a: 'Vì thời kỳ chỉ có mật khẩu đã thất bại. Các vụ rò rỉ hàng loạt công khai hàng tỷ thông tin đăng nhập, các tấn công credential stuffing được tự động hóa và trở nên rẻ mạt, và giờ chính các nền tảng phải gánh chi phí của tài khoản bị chiếm đoạt. Các cơ quan quản lý cũng thúc ép: NIST SP 800-63B xếp SMS vào nhóm «bị hạn chế», và luật PSD2 của EU yêu cầu xác thực khách hàng mạnh với thanh toán điện tử. Khi vài gã khổng lồ biến 2FA thành chuyện bình thường, mọi dịch vụ khác nối gót là tự nhiên.',
   },
   {
     q: 'TOTP, HOTP và OTP khác nhau thế nào?',
@@ -60,7 +60,7 @@ const faqs = [
   },
   {
     q: 'Vì sao TOTP tốt hơn SMS 2FA?',
-    a: 'Mã SMS đi qua mạng viễn thông, nơi nó có thể bị đánh chặn hay đánh cắp bằng tấn công SIM swap — và đôi khi SMS đơn giản là không tới. Mã TOTP được tính ngay trên thiết bị của bạn, không bao giờ gửi đi đâu, và hết hạn trong vài giây. Các cơ quan bảo mật, trong đó có NIST, đã không còn khuyến nghị SMS làm phương thức xác thực.',
+    a: 'Mã SMS đi qua mạng viễn thông, nơi nó có thể bị đánh chặn hay đánh cắp bằng tấn công SIM swap — và đôi khi SMS đơn giản là không tới. Mã TOTP được tính ngay trên thiết bị của bạn, không bao giờ gửi đi đâu, và hết hạn trong vài giây. NIST SP 800-63B xếp SMS vào nhóm «bị hạn chế», không coi là tương đương với ứng dụng xác thực.',
   },
   {
     q: 'Mã TOTP có thể bị đánh cắp bởi trang lừa đảo không?',
@@ -91,6 +91,11 @@ const sources = [
   {
     label: 'NIST SP 800-63B — Digital Identity Guidelines: Authentication and Lifecycle Management',
     href: 'https://pages.nist.gov/800-63-4/sp800-63b.html',
+    kind: 'independent' as const,
+  },
+  {
+    label: 'Directive (EU) 2015/2366 (PSD2) — Article 97, strong customer authentication',
+    href: 'https://eur-lex.europa.eu/eli/dir/2015/2366/oj',
     kind: 'independent' as const,
   },
   {
@@ -285,7 +290,7 @@ const alternates = [
         <h2 id="base32">Khóa bí mật và mã QR</h2>
         <p>
           Chuỗi Base32 không phải định dạng trung gian nào đó — nó chính là các byte thô của khóa
-          bí mật, mã hóa bằng một bộ chữ thân thiện với bàn phím (A–Z cộng 2–7, cố ý loại bỏ 0/1
+          bí mật, mã hóa bằng một bộ chữ thân thiện với bàn phím (A–Z cộng 2–7, đồng thời tránh 0/1
           vì dễ nhầm, và an toàn trên mọi bàn phím). Khi một nền tảng đưa ra lựa chọn “không thể
           quét?”, chuỗi bạn nhận được chứa <em>đúng dữ liệu riêng tư</em> mà mã QR mã hóa. Lưu
           dạng nào cũng được; ý nghĩa là như nhau:
@@ -301,7 +306,7 @@ otpauth://hotp/Example:you%40example.com?secret=...&amp;counter=5   ← biến t
 
         <h2 id="sms">TOTP vs. SMS vs. khóa phần cứng</h2>
         <ul>
-          <li><strong>Mã SMS</strong> đi ngang qua mạng viễn thông. Tấn công SIM swap cho phép kẻ tấn công chiếm đoạt số điện thoại và nhận mọi mã. SMS đã bị loại khỏi chuẩn xác thực của Mỹ (NIST SP 800-63B).</li>
+          <li><strong>Mã SMS</strong> đi ngang qua mạng viễn thông. Tấn công SIM swap cho phép kẻ tấn công chiếm đoạt số điện thoại và nhận mọi mã. NIST SP 800-63B chỉ xếp SMS vào một nhóm: «bị hạn chế» (restricted) — chỉ chấp nhận nếu dịch vụ đánh giá và giảm thiểu rủi ro.</li>
           <li><strong>TOTP</strong> không truyền đi một thứ gì — mã được tính ngay tại máy và hết hạn sau 30 giây. Miễn phí, dựa trên chuẩn, được hỗ trợ ở khắp nơi. Điểm yếu duy nhất: mã có thể bị lừa trong cửa sổ hiệu lực của nó.</li>
           <li><strong>Khóa bảo mật và passkey</strong> (WebAuthn/FIDO2) gắn chặt bằng mật mã với <em>đúng</em> tên miền, nên trang giả mạo tự động thất bại. Lựa chọn mạnh nhất; nhưng ít được hỗ trợ hơn và tốn tiền mua khóa.</li>
         </ul>

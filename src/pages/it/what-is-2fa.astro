@@ -54,7 +54,7 @@ const faqs = [
   },
   {
     q: 'Perché ormai tutti usano la 2FA?',
-    a: 'Perché l’era della sola password è crollata. I breach industriali hanno esposto miliardi di credenziali, il credential stuffing automatizzato ha reso il dirottamento degli account quasi gratis, e le piattaforme si sono stancate di pagare le conseguenze. A ciò si sono aggiunti i regolatori: il NIST ha deprecato l’autenticazione via SMS negli standard statunitensi, e la PSD2 dell’Unione europea richiede l’autenticazione forte del cliente. Dopo che pochi giganti hanno normalizzato la 2FA, tutti gli altri servizi hanno seguito.',
+    a: 'Perché l’era della sola password è crollata. I breach industriali hanno esposto miliardi di credenziali, il credential stuffing automatizzato ha reso il dirottamento degli account quasi gratis, e le piattaforme si sono stancate di pagare le conseguenze. A ciò si sono aggiunti i regolatori: il NIST SP 800-63B classifica gli SMS come «con restrizioni», e la PSD2 dell’Unione europea richiede l’autenticazione forte del cliente per i pagamenti elettronici. Dopo che pochi giganti hanno normalizzato la 2FA, tutti gli altri servizi hanno seguito.',
   },
   {
     q: 'Qual è la differenza tra TOTP, HOTP e OTP?',
@@ -62,7 +62,7 @@ const faqs = [
   },
   {
     q: 'Perché il TOTP è meglio della 2FA via SMS?',
-    a: 'I codici SMS viaggiano sulla rete telefonica, dove possono essere intercettati o rubati con gli attacchi SIM swap — e può semplicemente capitare che l’SMS non arrivi. I codici TOTP vengono calcolati sul tuo dispositivo, non vengono mai trasmessi e scadono nel giro di pochi secondi. Autorità come il NIST hanno deprecato gli SMS per l’autenticazione.',
+    a: 'I codici SMS viaggiano sulla rete telefonica, dove possono essere intercettati o rubati con gli attacchi SIM swap — e può semplicemente capitare che l’SMS non arrivi. I codici TOTP vengono calcolati sul tuo dispositivo, non vengono mai trasmessi e scadono nel giro di pochi secondi. Il NIST SP 800-63B classifica gli SMS come «con restrizioni», non come equivalenti a un’app di autenticazione.',
   },
   {
     q: 'Un sito di phishing può rubare i codici TOTP?',
@@ -93,6 +93,11 @@ const sources = [
   {
     label: 'NIST SP 800-63B — Digital Identity Guidelines: Authentication and Lifecycle Management',
     href: 'https://pages.nist.gov/800-63-4/sp800-63b.html',
+    kind: 'independent' as const,
+  },
+  {
+    label: 'Directive (EU) 2015/2366 (PSD2) — Article 97, strong customer authentication',
+    href: 'https://eur-lex.europa.eu/eli/dir/2015/2366/oj',
     kind: 'independent' as const,
   },
   {
@@ -296,8 +301,8 @@ const alternates = [
         <h2 id="base32">Il segreto e il codice QR</h2>
         <p>
           La stringa Base32 non è un formato intermedio qualsiasi: sono i byte grezzi del
-          segreto codificati in un alfabeto adatto alle tastiere (A–Z più 2–7, escludendo di
-          proposito 0 e 1, che si confondono facilmente, e sicuro su qualsiasi tastiera). Quando
+          segreto codificati in un alfabeto adatto alle tastiere (A–Z più 2–7, escludendo anche
+          0 e 1, che si confondono facilmente, e sicuro su qualsiasi tastiera). Quando
           una piattaforma offre il link “non riesci a scansionare?”, la stringa risultante contiene le
           <em>stesse informazioni private</em> del codice QR. Puoi conservare una delle due
           forme: il significato è identico:
@@ -314,7 +319,7 @@ otpauth://hotp/Example:you%40example.com?secret=...&amp;counter=5   ← counter-
 
         <h2 id="sms">TOTP contro SMS contro chiavi hardware</h2>
         <ul>
-          <li><strong>I codici SMS</strong> viaggiano sulla rete delle telecomunicazioni. Con gli attacchi SIM swap un malintenzionato dirotta il tuo numero di telefono e riceve ogni codice al posto tuo. L’SMS è deprecato negli standard statunitensi (NIST SP 800-63B) per l’autenticazione.</li>
+          <li><strong>I codici SMS</strong> viaggiano sulla rete delle telecomunicazioni. Con gli attacchi SIM swap un malintenzionato dirotta il tuo numero di telefono e riceve ogni codice al posto tuo. Il NIST SP 800-63B colloca gli SMS in un’unica categoria: «con restrizioni» (restricted), ammessi solo se il servizio valuta e mitiga il rischio.</li>
           <li><strong>Il TOTP</strong> non trasmette nulla — il codice viene calcolato in locale e scade dopo 30 secondi. Gratuito, basato su standard e supportato ovunque. Anello debole: può essere pescato con il phishing entro la sua finestra di validità.</li>
           <li><strong>Le chiavi di sicurezza e le passkey</strong> (WebAuthn/FIDO2) sono vincolate crittograficamente al dominio <em>esatto</em>, quindi le pagine finte somiglianti falliscono automaticamente. L’opzione più forte; supporto meno diffuso e costa una chiave.</li>
         </ul>

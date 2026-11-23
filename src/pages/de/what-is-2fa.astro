@@ -53,7 +53,7 @@ const faqs = [
   },
   {
     q: 'Warum setzt heute alles auf 2FA?',
-    a: 'Weil die Ära des reinen Passworts zusammengebrochen ist. Massenhafte Datenlecks legten Milliarden Zugangsdaten offen, Credential-Stuffing-Angriffe wurden automatisiert und billig, und die Plattformen trugen die Kosten für gekaperte Konten. Die Regulierung zog nach: NIST stufte SMS-Authentifizierung in seinen US-Standards ab, und die EU-Richtlinie PSD2 verlangt starke Kundenauthentifizierung. Nachdem wenige Giganten 2FA normalisiert haben, zog jeder weitere Dienst nach.',
+    a: 'Weil die Ära des reinen Passworts zusammengebrochen ist. Massenhafte Datenlecks legten Milliarden Zugangsdaten offen, Credential-Stuffing-Angriffe wurden automatisiert und billig, und die Plattformen trugen die Kosten für gekaperte Konten. Die Regulierung zog nach: NIST SP 800-63B führt SMS als „eingeschränkt“, und die EU-Richtlinie PSD2 verlangt starke Kundenauthentifizierung für elektronische Zahlungen. Nachdem wenige Giganten 2FA normalisiert haben, zog jeder weitere Dienst nach.',
   },
   {
     q: 'Was ist der Unterschied zwischen TOTP, HOTP und OTP?',
@@ -61,7 +61,7 @@ const faqs = [
   },
   {
     q: 'Warum ist TOTP besser als SMS-2FA?',
-    a: 'SMS-Codes laufen über das Mobilfunknetz, wo sie abgefangen oder durch SIM-Swap-Angriffe gestohlen werden können — und die SMS-Zustellung kann schlicht fehlschlagen. TOTP-Codes werden auf Ihrem Gerät berechnet, niemals übertragen und laufen nach Sekunden aus. Sicherheitsbehörden einschließlich NIST haben SMS für die Authentifizierung abgestuft.',
+    a: 'SMS-Codes laufen über das Mobilfunknetz, wo sie abgefangen oder durch SIM-Swap-Angriffe gestohlen werden können — und die SMS-Zustellung kann schlicht fehlschlagen. TOTP-Codes werden auf Ihrem Gerät berechnet, niemals übertragen und laufen nach Sekunden aus. NIST SP 800-63B führt SMS als „eingeschränkt“ und nicht als gleichwertig zu einer Authenticator-App.',
   },
   {
     q: 'Kann ein TOTP-Code von einer Phishing-Seite gestohlen werden?',
@@ -92,6 +92,11 @@ const sources = [
   {
     label: 'NIST SP 800-63B — Digital Identity Guidelines: Authentication and Lifecycle Management',
     href: 'https://pages.nist.gov/800-63-4/sp800-63b.html',
+    kind: 'independent' as const,
+  },
+  {
+    label: 'Directive (EU) 2015/2366 (PSD2) — Article 97, strong customer authentication',
+    href: 'https://eur-lex.europa.eu/eli/dir/2015/2366/oj',
     kind: 'independent' as const,
   },
   {
@@ -231,7 +236,7 @@ const alternates = [
         <p>
           Die meisten großen Dienste bieten 2FA heute an oder verlangen sie: GitHub erzwingt sie
           seit 2023, Krypto-Börsen (Binance, Coinbase, Kraken) empfehlen sie schon bei der
-          Registrierung nachdrücklich, und Microsoft, Google und Apple haben sie als Standard in die Kontosicherheit integriert.
+          Registrierung nachdrücklich, und eine Authenticator-App ist bei fast jedem Konto mit Geld oder Code die zweite Option.
         </p>
 
         <h2 id="factors">Die drei Faktoren</h2>
@@ -293,7 +298,7 @@ const alternates = [
         <h2 id="base32">Das Geheimnis und der QR-Code</h2>
         <p>
           Die Base32-Zeichenkette ist kein bloßes Zwischenformat — sie sind die rohen Bytes des
-          Geheimnisses, kodiert in einem handyfreundlichen Alphabet (A–Z plus 2–7, bewusst ohne
+          Geheimnisses, kodiert in einem handyfreundlichen Alphabet (A–Z plus 2–7, und damit nebenbei ohne
           0/1, die leicht verwechselt werden, und auf jeder Tastatur sicher). Bietet eine
           Plattform „Scannt nicht?“ an, enthält die resultierende Zeichenkette <em>dasselbe
           private Material</em>, das der QR-Code kodiert. Sie können beide Formen speichern; die
@@ -311,7 +316,7 @@ otpauth://hotp/Example:you%40example.com?secret=...&amp;counter=5   ← zählerb
 
         <h2 id="sms">TOTP gegenüber SMS und Hardware-Schlüsseln</h2>
         <ul>
-          <li><strong>SMS-Codes</strong> laufen über das Telekommunikationsnetz. SIM-Swap-Angriffe lassen einen Angreifer Ihre Rufnummer übernehmen und jeden Code mitlesen. SMS ist in den US-Standards (NIST SP 800-63B) für die Authentifizierung abgestuft.</li>
+          <li><strong>SMS-Codes</strong> laufen über das Telekommunikationsnetz. SIM-Swap-Angriffe lassen einen Angreifer Ihre Rufnummer übernehmen und jeden Code mitlesen. NIST SP 800-63B führt SMS in genau einer Kategorie: „eingeschränkt“ (restricted) — zulässig nur, wenn der Dienst das Risiko bewertet und mindert.</li>
           <li><strong>TOTP</strong> überträgt nichts — der Code wird lokal berechnet und läuft nach 30 Sekunden aus. Kostenlos, standardbasiert und überall unterstützt. Schwache Stelle: Er lässt sich innerhalb seines Gültigkeitsfensters phishen.</li>
           <li><strong>Sicherheitsschlüssel und Passkeys</strong> (WebAuthn/FIDO2) sind kryptografisch an die <em>exakte</em> Domain gebunden, sodass nachgeahmte Fake-Seiten automatisch scheitern. Die stärkste Option; weniger weit verbreitet und ein Schlüssel kostet Geld.</li>
         </ul>
