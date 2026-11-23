@@ -3,7 +3,7 @@ import GuideLayout from '../../components/GuideLayout.astro';
 
 const title = 'How to Set Up 2FA on Zoom (Authenticator App)';
 const description =
-  'Set up Zoom two-factor authentication with an authenticator app. Scan the QR code or use a setup key, then generate live TOTP codes in your browser.';
+  'Turn on Zoom two-step verification with an Authentication App, then generate live 6-digit TOTP codes in your browser and save the single-use recovery codes.';
 ---
 
 <GuideLayout
@@ -13,58 +13,66 @@ const description =
   path="/guides/zoom/"
   datePublished="2026-11-18"
   dateModified="2026-11-23"
-    lastReviewed="2026-11-23"
-  reviewedPrefix="UI wording and navigation"
-  reviewedClaim="unverified — support.zoom.com is a client-rendered portal with no readable article on 23 November 2026"
+  lastReviewed="2026-11-23"
   sources={[
+    {
+      label: 'Zoom Support — Managing two-step verification',
+      href: 'https://support.zoom.com/hc/en/article?id=zm_kb&sysparm_article=KB0066054',
+      kind: 'official',
+    },
+    {
+      label: 'Zoom Support — Changing account security settings',
+      href: 'https://support.zoom.com/hc/en/article?id=zm_kb&sysparm_article=KB0064901',
+      kind: 'official',
+    },
     {
       label: 'RFC 6238 — TOTP: Time-Based One-Time Password Algorithm',
       href: 'https://www.rfc-editor.org/rfc/rfc6238',
       kind: 'independent',
     },
   ]}
-  intro="Zoom supports authenticator apps for account sign-in, and many organizations enforce 2FA at the account level. Meetings themselves do not usually ask for a code — this protects the account that hosts them. Setup shows a QR code; if no manual key appears, screenshot the QR and paste the image into the generator."
+  intro="Zoom calls it two-step verification, and it applies to accounts that sign in with a work email and password — organizations using SSO get their second factor from the identity provider instead. Setup offers Authentication App or SMS; the app route issues a standard TOTP secret and, at the end, single-use recovery codes."
   minutes={4}
   params={['6 digits', '30 s period', 'SHA-1']}
   ctaTitle="The host account controls the meeting"
-  ctaBody="A hijacked Zoom account can schedule meetings as you, access cloud recordings, and change account settings. Store the setup secret and Zoom’s recovery codes in your vault before the next call."
+  ctaBody="A hijacked Zoom account can schedule meetings as you, reach cloud recordings, and change account settings. Zoom hands you recovery codes during setup — each works once — so store them and the setup key in your vault before the next call."
   deepDive={{
-    heading: "Zoom account details",
+    heading: 'Zoom account details',
     blocks: [
       {
-        title: 'Account-level 2FA versus per-meeting security',
-        body: 'Zoom’s two-factor authentication protects sign-in to your Zoom account. Meeting passwords, waiting rooms, and passcodes protect individual meetings. They are separate layers: enabling 2FA does not remove the need for a meeting passcode, and a strong meeting policy does not protect your account.',
+        title: 'Two-factor authentication protects sign-in, not the meeting',
+        body: 'Zoom’s two-step verification guards the account: the web portal, desktop app, mobile app and Zoom Room sign-in. Meeting passcodes, waiting rooms and authentication profiles protect individual meetings. They are separate layers — enabling 2SV does not remove the need for a passcode, and a strict meeting policy does not protect your account.',
       },
       {
-        title: 'Admins can enforce 2FA or route sign-in through SSO',
-        body: 'On a work or school account, an admin may require 2FA for all users or enforce SSO through an identity provider. If the authenticator option is missing, that is an account policy. Ask your admin which method is allowed; do not try to bypass enforced SSO.',
+        title: 'It covers work-email logins; SSO accounts are handled elsewhere',
+        body: 'Zoom states that two-step verification applies to users with the work email (email and password) login type. If your organization signs in through SSO, the identity provider is the place to look for the second factor, not this screen. Admins can also require 2SV for everyone, specific roles or groups, and can reset a user’s setup.',
       },
       {
-        title: 'Cloud recordings and connected apps stay sensitive',
-        body: 'Signing in with 2FA does not encrypt cloud recordings or revoke access granted to connected apps. After enabling it, review “Apps” and “Recordings” in the Zoom web portal, remove integrations you no longer use, and confirm who can view recorded meetings.',
+        title: 'Recovery codes are single-use, and the admin has a reset',
+        body: 'Zoom shows a list of recovery codes immediately after you verify the first 6-digit code, and offers Download or Print. Each code works once. If you run out or lose the list, the documented route is Try another way → Recovery codes at sign-in; if that fails, a Zoom admin can reset your two-step verification setup so you can enrol again.',
       },
     ],
   }}
   steps={[
     {
       title: 'Open your Zoom profile',
-      body: 'Sign in at zoom.us, then open “Profile” from the left-hand navigation. The direct shortcut is zoom.us/profile.',
+      body: 'Sign in at zoom.us, click your profile picture or initials in the top-right corner, then “Profile”. The direct shortcut is zoom.us/profile.',
     },
     {
-      title: 'Go to Two-Factor Authentication',
-      body: 'In the “Sign In” section, find “Two-Factor Authentication” and click “Set Up 2FA”. Zoom may ask you to confirm your password.',
+      title: 'Find Two-Step Verification',
+      body: 'Under “Sign In”, find “Two-Step Verification”. If it is off, click “Turn On”; if you are already in setup, use “Set Up” to the right of “Authentication App”. Zoom asks for your password at this point.',
     },
     {
-      title: 'Choose Authenticator App',
-      body: 'Select “Authenticator App” rather than SMS. Open your authenticator app and scan the QR code shown in Zoom. If your device cannot scan the code, look for an option on the setup prompt to enter the setup key manually.',
+      title: 'Choose Authentication App',
+      body: 'Zoom offers “Authentication App” or “SMS”. Choose the app, then click “Next” to reach the QR code. Some builds also print a setup key; if yours does not, screenshot the QR — the generator decodes the image on your device.',
     },
     {
       title: 'Generate the code',
-      body: 'Paste the setup key into 2facounter.com if you have one; otherwise screenshot the QR code and paste the image into the generator. Label it “Zoom”. The live 6-digit code refreshes every 30 seconds, and the decode happens on your device.',
+      body: 'Paste the setup key into 2facounter.com if you have one; otherwise paste the QR screenshot into the generator and label it “Zoom”. The live 6-digit code refreshes every 30 seconds.',
     },
     {
-      title: 'Confirm and save recovery codes',
-      body: 'After entering your 6-digit verification code to confirm setup, copy or download any recovery codes Zoom displays and store them somewhere safe — ideally your encrypted password manager, alongside the setup secret.',
+      title: 'Verify and save the recovery codes',
+      body: 'Enter the 6-digit code in Zoom and click “Verify”. Zoom then displays a list of recovery codes — download or print them before clicking “Done”. Each code can be used once, so keep them somewhere you can reach without the phone.',
     },
     {
       title: 'Review account access',
@@ -74,19 +82,19 @@ const description =
   faqs={[
     {
       q: 'Does Zoom use standard TOTP?',
-      a: 'Yes. Zoom’s authenticator-app method produces standard 6-digit, 30-second TOTP codes with SHA-1. The same secret works in any compatible authenticator, including this browser generator.',
+      a: 'Yes. Zoom’s Authentication App option accepts any app that supports the Time-based One-Time Password protocol, and produces a 6-digit code with SHA-1 and a 30-second period. The same secret works in any compatible authenticator, including this browser generator.',
     },
     {
       q: 'Do meeting attendees need 2FA to join?',
-      a: 'No. Two-factor authentication protects account sign-in, not meeting attendance. Guests join with a meeting link or ID and passcode as usual; only hosts and signed-in users deal with the account’s 2FA.',
+      a: 'No. Two-step verification protects account sign-in, not meeting attendance. Guests join with a meeting link or ID and passcode as usual; only hosts and signed-in users deal with the account’s 2FA.',
     },
     {
       q: 'Why is the authenticator option missing on my Zoom account?',
-      a: 'Your organization may enforce SSO or restrict authentication methods at the account level. In that case the identity provider handles the second factor. Ask your Zoom admin which methods are permitted.',
+      a: 'Two-step verification applies to work email (email and password) logins. If your organization enforces SSO, the identity provider handles the second factor instead. Ask your Zoom admin which methods are permitted rather than trying to bypass enforced SSO.',
     },
     {
       q: 'What if I lose my phone and recovery codes?',
-      a: 'If you saved the setup secret, paste it into the generator on another device and keep signing in. Without the secret or recovery codes, contact your Zoom account admin or Zoom support — recovery without a second factor is deliberately limited.',
+      a: 'At sign-in, click “Try another way” → “Recovery codes” and enter one — each works once. If you have none left, ask your Zoom account admin to reset your two-step verification setup; Zoom documents that reset. If you saved the setup secret, the generator on another device keeps producing valid codes, but it does not replace the recovery list for Zoom’s own reset flow.',
     },
   ]}
 />

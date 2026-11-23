@@ -1,11 +1,10 @@
 ---
 import GuideLayout from '../../components/GuideLayout.astro';
 
-const title = 'How to Set Up 2FA on TikTok (Authenticator App, Not SMS)';
+const title = 'How to Set Up 2FA on TikTok (Authenticator App)';
 
 const description =
-  'Set up TikTok two-step verification with an authenticator app instead of SMS: find the setup key behind the QR code and generate 6-digit codes in your browser.';
-
+  'Add an authenticator app to TikTok’s 2-step verification: scan the QR code or copy the key it offers, then generate live 6-digit codes in your browser.';
 ---
 
 <GuideLayout
@@ -16,12 +15,10 @@ const description =
   dateModified="2026-11-23"
   datePublished="2026-11-23"
   lastReviewed="2026-11-23"
-  reviewedPrefix="UI wording and navigation"
-  reviewedClaim="unverified — TikTok’s support centre served no readable article to an automated read on 23 November 2026"
   sources={[
     {
-      label: 'TikTok Help Centre — 2-step verification',
-      href: 'https://support.tiktok.com/en/account-and-privacy/account-privacy-settings/2-step-verification',
+      label: 'TikTok Help Center — Account safety',
+      href: 'https://support.tiktok.com/en/safety-hc/account-and-user-safety/account-safety',
       kind: 'official',
     },
     {
@@ -30,62 +27,62 @@ const description =
       kind: 'independent',
     },
   ]}
-  intro="TikTok pushes SMS as the easy option, and an SMS code is the exact factor SIM-swap fraud is built to intercept. This is the app's own path to the authenticator method: where the manual key hides behind the QR code, how to get a working code onto the screen, and what to save before you close the settings screen."
-  minutes={4}
+  intro="TikTok calls it 2-step verification and asks you to pick at least two methods: phone, email, an authenticator app, or your password. Phone and email are marked recommended, so the authenticator is an addition rather than a replacement — but it is the one method that does not depend on a SIM card or an inbox."
+  minutes={5}
   params={['6 digits', '30s period', 'SHA-1']}
   ctaTitle="A TikTok account is worth stealing for its audience"
-  ctaBody="Accounts with followers have resale value, so the login is attacked as an asset rather than a person. SMS is the cheapest way in — a swapped SIM receives the code without ever touching your password. Switching the second factor to an authenticator app moves the proof onto your device, and keeping the Base32 key in a password manager means a lost phone is an inconvenience rather than the end of the account."
+  ctaBody="Accounts with followers have resale value, so the login is attacked as an asset rather than a person. An SMS code proves control of a phone number, not of you. Adding an authenticator moves one factor onto a key you hold, and TikTok issues a recovery code at setup so a lost phone is not an automatic 30-day identity review."
   steps={[
     {
       title: 'Open Settings and privacy',
-      body: 'Profile tab → the ☰ menu at the top right → “Settings and privacy”. On the web, use the profile menu in the top right instead; the security screens are the same.',
+      body: 'Profile tab → the ☰ menu at the top right → “Settings and privacy”. TikTok’s help centre uses that exact path; the web version reaches the same security screens from the profile menu.',
     },
     {
-      title: 'Go to Security → 2-step verification',
-      body: 'Inside Settings and privacy, open “Security” and tap “2-step verification”. Older builds label this section “Security and login” — if you cannot find it, search the settings list for “2-step”.',
+      title: 'Go to Security & permissions → 2-step verification',
+      body: 'The current label is “Security & permissions”, not “Security” — older builds use the shorter name. Inside it, tap “2-step verification”. The same screen also holds “Security checkup”, which bundles the same tasks if you prefer a checklist.',
     },
     {
-      title: 'Choose the authenticator method, not SMS',
-      body: 'TikTok lists its methods with a switch or a “Turn on” button beside each. Pick “Authenticator app” and tap “Turn on” / “Set up”. Do not finish the SMS enrolment first and assume you will add the app later — start on the authenticator option.',
+      title: 'Choose at least two methods',
+      body: 'TikTok lists Phone (recommended), Email (recommended), Authenticator (recommended) and Password, and requires at least two. Pair the authenticator with email or phone — an authenticator-only selection is not one of the documented options.',
     },
     {
-      title: 'Reveal the key instead of scanning the QR code',
-      body: 'The next screen shows a QR code. Underneath it there is a manual option — “Can’t scan the QR code?” or “Enter key manually”, depending on your build — which reveals the Base32 key (letters A–Z and digits 2–7). That key is the whole secret; the QR code is just the same key in picture form.',
+      title: 'Add the authenticator app',
+      body: 'TikTok says to scan the QR code or copy the key provided. Copy the key if it is offered — it is the Base32 secret behind the QR. If only the QR appears, screenshot it; the generator decodes the image on your device.',
     },
     {
-      title: 'Paste it into 2FA COUNTER',
-      body: 'Copy the key, paste it into the generator and label it “TikTok”. Or take a screenshot of the QR code and paste the image anywhere on the generator page with Ctrl+V — it is decoded on your device, not uploaded.',
+      title: 'Enter the code and turn it on',
+      body: 'Paste the key into the generator, copy the live 6-digit code, and enter it on TikTok’s next screen. Then tap “Turn on” to confirm the method. If the code is rejected, check your device clock first — TOTP is time-based.',
     },
     {
-      title: 'Type the live code back into TikTok',
-      body: 'A fresh 6-digit code appears with a countdown. Copy it, paste it into TikTok’s confirmation field, and submit before the 30 seconds run out. If it is rejected, check your device clock first — TOTP codes are time-based, and a clock that is off by half a minute fails every time.',
-    },
-    {
-      title: 'Save the key, and the backup code if TikTok offers one',
-      body: 'Put the Base32 key in your password manager now — with it, 2facounter.com can rebuild your TikTok codes on any device, offline, forever. If this build also shows a backup code when you finish, store that in the same place; do not screenshot it into your camera roll.',
+      title: 'Save the key and the recovery code',
+      body: 'TikTok issues a recovery code when you set up the authenticator, and its reset flow asks for exactly that code. Store it with the Base32 key in your password manager — the key regenerates codes, the recovery code is what unlocks “Can’t access the app” if you lose the app itself.',
     },
   ]}
   deepDive={{
-    heading: 'Why the authenticator option is worth the extra minute',
+    heading: 'TikTok details that change the advice',
     blocks: [
       {
-        title: 'SMS is the weak factor, not the convenient one',
-        body: 'A code delivered by text message proves control of a phone number, not of a device. Numbers get ported, recycled and social-engineered at the carrier, and the account holder usually learns about it after the fact. An authenticator code proves possession of the key itself, which nobody can transfer out from under you.',
+        title: 'Two methods, not one',
+        body: 'The help centre requires at least two verification methods and marks phone and email as recommended. That makes “authenticator instead of SMS” the wrong mental model for TikTok: you are choosing which two (or more) factors to hold, and the authenticator is worth including because the other two depend on a number or an inbox that can be taken over.',
       },
       {
-        title: 'TikTok accounts are traded, which changes the threat',
-        body: 'A password leak is an annoyance; a TikTok account with an audience is inventory. That is why takeover attempts on social accounts tend to be patient and social — a fake login page, a “verification” DM, a support impersonator. None of those need to break encryption. They need you to type a code into the wrong place, so check the address bar and never relay a code to someone who asks for it, including someone claiming to be TikTok staff.',
+        title: 'A recovery code is issued, and losing it costs time',
+        body: 'TikTok documents the route for a lost authenticator: tap “Can’t access the app”, enter the recovery code you received at setup, then reset the method. Without that code, the documented fallback is “Need more help?” and an identity check that TikTok says may take up to 30 days. Save the code at setup, not after the phone is gone.',
       },
       {
-        title: 'What is verified here, and what is not',
-        body: 'The TOTP mechanics are standards, not opinions: TikTok’s authenticator method issues a Base32 key that any RFC 6238 implementation turns into the same 6-digit code, and that is what this page depends on. The navigation path in the steps — Settings and privacy → Security → 2-step verification → authenticator — was not checked against TikTok’s help centre, which served no readable article to an automated read on 23 November 2026. TikTok reworks its settings screens between app versions and regions, so the labels quoted here describe the control rather than certify a single build. If your screen words a control differently, the control described is still the one to look for.',
+        title: 'What the help centre documents, and what it leaves to the screen',
+        body: 'The account-safety article documents the path, the four methods, the two-method minimum, the QR-or-key choice, and the recovery-code reset. It does not state the TOTP parameters, and it does not promise static backup codes beyond that recovery code. The 6-digit, 30-second behaviour described here is RFC 6238, which is why the RFC is cited separately from TikTok’s own page.',
       },
     ],
   }}
   faqs={[
     {
+      q: 'Does TikTok require more than one 2FA method?',
+      a: 'Yes. TikTok’s help centre says to choose at least two verification methods, and lists Phone, Email, Authenticator and Password. If you want an authenticator, add it alongside email or phone rather than trying to select it alone.',
+    },
+    {
       q: 'TikTok only offers me SMS — why?',
-      a: 'Method availability varies by region, app version and account type, and TikTok rolls options out unevenly. Update the app, then check both the mobile app and the web version, since the method list is not always identical. If the authenticator option genuinely is not there yet, keep SMS on rather than leaving the account with a password alone — and treat your phone number as part of your security perimeter, not as an inconvenience.',
+      a: 'Method availability varies by region, app version and account type. Update the app and look again under Settings and privacy → Security & permissions → 2-step verification. If the authenticator option genuinely is not there, keep SMS on rather than leaving the account with a password alone, and treat your phone number as part of your security perimeter.',
     },
     {
       q: 'TikTok keeps saying my 2FA code is incorrect.',
@@ -93,11 +90,11 @@ const description =
     },
     {
       q: 'Do I need to install an authenticator app to use this?',
-      a: 'No — that is the point of the browser route. TikTok only needs a correct 6-digit code for the key it issued. 2FACounter computes that code in your browser with the Web Crypto API, so the key never leaves your device and there is no app to install, back up or lose. If you prefer an app, any standard TOTP app will also work with the same key.',
+      a: 'No — that is the point of the browser route. TikTok only needs a correct 6-digit code for the key it issued. 2FACounter computes that code in your browser with the Web Crypto API, so the key never leaves your device and there is no app to install, back up or lose. If you prefer an app, any standard TOTP app works with the same key; TikTok names Google Authenticator and Microsoft Authenticator as examples.',
     },
     {
       q: 'I lost the phone with my TikTok authenticator. What now?',
-      a: 'If you saved a backup code, use it. If not, the Base32 key you pasted into the generator is your recovery path: enter it on any device and you get valid codes again — which is why saving it in a password manager is step seven and not an afterthought. Without either, you are down to TikTok’s account recovery process, and a social account with an audience is exactly the kind of target recovery teams scrutinise hardest.',
+      a: 'Use the recovery code TikTok gave you at setup: tap “Can’t access the app” and enter it. If you have lost that code too, tap “Need more help?” and complete the identity check — TikTok says this can take up to 30 days. The Base32 key still generates codes, but TikTok’s reset flow asks for the recovery code, so the two are not interchangeable.',
     },
   ]}
 />
