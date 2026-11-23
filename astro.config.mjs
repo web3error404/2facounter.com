@@ -146,6 +146,7 @@ export default defineConfig({
             '/authenticator-for-pc/',
             '/authenticator-cloud-sync/',
             '/2fa-backup-codes/',
+            '/verify/',
           ];
           const COMPARISONS = [
             '/totp-vs-google-authenticator/',

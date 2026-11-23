@@ -19,6 +19,7 @@ const CORE = [
   '/about/',
   '/contact/',
   '/privacy/',
+  '/verify/',
   '/favicon.ico',
   '/favicon.svg',
   '/favicon-96x96.png',

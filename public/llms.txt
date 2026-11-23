@@ -23,6 +23,7 @@
 - [TOTP vs passkeys](https://2facounter.com/totp-vs-passkeys/)
 - [SIM-swap attacks](https://2facounter.com/sim-swap-attacks/)
 - [Editorial methodology](https://2facounter.com/methodology/)
+- [Verify it yourself](https://2facounter.com/verify/): five browser-side tests that the key never leaves the device.
 
 ## Service setup guides
 

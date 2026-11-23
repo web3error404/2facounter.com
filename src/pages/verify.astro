@@ -1,0 +1,223 @@
+---
+import Layout from '../layouts/Layout.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+
+const title = 'Verify Your Key Never Leaves the Browser — 2FA COUNTER';
+const description =
+  'Five tests you can run in two minutes to confirm 2FACounter keeps your 2FA secret on your device: network tab, offline mode, source code, headers, installed app.';
+
+const faq = [
+  {
+    q: 'Does 2FACounter send my secret key to a server?',
+    a: 'No. The generator has no network code at all: the key is read from the input field, used in an in-memory object, and turned into a code with the browser\'s Web Crypto API. The site also sends a Content-Security-Policy header with connect-src \'self\', which makes the browser refuse any outbound request to another domain even if the JavaScript were tampered with. You can confirm both in the tests on this page.',
+  },
+  {
+    q: 'Can I check this without reading any code?',
+    a: 'Yes — tests 1 and 2 on this page need nothing but the browser\'s developer tools. Paste a key with the Network tab open and watch that no request carries it; then switch the browser to offline and watch the code keep generating. Both take about a minute each.',
+  },
+  {
+    q: 'Is the source code public?',
+    a: 'Yes. The full source is published on GitHub under AGPL-3.0, including the Web Crypto TOTP/HOTP engine in src/scripts/generator.ts. Anyone can read it, self-host it, or diff it against what the live site serves.',
+  },
+  {
+    q: 'If the site is safe, why doesn\'t it just store my keys for me?',
+    a: 'Because storing them is the risk, not the convenience. A key held on a server — or synced to a cloud account — is exposed to a breach of that service, and a key held in browser storage survives on a shared or stolen device. 2FACounter keeps the key in the open page\'s memory only, so a refresh wipes it. Keep the original secret in your password manager and paste it when you need a code.',
+  },
+];
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    name: 'Verify your 2FA key never leaves the browser',
+    description,
+    url: 'https://2facounter.com/verify/',
+    isPartOf: { '@type': 'WebSite', name: '2FA COUNTER', url: 'https://2facounter.com/' },
+    about: {
+      '@type': 'WebApplication',
+      name: '2FA COUNTER',
+      url: 'https://2facounter.com/',
+      applicationCategory: 'SecurityApplication',
+    },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: '2FA COUNTER', item: 'https://2facounter.com/' },
+      { '@type': 'ListItem', position: 2, name: 'Verify it yourself', item: 'https://2facounter.com/verify/' },
+    ],
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faq.map(({ q, a }) => ({
+      '@type': 'Question',
+      name: q,
+      acceptedAnswer: { '@type': 'Answer', text: a },
+    })),
+  },
+];
+---
+
+<Layout title={title} description={description} path="/verify/" jsonLd={jsonLd}>
+  <SiteHeader />
+  <main id="main">
+    <div class="mx-auto max-w-[820px] px-4 py-20 sm:px-6 lg:py-24">
+      <p class="section-label">Security</p>
+      <h1 class="mt-3 font-display text-4xl tracking-normal text-ink sm:text-5xl">
+        Don't take our word for it
+      </h1>
+
+      <div class="rich-text mt-12">
+        <p>
+          Every browser-based 2FA tool says the same sentence: <em>your key never leaves this
+          device.</em> The sentence costs nothing to write. Rarely is anything offered to check it.
+          This page is the check — five tests, about two minutes each, no special tools beyond the
+          developer panel already built into your browser.
+        </p>
+        <p>
+          Run them before you paste a real key. If a tool fails test 1 or 2, close the tab and
+          treat the secret you entered as exposed: change it on the service that issued it.
+        </p>
+
+        <h2 id="test-1">Test 1 — Watch the network while you paste</h2>
+        <ol>
+          <li>Open <a href="/">2facounter.com</a> in a desktop browser.</li>
+          <li>
+            Open the developer tools (<kbd>F12</kbd>, or <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>I</kbd>
+            / <kbd>⌘</kbd>+<kbd>⌥</kbd>+<kbd>I</kbd>) and switch to the <strong>Network</strong> tab.
+          </li>
+          <li>Clear the request list so you are looking at a blank panel.</li>
+          <li>
+            Paste a key into the generator — a test key such as
+            <code>JBSWY3DPEHPK3PXP</code> if you would rather not use a real one — and wait through
+            a full 30-second cycle.
+          </li>
+          <li>
+            Filter the panel to <strong>Fetch/XHR</strong>. Nothing should appear. The total request
+            count should stay where it was before you pasted.
+          </li>
+        </ol>
+        <p>
+          <strong>What would contradict it:</strong> any request that carries the value you pasted,
+          or any request to a domain other than <code>2facounter.com</code>. Not one is made. Note
+          that the page's own assets — the font, the script, the QR decoder — are all downloaded from
+          this domain before you ever paste anything, so they show up as ordinary first-party loads,
+          not POSTs with your key.
+        </p>
+
+        <h2 id="test-2">Test 2 — Pull the plug</h2>
+        <p>
+          Keep the page open. In the developer tools, set the network throttling dropdown from{' '}
+          <strong>No throttling</strong> to <strong>Offline</strong> — or simply turn off Wi-Fi.
+          Paste the key again.
+        </p>
+        <p>
+          The code still appears, and the countdown still rotates it every 30 seconds. Nothing about
+          generating a TOTP code needs a network: it is an HMAC of your key and the current time,
+          which is exactly what the Web Crypto call in test 3 shows. A tool that goes blank when the
+          network does is telling you where the calculation happens.
+        </p>
+        <p>
+          One honest caveat: a <em>reload</em> while offline needs the page to already be cached. The
+          installed app (test 5) is the version that works offline from the first click.
+        </p>
+
+        <h2 id="test-3">Test 3 — Read the code that does the maths</h2>
+        <p>
+          The full source is public under AGPL-3.0 at{' '}
+          <a href="https://github.com/web3error404/2facounter.com" rel="noopener noreferrer"
+            >github.com/web3error404/2facounter.com</a
+          >. Open{' '}
+          <a
+            href="https://github.com/web3error404/2facounter.com/blob/master/src/scripts/generator.ts"
+            rel="noopener noreferrer"><code>src/scripts/generator.ts</code></a
+          >, the file that reads the input and produces the code, and search it for{' '}
+          <code>fetch</code>. There is no network call in it: no <code>fetch</code>, no{' '}
+          <code>XMLHttpRequest</code>, no <code>sendBeacon</code>, no WebSocket.
+        </p>
+        <p>
+          The code is produced by <code>crypto.subtle.sign('HMAC', …)</code> — the browser's own
+          implementation of the standard, the same one <a href="/what-is-2fa/">RFC 6238</a> describes.
+          The only storage call in the file is <code>wipeLegacyKeys()</code>, which <em>removes</em>{' '}
+          two entries written by older versions of the site and never reads them.
+        </p>
+
+        <h2 id="test-4">Test 4 — Check the header that makes it enforceable</h2>
+        <p>
+          Readable code proves what the code says today; a response header is what stops a future
+          line of JavaScript from quietly phoning home. In the Network tab, reload the page, click
+          the document request (the first row, usually <code>/</code>), and open
+          <strong>Headers → Response Headers</strong>. Look for:
+        </p>
+        <p>
+          <code>content-security-policy: default-src 'self'; … connect-src 'self'; …</code>
+        </p>
+        <p>
+          <code>connect-src 'self'</code> means the browser will refuse to open a connection to any
+          other origin from this page — a key exfiltrated by a rogue script would be blocked by your
+          browser, not by our promise. <code>default-src 'self'</code> blocks third-party scripts and
+          trackers by the same mechanism. No advertising network, analytics tag, or CDN can load
+          here even if one were added by mistake.
+        </p>
+
+        <h2 id="test-5">Test 5 — Install it and stop being online</h2>
+        <p>
+          Install the tool as an app (the install icon in your browser's address bar, or
+          <em>Add to Home Screen</em> on a phone). It then runs from your device's cache: decoding QR
+          images, generating codes, and copying them keep working on a plane, in a locked-down
+          office, or on a machine that has never had internet access since the install. That is the
+          same test as <a href="/authenticator-for-pc/">using it as a desktop authenticator</a>, with
+          the network removed rather than merely unused.
+        </p>
+
+        <h2 id="limits">What these tests do not prove</h2>
+        <p>
+          Being precise about the limits is part of the point:
+        </p>
+        <ul>
+          <li>
+            <strong>They test the site you actually loaded.</strong> A page served a minute ago could
+            differ from one served tomorrow. What makes that checkable is the public repository —
+            every release is diffable against the source — and the header in test 4, which constrains
+            behaviour regardless of what the script says.
+          </li>
+          <li>
+            <strong>Anyone can copy the words on this page.</strong> "Check the Network tab" is free
+            to write. The tests only mean something if the site also lets you read its source and
+            ships a restrictive policy — so run the tests, don't read the claim.
+          </li>
+          <li>
+            <strong>A clean browser test says nothing about your device.</strong> Malware, a
+            compromised browser extension, or a clipboard manager sees what is on your screen. No
+            TOTP tool can defend against that, and any that claims to is selling something.
+          </li>
+          <li>
+            <strong>It cannot stop you pasting into the wrong site.</strong> Check the address bar.
+            A lookalike domain runs someone else's code, and it can pass every one of your tests for
+            its own site while sending the key it received to its owner.
+          </li>
+        </ul>
+
+        <h2 id="faq">Questions</h2>
+        {faq.map(({ q, a }) => (
+          <>
+            <h3>{q}</h3>
+            <p>{a}</p>
+          </>
+        ))}
+
+        <p>
+          If any of these tests fails on this site, that is a security bug and we want to hear about
+          it: <a href="mailto:security@2facounter.com">security@2facounter.com</a>. Otherwise,{' '}
+          <a href="/">paste a key</a> — or read how the same claim is stated in the{' '}
+          <a href="/privacy/">privacy policy</a> and the{' '}
+          <a href="/methodology/">editorial methodology</a>.
+        </p>
+      </div>
+    </div>
+  </main>
+  <SiteFooter />
+</Layout>
