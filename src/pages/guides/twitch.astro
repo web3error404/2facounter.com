@@ -15,7 +15,7 @@ const description =
   dateModified="2026-11-23"
     lastReviewed="2026-11-23"
   reviewedPrefix="UI wording and navigation"
-  reviewedClaim="unverified — help.twitch.tv renders its help articles client-side and could not be read"
+  reviewedClaim="unverified — help.twitch.tv returned a bot-check page instead of the article on 23 November 2026"
   sources={[
     {
       label: 'RFC 6238 — TOTP: Time-Based One-Time Password Algorithm',
@@ -64,11 +64,11 @@ const description =
     },
     {
       title: 'Confirm the setup',
-      body: 'Enter the current code in Twitch’s verification field and submit. There are no backup codes to download at this stage; the next step covers what to keep instead.',
+      body: 'Enter the current code in Twitch’s verification field and submit. Twitch has not historically issued static backup codes; if your account shows any, save them before you continue.',
     },
     {
       title: 'Keep your recovery path current',
-      body: 'Twitch does not issue static backup codes. Keep your linked phone number up to date, as account recovery relies on SMS verification and your linked Authy account. Store the setup secret in your password manager so you can still generate codes on another device if the phone is lost.',
+      body: 'Keep the phone number and email on the account current, because that is what account recovery leans on. Store the setup secret in your password manager so you can still generate codes on another device if the phone is lost.',
     },
   ]}
   faqs={[
