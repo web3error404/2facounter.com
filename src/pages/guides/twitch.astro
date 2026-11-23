@@ -23,17 +23,17 @@ const description =
       kind: 'independent',
     },
   ]}
-  intro="Twitch requires email and phone verification before it will turn on two-factor authentication, then lets you choose an authenticator app for the actual codes. That phone requirement is the catch; the TOTP secret itself is standard. Twitch’s published instructions describe scanning a QR code, so the screenshot route below is the reliable fallback if no manual key appears. Twitch also does not issue static backup codes, so keep the recovery phone number current."
+  intro="Twitch has required email and phone verification before it will turn on two-factor authentication, then lets you choose an authenticator app for the actual codes. That phone requirement is the catch; the TOTP secret itself is standard. Setup shows a QR code, so the screenshot route below is the reliable fallback if no manual key appears. Twitch has not historically issued static backup codes, so keep the recovery phone number current."
   minutes={5}
   params={['6 digits', '30 s period', 'SHA-1']}
   ctaTitle="A stream key is a password you cannot rotate quietly"
-  ctaBody="A hijacked Twitch account can leak your stream key, change payouts, and impersonate you to your community. Save the setup secret and keep your recovery phone number current — Twitch does not issue static backup codes."
+  ctaBody="A hijacked Twitch account can leak your stream key, change payouts, and impersonate you to your community. Save the setup secret and keep your recovery phone number current — Twitch has not historically issued static backup codes."
   deepDive={{
     heading: "Twitch details that trip people up",
     blocks: [
       {
         title: 'The phone number is a Twitch gate, not the second factor',
-        body: 'Twitch uses a verified phone number as an eligibility check before enabling 2FA, and it uses SMS as the recovery path. The authenticator app is a separate method you select afterwards. If you do not want SMS codes in daily use, keep the number for recovery only and make the authenticator your primary method — but do not remove it, because Twitch has no static backup codes.',
+        body: 'Twitch uses a verified phone number as an eligibility check before enabling 2FA, and it uses SMS as the recovery path. The authenticator app is a separate method you select afterwards. If you do not want SMS codes in daily use, keep the number for recovery only and make the authenticator your primary method — but think twice before removing it, because a verified number is what Twitch’s recovery flow leans on.',
       },
       {
         title: 'Your stream key deserves its own protection',
@@ -86,7 +86,7 @@ const description =
     },
     {
       q: 'I lost the phone with my Twitch authenticator. What now?',
-      a: 'Twitch does not issue static backup codes. Paste the saved setup secret into the generator on another device and keep signing in. Without it, recovery depends on your verified phone number and linked Authy account, so keep both current.',
+      a: 'Twitch has not historically issued static backup codes. Paste the saved setup secret into the generator on another device and keep signing in. Without it, recovery depends on the phone number and email you verified, so keep both current.',
     },
   ]}
 />

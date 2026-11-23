@@ -1,0 +1,369 @@
+
+######## amazon
+← All guides
+Amazon 2FA setup
+Amazon calls it Two-Step Verification (2SV) and offers an authenticator-app option next to SMS and voice calls. The shopping account is separate from AWS — this guide covers the retail login, with a pointer to the IAM guide at the end.
+4 min · no app required6 digits30 s periodSHA-1
+UI wording and navigation unverified — Amazon’s help centre served only its navigation shell to every automated read on 23 November 2026 · last reviewed 23 November 2026 · how we review guides
+Reviewed by the 2FA COUNTER security editorial team · our editorial methodology
+Sources
+RFC 6238 — TOTP: Time-Based One-Time Password Algorithm independent
+Open the generator for Amazon
+Step by step
+01
+Open Login & security
+Sign in at amazon.com, hover over “Account & Lists” → “Account” → “Login & security”. The direct shortcut is amazon.com/a/security.
+02
+Open Two-Step Verification settings
+Next to “Two-Step Verification (2SV)”, click “Edit” or “Manage”, then choose the authenticator-app option (“Authenticator App” / “Add new app”).
+03
+Reveal the key
+Amazon shows a QR code. Look for a manual-entry link — often “Can’t scan the barcode?” — to display the alphanumeric setup key. Copy it, or screenshot the QR and paste the image into the generator.
+04
+Generate the first code
+Paste the key into 2facounter.com. A live 6-digit code appears and refreshes every 30 seconds; the calculation runs entirely in your browser.
+05
+Confirm the code with Amazon
+Enter the current code in Amazon’s verification box and save. Amazon marks the authenticator as an active 2SV method.
+06
+Save the backup route
+Store the Base32 key and any backup codes in your encrypted vault. If Amazon shows a “primary method” choice, keep the authenticator first and treat SMS as a fallback you control.
+Amazon account details
+Amazon retail and AWS are separate accounts
+Two-Step Verification on amazon.com protects shopping, Prime, Kindle and the retail account. AWS uses its own IAM users and root account with a separate MFA setup — enabling one does not enable the other. If you are here for AWS, use the dedicated AWS IAM guide instead; the keys and consoles are unrelated.
+The authenticator option is easy to miss
+Amazon may steer accounts toward SMS or voice call, and the authenticator choice can sit behind “Add new app” or “More options”. Look for “Authenticator App” rather than “Phone number”. Once enrolled, you can remove the phone method if you prefer not to keep a SIM-swap lane open — but consider keeping a recovery phone number that is not your main SIM.
+What is verified here, and what is not
+The TOTP mechanics are standards, not opinions: Amazon’s authenticator option issues a Base32 key that any RFC 6238 implementation turns into the same 6-digit code, and that is what this page depends on. The screen labels — “Authenticator App”, “Add new app”, “Can’t scan the barcode?” — could not be checked against Amazon’s own help centre, which blocks automated access and renders article bodies client-side. They are written to describe the control rather than to quote one build. If your screen words it differently, the control described is still the one to look for.
+TV devices and household sharing
+Fire TV, Kindle and other signed-in devices may keep their sessions, but some will ask for the code again after a security change. If a household member uses the account, make sure they can reach you for a code or have their own profile — and never share the Base32 key itself.
+FAQ
+Does Amazon use standard TOTP?
+Does this protect AWS too?
+Why does Amazon keep asking for a code on my TV?
+Can Amazon customer service bypass 2FA for me?
+More 2FA setup guides
+How to set up 2FA on Facebook
+How to set up 2FA on GitHub
+How to set up 2FA on Instagram
+How to set up 2FA on Discord
+How to set up 2FA on Dropbox
+How to set up 2FA on LinkedIn
+See all guides →
+Your order history is also your address book
+An Amazon account holds saved addresses, payment methods, and order history, and it can be used to impersonate you with customer service. Save the Base32 key and the backup codes before you finish setup.
+Generate Amazon 2FA codes now
+
+######## binance
+← All guides
+Binance 2FA setup
+Enabling 2FA removes the friction Binance applies to weaker accounts. Their TOTP setup is standard — you can run it on your browser keys, in an encrypted password manager, or on an offline machine. Two Binance-specific extras, the anti-phishing code and the withdrawal whitelist, are worth the extra two minutes.
+5 min · no app required6 digits30s periodSHA-1
+UI wording and navigation unverified — Binance’s support articles would not render for an automated read on 23 November 2026 · last reviewed 23 November 2026 · how we review guides
+Reviewed by the 2FA COUNTER security editorial team · our editorial methodology
+Sources
+Binance Academy — What Is Two-Factor Authentication (2FA)? official
+RFC 6238 — TOTP: Time-Based One-Time Password Algorithm independent
+Open the generator for Binance
+Step by step
+01
+Sign in and open Security
+At binance.com, hover over the profile icon, click “Account”, then open “Security”. Click “Manage” next to “Authenticator App”, then “Enable Authenticator App”.
+02
+Choose software (TOTP) over SMS
+Binance presents options. Prefer the authenticator app — SMS codes are interceptable and can fail when you travel.
+03
+Get the key text, not only the QR
+The dialog shows a QR code and a setup key. The key is a Base32 secret — usually around 16 characters, though the length can vary. Copy it exactly.
+04
+Paste it into the generator
+Paste the key into the generator at 2facounter.com and a live code appears immediately. Airplane-mode first if you like: the page works fully offline.
+05
+Confirm on Binance
+Copy the 6-digit code and submit it — Binance confirms the authenticator is active. Note for later: Binance can place a temporary hold on withdrawals after the authenticator changes, so check the current policy before you start — and keep the setup key backed up, so you never have to redo this at a bad moment.
+06
+Turn on the anti-phishing code and withdrawal whitelist
+Back in Security → “Anti Phishing Code”: Binance then stamps every real email with a code of your choosing, so fake “account alert” mail becomes instantly recognizable. In the same settings, add the withdrawal addresses you actually use — new whitelist entries face a withdrawal pause before they become usable, which is what stops a thief from redirecting your funds on day one.
+07
+Save Binance’s recovery key offline
+However Binance’s flow surfaces recovery material to you, write it down — it’s your path back if every device with the secret dies.
+What is verified here, and what is not
+The mechanics are standards; the screens are not
+The authenticator method is standard RFC 6238 TOTP — 6 digits, 30-second period, SHA-1 — which is why any authenticator, including a browser-based one, produces codes Binance accepts. That part rests on the standard rather than on Binance’s help centre. The on-screen path in the steps does not: Binance’s support centre renders its articles client-side and does not expose them to automated reads, so the labels are written to describe the control rather than to quote one build. If your account shows different wording, the control described is still the one to look for.
+The cooldown after a 2FA change is real, and it is the point
+Binance suspends withdrawals and P2P transfers after an authenticator change while the change settles. That hold is a feature: it is the window in which the real owner can react to an attacker who has just re-enrolled the factor. Treat any such hold as expected rather than as evidence of compromise — and keep the setup key backed up so you never have to trigger it casually.
+FAQ
+Do I have to scan the QR with a webcam?
+Is it safe to use exchange 2FA in a browser?
+Binance shows “Google Authenticator” only — will the browser codes work?
+What if my clock is a bit off?
+More 2FA setup guides
+How to set up 2FA on Coinbase
+How to set up 2FA on Kraken
+How to set up 2FA on AWS
+How to set up 2FA on X / Twitter
+How to set up 2FA on Twitch
+How to set up 2FA on Epic Games
+See all guides →
+Keeping the robots out is the real reward
+Binance accounts sit in the highest-value attack category on the web right now. Finishing the anti-phishing code and withdrawal whitelist — not just the TOTP toggle — is what actually closes the door; screenshots of both belong in your encrypted vault.
+Generate Binance 2FA codes now
+
+######## epic-games
+← All guides
+Epic Games 2FA setup
+Epic Games supports standard authenticator apps for Fortnite, Rocket League, the Epic Games Store and Unreal Engine accounts. Epic’s published instructions describe scanning a QR code; if your screen does not expose a manual key, the screenshot route below gets you the same secret.
+4 min · no app required6 digits30 s periodSHA-1
+UI wording and navigation unverified — epicgames.com/help would not render its articles for an automated read on 23 November 2026 · last reviewed 23 November 2026 · how we review guides
+Reviewed by the 2FA COUNTER security editorial team · our editorial methodology
+Sources
+RFC 6238 — TOTP: Time-Based One-Time Password Algorithm independent
+Open the generator for Epic Games
+Step by step
+01
+Open your Epic account
+Sign in at epicgames.com/account (or through the launcher) and open “Password & Security” from the account menu.
+02
+Start authenticator setup
+Find “Two-Factor Authentication” and choose the authenticator-app option rather than email or SMS. The exact button wording varies, but it is the app/TOTP choice.
+03
+Get the secret from the QR screen
+Epic shows a QR code. Scan it with an authenticator app, or enter the setup key manually if an alternate entry option is shown below the code. To use the browser generator, screenshot the QR code and paste the image into the generator — decoding happens locally.
+04
+Generate a live code
+Paste the key or decoded secret into 2facounter.com and label the entry “Epic Games”. The 6-digit code refreshes every 30 seconds and never leaves your browser.
+05
+Confirm and save backup codes
+Enter the current code in Epic’s verification field and submit. Epic issues backup codes during setup — save them before you leave the screen.
+06
+Store both secrets
+If your account offers it, you can view or regenerate backup codes later from the options menu next to “Authenticator App”. Put the setup secret in your password manager and keep the backup codes offline.
+Epic Games specifics
+2FA is required for some competitive and creator features
+Epic has required two-factor authentication for certain competitive play and creator payouts, and some account actions trigger a verification step. Enabling an authenticator app satisfies those requirements just as SMS does, but without depending on your carrier. Check the current rules in your account’s security page if a tournament or payout asks for 2FA.
+One Epic account, many linked platforms
+Your Epic account can be linked to PlayStation, Xbox, Nintendo and Steam identities. The second factor protects the Epic login, not those platform accounts — each console network has its own 2FA. If your Fortnite progress matters, enable 2FA on the console account as well so a stolen console login cannot unlink or replace the Epic identity.
+Recovery codes are the real insurance
+Epic issues backup codes when you enable 2FA — treat them like a spare key: store them offline, separate from the device that runs your authenticator. If you also save the setup secret in a password manager, you can regenerate codes anywhere — but a compromised password manager exposes both, so use a strong master password and a second factor on the vault itself.
+FAQ
+Is Epic Games 2FA standard TOTP?
+Do I need 2FA to play Fortnite?
+Will 2FA protect my linked PlayStation or Xbox account?
+What if I lose access to my authenticator?
+More 2FA setup guides
+How to set up 2FA on Slack
+How to set up 2FA on Zoom
+How to set up 2FA on Steam
+How to set up 2FA on Google
+How to set up 2FA on Microsoft
+How to set up 2FA on Amazon
+See all guides →
+Protect the account, not just the skins
+An Epic account can hold purchases, linked console identities, and years of progress — and account theft is common in gaming. Save the setup secret and Epic’s backup codes in your vault before you queue another match.
+Generate Epic Games 2FA codes now
+
+######## paypal
+← All guides
+PayPal 2FA setup
+PayPal supports standard TOTP as its authenticator-app option for 2-step verification — stronger than the default SMS codes, because a phone number can be hijacked by a SIM swap and money flows through PayPal. Worth doing: check which methods stay enrolled after setup, so no weaker fallback lingers without your say-so.
+4 min · no app required6 digits30s periodSHA-1
+UI wording and navigation unverified — PayPal’s help centre is client-rendered and the article we originally cited has since been unpublished · last reviewed 23 November 2026 · how we review guides
+Reviewed by the 2FA COUNTER security editorial team · our editorial methodology
+Sources
+RFC 6238 — TOTP: Time-Based One-Time Password Algorithm independent
+Open the generator for PayPal
+Step by step
+01
+Open PayPal security settings
+Sign in at paypal.com → click the gear icon (Settings) → “Security”. Find the “2-step verification” section. Business accounts may find it under Account Settings instead of Profile Settings.
+02
+Start 2-step verification setup
+Click “Set Up” next to 2-step verification. PayPal offers SMS and “Use an authenticator app” — choose the authenticator app option. It is the standard TOTP factor, independent of your phone number.
+03
+Reveal the secret
+PayPal shows a QR code. If a Base32 “secret key” is printed or linked for manual entry, copy that text; otherwise screenshot the QR and paste the image straight into the generator page — it is decoded on your device, never uploaded.
+04
+Generate, verify, activate
+Paste into 2facounter.com, copy the live code, and paste it back into PayPal’s confirmation field. 2-step verification flips to active and PayPal starts asking for a code at sign-in.
+05
+Audit your methods
+Back on the 2-step verification screen, check every enrolled method. If SMS is still listed as a second method, decide deliberately whether to keep it — it’s a weaker fallback than a saved recovery code. If PayPal offers recovery codes, download them now.
+FAQ
+Does PayPal require 2FA?
+SMS codes vs authenticator app on PayPal — which should I pick?
+I lost my phone and can’t get PayPal codes — what now?
+PayPal rejects my code right after setup — why?
+More 2FA setup guides
+How to set up 2FA on Binance
+How to set up 2FA on Coinbase
+How to set up 2FA on Kraken
+How to set up 2FA on AWS
+How to set up 2FA on X / Twitter
+How to set up 2FA on Twitch
+See all guides →
+Your PayPal account is a payment rail — treat the backup like one
+PayPal's recovery flow can lean on the phone number on file, which is exactly the factor SIM-swap attackers target. Save PayPal's recovery codes in an encrypted password manager and review enrolled 2-step-verification methods once a quarter.
+Generate PayPal 2FA codes now
+
+######## tiktok
+← All guides
+TikTok 2FA setup
+TikTok pushes SMS as the easy option, and an SMS code is the exact factor SIM-swap fraud is built to intercept. This is the app's own path to the authenticator method: where the manual key hides behind the QR code, how to get a working code onto the screen, and what to save before you close the settings screen.
+4 min · no app required6 digits30s periodSHA-1
+UI wording and navigation unverified — TikTok’s support centre served no readable article to an automated read on 23 November 2026 · last reviewed 23 November 2026 · how we review guides
+Reviewed by the 2FA COUNTER security editorial team · our editorial methodology
+Sources
+TikTok Help Centre — 2-step verification official
+RFC 6238 — TOTP: Time-Based One-Time Password Algorithm independent
+Open the generator for TikTok
+Step by step
+01
+Open Settings and privacy
+Profile tab → the ☰ menu at the top right → “Settings and privacy”. On the web, use the profile menu in the top right instead; the security screens are the same.
+02
+Go to Security → 2-step verification
+Inside Settings and privacy, open “Security” and tap “2-step verification”. Older builds label this section “Security and login” — if you cannot find it, search the settings list for “2-step”.
+03
+Choose the authenticator method, not SMS
+TikTok lists its methods with a switch or a “Turn on” button beside each. Pick “Authenticator app” and tap “Turn on” / “Set up”. Do not finish the SMS enrolment first and assume you will add the app later — start on the authenticator option.
+04
+Reveal the key instead of scanning the QR code
+The next screen shows a QR code. Underneath it there is a manual option — “Can’t scan the QR code?” or “Enter key manually”, depending on your build — which reveals the Base32 key (letters A–Z and digits 2–7). That key is the whole secret; the QR code is just the same key in picture form.
+05
+Paste it into 2FA COUNTER
+Copy the key, paste it into the generator and label it “TikTok”. Or take a screenshot of the QR code and paste the image anywhere on the generator page with Ctrl+V — it is decoded on your device, not uploaded.
+06
+Type the live code back into TikTok
+A fresh 6-digit code appears with a countdown. Copy it, paste it into TikTok’s confirmation field, and submit before the 30 seconds run out. If it is rejected, check your device clock first — TOTP codes are time-based, and a clock that is off by half a minute fails every time.
+07
+Save the key, and the backup code if TikTok offers one
+Put the Base32 key in your password manager now — with it, 2facounter.com can rebuild your TikTok codes on any device, offline, forever. If this build also shows a backup code when you finish, store that in the same place; do not screenshot it into your camera roll.
+Why the authenticator option is worth the extra minute
+SMS is the weak factor, not the convenient one
+A code delivered by text message proves control of a phone number, not of a device. Numbers get ported, recycled and social-engineered at the carrier, and the account holder usually learns about it after the fact. An authenticator code proves possession of the key itself, which nobody can transfer out from under you.
+TikTok accounts are traded, which changes the threat
+A password leak is an annoyance; a TikTok account with an audience is inventory. That is why takeover attempts on social accounts tend to be patient and social — a fake login page, a “verification” DM, a support impersonator. None of those need to break encryption. They need you to type a code into the wrong place, so check the address bar and never relay a code to someone who asks for it, including someone claiming to be TikTok staff.
+What is verified here, and what is not
+The TOTP mechanics are standards, not opinions: TikTok’s authenticator method issues a Base32 key that any RFC 6238 implementation turns into the same 6-digit code, and that is what this page depends on. The navigation path in the steps — Settings and privacy → Security → 2-step verification → authenticator — mirrors TikTok’s own help-centre topic. The exact button and link wording does not: TikTok reworks its settings screens between app versions and regions, and the labels quoted here accommodate that variation rather than certify a single build. If your screen words a control differently, the control described is still the one to look for.
+FAQ
+TikTok only offers me SMS — why?
+TikTok keeps saying my 2FA code is incorrect.
+Do I need to install an authenticator app to use this?
+I lost the phone with my TikTok authenticator. What now?
+More 2FA setup guides
+How to set up 2FA on PayPal
+How to set up 2FA on Binance
+How to set up 2FA on Coinbase
+How to set up 2FA on Kraken
+How to set up 2FA on AWS
+How to set up 2FA on X / Twitter
+See all guides →
+A TikTok account is worth stealing for its audience
+Accounts with followers have resale value, so the login is attacked as an asset rather than a person. SMS is the cheapest way in — a swapped SIM receives the code without ever touching your password. Switching the second factor to an authenticator app moves the proof onto your device, and keeping the Base32 key in a password manager means a lost phone is an inconvenience rather than the end of the account.
+Generate TikTok 2FA codes now
+
+######## twitch
+← All guides
+Twitch 2FA setup
+Twitch requires email and phone verification before it will turn on two-factor authentication, then lets you choose an authenticator app for the actual codes. That phone requirement is the catch; the TOTP secret itself is standard. Twitch’s published instructions describe scanning a QR code, so the screenshot route below is the reliable fallback if no manual key appears. Twitch also does not issue static backup codes, so keep the recovery phone number current.
+5 min · no app required6 digits30 s periodSHA-1
+UI wording and navigation unverified — help.twitch.tv returned a bot-check page instead of the article on 23 November 2026 · last reviewed 23 November 2026 · how we review guides
+Reviewed by the 2FA COUNTER security editorial team · our editorial methodology
+Sources
+RFC 6238 — TOTP: Time-Based One-Time Password Algorithm independent
+Open the generator for Twitch
+Step by step
+01
+Open Twitch security settings
+Sign in at twitch.tv, click your profile picture → “Settings” → “Security and Privacy” → the “Security” tab.
+02
+Start two-factor setup
+Under “Two-Factor Authentication”, click “Set Up Two-Factor Authentication”. Twitch requires email and phone verification before enabling any 2FA method — complete that step, then continue.
+03
+Choose the authenticator app
+Select “Use an authenticator app” rather than SMS. Twitch shows a QR code. If your screen also offers a manual setup key, use it; otherwise screenshot the QR code and paste the image into the generator — decoding happens on your device.
+04
+Generate a code in your browser
+Paste the key or decoded secret into 2facounter.com and label it “Twitch”. The live 6-digit code refreshes every 30 seconds; the secret never leaves your device.
+05
+Confirm the setup
+Enter the current code in Twitch’s verification field and submit. Twitch has not historically issued static backup codes; if your account shows any, save them before you continue.
+06
+Keep your recovery path current
+Keep the phone number and email on the account current, because that is what account recovery leans on. Store the setup secret in your password manager so you can still generate codes on another device if the phone is lost.
+Twitch details that trip people up
+The phone number is a Twitch gate, not the second factor
+Twitch uses a verified phone number as an eligibility check before enabling 2FA, and it uses SMS as the recovery path. The authenticator app is a separate method you select afterwards. If you do not want SMS codes in daily use, keep the number for recovery only and make the authenticator your primary method — but do not remove it, because Twitch has no static backup codes.
+Your stream key deserves its own protection
+The stream key is a credential that lets software broadcast as your channel. It is stored in OBS or your encoder, not in the authenticator. If you suspect a leak, reset the stream key in the Twitch dashboard immediately — 2FA protects account login, not an already-copied key.
+2FA is tied to account features and monetization
+Twitch uses 2FA as a requirement for some account actions and creator features, and the exact list changes over time. If a payout, raid, or chat feature asks for 2FA, enabling an authenticator satisfies it. Check the current security page rather than relying on old guides.
+FAQ
+Does Twitch use standard TOTP?
+Why does Twitch demand a phone number for 2FA?
+Can I stream without SMS after enabling the app?
+I lost the phone with my Twitch authenticator. What now?
+More 2FA setup guides
+How to set up 2FA on Epic Games
+How to set up 2FA on Slack
+How to set up 2FA on Zoom
+How to set up 2FA on Steam
+How to set up 2FA on Google
+How to set up 2FA on Microsoft
+See all guides →
+A stream key is a password you cannot rotate quietly
+A hijacked Twitch account can leak your stream key, change payouts, and impersonate you to your community. Save the setup secret and keep your recovery phone number current — Twitch does not issue static backup codes.
+Generate Twitch 2FA codes now
+
+######## zoom
+← All guides
+Zoom 2FA setup
+Zoom supports authenticator apps for account sign-in, and many organizations enforce 2FA at the account level. Meetings themselves do not usually ask for a code — this protects the account that hosts them. Zoom’s published instructions describe scanning a QR code; if no manual key appears, screenshot the QR and paste the image into the generator.
+4 min · no app required6 digits30 s periodSHA-1
+UI wording and navigation unverified — support.zoom.com is a client-rendered portal with no readable article on 23 November 2026 · last reviewed 23 November 2026 · how we review guides
+Reviewed by the 2FA COUNTER security editorial team · our editorial methodology
+Sources
+RFC 6238 — TOTP: Time-Based One-Time Password Algorithm independent
+Open the generator for Zoom
+Step by step
+01
+Open your Zoom profile
+Sign in at zoom.us, then open “Profile” from the left-hand navigation. The direct shortcut is zoom.us/profile.
+02
+Go to Two-Factor Authentication
+In the “Sign In” section, find “Two-Factor Authentication” and click “Set Up 2FA”. Zoom may ask you to confirm your password.
+03
+Choose Authenticator App
+Select “Authenticator App” rather than SMS. Open your authenticator app and scan the QR code shown in Zoom. If your device cannot scan the code, look for an option on the setup prompt to enter the setup key manually.
+04
+Generate the code
+Paste the setup key into 2facounter.com if you have one; otherwise screenshot the QR code and paste the image into the generator. Label it “Zoom”. The live 6-digit code refreshes every 30 seconds, and the decode happens on your device.
+05
+Confirm and save recovery codes
+After entering your 6-digit verification code to confirm setup, copy or download any recovery codes Zoom displays and store them somewhere safe — ideally your encrypted password manager, alongside the setup secret.
+06
+Review account access
+Check the “Apps” and “Recordings” sections of the web portal and remove anything unfamiliar. Store the setup secret alongside the recovery codes so a lost phone is an inconvenience, not a lockout.
+Zoom account details
+Account-level 2FA versus per-meeting security
+Zoom’s two-factor authentication protects sign-in to your Zoom account. Meeting passwords, waiting rooms, and passcodes protect individual meetings. They are separate layers: enabling 2FA does not remove the need for a meeting passcode, and a strong meeting policy does not protect your account.
+Admins can enforce 2FA or route sign-in through SSO
+On a work or school account, an admin may require 2FA for all users or enforce SSO through an identity provider. If the authenticator option is missing, that is an account policy. Ask your admin which method is allowed; do not try to bypass enforced SSO.
+Cloud recordings and connected apps stay sensitive
+Signing in with 2FA does not encrypt cloud recordings or revoke access granted to connected apps. After enabling it, review “Apps” and “Recordings” in the Zoom web portal, remove integrations you no longer use, and confirm who can view recorded meetings.
+FAQ
+Does Zoom use standard TOTP?
+Do meeting attendees need 2FA to join?
+Why is the authenticator option missing on my Zoom account?
+What if I lose my phone and recovery codes?
+More 2FA setup guides
+How to set up 2FA on Steam
+How to set up 2FA on Google
+How to set up 2FA on Microsoft
+How to set up 2FA on Amazon
+How to set up 2FA on Facebook
+How to set up 2FA on GitHub
+See all guides →
+The host account controls the meeting
+A hijacked Zoom account can schedule meetings as you, access cloud recordings, and change account settings. Store the setup secret and Zoom’s recovery codes in your vault before the next call.
+Generate Zoom 2FA codes now

@@ -23,17 +23,17 @@ const description =
       kind: 'independent',
     },
   ]}
-  intro="Epic Games supports standard authenticator apps for Fortnite, Rocket League, the Epic Games Store and Unreal Engine accounts. Epic’s published instructions describe scanning a QR code; if your screen does not expose a manual key, the screenshot route below gets you the same secret."
+  intro="Epic Games supports standard authenticator apps for Fortnite, Rocket League, the Epic Games Store and Unreal Engine accounts. Setup shows a QR code; if your screen does not expose a manual key, the screenshot route below gets you the same secret."
   minutes={4}
   params={['6 digits', '30 s period', 'SHA-1']}
   ctaTitle="Protect the account, not just the skins"
-  ctaBody="An Epic account can hold purchases, linked console identities, and years of progress — and account theft is common in gaming. Save the setup secret and the 8-digit backup codes in your vault before you queue another match."
+  ctaBody="An Epic account can hold purchases, linked console identities, and years of progress — and account theft is common in gaming. Save the setup secret and Epic’s backup codes in your vault before you queue another match."
   deepDive={{
     heading: "Epic Games specifics",
     blocks: [
       {
         title: '2FA is required for some competitive and creator features',
-        body: 'Epic has required two-factor authentication for certain competitive play and creator payouts, and some account actions trigger a verification step. Enabling an authenticator app satisfies those requirements just as SMS does, but without depending on your carrier. Check the current rules in your account’s security page if a tournament or payout asks for 2FA.',
+        body: 'Epic has required two-factor authentication for some competitive play and creator payouts at times, and some account actions trigger a verification step. Enabling an authenticator app satisfies those requirements just as SMS does, but without depending on your carrier. Check the current rules in your account’s security page if a tournament or payout asks for 2FA.',
       },
       {
         title: 'One Epic account, many linked platforms',
@@ -41,7 +41,7 @@ const description =
       },
       {
         title: 'Recovery codes are the real insurance',
-        body: 'Epic generates 8-digit backup codes when you enable 2FA — treat them like a spare key: store them offline, separate from the device that runs your authenticator. If you also save the setup secret in a password manager, you can regenerate codes anywhere — but a compromised password manager exposes both, so use a strong master password and a second factor on the vault itself.',
+        body: 'Epic issues backup codes when you enable 2FA — treat them like a spare key: store them offline, separate from the device that runs your authenticator. If you also save the setup secret in a password manager, you can regenerate codes anywhere — but a compromised password manager exposes both, so use a strong master password and a second factor on the vault itself.',
       },
     ],
   }}
@@ -86,7 +86,7 @@ const description =
     },
     {
       q: 'What if I lose access to my authenticator?',
-      a: 'Use one of the 8-digit backup codes first. If you saved the setup secret, paste it into the generator on another device. Without either, contact Epic support — recovery without a second factor is deliberately slow.',
+      a: 'Use one of Epic’s backup codes first. If you saved the setup secret, paste it into the generator on another device. Without either, contact Epic support — recovery without a second factor is deliberately slow.',
     },
   ]}
 />

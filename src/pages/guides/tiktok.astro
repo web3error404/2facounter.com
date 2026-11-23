@@ -78,7 +78,7 @@ const description =
       },
       {
         title: 'What is verified here, and what is not',
-        body: 'The TOTP mechanics are standards, not opinions: TikTok’s authenticator method issues a Base32 key that any RFC 6238 implementation turns into the same 6-digit code, and that is what this page depends on. The navigation path in the steps — Settings and privacy → Security → 2-step verification → authenticator — mirrors TikTok’s own help-centre topic. The exact button and link wording does not: TikTok reworks its settings screens between app versions and regions, and the labels quoted here accommodate that variation rather than certify a single build. If your screen words a control differently, the control described is still the one to look for.',
+        body: 'The TOTP mechanics are standards, not opinions: TikTok’s authenticator method issues a Base32 key that any RFC 6238 implementation turns into the same 6-digit code, and that is what this page depends on. The navigation path in the steps — Settings and privacy → Security → 2-step verification → authenticator — was not checked against TikTok’s help centre, which served no readable article to an automated read on 23 November 2026. TikTok reworks its settings screens between app versions and regions, so the labels quoted here describe the control rather than certify a single build. If your screen words a control differently, the control described is still the one to look for.',
       },
     ],
   }}
@@ -89,7 +89,7 @@ const description =
     },
     {
       q: 'TikTok keeps saying my 2FA code is incorrect.',
-      a: 'Nine times out of ten it is clock drift. TOTP codes are computed from your key and the current time, so a device clock that is half a minute out produces codes TikTok will always reject. Turn on automatic date and time (Windows: Settings → Time & language → “Sync now”; macOS: System Settings → General → Date & Time → “Set time automatically”), then try again.',
+      a: 'Most often it is clock drift. TOTP codes are computed from your key and the current time, so a device clock that is half a minute out produces codes TikTok will always reject. Turn on automatic date and time (Windows: Settings → Time & language → “Sync now”; macOS: System Settings → General → Date & Time → “Set time automatically”), then try again.',
     },
     {
       q: 'Do I need to install an authenticator app to use this?',

@@ -41,7 +41,7 @@ const description =
       },
       {
         title: 'What is verified here, and what is not',
-        body: 'The TOTP mechanics are standards, not opinions: Amazon’s authenticator option issues a Base32 key that any RFC 6238 implementation turns into the same 6-digit code, and that is what this page depends on. The screen labels — “Authenticator App”, “Add new app”, “Can’t scan the barcode?” — could not be checked against Amazon’s own help centre, which blocks automated access and renders article bodies client-side. They are written to describe the control rather than to quote one build. If your screen words it differently, the control described is still the one to look for.',
+        body: 'The TOTP mechanics are standards, not opinions: Amazon’s authenticator option issues a Base32 key that any RFC 6238 implementation turns into the same 6-digit code, and that is what this page depends on. The screen labels — “Authenticator App”, “Add new app”, “Can’t scan the barcode?” — could not be checked against Amazon’s own help centre, which served only its navigation shell to every automated read on 23 November 2026. They are written to describe the control rather than to quote one build. If your screen words it differently, the control described is still the one to look for.',
       },
       {
         title: 'TV devices and household sharing',
@@ -52,7 +52,7 @@ const description =
   steps={[
     {
       title: 'Open Login & security',
-      body: 'Sign in at amazon.com, hover over “Account & Lists” → “Account” → “Login & security”. The direct shortcut is amazon.com/a/security.',
+      body: 'Sign in at amazon.com, hover over “Account & Lists” → “Account” → “Login & security”. The shortcut amazon.com/a/security should land on the same page.',
     },
     {
       title: 'Open Two-Step Verification settings',
@@ -90,7 +90,7 @@ const description =
     },
     {
       q: 'Can Amazon customer service bypass 2FA for me?',
-      a: 'No. Support cannot read your TOTP code or disable 2SV on request — that would defeat the purpose. If you lose the key and the backup codes, account recovery is the only route, which is why saving both during setup matters.',
+      a: 'Treat it as no. A support agent cannot know your TOTP code, and recovery normally runs through the contact details already on the account rather than through an agent waiving the factor. If you lose the key and the backup codes, that is the route you are left with — which is why saving both during setup matters.',
     },
   ]}
 />

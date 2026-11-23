@@ -1,0 +1,97 @@
+
+######## amazon
+Q: Does Amazon use standard TOTP?
+A: Yes. Amazon’s authenticator-app option is standard 6-digit, 30-second TOTP with SHA-1, so the key works in any compatible authenticator — including this browser generator.
+
+Q: Does this protect AWS too?
+A: No. AWS IAM is a separate system with its own MFA devices. Follow the AWS guide to assign a virtual MFA device to the root account and each IAM user; Amazon shopping 2SV does not carry over.
+
+Q: Why does Amazon keep asking for a code on my TV?
+A: Some devices re-authenticate after a security change or when their session expires. Generate the code on your phone or laptop, enter it on the device, and the session should persist again. The key itself stays in your vault, not on the TV.
+
+Q: Can Amazon customer service bypass 2FA for me?
+A: No. Support cannot read your TOTP code or disable 2SV on request — that would defeat the purpose. If you lose the key and the backup codes, account recovery is the only route, which is why saving both during setup matters.
+
+
+######## binance
+Q: Do I have to scan the QR with a webcam?
+A: No — three non-camera routes: paste the Base32 key text, upload a screenshot of the QR, or just paste the screenshot with Ctrl+V anywhere on the generator page.
+
+Q: Is it safe to use exchange 2FA in a browser?
+A: It’s as safe as the browser. Use a fresh private window on a trusted computer, check the URL (2facounter.com) character-for-character, and clear the key field and site data afterward. Never enter your Binance password on any other page.
+
+Q: Binance shows “Google Authenticator” only — will the browser codes work?
+A: Yes. Binance’s authenticator flow is standard RFC-6238 TOTP at 6 digits / 30 seconds, exactly what the generator implements.
+
+Q: What if my clock is a bit off?
+A: Exchanges are stricter on drift than social networks. If codes keep failing, make sure your device clock syncs automatically with an internet time server (Windows/macOS both have a “sync now” toggle) before blaming anything else.
+
+
+######## epic-games
+Q: Is Epic Games 2FA standard TOTP?
+A: Yes. Epic’s authenticator-app method uses standard 6-digit, 30-second TOTP with SHA-1, so any compatible authenticator or this browser generator can produce the code from the same secret.
+
+Q: Do I need 2FA to play Fortnite?
+A: Not for ordinary play. Epic has required 2FA for certain competitive events, creator features, and some account actions, and it strongly recommends it for everyone. Enabling it now avoids a scramble when a specific event or payout requires it.
+
+Q: Will 2FA protect my linked PlayStation or Xbox account?
+A: No. It protects the Epic login only. Each console network has its own authentication settings; enable 2FA there separately if you want the whole chain protected.
+
+Q: What if I lose access to my authenticator?
+A: Use one of Epic’s backup codes first. If you saved the setup secret, paste it into the generator on another device. Without either, contact Epic support — recovery without a second factor is deliberately slow.
+
+
+######## paypal
+Q: Does PayPal require 2FA?
+A: Personal accounts can enable it voluntarily, and PayPal encourages 2-step verification on accounts that move money. Whatever your account type, enabling it on a money-mover account is one of the highest-value few minutes in personal security.
+
+Q: SMS codes vs authenticator app on PayPal — which should I pick?
+A: Authenticator app, always. SMS codes die with your SIM: a SIM-swap attacker who ports your phone number receives your codes. TOTP lives on the device (or in this browser) and never transmits anything.
+
+Q: I lost my phone and can’t get PayPal codes — what now?
+A: If you saved recovery codes, use one at sign-in. If SMS was kept as a fallback, that still works. If neither exists, PayPal support verifies your identity through account details and restores access — which is slower and more painful than saving recovery codes today.
+
+Q: PayPal rejects my code right after setup — why?
+A: Most rejections are clock drift: PayPal’s server and your device disagree on what "now" is, and the code rolls over mid-verification. Sync your system clock automatically, then submit the freshly displayed code. If a code mix-up ever locks you out, PayPal’s recovery path exists - but a synced clock prevents that in the first place.
+
+
+######## tiktok
+Q: TikTok only offers me SMS — why?
+A: Method availability varies by region, app version and account type, and TikTok rolls options out unevenly. Update the app, then check both the mobile app and the web version, since the method list is not always identical. If the authenticator option genuinely is not there yet, keep SMS on rather than leaving the account with a password alone — and treat your phone number as part of your security perimeter, not as an inconvenience.
+
+Q: TikTok keeps saying my 2FA code is incorrect.
+A: Nine times out of ten it is clock drift. TOTP codes are computed from your key and the current time, so a device clock that is half a minute out produces codes TikTok will always reject. Turn on automatic date and time (Windows: Settings → Time & language → “Sync now”; macOS: System Settings → General → Date & Time → “Set time automatically”), then try again.
+
+Q: Do I need to install an authenticator app to use this?
+A: No — that is the point of the browser route. TikTok only needs a correct 6-digit code for the key it issued. 2FACounter computes that code in your browser with the Web Crypto API, so the key never leaves your device and there is no app to install, back up or lose. If you prefer an app, any standard TOTP app will also work with the same key.
+
+Q: I lost the phone with my TikTok authenticator. What now?
+A: If you saved a backup code, use it. If not, the Base32 key you pasted into the generator is your recovery path: enter it on any device and you get valid codes again — which is why saving it in a password manager is step seven and not an afterthought. Without either, you are down to TikTok’s account recovery process, and a social account with an audience is exactly the kind of target recovery teams scrutinise hardest.
+
+
+######## twitch
+Q: Does Twitch use standard TOTP?
+A: Yes. Once an authenticator app is enrolled, Twitch uses standard 6-digit, 30-second TOTP codes with SHA-1. The same secret works in any compatible authenticator or this browser generator.
+
+Q: Why does Twitch demand a phone number for 2FA?
+A: Twitch uses phone verification as an anti-abuse gate before enabling two-factor authentication. It is separate from the code generator: the phone proves eligibility, while the authenticator app supplies the login codes. Policies vary by region and account, so follow the prompts you see.
+
+Q: Can I stream without SMS after enabling the app?
+A: Usually yes. Choose the authenticator app as the method and keep the phone number as a recovery path if Twitch requires one. SMS codes are the weaker lane because of SIM-swap attacks; the authenticator is what you should actually use day to day.
+
+Q: I lost the phone with my Twitch authenticator. What now?
+A: Twitch has not historically issued static backup codes. Paste the saved setup secret into the generator on another device and keep signing in. Without it, recovery depends on the phone number and email you verified, so keep both current.
+
+
+######## zoom
+Q: Does Zoom use standard TOTP?
+A: Yes. Zoom’s authenticator-app method produces standard 6-digit, 30-second TOTP codes with SHA-1. The same secret works in any compatible authenticator, including this browser generator.
+
+Q: Do meeting attendees need 2FA to join?
+A: No. Two-factor authentication protects account sign-in, not meeting attendance. Guests join with a meeting link or ID and passcode as usual; only hosts and signed-in users deal with the account’s 2FA.
+
+Q: Why is the authenticator option missing on my Zoom account?
+A: Your organization may enforce SSO or restrict authentication methods at the account level. In that case the identity provider handles the second factor. Ask your Zoom admin which methods are permitted.
+
+Q: What if I lose my phone and recovery codes?
+A: If you saved the setup secret, paste it into the generator on another device and keep signing in. Without the secret or recovery codes, contact your Zoom account admin or Zoom support — recovery without a second factor is deliberately limited.
