@@ -37,3 +37,6 @@ launch-private/
 
 # IndexNow submission state (local to the deploy machine)
 .indexnow-state.json
+
+# agent scratch files (tmp-*.mjs, tmp-*.txt, tmp-*.json …)
+tmp-*
