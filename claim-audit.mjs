@@ -9,13 +9,18 @@
 //   4. An "unverified" byline must carry the date of the failed attempt.
 //   5. Claims about what vendor support can do must sit on a page that cites
 //      the vendor.
+//   6. A documented absence is not invented back into existence: if a vendor's
+//      help centre says a feature (e.g. recovery codes) does not exist, no
+//      sentence on the site may promise it.
 //
 // Run: node claim-audit.mjs            (all checks)
 //      node claim-audit.mjs --no-links (skip the network pass)
+//      CLAIM_AUDIT_ROOT=<dir> node claim-audit.mjs   (audit a fixture instead)
 import { readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
 const SKIP_LINKS = process.argv.includes('--no-links');
+const ROOT = process.env.CLAIM_AUDIT_ROOT || 'dist';
 
 const pages = [];
 (function walk(dir, prefix = '') {
@@ -24,7 +29,7 @@ const pages = [];
     if (e.isDirectory()) walk(p, prefix + '/' + e.name);
     else if (e.name === 'index.html') pages.push({ path: prefix + '/' || '/', file: p });
   }
-})('dist');
+})(ROOT);
 
 const decoded = (html) =>
   html
@@ -57,6 +62,45 @@ const banned = [
 // Link results are shared across pages: a source cited on 15 pages is checked once.
 const external = new Map(); // url -> Set(page paths)
 
+// Features a vendor's own documentation says do not exist. A guide may say so
+// (with the negation), but it must never promise one: that is how the PayPal
+// page once told readers to download a recovery-code list that PayPal does not
+// document. Sentences are matched whole so the true and false statements can
+// share the same vocabulary.
+const ABSENT = [
+  {
+    name: 'PayPal',
+    vendor: /PayPal/i,
+    topic: /\brecovery[\s-]?codes?\b/i,
+    negation: /\b(no|none|not|never|without|doesn't|does not|isn't|no longer)\b/i,
+    because: 'PayPal documents no recovery-code list for 2-step verification',
+  },
+];
+
+const sentences = (t) => t.split(/(?<=[.!?])\s+/);
+
+// Internal links resolve against what was actually built, so a guide that links
+// to a page someone later deleted fails here rather than 404ing for a reader.
+// External links are checked live further down; these need no network.
+const builtFiles = new Set();
+(function walkFiles(dir, prefix = '') {
+  for (const e of readdirSync(dir, { withFileTypes: true })) {
+    const p = join(dir, e.name);
+    const url = `${prefix}/${e.name}`;
+    if (e.isDirectory()) walkFiles(p, url);
+    else builtFiles.add(url);
+  }
+})(ROOT);
+const routeExists = (href) => {
+  const clean = href.split('#')[0].split('?')[0];
+  if (!clean || clean === '/') return true;
+  const base = clean.replace(/\/$/, '');
+  if (builtFiles.has(clean)) return true;
+  if (builtFiles.has(`${base}/index.html`)) return true;
+  if (builtFiles.has(`${base}.html`)) return true;
+  return false;
+};
+
 for (const { path, file } of pages) {
   const html = readFileSync(file, 'utf8');
   const text = decoded(html);
@@ -77,6 +121,13 @@ for (const { path, file } of pages) {
     const clean = u.replace(/&amp;/g, '&');
     if (!external.has(clean)) external.set(clean, new Set());
     external.get(clean).add(path);
+  }
+
+  // ---- 1b. internal links must point at something that was built
+  for (const m of html.matchAll(/<a\b[^>]*href="(\/(?!\/)[^"]*)"/g)) {
+    const href = m[1];
+    if (href.startsWith('/#')) continue;
+    if (!routeExists(href)) fail(`${path}: internal link "${href}" is not a built page`);
   }
 
   // ---- 2. banned phrasing
@@ -103,6 +154,16 @@ for (const { path, file } of pages) {
   const supportClaim = text.match(/\bsupport\b[^.]{0,60}\b(cannot|can ?not|is unable to|are unable to)\b[^.]{0,60}\b(remove|disable|bypass|change|reset)\b/i);
   if (supportClaim && !/official/i.test(decoded(sourcesBlock || ''))) {
     fail(`${path}: claim about support ("${supportClaim[0].slice(0, 70)}…") without a cited vendor source`);
+  }
+
+  // ---- 5b. documented absences stay absent
+  for (const s of sentences(text)) {
+    for (const a of ABSENT) {
+      if (a.vendor.test(s) && a.topic.test(s) && !a.negation.test(s)) {
+        const at = s.search(a.vendor);
+        fail(`${path}: promises a ${a.name} feature the vendor does not document ("${s.slice(at, at + 90).trim()}") — ${a.because}`);
+      }
+    }
   }
 
   // ---- 6. a review claim must record how the source was read
