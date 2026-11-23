@@ -35,11 +35,20 @@ const decoded = (html) =>
   html
     .replace(/<script[\s\S]*?<\/script>/gi, ' ')
     .replace(/<style[\s\S]*?<\/style>/gi, ' ')
+    // Block boundaries end a sentence in rendered text, so they must end one
+    // here too. Without this, a byline followed by a list followed by a
+    // paragraph reads as one giant sentence, and a claim in the last block
+    // inherits vocabulary from the first.
+    .replace(/<\/(p|li|h[1-6]|div|section|td|th|summary|details|blockquote|figcaption)>/gi, '. ')
+    .replace(/<br\s*\/?>/gi, '. ')
     .replace(/<[^>]+>/g, ' ')
     .replace(/&#39;|&apos;/g, "'")
     .replace(/&quot;/g, '"')
     .replace(/&amp;/g, '&')
     .replace(/&nbsp;/g, ' ')
+    // A block ending in a full stop now gets a second one from the boundary
+    // rule; collapse runs so messages read cleanly.
+    .replace(/\.{2,}/g, '.')
     .replace(/\s+/g, ' ');
 
 let problems = 0;
@@ -62,18 +71,30 @@ const banned = [
 // Link results are shared across pages: a source cited on 15 pages is checked once.
 const external = new Map(); // url -> Set(page paths)
 
-// Features a vendor's own documentation says do not exist. A guide may say so
-// (with the negation), but it must never promise one: that is how the PayPal
-// page once told readers to download a recovery-code list that PayPal does not
-// document. Sentences are matched whole so the true and false statements can
-// share the same vocabulary.
+// Features a vendor's own documentation says do not exist, with the evidence
+// that says so. A guide may report the absence; it must never promise the
+// feature — that is how the PayPal page once told readers to download a
+// recovery-code list PayPal does not document.
+//
+// The rule is deliberately three-part, because co-mention is not a claim:
+// either party in a comparison can name PayPal and recovery codes without
+// asserting that PayPal has them ("Unlike PayPal, Discord issues recovery
+// codes"). So a sentence must name the vendor, name the topic, AND use an
+// issuance verb — and must not be a denial or a comparison — before it is
+// treated as contradicting the record.
 const ABSENT = [
   {
     name: 'PayPal',
     vendor: /PayPal/i,
     topic: /\brecovery[\s-]?codes?\b/i,
-    negation: /\b(no|none|not|never|without|doesn't|does not|isn't|no longer)\b/i,
+    asserts: /\b(issues?|issued|provides?|provided|offers?|offered|gives?|given|hands?|downloads?|printed|prints?|saves?|generates?|includes?|come[s]? with|available)\b/i,
+    denies: /\b(no|none|not|never|without|doesn't|does not|isn't|aren't|no longer|unlike|whereas|instead|rather than|compared)\b/i,
     because: 'PayPal documents no recovery-code list for 2-step verification',
+    // The evidence behind the entry. Kept beside the rule so the next person
+    // can re-read the source rather than trusting the table.
+    source: 'https://www.paypal.com/us/cshelp/article/what-is-2-step-verification-help167',
+    checked: '2026-11-23',
+    proposition: 'PayPal 2-step verification issues no recovery codes and documents no recovery-code list.',
   },
 ];
 
@@ -159,10 +180,16 @@ for (const { path, file } of pages) {
   // ---- 5b. documented absences stay absent
   for (const s of sentences(text)) {
     for (const a of ABSENT) {
-      if (a.vendor.test(s) && a.topic.test(s) && !a.negation.test(s)) {
-        const at = s.search(a.vendor);
-        fail(`${path}: promises a ${a.name} feature the vendor does not document ("${s.slice(at, at + 90).trim()}") — ${a.because}`);
-      }
+      if (!a.vendor.test(s) || !a.topic.test(s)) continue;
+      if (!a.asserts.test(s) || a.denies.test(s)) continue;
+      // Quote from whichever half of the claim comes first, so the message
+      // shows the assertion rather than whatever vendor name precedes it.
+      const at = Math.min(...[s.search(a.vendor), s.search(a.topic)].filter((i) => i >= 0));
+      fail(
+        `${path}: promises a ${a.name} feature the vendor does not document ` +
+          `("${s.slice(at, at + 90).trim()}") — ${a.because} ` +
+          `(checked ${a.checked}: ${a.source})`,
+      );
     }
   }
 
