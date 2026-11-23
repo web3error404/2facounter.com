@@ -24,6 +24,11 @@ const description =
       kind: 'official',
     },
     {
+      label: 'Discord Support — Using an Authenticator App on Discord',
+      href: 'https://support.discord.com/hc/en-us/articles/26304482627095-Using-an-Authenticator-App-on-Discord',
+      kind: 'official',
+    },
+    {
       label: 'RFC 6238 — TOTP: Time-Based One-Time Password Algorithm',
       href: 'https://www.rfc-editor.org/rfc/rfc6238',
       kind: 'independent',
@@ -45,7 +50,7 @@ const description =
     },
     {
       title: 'Get the secret key instead of using your phone',
-      body: 'The screen shows a QR code by default. Click the manual-entry/link option below it — “enter the key manually” — and you’ll see a Base32 key like JBSWY3DPEHPK3PXP (letters A–Z plus the digits 2–7 — no 0, 1 or 8).',
+      body: 'The screen shows a QR code by default. If a manual-entry link (“enter the key manually”) is offered below it, use it and you’ll see a Base32 key like JBSWY3DPEHPK3PXP; if there is no such link, screenshot the QR and paste the image into the generator. Either way the same secret comes out — letters A–Z plus the digits 2–7.',
     },
     {
       title: 'Paste it into 2FA COUNTER',
@@ -61,13 +66,13 @@ const description =
     },
     {
       title: 'Save your recovery codes first',
-      body: 'Discord displays a one-time set of recovery codes. Download them and store them in an encrypted password manager. If you keep the Base32 secret there too, 2facounter.com can rebuild your codes anywhere, offline.',
+      body: 'Discord displays a set of recovery codes, each usable once. Download them and store them in an encrypted password manager — Discord’s own documentation says its support team cannot remove MFA from an account, so these are the only way back. If you keep the Base32 secret there too, 2facounter.com can rebuild your codes anywhere, offline.',
     },
   ]}
   faqs={[
     {
       q: 'Discord says my 2FA code is wrong.',
-      a: 'That’s clock drift, nine times out of ten. Check that your device clock auto-syncs with an internet time server (Windows: Settings → Time & language → “Sync now”; macOS: System Settings → Date & time), then try again — the generator computes against the time your device reports.',
+      a: 'That’s most often clock drift. Check that your device clock auto-syncs with an internet time server (Windows: Settings → Time & language → “Sync now”; macOS: System Settings → Date & time), then try again — the generator computes against the time your device reports.',
     },
     {
       q: 'Does 2FA change anything about running a server?',
@@ -79,7 +84,7 @@ const description =
     },
     {
       q: 'I lost the phone my Discord authenticator was on. Can I still log in?',
-      a: 'Use a recovery code if you saved them. Otherwise browser 2FA codes can’t help retroactively — that’s why saving recovery codes before you need them is step seven.',
+      a: 'Use a recovery code if you saved them — Discord documents that its support team cannot remove MFA from an account, so there is no support-side unlock. Otherwise browser 2FA codes can’t help retroactively — that’s why saving recovery codes before you need them is step seven.',
     },
   ]}
 />

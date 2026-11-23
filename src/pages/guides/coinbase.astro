@@ -37,11 +37,11 @@ const description =
   steps={[
     {
       title: 'Open Coinbase security settings',
-      body: 'Sign in at coinbase.com and open the 2-step verification settings page (your avatar menu → Security). Coinbase’s help centre calls this page “2-step verification settings” throughout, and lists every method you can enable there.',
+      body: 'Sign in at coinbase.com and open the 2-step verification settings page — usually under the avatar menu, then Security. Coinbase’s help centre calls this page “2-step verification settings” throughout, and lists every method you can enable there.',
     },
     {
       title: 'Add an authenticator method',
-      body: 'Under “Available methods”, click “Set up” next to “Authenticator app” rather than choosing SMS. Coinbase verifies you’re the account holder with a password step first.',
+      body: 'Under “Available methods”, click “Set up” next to “Authenticator app” rather than choosing SMS. Coinbase first confirms it is you — a password prompt or an existing 2FA check, depending on the account.',
     },
     {
       title: 'Extract the setup key',
@@ -59,11 +59,11 @@ const description =
   faqs={[
     {
       q: 'Coinbase Authenticator app vs. SMS — which should I pick?',
-      a: 'Always the authenticator app. SMS 2FA on a crypto exchange is a SIM-swap attack waiting to happen: an attacker porting your number receives every code. TOTP tokens never transit a phone network.',
+      a: 'Always the authenticator app. Coinbase requires 2-step verification on every account and its help centre calls SMS “the least secure option” itself. On a crypto exchange that matters more than elsewhere: an attacker who ports your number receives every SMS code, while TOTP tokens never transit a phone network.',
     },
     {
       q: 'I removed or replaced my 2FA — why can’t I send crypto out?',
-      a: 'Coinbase may hold outbound sends for a short security window after authentication changes. The pause gives the real owner time to undo an attacker’s edits — so when you eventually rotate this key, expect a temporary send hold rather than a fresh compromise.',
+      a: 'Coinbase has used a short security hold on outbound sends after authentication changes. Where one applies it gives the real owner time to undo an attacker’s edits, so treat a temporary send hold as expected rather than as fresh evidence of compromise — but check the current policy when you rotate this key, because the window is set by Coinbase, not by the standard.',
     },
     {
       q: 'Does this replace the Coinbase mobile app’s prompts?',
@@ -71,7 +71,7 @@ const description =
     },
     {
       q: 'I lost my Coinbase TOTP key — how do I get back in?',
-      a: 'Without the secret you’ll need Coinbase’s identity-verification recovery path, which can take days. Now you see the point of step 5: the Base32 key in an encrypted vault is your backup, and it can re-mint codes anywhere, forever.',
+      a: 'Without the secret you’ll need Coinbase’s recovery path — identity verification, or the trusted-contacts feature Coinbase documents, where two to five people you nominate approve a recovery request (usable 24 hours after setup). Either route is slow, which is the point of step 5: the Base32 key in an encrypted vault is your own backup, and it can re-mint codes anywhere, forever.',
     },
   ]}
 />
