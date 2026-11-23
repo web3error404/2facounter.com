@@ -1,0 +1,45 @@
+---
+// ── Sources list ─────────────────────────────────────────────────────
+// The documentation a page was checked against, rendered as a list under
+// the review line. Deliberately separate from the review claim: the claim
+// says what standard the review met, this says what a reader can go and
+// verify for themselves.
+//
+// Each link is tagged 'official' (the vendor's own pages) or 'independent'
+// (standards documents, reporting, reference implementations) so third-party
+// corroboration is never mistaken for vendor documentation. Renders nothing
+// when the list is empty — an empty Sources block would imply a source that
+// does not exist.
+export interface Props {
+  sources: { label: string; href: string; kind?: 'official' | 'independent' }[];
+  /** Heading text; override for localized pages */
+  heading?: string;
+  /** Anchor id. Keep the default on guide-style pages so audits stay stable. */
+  id?: string;
+  class?: string;
+}
+
+const { sources, heading = 'Sources', id = 'guide-sources', class: className = 'mt-5 max-w-2xl' } = Astro.props;
+---
+
+{
+  sources && sources.length > 0 && (
+    <section class={`${className} border-l-2 border-hairline-strong pl-4`} aria-labelledby={id}>
+      <h2 id={id} class="section-label">
+        {heading}
+      </h2>
+      <ul class="mt-2 space-y-1.5">
+        {sources.map((s) => (
+          <li class="text-[13px] font-medium leading-[1.6] text-ink">
+            <a href={s.href} class="link" rel="noopener">
+              {s.label}
+            </a>{' '}
+            <span class="font-mono text-[10px] font-semibold tracking-tight text-ink/60 uppercase">
+              {s.kind === 'independent' ? 'independent' : 'official'}
+            </span>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )
+}

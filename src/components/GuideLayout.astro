@@ -3,6 +3,7 @@ import Layout from '../layouts/Layout.astro';
 import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 import ReviewByline from './ReviewByline.astro';
+import SourcesList from './SourcesList.astro';
 import { GUIDES } from '../data/guides';
 
 export interface Props {
@@ -243,23 +244,7 @@ const jsonLd = [
         </p>
       )}
       <ReviewByline />
-      {sources && sources.length > 0 && (
-        <section class="mt-5 max-w-2xl border-l-2 border-hairline-strong pl-4" aria-labelledby="guide-sources">
-          <h2 id="guide-sources" class="section-label">Sources</h2>
-          <ul class="mt-2 space-y-1.5">
-            {sources.map((s) => (
-              <li class="text-[13px] font-medium leading-[1.6] text-ink">
-                <a href={s.href} class="link" rel="noopener">
-                  {s.label}
-                </a>{' '}
-                <span class="font-mono text-[10px] font-semibold tracking-tight text-ink/60 uppercase">
-                  {s.kind === 'independent' ? 'independent' : 'official'}
-                </span>
-              </li>
-            ))}
-          </ul>
-        </section>
-      )}
+      {sources && sources.length > 0 && <SourcesList sources={sources} />}
       <a href="/#generator" class="btn-primary mt-8">
         {generatorCtaText}
         <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14m0 0-6-6m6 6-6 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
