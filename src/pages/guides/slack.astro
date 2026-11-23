@@ -13,7 +13,20 @@ const description =
   path="/guides/slack/"
   datePublished="2026-11-18"
   dateModified="2026-11-18"
-  lastReviewed="2026-11-18"
+  lastReviewed="2026-11-23"
+  dateModified="2026-11-23"
+  sources={[
+    {
+      label: 'Slack Help — Set up two-factor authentication',
+      href: 'https://slack.com/help/articles/204509068-Set-up-two-factor-authentication',
+      kind: 'official',
+    },
+    {
+      label: 'RFC 6238 — TOTP: Time-Based One-Time Password Algorithm',
+      href: 'https://www.rfc-editor.org/rfc/rfc6238',
+      kind: 'independent',
+    },
+  ]}
   intro="Slack supports authenticator apps for personal accounts, but workspace owners can also require 2FA or route sign-in through SSO. This guide covers the personal TOTP setup and explains when your company’s identity provider is already handling the second factor."
   minutes={4}
   params={['6 digits', '30 s period', 'SHA-1']}
@@ -47,7 +60,7 @@ const description =
     },
     {
       title: 'Choose the authenticator app',
-      body: 'Pick “Use an authenticator app” rather than SMS. Slack’s help documents both scanning a QR code and entering the code by hand, so look for the manual-entry option if a setup key is not shown by default.',
+      body: 'Choose “Use an app to retrieve authentication codes” rather than SMS. Slack’s help documents both routes — scan the QR code, or “if you prefer, you can choose to enter the code by hand” — so the manual-entry option is there even when the key is not shown by default.',
     },
     {
       title: 'Generate the code',

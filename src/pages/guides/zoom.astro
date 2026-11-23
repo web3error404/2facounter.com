@@ -12,8 +12,17 @@ const description =
   description={description}
   path="/guides/zoom/"
   datePublished="2026-11-18"
-  dateModified="2026-11-18"
-  lastReviewed="2026-11-18"
+  dateModified="2026-11-23"
+    lastReviewed="2026-11-23"
+  reviewedPrefix="UI wording and navigation"
+  reviewedClaim="unverified — support.zoom.com renders its help articles client-side and could not be read"
+  sources={[
+    {
+      label: 'RFC 6238 — TOTP: Time-Based One-Time Password Algorithm',
+      href: 'https://www.rfc-editor.org/rfc/rfc6238',
+      kind: 'independent',
+    },
+  ]}
   intro="Zoom supports authenticator apps for account sign-in, and many organizations enforce 2FA at the account level. Meetings themselves do not usually ask for a code — this protects the account that hosts them. Zoom’s published instructions describe scanning a QR code; if no manual key appears, screenshot the QR and paste the image into the generator."
   minutes={4}
   params={['6 digits', '30 s period', 'SHA-1']}

@@ -3,7 +3,7 @@ import GuideLayout from '../../components/GuideLayout.astro';
 
 const title = 'How to Set Up 2FA on LinkedIn (Authenticator App)';
 const description =
-  'Enable two-step verification on LinkedIn with an authenticator app. Enter LinkedIn’s secret key or scan the QR code, then generate TOTP codes in your browser.';
+  'Enable two-factor authentication on LinkedIn with an authenticator app. Enter LinkedIn’s secret key or scan the QR code, then generate TOTP codes in your browser.';
 ---
 
 <GuideLayout
@@ -13,7 +13,25 @@ const description =
   path="/guides/linkedin/"
   datePublished="2026-11-18"
   dateModified="2026-11-18"
-  lastReviewed="2026-11-18"
+  lastReviewed="2026-11-23"
+  dateModified="2026-11-23"
+  sources={[
+    {
+      label: 'LinkedIn Help — Authenticator app overview',
+      href: 'https://www.linkedin.com/help/linkedin/answer/a1354987',
+      kind: 'official',
+    },
+    {
+      label: 'LinkedIn Help — Turn two-factor authentication on and off',
+      href: 'https://www.linkedin.com/help/linkedin/answer/a1381088',
+      kind: 'official',
+    },
+    {
+      label: 'RFC 6238 — TOTP: Time-Based One-Time Password Algorithm',
+      href: 'https://www.rfc-editor.org/rfc/rfc6238',
+      kind: 'independent',
+    },
+  ]}
   intro="LinkedIn supports authenticator apps alongside SMS, and its official instructions describe manual entry using a secret key LinkedIn provides. That matters if you work across shared machines or want a login that does not depend on a phone number."
   minutes={4}
   params={['6 digits', '30 s period', 'SHA-1']}
@@ -23,8 +41,8 @@ const description =
     heading: "LinkedIn nuances before you enroll",
     blocks: [
       {
-        title: 'The authenticator option is not always the default',
-        body: 'LinkedIn has long offered SMS codes, and it still presents SMS prominently. Choose the authenticator-app path explicitly; otherwise you end up with a second factor that a SIM swap can intercept. Once the app is enrolled, you can usually remove SMS as a sign-in method while keeping a recovery route.',
+        title: 'The app is LinkedIn’s own recommendation',
+        body: 'LinkedIn’s help centre states that it recommends the authenticator app as the preferred two-factor method — ahead of SMS, which it also offers. Older guides describe the opposite, because LinkedIn used to present SMS first. Take the app path explicitly: it is the only one of the two whose codes a SIM swap cannot intercept. Once enrolled, you can usually remove SMS as a sign-in method while keeping a recovery route.',
       },
       {
         title: 'Company SSO can bypass LinkedIn 2FA entirely',
@@ -39,15 +57,15 @@ const description =
   steps={[
     {
       title: 'Open LinkedIn settings',
-      body: 'Sign in at linkedin.com, click “Me” under your profile picture → “Settings & Privacy” → “Sign in & security” → “Two-step verification”.',
+      body: 'Sign in at linkedin.com, select the profile icon → “Settings & Privacy” → under “Sign-in & security”, select “Two-factor authentication”. LinkedIn renamed this from “two-step verification”; older screenshots will say that instead.',
     },
     {
-      title: 'Turn on two-step verification',
-      body: 'Click “Turn on” and choose “Authenticator app” rather than phone/SMS. LinkedIn walks you into the setup flow.',
+      title: 'Enable it and choose “Authenticator app”',
+      body: 'Enable two-factor authentication, choose “Authenticator app” as the method, select “Continue”, and submit your LinkedIn password.',
     },
     {
-      title: 'Get the setup key',
-      body: 'LinkedIn provides a secret key for manual entry during setup; the exact label varies. Copy it if shown. If your screen only displays a QR code, screenshot it and paste the image into the generator — the QR is decoded locally.',
+      title: 'Note the secret key LinkedIn shows you',
+      body: 'LinkedIn’s own instructions tell you to choose “Other” in your authenticator app, name the account “LinkedIn”, and “enter the secret key provided by LinkedIn”. That key is the whole backup — copy it now. If your screen only displays a QR code, screenshot it and paste the image into the generator; the QR is decoded locally.',
     },
     {
       title: 'Generate a code',
@@ -55,7 +73,7 @@ const description =
     },
     {
       title: 'Confirm and finish',
-      body: 'Enter the current code in LinkedIn’s confirmation field. LinkedIn lists the authenticator as an active method. If the flow presents recovery codes, download or copy them now.',
+      body: 'Enter the current code in LinkedIn’s confirmation field. LinkedIn then makes the authenticator an active method. Worth knowing: LinkedIn ties the enrolment to that app install, so a new phone or a reset means re-adding it — which the saved secret makes trivial rather than painful.',
     },
     {
       title: 'Store the key as your backup',

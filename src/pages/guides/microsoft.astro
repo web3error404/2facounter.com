@@ -13,7 +13,21 @@ const description =
   path="/guides/microsoft/"
   dateModified="2026-11-09"
   datePublished="2026-11-09"
-  lastReviewed="2026-11-07"
+  lastReviewed="2026-11-23"
+  reviewedPrefix="UI wording and navigation"
+  reviewedClaim="partially verified — Microsoft’s two-step verification article was read; the third-party-authenticator path is only described there as on-screen instructions"
+  sources={[
+    {
+      label: 'Microsoft Support — How to use two-step verification with your Microsoft account',
+      href: 'https://support.microsoft.com/en-us/account-billing/how-to-use-two-step-verification-with-your-microsoft-account-c7910146-672f-01e9-50a0-93b4585e7eb4',
+      kind: 'official',
+    },
+    {
+      label: 'RFC 6238 — TOTP: Time-Based One-Time Password Algorithm',
+      href: 'https://www.rfc-editor.org/rfc/rfc6238',
+      kind: 'independent',
+    },
+  ]}
   intro="Microsoft account security (Outlook, Windows, Xbox, Office) pushes hard toward its own Authenticator and passkeys — but a standard TOTP setup key is always available if you know where to look. Here's the path."
   minutes={5}
   params={['6 digits', '30s period', 'SHA-1']}
@@ -26,11 +40,11 @@ const description =
     },
     {
       title: 'Decline the Authenticator-app download',
-      body: 'Microsoft offers its mobile Authenticator first. Decline the download and choose the option to use a different authenticator app instead — the wizard then shows the classic QR-code setup screen for any authenticator app.',
+      body: 'Microsoft offers its mobile Authenticator first. Decline the download and look for the option to use a different authenticator app instead — Microsoft’s help article only covers this as “follow the instructions shown on the screen”, so the exact wording varies, but the wizard then shows the classic QR setup screen for any authenticator app.',
     },
     {
       title: 'Reveal the secret key',
-      body: 'On the QR screen choose “Can’t scan the image?” (or “enter code manually”). A Base32 setup key appears — letters A–Z and digits 2–7, no spaces.',
+      body: 'On the QR screen choose the manual-entry link — “Can’t scan the image?” or “enter code manually”, depending on build. A Base32 setup key appears — letters A–Z and digits 2–7, no spaces. Microsoft generates that QR to prove the device is physically yours, so the key route is the same secret with the possession check moved to whoever holds it.',
     },
     {
       title: 'Paste the key into the generator',
@@ -42,7 +56,7 @@ const description =
     },
     {
       title: 'Archive key and recovery info',
-      body: 'Save the Base32 key in your encrypted password manager as master copy and verify a fallback email/phone exists in your profile. Microsoft has been steering personal accounts toward passkeys and app-based sign-in and away from SMS, so an email fallback - or better, a printed code - is the durable option.',
+      body: 'Save the Base32 key in your encrypted password manager as master copy and verify a fallback email/phone exists in your profile. Microsoft has been steering personal accounts toward passkeys and app-based sign-in and away from SMS, so an email fallback — or better, a printed recovery code — is the durable option.',
     },
   ]}
   faqs={[

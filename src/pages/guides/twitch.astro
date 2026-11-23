@@ -12,8 +12,17 @@ const description =
   description={description}
   path="/guides/twitch/"
   datePublished="2026-11-18"
-  dateModified="2026-11-18"
-  lastReviewed="2026-11-18"
+  dateModified="2026-11-23"
+    lastReviewed="2026-11-23"
+  reviewedPrefix="UI wording and navigation"
+  reviewedClaim="unverified — help.twitch.tv renders its help articles client-side and could not be read"
+  sources={[
+    {
+      label: 'RFC 6238 — TOTP: Time-Based One-Time Password Algorithm',
+      href: 'https://www.rfc-editor.org/rfc/rfc6238',
+      kind: 'independent',
+    },
+  ]}
   intro="Twitch requires email and phone verification before it will turn on two-factor authentication, then lets you choose an authenticator app for the actual codes. That phone requirement is the catch; the TOTP secret itself is standard. Twitch’s published instructions describe scanning a QR code, so the screenshot route below is the reliable fallback if no manual key appears. Twitch also does not issue static backup codes, so keep the recovery phone number current."
   minutes={5}
   params={['6 digits', '30 s period', 'SHA-1']}

@@ -15,7 +15,20 @@ const description =
   path="/guides/discord/"
   dateModified="2026-11-09"
   datePublished="2026-11-09"
-  lastReviewed="2026-11-07"
+  lastReviewed="2026-11-23"
+  dateModified="2026-11-23"
+  sources={[
+    {
+      label: 'Discord Support — Setting up Multi-Factor Authentication',
+      href: 'https://support.discord.com/hc/en-us/articles/219576828-Setting-up-Multi-Factor-Authentication',
+      kind: 'official',
+    },
+    {
+      label: 'RFC 6238 — TOTP: Time-Based One-Time Password Algorithm',
+      href: 'https://www.rfc-editor.org/rfc/rfc6238',
+      kind: 'independent',
+    },
+  ]}
   intro="Discord throws you out if you lose both your phone and its authenticator. This browser-only route generates your Discord 6-digit codes on any device you’re actually logged in on — and server owners often require 2FA before moderation actions count, so it’s effectively mandatory if you run a community."
   minutes={4}
   params={['6 digits', '30s period', 'SHA-1']}
@@ -44,7 +57,7 @@ const description =
     },
     {
       title: 'Consider a passkey or security key too',
-      body: 'Discord supports three MFA types — passkeys/security keys, authenticator apps, and SMS — and recommends a security key as the strongest option. A passkey is phishing-resistant but lives in one device’s hardware; TOTP stays portable through your saved key. Using both is the strongest combination.',
+      body: 'Discord supports three MFA types — passkeys/security keys, authenticator apps, and SMS — and lists passkeys and security keys first. A passkey is phishing-resistant but lives in one device’s hardware; TOTP stays portable through your saved key. Using both is the strongest combination.',
     },
     {
       title: 'Save your recovery codes first',

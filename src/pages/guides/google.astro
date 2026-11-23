@@ -13,7 +13,26 @@ const description =
   path="/guides/google/"
   dateModified="2026-11-09"
   datePublished="2026-11-09"
-  lastReviewed="2026-11-09"
+  lastReviewed="2026-11-23"
+  reviewedPrefix="UI wording and navigation"
+  reviewedClaim="partially verified — Google’s 2-Step Verification and Authenticator articles were read; the setup-key dialog itself is not documented"
+  sources={[
+    {
+      label: 'Google Account Help — Turn on 2-Step Verification',
+      href: 'https://support.google.com/accounts/answer/185839',
+      kind: 'official',
+    },
+    {
+      label: 'Google Account Help — Get verification codes with Google Authenticator',
+      href: 'https://support.google.com/accounts/answer/1066447',
+      kind: 'official',
+    },
+    {
+      label: 'RFC 6238 — TOTP: Time-Based One-Time Password Algorithm',
+      href: 'https://www.rfc-editor.org/rfc/rfc6238',
+      kind: 'independent',
+    },
+  ]}
   intro="Google’s 2-Step Verification supports standard TOTP for everyone — but the setup key is hidden behind the QR code and Google nudges you toward its cloud-synced app. This guide gets you the plain Base32 key in about six minutes."
   minutes={6}
   params={['6 digits', '30s period', 'SHA-1']}
@@ -43,7 +62,7 @@ const description =
     },
     {
       title: 'Choose “Authenticator app”',
-      body: 'Scroll to the available second-step options and add “Authenticator app”. Google shows a QR code, with the setup key below it — you can use either in the next steps.',
+      body: 'Scroll to the available second-step options and add “Authenticator app”. Google shows a QR code, and the setup key sits behind the manual-entry link on the same screen — “Can’t scan it?” in the builds most people see. If your dialog words it differently, look for the option that shows a key instead of a square.',
     },
     {
       title: 'Reveal the setup key',

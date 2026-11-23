@@ -13,7 +13,20 @@ const description =
   path="/guides/dropbox/"
   datePublished="2026-11-18"
   dateModified="2026-11-18"
-  lastReviewed="2026-11-18"
+  lastReviewed="2026-11-23"
+  dateModified="2026-11-23"
+  sources={[
+    {
+      label: 'Dropbox Help — How to turn 2-factor authentication on and off',
+      href: 'https://help.dropbox.com/security/enable-two-step-verification',
+      kind: 'official',
+    },
+    {
+      label: 'RFC 6238 — TOTP: Time-Based One-Time Password Algorithm',
+      href: 'https://www.rfc-editor.org/rfc/rfc6238',
+      kind: 'independent',
+    },
+  ]}
   intro="Dropbox calls it two-step verification and supports both authenticator apps and security keys. The setup screen shows a QR code; the manual key is one click away. This guide uses standard TOTP so the code can be generated on any browser you trust."
   minutes={4}
   params={['6 digits', '30 s period', 'SHA-1']}

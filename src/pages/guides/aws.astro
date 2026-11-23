@@ -15,7 +15,20 @@ const description =
   path="/guides/aws/"
   dateModified="2026-11-09"
   datePublished="2026-11-09"
-  lastReviewed="2026-11-07"
+  lastReviewed="2026-11-23"
+  dateModified="2026-11-23"
+  sources={[
+    {
+      label: 'AWS Docs — Assign a virtual MFA device in the AWS Management Console',
+      href: 'https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_mfa_enable_virtual.html',
+      kind: 'official',
+    },
+    {
+      label: 'RFC 6238 — TOTP: Time-Based One-Time Password Algorithm',
+      href: 'https://www.rfc-editor.org/rfc/rfc6238',
+      kind: 'independent',
+    },
+  ]}
   intro="AWS calls authenticator apps “virtual MFA devices” — it’s the same RFC 6238 TOTP underneath. A browser-based generator is a favourite for CI boxes, consoles-on-VMs, and situations where your phone isn’t the right tool. Root and IAM users each carry their own enrollment."
   minutes={4}
   params={['6 digits', '30s period', 'SHA-1']}
@@ -44,7 +57,7 @@ const description =
     },
     {
       title: 'Back up the key',
-      body: 'The key is re-derivable only if you saved it: AWS tells you to make a secure backup of the QR code or secret key, or enable multiple MFA devices — keep yours encrypted in your password manager. To rotate later, deactivate the device and assign a new one (docs.aws.amazon.com/IAM/latest/UserGuide/enable-virt-mfa-for-root.html).',
+      body: 'The key is re-derivable only if you saved it: AWS recommends registering multiple MFA devices, or enabling your authenticator app’s cloud backup — a copy of the secret in your password manager achieves the same without handing it to a vendor. To rotate later, deactivate the device and assign a new one (docs.aws.amazon.com/IAM/latest/UserGuide/enable-virt-mfa-for-root.html).',
     },
   ]}
   faqs={[
