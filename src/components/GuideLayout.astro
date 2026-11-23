@@ -50,6 +50,13 @@ export interface Props {
    * list would imply a source that does not exist.
    */
   sources?: { label: string; href: string; kind?: 'official' | 'independent' }[];
+  /**
+   * How the source was actually read. Recorded as structured metadata
+   * (data-review-via) rather than left in prose, so an audit can tell a
+   * browser check from a text-reader check from a claim that predates the
+   * distinction. 'unspecified' is honest, not a fourth standard.
+   */
+  reviewedVia?: 'browser' | 'text-reader' | 'unspecified';
   /* ── UI chrome overridables (all default to the current English copy) ──
      Present so a translated guide page can localize the layout without
      touching this file. Per-service copy already flows in as props. */
@@ -105,6 +112,7 @@ const {
   minutesSuffix = 'min · no app required',
   reviewedPrefix = 'Fact-checked against',
   reviewedClaim = `${serviceName}'s official documentation`,
+  reviewedVia = 'unspecified',
   sources,
   reviewedLinkLabel = 'how we review guides',
   generatorCta,
@@ -237,7 +245,7 @@ const jsonLd = [
         }
       </div>
       {reviewedLong && (
-        <p class="mt-3 font-mono text-[13px] text-ink/90">
+        <p class="mt-3 font-mono text-[13px] text-ink/90" data-review-via={reviewedVia} data-review-date={reviewed}>
           {reviewedPrefix} {reviewedClaim} · last reviewed{" "}
           {reviewedLong} ·{" "}
           <a href="/methodology/" class="link">{reviewedLinkLabel}</a>

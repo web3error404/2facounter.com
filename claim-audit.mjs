@@ -38,6 +38,7 @@ const decoded = (html) =>
     .replace(/\s+/g, ' ');
 
 let problems = 0;
+const viaCounts = new Map();
 const fail = (msg) => {
   console.log(`✗ ${msg}`);
   problems++;
@@ -64,7 +65,7 @@ for (const { path, file } of pages) {
   // The byline is the only place a review claim may live. Prose that explains
   // the three states (on /methodology/) is not a claim about this page.
   const byline = decoded(
-    [...html.matchAll(/<p class="[^"]*font-mono text-\[13px\][^"]*">([\s\S]*?)<\/p>/g)]
+    [...html.matchAll(/<p class="[^"]*font-mono text-\[13px\][^"]*"[^>]*>([\s\S]*?)<\/p>/g)]
       .map((m) => m[1])
       .join(' '),
   );
@@ -104,7 +105,25 @@ for (const { path, file } of pages) {
     fail(`${path}: claim about support ("${supportClaim[0].slice(0, 70)}…") without a cited vendor source`);
   }
 
-  // ---- 6. noindex pages still must not ship banned phrasing (checked above)
+  // ---- 6. a review claim must record how the source was read
+  // The byline says what was checked; data-review-via says through which pipe.
+  // Keeping it in the markup makes the provenance checkable without trusting
+  // the prose, and makes a browser check distinguishable from a reader check.
+  if (claimsCheck) {
+    const via = html.match(/data-review-via="([^"]+)"/)?.[1];
+    const reviewedOn = html.match(/data-review-date="([^"]+)"/)?.[1];
+    if (!via) fail(`${path}: claims a review but carries no data-review-via metadata`);
+    else if (!['browser', 'text-reader', 'unspecified'].includes(via)) {
+      fail(`${path}: unknown data-review-via="${via}"`);
+    } else viaCounts.set(via, (viaCounts.get(via) || 0) + 1);
+    // Reviews from 24 November 2026 onward must name the route. Older claims
+    // keep 'unspecified' rather than being retro-labelled.
+    if (via === 'unspecified' && reviewedOn && reviewedOn >= '2026-11-24') {
+      fail(`${path}: review dated ${reviewedOn} does not record how the source was read`);
+    }
+  }
+
+  // ---- 7. noindex pages still must not ship banned phrasing (checked above)
   if (noindex) continue;
 }
 
@@ -293,4 +312,9 @@ console.log(
     ? `claim audit: ${pages.length} pages checked, 0 problems`
     : `claim audit: ${pages.length} pages checked, ${problems} problem(s)`,
 );
+if (viaCounts.size) {
+  const order = ['browser', 'text-reader', 'unspecified'];
+  const parts = order.filter((k) => viaCounts.has(k)).map((k) => `${viaCounts.get(k)} ${k}`);
+  console.log(`review metadata: ${parts.join(', ')}`);
+}
 process.exit(problems === 0 ? 0 : 1);
