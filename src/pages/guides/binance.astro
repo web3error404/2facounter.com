@@ -15,7 +15,35 @@ const description =
   path="/guides/binance/"
   dateModified="2026-11-09"
   datePublished="2026-11-09"
-  lastReviewed="2026-11-07"
+  lastReviewed="2026-11-23"
+  dateModified="2026-11-23"
+  reviewedPrefix="UI wording and navigation"
+  reviewedClaim="unverified — Binance’s support centre is a client-rendered app and its article bodies are not exposed to automated reads"
+  sources={[
+    {
+      label: 'Binance Academy — What Is Two-Factor Authentication (2FA)?',
+      href: 'https://academy.binance.com/en/articles/what-is-two-factor-authentication-2fa',
+      kind: 'official',
+    },
+    {
+      label: 'RFC 6238 — TOTP: Time-Based One-Time Password Algorithm',
+      href: 'https://www.rfc-editor.org/rfc/rfc6238',
+      kind: 'independent',
+    },
+  ]}
+  deepDive={{
+    heading: "What is verified here, and what is not",
+    blocks: [
+      {
+        title: 'The mechanics are standards; the screens are not',
+        body: 'The authenticator method is standard RFC 6238 TOTP — 6 digits, 30-second period, SHA-1 — which is why any authenticator, including a browser-based one, produces codes Binance accepts. That part rests on the standard rather than on Binance’s help centre. The on-screen path in the steps does not: Binance’s support centre renders its articles client-side and does not expose them to automated reads, so the labels are written to describe the control rather than to quote one build. If your account shows different wording, the control described is still the one to look for.',
+      },
+      {
+        title: 'The cooldown after a 2FA change is real, and it is the point',
+        body: 'Binance suspends withdrawals and P2P transfers after an authenticator change while the change settles. That hold is a feature: it is the window in which the real owner can react to an attacker who has just re-enrolled the factor. Treat any such hold as expected rather than as evidence of compromise — and keep the setup key backed up so you never have to trigger it casually.',
+      },
+    ],
+  }}
   intro="Enabling 2FA removes the friction Binance applies to weaker accounts. Their TOTP setup is standard — you can run it on your browser keys, in an encrypted password manager, or on an offline machine. Two Binance-specific extras, the anti-phishing code and the withdrawal whitelist, are worth the extra two minutes."
   minutes={5}
   params={['6 digits', '30s period', 'SHA-1']}
@@ -40,7 +68,7 @@ const description =
     },
     {
       title: 'Confirm on Binance',
-      body: 'Copy the 6-digit code and submit it — Binance confirms the authenticator is active. Note for later: changing or resetting the authenticator disables withdrawals and P2P for 24 hours, so keep the setup key backed up.',
+      body: 'Copy the 6-digit code and submit it — Binance confirms the authenticator is active. Note for later: changing or resetting the authenticator triggers a withdrawal and P2P hold while the change settles, so keep the setup key backed up rather than discovering the cooldown at an inconvenient moment.',
     },
     {
       title: 'Turn on the anti-phishing code and withdrawal whitelist',

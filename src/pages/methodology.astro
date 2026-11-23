@@ -47,15 +47,44 @@ const jsonLd = [
           when a page was last checked and how to get it corrected.
         </p>
 
-        <h2>Sources</h2>
+        <h2>Sources, and what the review line means</h2>
         <p>
-          Each per-service guide is fact-checked against the service's own documentation at the
-          time of writing: the official security, sign-in, or settings pages for enabling
-          two-factor authentication and revealing the setup key. We do not rephrase forum posts
-          or third-party blogs. Where a service's flow changes between regions or account types
-          (Google Workspace policies, Microsoft Entra ID, AWS's IAM console), the guide says so
-          instead of papering over the difference. The date on each guide card — "fact-checked
-          against …, last reviewed …" — tells you how fresh that check is.
+          Each per-service guide names the documentation it was checked against in a{' '}
+          <strong>Sources</strong> list under the review line. Two kinds of link appear there:{' '}
+          <strong>official</strong> — the service's own security, sign-in or settings pages — and{' '}
+          <strong>independent</strong> — a standards document such as RFC 6238, or a reference
+          implementation used to corroborate a technical detail. An independent source is never
+          presented as vendor documentation.
+        </p>
+        <p>
+          Not every vendor document can be read. Some help centres render their article bodies in
+          JavaScript, gate them by region, or block automated requests outright. When that happens
+          the review line says so, because borrowing credibility we have not earned would be worse
+          than admitting the gap. Guides carry one of three claims:
+        </p>
+        <ul>
+          <li>
+            <strong>Fact-checked against …</strong> — the service's own documentation was read, and
+            the steps were checked against it.
+          </li>
+          <li>
+            <strong>Partially verified</strong> — the documentation could not be read in full. The
+            standard mechanics were corroborated independently; the on-screen details are described
+            rather than quoted.
+          </li>
+          <li>
+            <strong>Unverified</strong> — no readable vendor documentation was available. The page
+            still explains the standard mechanics, and states plainly that the screen path is
+            unconfirmed.
+          </li>
+        </ul>
+        <p>
+          The review date and the verification claim are separate on purpose. The date records when
+          someone last looked; the claim records what evidence supported the content. A fresh date
+          on an unverifiable page does not make it verified. We do not rephrase forum posts or
+          third-party blogs into steps, and where a service's flow changes between regions or
+          account types (Google Workspace policies, Microsoft Entra ID, AWS's IAM console,
+          PayPal's business accounts), the guide says so instead of papering over the difference.
         </p>
 
         <h2>What we deliberately do not claim</h2>

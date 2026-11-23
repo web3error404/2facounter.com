@@ -13,9 +13,31 @@ const description =
   title={title}
   description={description}
   path="/guides/kraken/"
-  dateModified="2026-11-11"
+  dateModified="2026-11-23"
   datePublished="2026-11-09"
-  lastReviewed="2026-11-11"
+  lastReviewed="2026-11-23"
+  sources={[
+    {
+      label: 'Kraken Support — How does two-factor authentication (2FA) for sign-in work?',
+      href: 'https://support.kraken.com/articles/360000911823-how-does-two-factor-authentication-2fa-for-sign-in-work-',
+      kind: 'official',
+    },
+    {
+      label: 'Kraken Support — Using an authenticator app for 2FA',
+      href: 'https://support.kraken.com/articles/360000572186-using-an-authenticator-app-for-two-factor-authentication-2fa-',
+      kind: 'official',
+    },
+    {
+      label: 'Kraken Support — Setting up the Global Settings Lock',
+      href: 'https://support.kraken.com/articles/360000444963-setting-up-the-global-settings-lock-gsl-',
+      kind: 'official',
+    },
+    {
+      label: 'RFC 6238 — TOTP: Time-Based One-Time Password Algorithm',
+      href: 'https://www.rfc-editor.org/rfc/rfc6238',
+      kind: 'independent',
+    },
+  ]}
   intro="Kraken has supported standard TOTP for years, and it stops account takeovers cold. Worth knowing: Kraken's highest-rated factor today is a passkey/security key, and the TOTP factor is scoped per “facet” (sign-in, trading, funding), so one enrollment is only the start."
   minutes={3}
   params={['6 digits', '30s period', 'SHA-1']}
@@ -24,15 +46,15 @@ const description =
   steps={[
     {
       title: 'Open Kraken security settings',
-      body: 'Sign in at kraken.com and open your Security settings. You’ll see “Sign-in Two-Factor Authentication (2FA)” — the facet that stops account takeovers on the login page itself. Kraken scopes 2FA per action: Trading, Funding and the Master key are set up separately (on pro.kraken.com, it’s profile icon → Settings → Security → the 2FA table).',
+      body: 'Sign in at kraken.com and open Security settings. You’ll see “Sign-in Two-Factor Authentication (2FA)” — the facet that stops account takeovers on the login page itself. Kraken scopes 2FA per action: Trading, Funding and the Master key are set up separately. On the retail site the entry point is your profile icon → “Security & Access”; on pro.kraken.com it is profile icon → Settings → Security, where the per-function 2FA table lives.',
     },
     {
       title: 'Add the authenticator-app factor',
-      body: 'Kraken recommends a passkey here if you have a hardware key or can use device biometrics. Prefer a portable TOTP code? Choose the authenticator-app option in the Sign-in 2FA section instead. Heads-up Kraken shares with everyone: enabling sign-in 2FA also activates Step-up 2FA — any later change to your 2FA settings must be confirmed with a code.',
+      body: 'Kraken recommends a passkey here — it is phishing-resistant, and Kraken says so explicitly. Prefer a portable TOTP code? Choose “Authenticator app” in the Sign-in 2FA section instead. Either way, Kraken’s Step-up 2FA then covers later changes: adding, editing or removing a 2FA method has to be confirmed with your passkey, an authenticator code or your Master Key before it goes through.',
     },
     {
       title: 'Reveal the secret',
-      body: 'Kraken shows the QR together with the Base32 “setup key” for manual entry — Kraken notes storing that setup key is how you back the method up. Copy the key text, or screenshot the QR and paste the image onto the generator page — it is decoded in your browser, never sent anywhere.',
+      body: 'Kraken shows the QR together with the setup key — click “View setup key” to read it in plain text, and Kraken states plainly that storing that key is how you back the method up. Copy the key, or screenshot the QR and paste the image onto the generator page — it is decoded in your browser, never sent anywhere. Note the label: Kraken’s own troubleshooting warns to enter the code labelled “Kraken.com Sign-in”, not “Kraken.com Master Key”, once you run both.',
     },
     {
       title: 'Generate, verify, activate',
@@ -40,7 +62,7 @@ const description =
     },
     {
       title: 'Harden the rest',
-      body: 'Add Kraken’s Master Key, enable withdrawal address whitelisting, and keep the separate secrets for sign-in and Master key in your password manager. Kraken also offers a support phrase for identity verification when contacting support.',
+      body: 'Add Kraken’s Master Key, enable withdrawal address whitelisting, and keep the separate secrets for sign-in and Master key in your password manager — Kraken’s guidance is explicit that the two should live on different devices, and never in the same authenticator app. If you ever lose both, Kraken’s route back is the Account Recovery Photo process, which is worth reading before you need it.',
     },
   ]}
   faqs={[
@@ -54,7 +76,7 @@ const description =
     },
     {
       q: 'What is the Global Settings Lock?',
-      a: 'Kraken’s GSL (Global Settings Lock) freezes security-critical settings — 2FA changes, password resets, withdrawal addresses — until you explicitly unlock it. Kraken’s own guidance: enable the Master key first, and only then the GSL. Even someone with your password and phone can’t quietly rewire a locked account.',
+      a: 'Kraken’s GSL freezes changes to your account and hides sensitive information — the last line of defence if your password and sign-in 2FA are both compromised. Its own guidance: once the GSL is on you cannot add or change 2FA or your Master Key, so set both up first, and set the Master Key up before the GSL specifically. A Master Key enrolled beforehand can release the lock immediately; without one you sit out the full unlock period, and Kraken Support cannot shorten it.',
     },
     {
       q: 'Codes rejected right after setup — what broke?',

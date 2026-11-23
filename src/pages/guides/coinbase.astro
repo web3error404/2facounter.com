@@ -15,8 +15,21 @@ const description =
   path="/guides/coinbase/"
   dateModified="2026-11-09"
   datePublished="2026-11-09"
-  lastReviewed="2026-11-07"
-  intro="Coinbase protects an exchange balance, so 2FA here is the difference between an inconvenience and a headline. The platform supports standard TOTP with any authenticator — including a purely browser-based one — and pairs it with a few crypto-specific extra gates worth setting up the same day."
+  lastReviewed="2026-11-23"
+  dateModified="2026-11-23"
+  sources={[
+    {
+      label: 'Coinbase Help — Set up your 2-step verification',
+      href: 'https://help.coinbase.com/en/coinbase/getting-started/getting-started-with-coinbase/2-step-verification',
+      kind: 'official',
+    },
+    {
+      label: 'RFC 6238 — TOTP: Time-Based One-Time Password Algorithm',
+      href: 'https://www.rfc-editor.org/rfc/rfc6238',
+      kind: 'independent',
+    },
+  ]}
+  intro="Coinbase protects an exchange balance, so 2FA here is the difference between an inconvenience and a headline. It supports standard TOTP with any authenticator, including a browser-based one — though Coinbase’s setup flow expects an authenticator app on a mobile device, so plan for the phone to be in the loop once. The platform pairs 2FA with a few crypto-specific gates worth setting up the same day."
   minutes={3}
   params={['6 digits', '30s period', 'SHA-1']}
   ctaTitle="On Coinbase, safeguarding the secret is safeguarding the funds"
@@ -24,7 +37,7 @@ const description =
   steps={[
     {
       title: 'Open Coinbase security settings',
-      body: 'Sign in at coinbase.com and open the security/2-step verification settings page (your avatar menu → Security; the direct settings page is accounts.coinbase.com/security/settings).',
+      body: 'Sign in at coinbase.com and open the 2-step verification settings page (your avatar menu → Security). Coinbase’s help centre calls this page “2-step verification settings” throughout, and lists every method you can enable there.',
     },
     {
       title: 'Add an authenticator method',
@@ -32,7 +45,7 @@ const description =
     },
     {
       title: 'Extract the setup key',
-      body: 'Coinbase shows a QR code with a “use secret key” / “enter code manually” option. The revealed Base32 string is what every authenticator app would scan — paste it into 2facounter.com.',
+      body: 'Coinbase shows a QR code during setup and its help centre says the flow “requires accessing the authenticator app from your mobile device” — so the phone is usually in the loop even though the settings live on the web. Screenshot the QR and paste the image into the generator to decode it locally; if your build also reveals a secret key, copying that is equivalent.',
     },
     {
       title: 'Generate and confirm',
