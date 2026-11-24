@@ -17,7 +17,7 @@
 //
 // Run: node claim-audit-selftest.mjs   (needs the network for one 404 probe)
 import { execFileSync } from 'node:child_process';
-import { mkdtempSync, mkdirSync, writeFileSync, rmSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, copyFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
@@ -68,33 +68,76 @@ for (const [name, html] of Object.entries(cases)) {
   writeFileSync(join(root, name, 'index.html'), html);
 }
 
-let out = '';
-let code = 0;
-try {
-  out = execFileSync(process.execPath, ['claim-audit.mjs'], {
-    env: { ...process.env, CLAIM_AUDIT_ROOT: root },
-    encoding: 'utf8',
-  });
-} catch (e) {
-  out = `${e.stdout || ''}${e.stderr || ''}`;
-  code = e.status ?? 1;
-}
-rmSync(root, { recursive: true, force: true });
+// ---- run the real audit against the fixture
+const run = (script, args = [], root_ = root) => {
+  try {
+    const stdout = execFileSync(process.execPath, [script, ...args], {
+      env: { ...process.env, CLAIM_AUDIT_ROOT: root_ },
+      encoding: 'utf8',
+    });
+    return { out: stdout, code: 0 };
+  } catch (e) {
+    return { out: `${e.stdout || ''}${e.stderr || ''}`, code: e.status ?? 1 };
+  }
+};
 
-const lines = out.split('\n').filter(Boolean);
+const base = run('claim-audit.mjs');
+
+const lines = base.out.split('\n').filter(Boolean);
 const failures = lines.filter((l) => l.startsWith('✗'));
 const dirty = failures.filter((l) => l.includes('/regressed/'));
 const clean = failures.filter((l) => l.includes('/clean/'));
 
+// ---- evidence mutation: the report must follow the table, not a copy of it
+// copy the checker and its evidence base somewhere writable, change every
+// evidence field, and re-run. If any part of the pipeline still prints the old
+// values, the audit is reporting from memory rather than from the evidence.
+const auditDir = join(root, '_mutation');
+mkdirSync(auditDir, { recursive: true });
+copyFileSync('claim-audit.mjs', join(auditDir, 'claim-audit.mjs'));
+
+const OLD = {
+  checked: "checked: '2026-11-23'",
+  source: "source: 'https://www.paypal.com/us/cshelp/article/what-is-2-step-verification-help167'",
+  proposition: "proposition: 'PayPal 2-step verification issues no recovery codes and documents no recovery-code list.'",
+};
+const NEW = {
+  checked: "checked: '2027-01-15'",
+  source: "source: 'https://example.com/mutated-evidence-base'",
+  proposition: "proposition: 'MUTATED PROPOSITION: PayPal issues recovery codes after all.'",
+};
+
+const originalEvidence = readFileSync('claim-evidence.mjs', 'utf8');
+let mutated = originalEvidence;
+for (const key of Object.keys(OLD)) {
+  if (!mutated.includes(OLD[key])) throw new Error(`selftest: could not find ${key} in claim-evidence.mjs`);
+  mutated = mutated.split(OLD[key]).join(NEW[key]);
+}
+writeFileSync(join(auditDir, 'claim-evidence.mjs'), mutated);
+const mutation = run(join(auditDir, 'claim-audit.mjs'), ['--no-links']);
+
+// ---- evidence completeness: an entry with no source must be refused
+const stripped = originalEvidence.replace(/^\s*source: '[^']*',\n/m, '');
+if (stripped === originalEvidence) throw new Error('selftest: could not strip the source field');
+writeFileSync(join(auditDir, 'claim-evidence.mjs'), stripped);
+const incomplete = run(join(auditDir, 'claim-audit.mjs'), ['--no-links']);
+
+rmSync(root, { recursive: true, force: true });
+
 const checks = [
-  ['audit exits non-zero when a fixture fails', code !== 0],
+  ['audit exits non-zero when a fixture fails', base.code !== 0],
   ['true sentences produce no failure (false-positive challenge)', clean.length === 0],
   ['invented recovery-code list is caught', dirty.some((l) => /issues recovery codes at setup/i.test(l))],
   ['rephrased invented claim is caught', dirty.some((l) => /provided by PayPal/i.test(l))],
   ['conditional invented claim is caught', dirty.some((l) => /offers recovery codes, download them now/i.test(l))],
   ['dead external body-text URL is caught as a dead link', dirty.some((l) => /dead link/i.test(l) && l.includes('this-guide-was-removed'))],
   ['dead internal body-text link is caught', dirty.some((l) => /internal link/i.test(l) && l.includes('/guides/this-page-was-deleted'))],
-  ['failure names its evidence (source + checked date)', dirty.every((l) => !/recovery/i.test(l) || /checked 2026-11-23: https:\/\//.test(l))],
+  ['failure quotes the evidence from the table', dirty.every((l) => !/recovery codes|recovery-code/i.test(l) || /evidence: https:\/\/\S+, read 2026-11-23/.test(l))],
+
+  ['mutated proposition is reported, not the old text', mutation.out.includes('MUTATED PROPOSITION: PayPal issues recovery codes after all.')],
+  ['mutated source and date are reported', mutation.out.includes('https://example.com/mutated-evidence-base') && mutation.out.includes('read 2027-01-15')],
+  ['stale evidence no longer appears anywhere in the report', !mutation.out.includes(OLD.source) && !mutation.out.includes('read 2026-11-23')],
+  ['an entry with no source is refused', incomplete.code !== 0 && /claim-evidence: entry "PayPal" is missing source/.test(incomplete.out)],
 ];
 
 let bad = 0;
@@ -104,7 +147,11 @@ for (const [label, ok] of checks) {
 }
 if (bad) {
   console.log('\n--- audit output ---');
-  console.log(out.trim() || '(no output)');
+  console.log(base.out.trim() || '(no output)');
+  console.log('--- mutated evidence output ---');
+  console.log(mutation.out.trim() || '(no output)');
+  console.log('--- incomplete evidence output ---');
+  console.log(incomplete.out.trim() || '(no output)');
 }
 console.log(bad === 0 ? `selftest: ${checks.length} checks passed` : `selftest: ${bad} of ${checks.length} checks failed`);
 process.exit(bad === 0 ? 0 : 1);

@@ -54,7 +54,7 @@ the network disconnected.
 | `npm run typecheck` | TypeScript check (`tsc --noEmit`)         |
 | `npm run test:e2e`  | Run the Playwright smoke tests (dev server must be running) |
 | `npm run audit:claims` | Check every citation resolves, every byline has evidence, and banned phrasings stay gone (escalates bot challenges to a real browser) |
-| `npm run audit:claims:selftest` | Prove the claim audit still catches an invented feature and a dead body-text link, using a throwaway fixture |
+| `npm run audit:claims:selftest` | Prove the claim audit still catches an invented feature and a dead body-text link, and that a mutated evidence entry is reported from the table rather than from stale text |
 
 ## Search engine verification (post-deploy)
 

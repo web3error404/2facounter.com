@@ -18,6 +18,7 @@
 //      CLAIM_AUDIT_ROOT=<dir> node claim-audit.mjs   (audit a fixture instead)
 import { readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
+import { ABSENT } from './claim-evidence.mjs';
 
 const SKIP_LINKS = process.argv.includes('--no-links');
 const ROOT = process.env.CLAIM_AUDIT_ROOT || 'dist';
@@ -58,6 +59,22 @@ const fail = (msg) => {
   problems++;
 };
 
+// ---- 0. the evidence table must be complete before it is trusted
+// An entry without a source, date or proposition could only ever produce an
+// assertion with no evidence behind it, which is the failure this audit exists
+// to catch. Refuse to run it rather than report from it.
+for (const a of ABSENT) {
+  for (const field of ['name', 'vendor', 'topic', 'asserts', 'denies', 'proposition', 'source', 'checked']) {
+    if (!a[field]) fail(`claim-evidence: entry "${a.name || 'unnamed'}" is missing ${field}`);
+  }
+  if (a.source && !/^https:\/\/\S+$/.test(a.source)) {
+    fail(`claim-evidence: entry "${a.name}" has a source that is not an https URL ("${a.source}")`);
+  }
+  if (a.checked && !/^\d{4}-\d{2}-\d{2}$/.test(a.checked)) {
+    fail(`claim-evidence: entry "${a.name}" has checked="${a.checked}", expected YYYY-MM-DD`);
+  }
+}
+
 // Phrases that were factually wrong on a page at some point. None of them is
 // legitimate copy, so a hit means the error has been reintroduced.
 const banned = [
@@ -71,32 +88,9 @@ const banned = [
 // Link results are shared across pages: a source cited on 15 pages is checked once.
 const external = new Map(); // url -> Set(page paths)
 
-// Features a vendor's own documentation says do not exist, with the evidence
-// that says so. A guide may report the absence; it must never promise the
-// feature — that is how the PayPal page once told readers to download a
-// recovery-code list PayPal does not document.
-//
-// The rule is deliberately three-part, because co-mention is not a claim:
-// either party in a comparison can name PayPal and recovery codes without
-// asserting that PayPal has them ("Unlike PayPal, Discord issues recovery
-// codes"). So a sentence must name the vendor, name the topic, AND use an
-// issuance verb — and must not be a denial or a comparison — before it is
-// treated as contradicting the record.
-const ABSENT = [
-  {
-    name: 'PayPal',
-    vendor: /PayPal/i,
-    topic: /\brecovery[\s-]?codes?\b/i,
-    asserts: /\b(issues?|issued|provides?|provided|offers?|offered|gives?|given|hands?|downloads?|printed|prints?|saves?|generates?|includes?|come[s]? with|available)\b/i,
-    denies: /\b(no|none|not|never|without|doesn't|does not|isn't|aren't|no longer|unlike|whereas|instead|rather than|compared)\b/i,
-    because: 'PayPal documents no recovery-code list for 2-step verification',
-    // The evidence behind the entry. Kept beside the rule so the next person
-    // can re-read the source rather than trusting the table.
-    source: 'https://www.paypal.com/us/cshelp/article/what-is-2-step-verification-help167',
-    checked: '2026-11-23',
-    proposition: 'PayPal 2-step verification issues no recovery codes and documents no recovery-code list.',
-  },
-];
+// Features a vendor's own documentation says do not exist live in
+// claim-evidence.mjs, with the source, the date it was read, and the exact
+// contradicted proposition. This file only applies the rule.
 
 const sentences = (t) => t.split(/(?<=[.!?])\s+/);
 
@@ -187,8 +181,8 @@ for (const { path, file } of pages) {
       const at = Math.min(...[s.search(a.vendor), s.search(a.topic)].filter((i) => i >= 0));
       fail(
         `${path}: promises a ${a.name} feature the vendor does not document ` +
-          `("${s.slice(at, at + 90).trim()}") — ${a.because} ` +
-          `(checked ${a.checked}: ${a.source})`,
+          `("${s.slice(at, at + 90).trim()}") — ${a.proposition} ` +
+          `(evidence: ${a.source}, read ${a.checked})`,
       );
     }
   }
