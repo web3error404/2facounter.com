@@ -56,6 +56,12 @@ the network disconnected.
 | `npm run audit:claims` | Check every citation resolves, every byline has evidence, and banned phrasings stay gone (escalates bot challenges to a real browser) |
 | `npm run audit:claims:selftest` | Prove the claim audit still catches an invented feature and a dead body-text link, and that a mutated evidence entry is reported from the table rather than from stale text |
 
+A green `audit:claims` run means **no known contradiction was detected within
+the documented evidence base** — it does not certify that every claim is true.
+The evidence entries in `claim-evidence.mjs` are only as good as the vendor
+articles they came from, so read the article, quote the sentence that states
+the absence, and record the date it was read. Never add an entry from memory.
+
 ## Search engine verification (post-deploy)
 
 1. Copy `.env.example` → `.env`, paste your `PUBLIC_GSC_TOKEN` and
