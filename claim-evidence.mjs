@@ -26,6 +26,8 @@
 //
 // Adding an entry means: read the vendor's article, quote the sentence that
 // states the absence, and date the read. Do not add an entry from memory.
+// Entry count is not a quality metric — one inspected contradiction is worth
+// more than a page of patterns nobody read.
 
 export const ABSENT = [
   {
