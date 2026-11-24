@@ -16,7 +16,7 @@ any other persistent storage); there are no servers.
   <img src="docs/screenshots/mobile-tool.png" alt="2FA Counter on mobile: paste key, scan QR and upload buttons above the live TOTP code and timer" width="300" />
 </p>
 
-**Try it: [2facounter.com](https://2facounter.com) · [Privacy policy](https://2facounter.com/privacy/)** —
+**Try it: [2FA Counter](https://2facounter.com/) · [Privacy policy](https://2facounter.com/privacy/)** —
 zero third-party requests: no analytics, no trackers, no CDN scripts; every
 asset is served from the site's own domain, and the tool keeps working with
 the network disconnected.
