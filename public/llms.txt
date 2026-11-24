@@ -18,6 +18,7 @@
 - [2FA backup codes and recovery](https://2facounter.com/2fa-backup-codes/): where to store backup codes and what to do after a lost phone.
 - [Authenticator app for PC](https://2facounter.com/authenticator-for-pc/): desktop options without an emulator.
 - [Authenticator cloud sync compared](https://2facounter.com/authenticator-cloud-sync/): trade-offs of syncing secrets.
+- [Authenticator apps compared](https://2facounter.com/authenticator-apps/): nine authenticator apps side by side, and which fits a given setup.
 - [TOTP vs Google Authenticator](https://2facounter.com/totp-vs-google-authenticator/)
 - [TOTP vs Authy](https://2facounter.com/totp-vs-authy/)
 - [TOTP vs passkeys](https://2facounter.com/totp-vs-passkeys/)

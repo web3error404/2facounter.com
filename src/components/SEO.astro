@@ -43,8 +43,9 @@ const {
 // Base URL from the configured `site` (hardcoded fallback keeps the
 // canonical stable even if someone builds without astro.config.mjs).
 const site = Astro.site?.origin ?? 'https://2facounter.com';
-// Self-referencing canonical: home ("/") stays bare, like the current URLs.
-const canonical = `${site}${canonicalPath === '/' ? '' : canonicalPath}`;
+// Self-referencing canonical. Directory URLs always carry the trailing slash
+// so the canonical matches the sitemap and hreflang cluster exactly.
+const canonical = `${site}${canonicalPath.endsWith('/') ? canonicalPath : `${canonicalPath}/`}`;
 
 // Map BCP 47 to the hyphenated locale format og:locale expects.
 const ogLocale: Record<string, string> = {

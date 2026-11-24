@@ -53,6 +53,10 @@ const description =
         title: 'Leave Google Prompt enabled as a fallback',
         body: 'Prompt (tap “Yes” on your phone) is Google’s fastest second step, but it dies when the phone does — battery, network, or loss. A TOTP code computed from a key you hold keeps working on any device. Enabling both costs nothing: keep Prompt for convenience, keep the browser generator as the phone-independent lane, and print backup codes for when even the browser is gone.',
       },
+      {
+        title: 'Gmail uses the same Google Account second step',
+        body: 'There is no separate Gmail 2FA switch: signing in to Gmail is signing in to your Google Account, so the 2-Step Verification you enable here covers Gmail, Drive, YouTube, and every other Google service at once. If you searched for “Gmail 2FA” or “2FA Gmail”, this is that flow — one TOTP key, one authenticator, all of Google.',
+      },
     ],
   }}
   steps={[

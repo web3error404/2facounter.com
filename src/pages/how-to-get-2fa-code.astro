@@ -50,9 +50,9 @@ const alternates = [
 { hreflang: 'x-default', href: 'https://2facounter.com/how-to-get-2fa-code/' },
 ];
 
-const title = 'How to Get a 2FA Code: Step-by-Step Guide (TOTP)';
+const title = 'How to Get a 2FA Code From a Saved Secret Key (TOTP)';
 const description =
-  'How to get a 2FA code in three steps: reveal your setup key, paste it into the online TOTP generator, and copy the live code — plus fixes for rejected codes.';
+  'Already have your 2FA secret key? Turn it into a live TOTP code in the browser: three steps, no phone app, plus fixes for rejected or expired codes.';
 
 const faq = [
   {
@@ -92,7 +92,7 @@ const jsonLd = [
       { '@type': 'HowToStep', position: 2, name: 'Paste the key into the generator', text: 'Paste the Base32 string or otpauth:// URI into the generator on the 2FA COUNTER homepage. Everything is computed locally in the browser.' },
       { '@type': 'HowToStep', position: 3, name: 'Copy the live code and confirm', text: 'Type the 6-digit code into the service’s verification prompt within its 30-second window to confirm the setup — then use the same flow for every future sign-in.' },
     ],
-    dateModified: '2026-11-23',
+    dateModified: '2026-11-24',
     citation: sources.map((s) => s.href),
   },
   {
@@ -113,13 +113,13 @@ const jsonLd = [
     <article class="mx-auto max-w-[820px] px-4 py-20 sm:px-6 lg:py-24 xl:px-0">
       <p class="section-label">2FA How-to</p>
       <h1 class="mt-3 font-display text-4xl tracking-normal text-ink sm:text-5xl">
-        How to get your 2FA code
+        How to get a 2FA code from a saved secret key
       </h1>
       <p class="mt-5 text-lg font-medium text-ink">
         The whole process takes about a minute: reveal the setup key, paste it here, and type the
         resulting code into whatever screen asked for it. No phone required — a working
         implementation of the same math is running at the top of our{" "}
-        <a href="/">home page generator</a>.
+        <a href="/">2FA code generator on our home page</a>.
       </p>
 
       <ReviewByline />
@@ -238,6 +238,24 @@ const jsonLd = [
           at the login screen you chose.
         </p>
       </div>
+
+      <h2 id="faq">FAQ</h2>
+      <div class="mt-6 divide-y-2 divide-dashed divide-hairline-strong">
+        {
+          faq.map(({ q, a }) => (
+            <details class="group px-1 py-1">
+              <summary class="flex cursor-pointer list-none items-center justify-between gap-4 py-4 text-left font-bold text-ink select-none marker:hidden">
+                {q}
+                <svg class="h-4 w-4 shrink-0 text-ink transition-transform group-open:rotate-45" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"></path>
+                </svg>
+              </summary>
+              <p class="pb-5 text-sm font-medium text-ink">{a}</p>
+            </details>
+          ))
+        }
+      </div>
+
     </article>
   </main>
   <SiteFooter />

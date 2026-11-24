@@ -1,0 +1,487 @@
+---
+import Layout from '../layouts/Layout.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import ReviewByline from '../components/ReviewByline.astro';
+import SourcesList from '../components/SourcesList.astro';
+
+const sources = [
+  {
+    label: 'Google Account Help — Get verification codes with Google Authenticator',
+    href: 'https://support.google.com/accounts/answer/1066447?hl=en',
+    kind: 'official' as const,
+  },
+  {
+    label: 'Google Security Blog — Google Authenticator now supports Google Account synchronization (Apr 2023)',
+    href: 'https://security.googleblog.com/2023/04/google-authenticator-now-supports.html',
+    kind: 'official' as const,
+  },
+  {
+    label: 'Microsoft — Download Microsoft Authenticator',
+    href: 'https://www.microsoft.com/en-us/security/mobile-authenticator-app',
+    kind: 'official' as const,
+  },
+  {
+    label: 'Authy Help Center',
+    href: 'https://authy.com/help/',
+    kind: 'official' as const,
+  },
+  {
+    label: 'BleepingComputer — Twilio kills off Authy for desktop, forcibly logs out all users (1 Aug 2024)',
+    href: 'https://www.bleepingcomputer.com/news/security/twilio-kills-off-authy-for-desktop-forcibly-logs-out-all-users/',
+    kind: 'independent' as const,
+  },
+  {
+    label: '1Password Support — Use 1Password as an authenticator for sites with two-factor authentication',
+    href: 'https://support.1password.com/one-time-passwords/',
+    kind: 'official' as const,
+  },
+  {
+    label: 'Bitwarden Help — Integrated Authenticator',
+    href: 'https://bitwarden.com/help/integrated-authenticator/',
+    kind: 'official' as const,
+  },
+  {
+    label: 'Ente Auth — Open source 2FA authenticator with end-to-end encrypted backups',
+    href: 'https://ente.io/auth/',
+    kind: 'official' as const,
+  },
+  {
+    label: '2FAS — Open-source authenticator app',
+    href: 'https://2fas.com/',
+    kind: 'official' as const,
+  },
+  {
+    label: 'Aegis Authenticator — Free, open source Android authenticator',
+    href: 'https://getaegis.app/',
+    kind: 'official' as const,
+  },
+  {
+    label: 'RFC 6238 — TOTP: Time-Based One-Time Password Algorithm',
+    href: 'https://www.rfc-editor.org/rfc/rfc6238',
+    kind: 'independent' as const,
+  },
+];
+
+const title = '2FA Authenticator Apps Compared: Which One to Use?';
+const description =
+  'Google Authenticator, Microsoft, Authy, 1Password, Bitwarden, Ente, 2FAS, Aegis or a browser tool — compare 2FA authenticator apps by situation.';
+
+const faqs = [
+  {
+    q: 'Which 2FA authenticator app is the safest?',
+    a: 'No app is automatically safest, because the core TOTP calculation is the same everywhere. What separates them is operational: whether you can export your secrets, where the backup lives, whether the vault is encrypted, and how the app behaves if you lose a device. Pick one that lets you export or back up, turn on the phone or computer lock screen, and save the recovery codes each service gives you.',
+  },
+  {
+    q: 'Is Google Authenticator better than Authy?',
+    a: 'They solve the same problem with different trade-offs. Google Authenticator is a free phone app with optional sync to your Google Account and a QR-based transfer tool. Authy is also free and offers multi-device encrypted backups, but it has no plain secret export and Twilio discontinued the Authy desktop app in August 2024. Our Authy alternatives guide covers the switch in detail.',
+  },
+  {
+    q: 'Do I need a separate authenticator if I use a password manager?',
+    a: 'Not necessarily. 1Password can store and fill TOTP codes, and Bitwarden can generate them in the vault on Premium or paid organization plans. The convenience is real, but it puts your password and your second factor behind one master password and one unlocked vault. That is a trade-off, not automatically a mistake; some people keep the highest-value accounts in a separate authenticator for exactly that reason.',
+  },
+  {
+    q: 'Are open-source authenticators more secure?',
+    a: 'Open source means the code can be inspected by anyone, which is a useful accountability signal, but it is not proof that an app is secure. Ente Auth, 2FAS, Aegis and Bitwarden publish their source. Judge the whole package: encryption design, backup model, update cadence, platform support, and whether the project explains its cryptography clearly.',
+  },
+  {
+    q: 'Can I use two authenticator apps for the same account?',
+    a: 'Usually yes, if you enrol both while the service is showing the setup QR code or secret. Scan the same code with the second app, or paste the same Base32 key into it, then confirm that both produce the same six digits. Some services show the QR only once, so add the second copy during setup. Test it before you rely on it as a backup.',
+  },
+  {
+    q: 'Which authenticator works on a desktop?',
+    a: '1Password, Bitwarden and Ente Auth have desktop apps, and 2FAS offers a browser extension. Google Authenticator, Microsoft Authenticator, Authy and Aegis are phone-first; Authy has had no desktop app since August 2024. If you need a code on a locked-down or borrowed computer with nothing installed, a browser-based generator is the practical option.',
+  },
+  {
+    q: 'What happens if I lose my phone?',
+    a: 'It depends entirely on the backup you made before losing it. Synced or exported secrets can be restored on another device; recovery codes can get you back into individual accounts; without either, you are in account-recovery territory. That is why the backup model matters more than the app logo. Our 2FA backup-code guide walks through the recovery options.',
+  },
+  {
+    q: 'Is a browser 2FA generator as safe as a phone app?',
+    a: 'It computes the same RFC 6238 codes, locally in your browser, and this site never receives or stores your secret. The risks are the ones around any authenticator: a compromised device, a clipboard that other software can read, and a phishing page that tricks you into pasting a secret or typing a live code. Use a trusted device, keep the master secret in an encrypted vault, and check the URL before pasting.',
+  },
+];
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: '2FA Authenticator Apps Compared',
+    description,
+    url: 'https://2facounter.com/authenticator-apps/',
+    datePublished: '2026-11-24',
+    dateModified: '2026-11-24',
+    author: { '@type': 'Organization', name: '2FA COUNTER', url: 'https://2facounter.com' },
+    publisher: {
+      '@type': 'Organization',
+      name: '2FA COUNTER',
+      url: 'https://2facounter.com',
+      logo: { '@type': 'ImageObject', url: 'https://2facounter.com/web-app-manifest-512x512.png' },
+    },
+    mainEntityOfPage: { '@type': 'WebPage', '@id': 'https://2facounter.com/authenticator-apps/' },
+    citation: sources.map((s) => s.href),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map(({ q, a }) => ({
+      '@type': 'Question',
+      name: q,
+      acceptedAnswer: { '@type': 'Answer', text: a },
+    })),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: '2FA COUNTER', item: 'https://2facounter.com/' },
+      { '@type': 'ListItem', position: 2, name: 'Authenticator apps compared', item: 'https://2facounter.com/authenticator-apps/' },
+    ],
+  },
+];
+
+const apps = [
+  {
+    name: 'Google Authenticator',
+    platforms: 'iOS, Android',
+    backup: 'Optional Google Account sync; QR export between phones',
+    cost: 'Free',
+    best: 'The simplest default for a phone-only setup',
+  },
+  {
+    name: 'Microsoft Authenticator',
+    platforms: 'iOS, Android',
+    backup: 'Backup for eligible personal accounts; no desktop app',
+    cost: 'Free',
+    best: 'Microsoft accounts, plus standard TOTP for everything else',
+  },
+  {
+    name: 'Authy',
+    platforms: 'iOS, Android',
+    backup: 'Encrypted multi-device backup; no plain secret export',
+    cost: 'Free',
+    best: 'One phone-based account across several devices',
+  },
+  {
+    name: '1Password',
+    platforms: 'macOS, Windows, Linux, iOS, Android, web, browser extension',
+    backup: 'Vault sync through your 1Password account',
+    cost: 'Paid subscription',
+    best: 'People already living in a password manager',
+  },
+  {
+    name: 'Bitwarden',
+    platforms: 'All major platforms, browser extension, web vault',
+    backup: 'Vault sync; TOTP generation needs Premium or a paid organization',
+    cost: 'Free app; Premium for vault TOTP',
+    best: 'Open-source password-manager users',
+  },
+  {
+    name: 'Ente Auth',
+    platforms: 'iOS, Android, Windows, macOS, Linux, web',
+    backup: 'End-to-end encrypted cloud backup; offline mode without an account',
+    cost: 'Free',
+    best: 'Open source plus encrypted cloud backup',
+  },
+  {
+    name: '2FAS',
+    platforms: 'iOS, Android, browser extension',
+    backup: 'Cloud or manual backup; no account required',
+    cost: 'Free',
+    best: 'iPhone and Apple Watch users who want an extension too',
+  },
+  {
+    name: 'Aegis',
+    platforms: 'Android',
+    backup: 'Local encrypted backups you store yourself',
+    cost: 'Free',
+    best: 'Android users who want local control and export',
+  },
+  {
+    name: '2FA COUNTER',
+    platforms: 'Any modern browser',
+    backup: 'None: nothing is stored, so keep the secret in your own vault',
+    cost: 'Free',
+    best: 'A desktop or borrowed machine with nothing installed',
+  },
+];
+---
+
+<Layout title={title} description={description} path="/authenticator-apps/" jsonLd={jsonLd}>
+  <SiteHeader />
+  <main id="main">
+    <article class="mx-auto max-w-[820px] px-4 py-16 sm:px-6 lg:py-24">
+      <p class="section-label">Learn</p>
+      <h1 class="mt-3 font-display text-4xl tracking-normal text-ink sm:text-5xl">
+        2FA authenticator apps compared: which one fits your setup
+      </h1>
+      <p class="mt-5 max-w-2xl text-lg font-medium text-ink">
+        Every app on this page runs the same TOTP standard. The differences that actually matter
+        are where your secrets live, how you get them back, and whether the app exists on the
+        device in front of you.
+      </p>
+
+      <nav aria-label="On this page" class="mt-10 rounded-xl border-2 border-ink bg-cream p-6" style="box-shadow: var(--shadow-card)">
+        <p class="font-mono text-[13px] font-bold tracking-wide text-ink uppercase">On this page</p>
+        <ul class="mt-3 space-y-2 text-sm font-medium text-ink">
+          <li><a class="link" href="#quick-answer">The 60-second answer</a></li>
+          <li><a class="link" href="#same-math">What every authenticator shares</a></li>
+          <li><a class="link" href="#compare">The shortlist, compared</a></li>
+          <li><a class="link" href="#situations">Pick by situation</a></li>
+          <li><a class="link" href="#checks">Four checks before you commit</a></li>
+          <li><a class="link" href="#browser">The browser option</a></li>
+          <li><a class="link" href="#migrate">Moving between apps</a></li>
+          <li><a class="link" href="#faq">FAQ</a></li>
+        </ul>
+      </nav>
+
+      <ReviewByline />
+      <p class="mt-6 max-w-2xl font-mono text-[13px] text-ink/90">
+        Claims checked against each vendor's own documentation and RFC 6238 · last reviewed
+        24 November 2026 ·{' '}
+        <a href="/methodology/" class="link">how we review</a>
+      </p>
+      <SourcesList sources={sources} />
+
+      <div class="rich-text mt-12">
+        <h2 id="quick-answer">The 60-second answer</h2>
+        <ul>
+          <li>
+            <strong>Want the simplest phone app?</strong> Google Authenticator or Microsoft
+            Authenticator. Both are free, both handle standard TOTP, and both are phone-first.
+          </li>
+          <li>
+            <strong>Already pay for a password manager?</strong> Use its built-in authenticator:
+            1Password, or Bitwarden on Premium or a paid organization. Fewer apps, one vault, one
+            backup story.
+          </li>
+          <li>
+            <strong>Want open source with encrypted cloud backup?</strong> Ente Auth. It has apps
+            for mobile, desktop and web, and an offline mode that works without an account.
+          </li>
+          <li>
+            <strong>Android, local-only?</strong> Aegis. Free, open source, encrypted local vault,
+            and backups you control.
+          </li>
+          <li>
+            <strong>iPhone plus Apple Watch?</strong> 2FAS. Open source, free, with a browser
+            extension and cloud or manual backup.
+          </li>
+          <li>
+            <strong>Need a code on a desktop right now?</strong> Use the{' '}
+            <a href="/#generator">browser-based 2FA code generator</a>: no install, no account,
+            nothing stored.
+          </li>
+        </ul>
+
+        <h2 id="same-math">What every authenticator shares</h2>
+        <p>
+          Google Authenticator, Microsoft Authenticator, Authy, 1Password, Bitwarden, Ente Auth,
+          2FAS and Aegis all compute the same RFC 6238 time-based one-time password. Six digits,
+          a 30-second window, and a result derived from your secret plus the current time. A code
+          from one is accepted by any service that asked for a standard authenticator app.
+        </p>
+        <p>
+          That is why "which app is most secure" is the wrong first question. The cryptographic
+          core is shared. The real differences are operational: whether you can export the secret,
+          where the backup copy lives, whether that copy is end-to-end encrypted, which devices the
+          app runs on, and what happens on the day the phone is lost. If you want the mechanics,
+          our <a href="/what-is-2fa/">plain-English guide to TOTP</a> walks through the algorithm.
+        </p>
+
+        <h2 id="compare">The shortlist, compared</h2>
+        <p>
+          Nine options, grouped by the job they do best. "Backup" here means how the app lets you
+          recover codes on another device, not whether the vendor promises to keep your account
+          safe.
+        </p>
+        <div class="mt-6 overflow-x-auto">
+          <table class="w-full min-w-[760px] border-collapse text-left text-sm">
+            <caption class="sr-only">Comparison of popular 2FA authenticator apps</caption>
+            <thead>
+              <tr class="border-b-2 border-ink">
+                <th scope="col" class="py-3 pr-4 font-mono text-[11px] font-bold tracking-wide text-ink uppercase">Authenticator</th>
+                <th scope="col" class="py-3 pr-4 font-mono text-[11px] font-bold tracking-wide text-ink uppercase">Platforms</th>
+                <th scope="col" class="py-3 pr-4 font-mono text-[11px] font-bold tracking-wide text-ink uppercase">Backup / sync</th>
+                <th scope="col" class="py-3 pr-4 font-mono text-[11px] font-bold tracking-wide text-ink uppercase">Cost</th>
+                <th scope="col" class="py-3 font-mono text-[11px] font-bold tracking-wide text-ink uppercase">Best for</th>
+              </tr>
+            </thead>
+            <tbody>
+              {apps.map((app) => (
+                <tr class="border-b border-hairline align-top">
+                  <th scope="row" class="py-3 pr-4 font-bold text-ink">{app.name}</th>
+                  <td class="py-3 pr-4 font-medium text-ink">{app.platforms}</td>
+                  <td class="py-3 pr-4 font-medium text-ink">{app.backup}</td>
+                  <td class="py-3 pr-4 font-medium text-ink">{app.cost}</td>
+                  <td class="py-3 font-medium text-ink">{app.best}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        <h2 id="situations">Pick by situation</h2>
+
+        <h3>You want one app that just works</h3>
+        <p>
+          Google Authenticator is the default most people meet first: free, on both phone
+          platforms, and since 2023 able to sync codes to your Google Account. Microsoft
+          Authenticator is the equivalent for Microsoft accounts and also accepts standard TOTP
+          codes from other services. Either is a reasonable starting point. The thing to decide is
+          whether you want the vendor's cloud copy — our{' '}
+          <a href="/authenticator-cloud-sync/">cloud-sync comparison</a> covers what that copy
+          means for your secrets.
+        </p>
+
+        <h3>You already pay for a password manager</h3>
+        <p>
+          1Password stores TOTP codes alongside the login and fills them for you. Bitwarden does the
+          same in its vault, but generating TOTP codes requires Premium or a paid organization
+          plan; the separate Bitwarden Authenticator app is free. The appeal is obvious: one place,
+          one backup, one lock. The trade-off is equally obvious: your password and your second
+          factor now sit behind the same master password. For most accounts that is a reasonable
+          convenience; for your highest-value accounts, some people deliberately keep the two
+          separate.
+        </p>
+
+        <h3>You want open source with encrypted cloud backup</h3>
+        <p>
+          Ente Auth is the clearest fit. It is free and open source, runs on mobile, desktop and
+          the web, offers end-to-end encrypted cloud backups, and can be used offline without an
+          account. If you want the backup convenience of a cloud app without handing the vendor
+          readable secrets, start here.
+        </p>
+
+        <h3>You want Android-only local control</h3>
+        <p>
+          Aegis is free, open source, Android-only, and built around a local encrypted vault with
+          export, import and automatic backups. There is no vendor cloud in the loop: you decide
+          where the backup file goes. That is the strongest fit if you treat the secret as
+          something you own and audit, rather than something a service holds for you.
+        </p>
+
+        <h3>You want an iPhone and Apple Watch workflow</h3>
+        <p>
+          2FAS is free and open source, with native iOS and Android apps, a browser extension, and
+          a choice between cloud and manual backups. It also supports Apple Watch, which matters if
+          you want the code on your wrist rather than in a phone app you have to unlock.
+        </p>
+
+        <h3>You need a code on a desktop right now</h3>
+        <p>
+          This is the gap phone apps leave. Google, Microsoft, Authy and Aegis have no desktop
+          build; Authy's desktop app was discontinued in August 2024. 1Password, Bitwarden and
+          Ente Auth do have desktop apps, and 2FAS has a browser extension. If you are on a
+          borrowed or locked-down machine and cannot install anything, use the{' '}
+          <a href="/#generator">browser generator</a>. It runs the same TOTP math locally and needs
+          no account. Our <a href="/authenticator-for-pc/">authenticator-for-PC guide</a> compares
+          the desktop routes honestly.
+        </p>
+
+        <h3>You are leaving Authy</h3>
+        <p>
+          Authy still works as a phone app, but it has no plain secret export and no desktop app.
+          If that combination no longer fits, our{' '}
+          <a href="/totp-vs-authy/">Authy alternatives guide</a> covers the migration options and
+          the lockout risks to avoid.
+        </p>
+
+        <h2 id="checks">Four checks before you commit</h2>
+        <ol>
+          <li>
+            <strong>Can you export?</strong> Look for a documented export or transfer path before
+            you add a single account. A free app with no exit is more expensive than a paid app
+            with one.
+          </li>
+          <li>
+            <strong>Where is the backup?</strong> Decide whether you are comfortable with a vendor
+            cloud copy, a local encrypted file, or no backup at all. "No backup" is a choice too,
+            and usually the wrong one.
+          </li>
+          <li>
+            <strong>Does it run on the devices you actually use?</strong> A phone-only app is fine
+            until the day you need a code on a work laptop. Check the desktop story before you
+            need it.
+          </li>
+          <li>
+            <strong>Have you saved the recovery codes?</strong> Every service prints a set when
+            you enable 2FA. Store them encrypted and offline. They are the fallback when the
+            authenticator itself is gone — see our{' '}
+            <a href="/2fa-backup-codes/">backup-code guide</a>.
+          </li>
+        </ol>
+
+        <h2 id="browser">The browser option, stated plainly</h2>
+        <p>
+          2FA COUNTER is not trying to be your only authenticator. It is the option for the moments
+          a phone app cannot help: a desktop sign-in, a dead battery, a shared machine, a device
+          where you cannot install software. Paste a Base32 secret, get a live code, and close the
+          tab. The calculation happens in your browser with the Web Crypto API, and nothing you
+          type is sent or stored.
+        </p>
+        <p>
+          That design has limits worth naming. It does not do push approvals, it does not replace
+          passkeys, and it cannot recover a secret you did not keep. Treat it as a portable second
+          copy of a key you already store safely — not as a vault. You can{' '}
+          <a href="/verify/">verify the local-only behaviour yourself</a> and read how it compares
+          with <a href="/totp-vs-google-authenticator/">Google Authenticator</a> and{' '}
+          <a href="/totp-vs-authy/">Authy</a>.
+        </p>
+
+        <h2 id="migrate">Moving between apps</h2>
+        <ol>
+          <li>
+            <strong>Export from the old app.</strong> Most apps show a transfer QR code or an
+            export file. Authy is the notable exception: it has no plain export, so you re-enrol
+            each account from the service's own setup screen.
+          </li>
+          <li>
+            <strong>Import or paste into the new app.</strong> Scan the QR with the new app, or
+            paste the Base32 secret. Check that both apps show the same six digits before you
+            continue.
+          </li>
+          <li>
+            <strong>Keep the old app until you have tested a login.</strong> Do not wipe the old
+            device on the same day. Sign in to one account with the new app first.
+          </li>
+          <li>
+            <strong>Then remove the old enrolment.</strong> Once the new code works, disable the
+            old authenticator in each service's security settings and delete the old copy.
+          </li>
+        </ol>
+        <p>
+          The full phone-free walkthrough, including where to find the setup key when a service
+          only shows a QR code, is in <a href="/how-to-get-2fa-code/">how to get a 2FA code</a>.
+        </p>
+      </div>
+
+      <h2 id="faq" class="mt-16 font-display text-[28px] leading-[1.2] tracking-normal text-ink">FAQ</h2>
+      <div class="mt-6 divide-y-2 divide-dashed divide-hairline-strong">
+        {
+          faqs.map(({ q, a }) => (
+            <details class="group px-1 py-1">
+              <summary class="flex cursor-pointer list-none items-center justify-between gap-4 py-4 text-left font-bold text-ink select-none marker:hidden">
+                {q}
+                <svg class="h-4 w-4 shrink-0 text-ink transition-transform group-open:rotate-45" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"></path>
+                </svg>
+              </summary>
+              <p class="pb-5 text-sm font-medium text-ink">{a}</p>
+            </details>
+          ))
+        }
+      </div>
+
+      <div class="cta-banner on-dark mt-12">
+        <h2 class="font-display text-2xl tracking-normal text-primary">Pick one, then make it boring</h2>
+        <p class="mt-2 max-w-2xl font-medium text-cream/80">
+          The best authenticator is the one you can still open when the phone is gone. Keep the
+          secret somewhere you control, and keep a browser copy within reach.
+        </p>
+        <a href="/#generator" class="btn-primary mt-5">Open the 2FA code generator</a>
+      </div>
+    </article>
+  </main>
+  <SiteFooter />
+</Layout>

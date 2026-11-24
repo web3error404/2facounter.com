@@ -149,6 +149,7 @@ export default defineConfig({
             '/verify/',
           ];
           const COMPARISONS = [
+            '/authenticator-apps/',
             '/totp-vs-google-authenticator/',
             '/totp-vs-authy/',
             '/totp-vs-passkeys/',

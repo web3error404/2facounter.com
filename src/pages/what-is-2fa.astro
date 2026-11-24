@@ -196,6 +196,7 @@ const jsonLd = [
           <li><a class="link" href="#totp">How TOTP works, step by step</a></li>
           <li><a class="link" href="#base32">The secret and the QR code</a></li>
           <li><a class="link" href="#sms">TOTP vs. SMS vs. hardware keys</a></li>
+          <li><a class="link" href="#enable">How to enable 2FA</a></li>
           <li><a class="link" href="#limitations">What 2FA doesn't fix</a></li>
           <li><a class="link" href="#never-locked-out">How to never get locked out</a></li>
           <li><a class="link" href="#faq">FAQ</a></li>
@@ -324,6 +325,49 @@ otpauth://hotp/Example:you%40example.com?secret=...&amp;counter=5   ← counter-
           <a href="/authenticator-cloud-sync/">what app cloud-sync does to your secret keys</a>.
         </p>
 
+        <h2 id="enable">How to enable 2FA on an account</h2>
+        <p>
+          The menu names differ from service to service, but the sequence is almost always the
+          same. Budget two minutes for the first account and much less for the next one.
+        </p>
+        <ol>
+          <li>
+            <strong>Open the account's security settings.</strong> Look for "Security", "Login
+            &amp; security", "Privacy and security", or "Two-step verification". On a work account
+            it may sit under an administrator's security policy rather than your own profile.
+          </li>
+          <li>
+            <strong>Choose the authenticator-app option, not SMS.</strong> If the service offers
+            several methods, pick "Authenticator app" or "Use an app". SMS codes travel over the
+            phone network and are exposed to SIM-swap attacks; an app-generated TOTP code never
+            leaves your device.
+          </li>
+          <li>
+            <strong>Capture the secret.</strong> Scan the QR code with your authenticator, or
+            choose "can't scan?" / "show setup key" to reveal the Base32 string. If you want a
+            second copy in a browser, this is the moment: paste the key into the{' '}
+            <a href="/#generator">2FA code generator</a> before the setup screen moves on. The
+            step-by-step version is in <a href="/how-to-get-2fa-code/">how to get a 2FA code</a>.
+          </li>
+          <li>
+            <strong>Confirm with a live code.</strong> Type the current six digits into the
+            service. If it rejects them, check that your device clock is set automatically before
+            you try anything else.
+          </li>
+          <li>
+            <strong>Save the recovery codes.</strong> The service shows a one-time set of backup
+            codes immediately after setup. Store them encrypted and offline — they are what gets
+            you back in if the authenticator is lost. Our{' '}
+            <a href="/2fa-backup-codes/">backup-code guide</a> covers the details.
+          </li>
+        </ol>
+        <p>
+          Not sure which app should hold the secret? Our{' '}
+          <a href="/authenticator-apps/">comparison of 2FA authenticator apps</a> matches the main
+          options to real situations, and the <a href="/guides/">per-service setup guides</a> cover
+          the exact menus for Google, GitHub, Discord, Binance, PayPal and more.
+        </p>
+
         <h2 id="limitations">What 2FA doesn't fix</h2>
         <p>
           Two-factor solves <em>password theft</em>. It does not stop session-cookie theft
@@ -344,7 +388,7 @@ otpauth://hotp/Example:you%40example.com?secret=...&amp;counter=5   ← counter-
           <li>
             <strong>Keep the secret, not just the tool.</strong> The Base32 key written to your
             password-manager vault lets you re-generate codes with any authenticator — a phone
-            app, or <a href="/#generator">the browser-based generator</a> — on whatever device
+            app, or <a href="/#generator">the browser-based 2FA code generator</a> — on whatever device
             you actually have that day.
           </li>
           <li>

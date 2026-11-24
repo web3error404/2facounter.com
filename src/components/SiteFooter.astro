@@ -35,6 +35,7 @@ const defaultColumns: FooterColumn[] = [
       { href: '/2fa-backup-codes/', label: 'Backup codes & recovery' },
       { href: '/sim-swap-attacks/', label: 'SIM-swap attacks' },
       { href: '/authenticator-cloud-sync/', label: 'App cloud sync, compared' },
+      { href: '/authenticator-apps/', label: 'Authenticator apps compared' },
       { href: '/authenticator-for-pc/', label: 'Authenticator for PC' },
     ],
   },
@@ -83,7 +84,7 @@ interface Props {
 
 const {
   columns = defaultColumns,
-  tagline = 'A zero-knowledge 2FA authenticator that runs entirely in your browser at 2facounter.com. No accounts, no servers, no phone required.',
+  tagline = 'A zero-knowledge 2FA authenticator that runs entirely in your browser at 2facounter.com. No accounts, no server ever receives your key, no phone required.',
   languagesTitle = 'Language',
   languages = LANGUAGES,
 } = Astro.props;
@@ -140,9 +141,9 @@ const hreflangOf = (href: string) => LANG_BY_HREF.get(href)?.hreflang ?? 'en';
         {
           columnsWithX.map((col) => (
             <div>
-              <h2 class="font-mono text-[13px] font-bold tracking-wide text-cream uppercase">
+              <p class="font-mono text-[13px] font-bold tracking-wide text-cream uppercase">
                 {col.title}
-              </h2>
+              </p>
               <ul class="mt-4 space-y-2">
                 {col.links.map(({ href, label, icon, id }) => (
                   <li>
@@ -181,9 +182,9 @@ const hreflangOf = (href: string) => LANG_BY_HREF.get(href)?.hreflang ?? 'en';
             (The language column already wrapped to the nav's second row
             at lg — 6 items in a 5-column grid — so this only widens it.) */}
         <div class="col-span-2 min-w-0">
-          <h2 class="font-mono text-[13px] font-bold tracking-wide text-cream uppercase">
+          <p class="font-mono text-[13px] font-bold tracking-wide text-cream uppercase">
             {languagesTitle}
-          </h2>
+          </p>
           {/* Two-column language grid: row-major order halves the column
               height (8 + 7 rows). 12px column / 8px row gaps; each link is
               a one-line flex row — nowrap prevents wraps, flex keeps the

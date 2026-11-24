@@ -7,7 +7,7 @@ import SourcesList from '../components/SourcesList.astro';
 
 const title = 'Verify Your Key Never Leaves the Browser — 2FA COUNTER';
 const description =
-  'Five tests you can run in about ten minutes to confirm 2FACounter keeps your 2FA secret on your device: network tab, offline mode, source code, headers, installed app.';
+  'Five tests you can run in ten minutes to confirm 2FACounter keeps your 2FA secret on your device: network tab, offline mode, source code, headers, app.';
 
 const sources = [
   {
@@ -162,10 +162,11 @@ const jsonLd = [
         <h2 id="test-3">Test 3 — Read the code that does the maths</h2>
         <p>
           The full source is public under AGPL-3.0 at{' '}
-          <a href="https://github.com/web3error404/2facounter.com" rel="noopener noreferrer"
+          <a class="[overflow-wrap:anywhere]" href="https://github.com/web3error404/2facounter.com" rel="noopener noreferrer"
             >github.com/web3error404/2facounter.com</a
           >. Open{' '}
           <a
+            class="[overflow-wrap:anywhere]"
             href="https://github.com/web3error404/2facounter.com/blob/master/src/scripts/generator.ts"
             rel="noopener noreferrer"><code>src/scripts/generator.ts</code></a
           >, the file that reads the input and produces the code, and search it for{' '}
