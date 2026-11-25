@@ -5,7 +5,7 @@ import SiteHeader from '../../components/SiteHeader.astro';
 import SiteFooter from '../../components/SiteFooter.astro';
 import Generator from '../../components/Generator.astro';
 
-const title = '2FAコード生成ツール — 無料オンライン認証アプリ（TOTP）';
+const title = '2FAサイト｜無料オンライン認証アプリ（TOTPコード生成）';
 const description =
   '秘密鍵を貼り付けるだけでワンタイムパスワードを生成できる無料のオンライン2段階認証アプリ。TOTPコードがライブ表示され、30秒ごとに自動更新。登録もスマホも不要です。';
 
@@ -221,7 +221,7 @@ const services = [
         <div>
           <span class="badge-eyebrow -rotate-1">100% 端末内で完結 · ゼロ知識</span>
           <h1 class="mt-6 max-w-[11em] font-display text-display-xl tracking-normal text-ink lg:text-display-xxl">
-            2FAコード生成ツール（ライブTOTP）
+            2FAコード生成サイト（ライブTOTP）
           </h1>
           <p class="mt-6 max-w-xl text-lg leading-[1.5] font-medium text-ink lg:text-xl">
             秘密鍵を貼り付ければ、6桁のコードがすぐにライブ表示されます。スマホが手元にない、壊れた、充電切れ —
@@ -306,7 +306,9 @@ const services = [
             </p>
             <p class="mt-4 text-sm font-medium text-ink">
               初めての方は、平易な解説記事もどうぞ：{" "}
-              <a href="/ja/what-is-2fa/" class="link">2FAとは？TOTPの仕組み</a>
+              <a href="/ja/what-is-2fa/" class="link">2FAとは？TOTPの仕組み</a>。設定キーの見つけ方や
+              コードが拒否されたときの対処まで含めた手順は、
+              <a href="/ja/how-to-get-2fa-code/" class="link">2FAコードを取得する方法</a>で解説しています。
             </p>
             <a href="#generator" class="btn-primary mt-8">今すぐ試す</a>
           </div>
