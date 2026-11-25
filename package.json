@@ -13,12 +13,13 @@
     "typecheck": "tsc --noEmit",
     "test:e2e": "node e2e-smoke.mjs",
     "test:camera": "node camera-race.mjs",
-    "test": "node e2e-smoke.mjs && node camera-race.mjs",
+    "test": "node e2e-smoke.mjs && node camera-race.mjs && node csp-check.mjs",
     "deploy": "node deploy.mjs",
     "audit:claims": "node claim-audit.mjs",
     "audit:claims:selftest": "node claim-audit-selftest.mjs",
     "indexnow": "node scripts/indexnow.mjs",
-    "astro": "astro"
+    "astro": "astro",
+    "test:csp": "node csp-check.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.4",

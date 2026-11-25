@@ -21,9 +21,17 @@
 // run_worker_first routes every request through this script; applying them at
 // the edge guarantees nosniff / referrer-policy / frame-deny / permissions
 // rules on EVERY response, including 404s, regardless of whether the asset
-// layer applies public/_headers through the ASSETS binding. Values mirror
-// public/_headers — keep the two lists in sync. Existing headers are never
-// overwritten, so the _headers file remains authoritative where it applies.
+// layer applies public/_headers through the ASSETS binding. Existing headers
+// are never overwritten, so the _headers file remains authoritative where it
+// applies; the other header values below mirror it.
+//
+// The CSP below is imported rather than written out: `astro build` computes a
+// SHA-256 for every inline script in the built HTML and writes the finished
+// policy to csp.generated.mjs (see the csp-hashes integration in
+// astro.config.mjs). That keeps this fallback byte-identical to the policy
+// _headers serves — script-src has no 'unsafe-inline' in either place.
+import { CONTENT_SECURITY_POLICY } from './csp.generated.mjs';
+
 const APEX_HOST = '2facounter.com';
 
 const SECURITY_HEADERS = {
@@ -32,14 +40,13 @@ const SECURITY_HEADERS = {
   'x-frame-options': 'DENY',
   'permissions-policy': 'camera=(self), geolocation=(), microphone=()',
   'strict-transport-security': 'max-age=31536000',
-  /* Mirrors public/_headers. The only scripts are first-party inline ones
-     (the mirror-host noindex guard and the service-worker registration) and
-     the styles are Astro's own page styles. Every tracker (GTM/GA and the
-     Cloudflare Insights beacon) was removed in 2026-11: the site ships zero
-     third-party scripts and makes no third-party requests — script-src and
-     connect-src are 'self'-only, matching the claims on /privacy/. */
-  'content-security-policy':
-    "default-src 'self'; script-src 'self' 'unsafe-inline'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'",
+  /* The only scripts are first-party inline ones, allowed by hash, plus
+     first-party modules and Astro's own page styles. Every tracker (GTM/GA
+     and the Cloudflare Insights beacon) was removed in 2026-11: the site
+     ships zero third-party scripts and makes no third-party requests —
+     script-src and connect-src are 'self'-only, matching the claims on
+     /privacy/. */
+  'content-security-policy': CONTENT_SECURITY_POLICY,
 };
 
 export default {

@@ -4,6 +4,8 @@
 // against a local preview of the exact dist/ output:
 //   - e2e-smoke.mjs   (generator functionality, mobile menu, memory-only keys)
 //   - camera-race.mjs (camera lifecycle / orphan-stream regression)
+//   - csp-check.mjs   (hash-based CSP matches the HTML and blocks nothing it
+//                      should allow)
 // Set FULL_AUDIT=1 to also run full-audit.mjs + tablet-sweep.mjs (slow:
 // every page at desktop+mobile). Set SKIP_DEPLOY=1 to build+test only.
 import { spawn, spawnSync } from 'node:child_process';
@@ -41,6 +43,8 @@ try {
   run('node', ['e2e-smoke.mjs']);
   console.log('▶ camera-race');
   run('node', ['camera-race.mjs']);
+  console.log('▶ csp-check');
+  run('node', ['csp-check.mjs']);
   if (process.env.FULL_AUDIT === '1') {
     console.log('▶ full-audit');
     run('node', ['full-audit.mjs']);

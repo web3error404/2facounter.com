@@ -16,9 +16,14 @@
   X-Frame-Options: DENY
   Permissions-Policy: camera=(self), geolocation=(), microphone=()
   Strict-Transport-Security: max-age=31536000
-  # Keep in sync with SECURITY_HEADERS in worker.mjs. The only scripts are
-  # first-party inline ones (mirror-host noindex guard, SW registration);
-  # every tracker (GTM/GA, Cloudflare Insights beacon) was removed in
-  # 2026-11 — the site ships zero third-party scripts and makes no
-  # third-party requests, matching the claims on /privacy/.
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'
+  # script-src carries no 'unsafe-inline': the build-time placeholder below is
+  # replaced by the csp-hashes integration in astro.config.mjs with the SHA-256
+  # of every inline <script> in the built HTML, so the same three first-party
+  # scripts (mirror-host noindex guard, service-worker registration, mobile-menu
+  # handler) still run while injected inline script does not. Never hand-edit
+  # the placeholder. worker.mjs imports the finished policy from
+  # csp.generated.mjs — one source, so the two cannot drift.
+  # Every tracker (GTM/GA, Cloudflare Insights beacon) was removed in 2026-11:
+  # the site ships zero third-party scripts and makes no third-party requests,
+  # matching the claims on /privacy/.
+  Content-Security-Policy: default-src 'self'; script-src 'self' __CSP_SCRIPT_HASHES__; img-src 'self' data:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'
